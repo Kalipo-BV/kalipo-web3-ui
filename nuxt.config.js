@@ -38,7 +38,7 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
+    '@nuxtjs/vuetify'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -52,17 +52,21 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: '/'
   },
 
-  // Content module configuration: https://go.nuxtjs.dev/config-content
-  content: {},
+  // PWA module configuration: https://go.nuxtjs.dev/pwa
+  pwa: {
+    manifest: {
+      lang: 'en'
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      // dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -72,7 +76,16 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3
-        }
+        },
+        light: {
+          primary: '#212A42', // heading title
+          accent: '#F7F9FB', //surface web background 
+          secondary: '#0565E3', // primary color kalipo
+          info: '#0089EC',
+          warning: '#FFBF00',
+          error: '#EA444F', 
+          success: '#45D07D'
+        },
       }
     }
   },
