@@ -13,7 +13,6 @@
         <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal_membership_invitation = true">
           Membership
           invitation</v-btn>
-
         <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal = true">Poll</v-btn>
       </v-card-actions>
 
@@ -82,7 +81,10 @@
 </template>
 
 <script>
+import Statement from "../components/Statement";
+import Dialogue from "../components/Dialogue";
 export default {
+  components: {Dialogue, Statement},
   data: () => ({
     offsetTop: 0,
     choice: false,
