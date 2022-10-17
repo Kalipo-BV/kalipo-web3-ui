@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center">
+  <div class="d-flex align-center justify-center">
     <v-card class="ma-auto" color="grey lighten-5" width="500" height="350">
       <v-card-title class="primary--text">
         Submitting a new proposal
