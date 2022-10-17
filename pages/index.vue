@@ -11,14 +11,17 @@
         A DAO platform to support online collaborations with the right tools, helpful insights and pre-made templates
       </div>
     </v-card-text>
-   
+   <ChoicesView></ChoicesView>
   </v-card>
+  
 </template>
 
 <script>
+import ChoicesView from '~/components/ChoicesView.vue';
   export default {
     data: () => ({
-      reveal: false,
+        reveal: false,
     }),
-  }
+    components: { ChoicesView }
+}
 </script>
