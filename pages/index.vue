@@ -11,7 +11,6 @@
         A DAO platform to support online collaborations with the right tools, helpful insights and pre-made templates
       </div>
     </v-card-text>
-   
   </v-card>
 </template>
 

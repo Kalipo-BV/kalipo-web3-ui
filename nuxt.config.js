@@ -79,11 +79,11 @@ export default {
         },
         light: {
           primary: '#212A42', // heading title
-          accent: '#F7F9FB', //surface web background 
+          accent: '#F7F9FB', //surface web background
           secondary: '#0565E3', // primary color kalipo
           info: '#0089EC',
           warning: '#FFBF00',
-          error: '#EA444F', 
+          error: '#EA444F',
           success: '#45D07D'
         },
       }
