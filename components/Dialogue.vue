@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" width="650">
       <v-card>
       <slot></slot>
-        <v-divider class=""></v-divider>
+        <v-divider></v-divider>
         <v-card-actions>
           <v-btn color="#0A75F3" class="white--text" width="100px" height="45px">
             <v-icon light>
