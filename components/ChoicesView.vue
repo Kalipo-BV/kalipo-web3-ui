@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row justify="center">
-            <v-dialog v-model="dialog" persistent max-width="600px" max-height="400px">
+            <v-dialog v-model="dialog" persistent max-width="600px" max-height="300px">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn color="primary" dark v-bind="attrs" v-on="on">
                         Open Dialog
@@ -17,35 +17,41 @@
                         </div>
                     </v-card-text>
                     <v-card-text>
-                        <v-container id="scroll-target" class="overflow-y-auto">
-                            <v-row>
-                                <v-col cols="12" sm="6" md="10" v-for="(textField, i) in textFields" :key="i"
-                                    class="text-fields-row">
-                                    <v-col cols="12" sm="6" md="10">
-                                        <v-text-field v-model="addedValue" name="addedvaluefield" label="Choice*"
-                                            required :rules="addedValueRules" counter maxlength="150"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="2">
-                                        <v-btn @click="remove(i)" class="error">delete</v-btn>
-                                    </v-col>
-                                </v-col>
-                                <!-- <v-col cols="12" sm="6">
-                                    <div v-for="(textField, i) in textFields" :key="i" class="text-fields-row">
-                                        <v-col cols="12" sm="6" md="10">
-                                            <v-text-field v-model="addedValue" name="addedvaluefield" label="Choice*" required :rules="addedValueRules" counter
+                        <v-row justify="center">
+                            <v-col cols="2">
+                                <v-label>
+                                    {{textFieldsAmount}}/4
+                                </v-label>
+                            </v-col>
+                        </v-row>
+                        <v-container id="scroll-target" style="max-height: 280px" class="overflow-y-auto">
+                            <v-row v-scroll:#scroll-target="onScroll">
+                                <v-col cols="12" v-for="(textField, i) in textFields" :key="i" class="text-fields-row">
+                                    <v-row>
+                                        <v-col cols="11" class="py-0">
+                                            <v-text-field v-model="textField.value" :label="i + 1 + ') Choice *'" required counter
                                                 maxlength="100"></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" sm="6" md="2">
-                                            <v-btn @click="remove(i)" class="error">delete</v-btn>
+                                        <v-col cols="1" class="px-1">
+                                            <v-btn :disabled="textFieldsAmount == 1" @click="remove(i)" elevation="1" icon >
+                                                <v-icon>
+                                                    {{"mdi-trash-can-outline"}}
+                                                </v-icon>
+                                            </v-btn>
                                         </v-col>
-                                    </div>
-                                </v-col> -->
-                                <v-col cols="12">
-                                    <v-btn :disabled="textFieldsAmount > 3" @click="add" class="secondary">add</v-btn>
-                                    <!-- <v-btn v-else @click="add" class="secondary" disabled>add</v-btn> -->
+                                    </v-row>
                                 </v-col>
                             </v-row>
                         </v-container>
+                            <v-row justify="center">
+                                <v-col cols="2">
+                                    <v-btn :disabled="textFieldsAmount > 3" @click="add" icon large>
+                                        <v-icon>
+                                            {{"mdi-plus-circle-outline"}}
+                                        </v-icon>
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
                         <small>*indicates required field</small>
                     </v-card-text>
                     <v-card-actions>
@@ -69,12 +75,9 @@ export default {
     data() {
         return {
             dialog: false,
-            addedValue: '',
             offsetTop: 0,
-            textFields: [],
-            textFieldsAmount: 0,
-            addedValueRules: [v => v.length <= 100 || 'Max 100 characters'],
-            reachedMax: false,
+            textFields: [{ label: "Choice", value: "" }],
+            textFieldsAmount: 1,
         }
     },
 
