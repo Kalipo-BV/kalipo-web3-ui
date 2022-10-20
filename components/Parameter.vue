@@ -9,9 +9,12 @@
         <v-container class="green">
             <v-row>
                 <v-col sm="12" >
-                    <v-text-field>
-                        
-                    </v-text-field>
+                    <p>Start date/time: &nbsp; &nbsp; 2 Days - 15 October 2022 09:00</p>
+                    <p>End date/time: &nbsp; &nbsp; &nbsp; 2 Days - 17 October 2022 23:59</p>
+                    <p>Eligible voter: &nbsp; </p>
+                    <p>Voting window: &nbsp; </p>
+                    <p>Attendence: &nbsp; </p>
+                    <p> % answer: &nbsp;</p>
                 </v-col>
             </v-row>
         </v-container>
