@@ -1,6 +1,6 @@
 <template>
   <div v-if="reveal != 3" class="text-center">
-    <v-dialog persistent v-model="dialog" width="650">
+    <v-dialog persistent v-model="dialog" width="650px">
       <v-card>
         <v-row justify="end">
           <v-col cols="1">
