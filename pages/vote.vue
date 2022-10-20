@@ -12,37 +12,21 @@
       <v-card-actions>
         <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal_membership_invitation = true">
           Membership
-          invitation</v-btn>
+          invitation
+        </v-btn>
         <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal = true">Poll</v-btn>
       </v-card-actions>
 
       <v-expand-transition>
-        <v-card v-if="reveal" class="transition-fast-in-fast-out v-card--reveal" color="grey lighten-5"
-          style="height: 100%;">
-          <v-card-title class="primary--text">
-            Submitting a new proposal
-          </v-card-title>
-          <v-card-text>
-            <div class="text-h8 primary--text">
-              Describe your statement by providing a title and description
-            </div>
-          </v-card-text>
-          <div>
-            <v-text-field background-color="grey lighten-1 mx-2" label="Statement" :rules="rules" hide-details="auto"
-              style="width:484px" clearable></v-text-field>
-            <v-text-field background-color="grey lighten-1 mx-2" label="Description" style="width:484px" clearable>
-            </v-text-field>
-          </div>
-          <v-card-actions class="pt-0">
-            <v-btn x-large text color="indigo darken-4" @click="reveal = false">Previous</v-btn>
-            <v-btn x-large text color="indigo darken-4" @click="reveal = false, choice = true">Next</v-btn>
-          </v-card-actions>
-        </v-card>
+        <Dialogue v-if="reveal" class="transition-fast-in-fast-out v-card--reveal" color="grey lighten-5"
+                  style="height: 100%;">
+          <proposal></proposal>
+        </Dialogue>
       </v-expand-transition>
 
       <v-expand-transition>
         <v-card v-if="choice" class="transition-fast-in-fast-out v-card--choice" color="grey lighten-5"
-          style="height: 100%;">
+                style="height: 100%;">
           <v-card-title class="primary--text">
             Choice
           </v-card-title>
@@ -59,7 +43,7 @@
 
                 <div v-for="(textField, i) in textFields" :key="i" class="text-fields-row">
                   <v-text-field background-color="grey lighten-1 " style="width:470px"
-                    clearable:label="textField.label1" v-model="textField.value1"></v-text-field>
+                                clearable:label="textField.label1" v-model="textField.value1"></v-text-field>
                   <v-btn @click="remove(i)" class="error mx-2">delete</v-btn>
                 </div>
 
@@ -83,6 +67,7 @@
 <script>
 import Statement from "../components/Statement";
 import Dialogue from "../components/Dialogue";
+
 export default {
   components: {Dialogue, Statement},
   data: () => ({
