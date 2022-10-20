@@ -12,12 +12,12 @@
       </div>
     </v-card-text>
   </v-card>
-  
 </template>
 
 <script>
-import ChoicesView from '~/components/ChoicesView.vue';
   export default {
     data: () => ({
-        reveal: false,
+      reveal: false,
     }),
+  }
+</script>
