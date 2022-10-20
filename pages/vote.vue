@@ -12,7 +12,8 @@
       <v-card-actions>
         <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal_membership_invitation = true">
           Membership
-          invitation</v-btn>
+          invitation
+        </v-btn>
         <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal = true">Poll</v-btn>
         <Dialogue v-if="reveal"></Dialogue>
       </v-card-actions>
@@ -22,6 +23,7 @@
 
 <script>
 import Dialogue from "../components/Dialogue";
+
 export default {
   components: { Dialogue },
   data: () => ({
