@@ -118,11 +118,11 @@ export default {
           title: 'Vote',
           to: '/vote'
         },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Test',
-          to: '/test'
-        }
+        // {
+        //   icon: 'mdi-chart-bubble',
+        //   title: 'Test',
+        //   to: '/test'
+        // }
       ],
       // miniVariant: true,
       // right: true,
