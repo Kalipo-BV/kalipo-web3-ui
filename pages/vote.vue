@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-row justify="center">
       <v-col cols="1">
-        <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal = true">CLICK ON ME</v-btn>
+        <v-btn elevation="1" x-large text color="indigo darken-4" @click="reveal = true">Vote</v-btn>
         <Dialogue v-if="reveal"></Dialogue>
       </v-col>
     </v-row>

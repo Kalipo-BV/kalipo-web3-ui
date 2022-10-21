@@ -3,8 +3,8 @@
         <v-card-title class="primary--text">
             Parameters
         </v-card-title>
-        <v-card-subtitle>
-            The given parameters
+        <v-card-subtitle class="black--text">
+            These are the enabled parameters on your poll
         </v-card-subtitle>
         <v-container>
             <v-row>
@@ -17,7 +17,7 @@
                     <p> % answer: &nbsp;</p>
                 </v-col>
             </v-row>
-        </v-container>           
+        </v-container>
     </v-card>
 </template>
 

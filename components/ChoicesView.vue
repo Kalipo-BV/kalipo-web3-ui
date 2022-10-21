@@ -1,13 +1,11 @@
 <template>
     <v-card elevation="0">
         <v-card-title class="primary--text">
-            Choice
+            Multiple choice
         </v-card-title>
-        <v-card-text>
-            <div class="text-h8 primary--text">
-                Give a clear description of the choices
-            </div>
-        </v-card-text>
+        <v-card-subtitle class="black--text">
+          Give a clear description of your choices
+        </v-card-subtitle>
         <v-card-text>
             <v-row justify="center">
                 <v-col cols="1">
@@ -48,7 +46,7 @@
         </v-card-text>
     </v-card>
 </template>
-  
+
 <script>
 export default {
     data() {
@@ -77,4 +75,3 @@ export default {
     }
 }
 </script>
-  

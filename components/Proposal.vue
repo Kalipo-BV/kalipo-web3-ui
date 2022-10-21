@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-card-title class="font-poppins primary--text"> Submitting a new proposal</v-card-title>
-    <v-card-subtitle class="font-roboto">
+    <v-card-title class="primary--text"> Submitting a new proposal</v-card-title>
+    <v-card-subtitle class="black--text">
       First choose the desired type that suits your proposal
     </v-card-subtitle>
     <v-container>
@@ -16,7 +16,7 @@
             >
               <v-item v-slot="{ active, toggle }">
                 <v-card
-                  :color="active ? '#0A75F3' : ''"
+                  :color="active ? 'secondary' : ''"
                   class="d-flex align-center"
                   height="125"
                   @click="toggle"
