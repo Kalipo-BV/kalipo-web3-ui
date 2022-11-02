@@ -89,3 +89,4 @@ sw.*
 # Vim swap files
 *.swp
 pages/test.vue
+nuxt.config.js
