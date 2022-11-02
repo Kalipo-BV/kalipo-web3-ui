@@ -6,8 +6,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - web3-ui',
-    title: 'web3-ui',
+    // titleTemplate: '%s - web3-ui',
+    title: 'Kalipo',
     htmlAttrs: {
       lang: 'en'
     },
