@@ -4,8 +4,6 @@
     permanent 
     class="primary" 
     v-model="drawer" 
-    :mini-variant="miniVariant"
-    :clipped="clipped" 
     fixed 
     app>
       <v-list>

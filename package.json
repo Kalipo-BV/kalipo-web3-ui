@@ -9,10 +9,15 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@liskhq/lisk-client": "^5.2.2",
+    "@liskhq/lisk-cryptography": "^3.2.1",
+    "@liskhq/lisk-passphrase": "^3.1.1",
     "@mdi/js": "^7.0.96",
     "@nuxt/content": "^1.0.0",
     "@nuxtjs/axios": "^5.13.6",
     "core-js": "^3.25.3",
+    "fs": "^0.0.1-security",
+    "net": "^1.0.2",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",
     "vue-server-renderer": "^2.7.10",
