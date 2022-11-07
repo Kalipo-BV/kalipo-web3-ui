@@ -4,7 +4,6 @@
     permanent 
     class="primary" 
     v-model="drawer" 
-    :mini-variant="miniVariant"
     :clipped="clipped" 
     fixed 
     app>
@@ -71,7 +70,7 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Vote',
           to: '/vote'
-        }
+        },
       ],
       title: 'Kalipo'
     }

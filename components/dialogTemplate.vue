@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div v-if="reveal !== 4" class="text-center">
     <v-dialog persistent v-model="dialog" width="650px">
       <v-card>
@@ -11,9 +11,9 @@
             </v-btn>
           </v-col>
         </v-row>
-        <Proposal v-if="reveal === 0"></Proposal>
+        <proposal v-if="reveal === 0"></proposal>
         <Parameter v-if="reveal === 1"></Parameter>
-        <Statement v-if="reveal === 2"></Statement>
+        <statement v-if="reveal === 2"></statement>
         <ChoicesView v-if="reveal === 3"></ChoicesView>
         <slot></slot>
         <v-divider></v-divider>
@@ -40,13 +40,15 @@
 </template>
 
 <script>
-import ChoicesView from './ChoicesView.vue';
-import Parameter from './Parameter.vue';
-import Proposal from './Proposal.vue';
-import Statement from './Statement.vue'
+import ChoicesView from './choicesView.vue';
+import Parameter from './parameter.vue';
+import Proposal from './proposal.vue';
+// import statement from './statement.vue'
 
 export default {
-  name: "Dialogue",
+  props: [
+    'blog'
+  ],
   data() {
     return {
       dialog: true,
@@ -68,10 +70,10 @@ export default {
       }
     }
   },
-  components: { ChoicesView, Parameter, Proposal }
+  components: { ChoicesView, Parameter, Proposal, statement },
 }
 </script>
 
 <style scoped>
 
-</style>
+</style> -->

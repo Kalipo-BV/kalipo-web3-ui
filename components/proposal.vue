@@ -8,26 +8,16 @@
       <v-item-group>
         <v-container>
           <v-row>
-            <v-col
-              v-for="(proposal, i) in proposalTypes"
-              :key="i"
-              cols="12"
-              md="6"
-            >
+            <v-col v-for="(proposal, i) in proposalTypes" :key="i" cols="12" md="6">
               <v-item v-slot="{ active, toggle }">
-                <v-card
-                  :color="active ? '#0A75F3' : ''"
-                  class="d-flex align-center"
-                  height="125"
-                  @click="toggle"
-                >
+                <v-card :color="active ? '#0A75F3' : ''" class="d-flex align-center" height="125" @click="toggle">
                   <v-scroll-y-transition>
                     <div class="text-h6 flex-grow-1 text-center">
                       <v-btn class="elevation-0" depressed dark fab>
                         <v-icon> {{ proposal.icon }} </v-icon>
                       </v-btn>
                       <br>
-                      <div class="pt-2" >
+                      <div class="pt-2">
                         {{ proposal.name }}
                       </div>
                     </div>
@@ -47,8 +37,12 @@ export default {
   name: "Proposal",
   data() {
     return {
-      proposalTypes: [{name: "Membership invitation", icon: "mdi-account-plus"}, {
-        name: "Decision Poll",
+      proposalTypes: [{ 
+        name: "Membership invitation", 
+        icon: "mdi-account-plus" 
+      }, 
+      {
+        name: "Poll",
         icon: "mdi-ballot-outline"
       }]
     }
