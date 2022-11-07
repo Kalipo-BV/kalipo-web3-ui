@@ -13,8 +13,8 @@
                 <v-card :color="active ? '#0A75F3' : ''" class="d-flex align-center" height="125" @click="toggle">
                   <v-scroll-y-transition>
                     <div class="text-h6 flex-grow-1 text-center">
-                      <v-btn class="elevation-0" depressed dark fab>
-                        <v-icon> {{ proposal.icon }} </v-icon>
+                      <v-btn class="elevation-0" depressed dark fab :color="active ? 'white' : ''">
+                        <v-icon :color="active ? '#0A75F3' : ''"> {{ proposal.icon }} </v-icon>
                       </v-btn>
                       <br>
                       <div class="pt-2">
@@ -43,8 +43,13 @@ export default {
       }, 
       {
         name: "Poll",
-        icon: "mdi-ballot-outline"
+        icon: "mdi-poll"
       }]
+    }
+  },
+  methods:{
+    change(){
+      return red;
     }
   }
 }

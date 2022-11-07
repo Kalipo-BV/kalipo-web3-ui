@@ -67,7 +67,7 @@ export default {
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
+          icon: 'mdi-vote-outline',
           title: 'Vote',
           to: '/vote'
         },

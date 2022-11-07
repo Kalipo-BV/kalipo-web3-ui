@@ -21,6 +21,7 @@
         <parameter v-if="reveal === 2"></parameter>
         <statement v-if="reveal === 3"></statement>
         <choicesView v-if="reveal === 4"></choicesView>
+        <final v-if="reveal === 5"></final>
         <slot></slot>
         <v-divider></v-divider>
         <v-card-actions>
@@ -32,10 +33,10 @@
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn color="#0A75F3" class="white--text" @click="nextPage" width="100px" height="45px">
-            <v-icon v-if="reveal < 4" light>
+            <v-icon v-if="reveal < 5" light>
               mdi-arrow-right
             </v-icon>
-            <label v-if="reveal === 4">
+            <label v-if="reveal === 5">
               sign
             </label>
           </v-btn>
@@ -51,6 +52,8 @@ import parameter from '~/components/parameter.vue';
 import proposal from '~/components/proposal.vue';
 import statement from '~/components/statement.vue';
 import polls from '~/components/polls.vue';
+import final from '~/components/final.vue';
+
 
 export default {
   data() {
@@ -65,7 +68,7 @@ export default {
       this.reveal = 0
     },
     nextPage() {
-      if (this.reveal === 4) {
+      if (this.reveal === 5) {
         this.reveal = 0
         this.dialog = false
       } else {
@@ -79,7 +82,7 @@ export default {
       }
     }
   },
-  components: { choicesView, parameter, proposal, statement, polls },
+  components: { choicesView, parameter, proposal, statement, polls, final },
 }
 </script>
 

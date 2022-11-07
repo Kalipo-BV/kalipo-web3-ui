@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-card-title class="font-poppins primary--text"> Submitting a new proposal</v-card-title>
+      <v-card-title class="font-poppins primary--text"> Proposal Poll</v-card-title>
       <v-card-subtitle class="font-roboto">
         First choose the desired type that suits your proposal
       </v-card-subtitle>
@@ -39,11 +39,11 @@
       return {
         pollTypes: [{ 
           name: "Poll Y/N", 
-          icon: "mdiChartBox" 
+          icon: "mdi-format-list-checks" 
         }, 
         {
           name: "Poll Multiple Choice",
-          icon: "mdi-call-split"
+          icon: "mdi-format-list-checkbox"
         }]
       }
     }
