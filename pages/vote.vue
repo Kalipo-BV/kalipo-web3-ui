@@ -51,8 +51,8 @@ import choicesView from '~/components/choicesView.vue';
 import parameter from '~/components/parameter.vue';
 import proposal from '~/components/proposal.vue';
 import statement from '~/components/statement.vue';
-import polls from '~/components/polls.vue';
-import final from '~/components/final.vue';
+import polls from '~/components/poll.vue';
+import final from '~/components/sign.vue';
 
 
 export default {
