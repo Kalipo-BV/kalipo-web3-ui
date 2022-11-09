@@ -37,10 +37,10 @@ export default {
   name: "Proposal",
   data() {
     return {
-      proposalTypes: [{ 
-        name: "Membership invitation", 
-        icon: "mdi-account-plus" 
-      }, 
+      proposalTypes: [{
+        name: "Membership invitation",
+        icon: "mdi-account-plus"
+      },
       {
         name: "Poll",
         icon: "mdi-poll"

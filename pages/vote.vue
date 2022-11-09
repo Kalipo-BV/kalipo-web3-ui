@@ -85,7 +85,3 @@ export default {
   components: { choicesView, parameter, proposal, statement, polls, final },
 }
 </script>
-
-<style scoped>
-
-</style>

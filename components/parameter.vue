@@ -17,7 +17,7 @@
                     <p> % answer: &nbsp;</p>
                 </v-col>
             </v-row>
-        </v-container>           
+        </v-container>
     </v-card>
 </template>
 
