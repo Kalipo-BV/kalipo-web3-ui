@@ -1,4 +1,5 @@
 <template>
+    <!-- TO DO: change the whole logic to data table -->
     <v-card elevation="0">
         <v-card-title class="primary--text">
             Are you sure?

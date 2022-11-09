@@ -1,9 +1,7 @@
 <template>
   <div>
-    <v-card-title class="font-poppins primary--text"> Creating a new poll</v-card-title>
-    <v-card-subtitle class="font-roboto">
-      Give us your statement and describe why you're creating this poll.
-    </v-card-subtitle>
+    <v-card-title class="font-poppins primary--text"> Creating a poll</v-card-title>
+    <v-card-subtitle class="font-roboto accent--text">Give us your title and describe why you're creating this poll.</v-card-subtitle>
     <v-container class="">
       <v-row>
         <v-col sm="12">
@@ -14,7 +12,7 @@
             counter
             maxlength="50"
             hint="Make your statement simple and direct"
-            label="Statement"
+            label="Title"
           ></v-text-field>
         </v-col>
         <v-col sm="12">

@@ -21,24 +21,19 @@
         <parameter v-if="reveal === 2"></parameter>
         <statement v-if="reveal === 3"></statement>
         <choicesView v-if="reveal === 4"></choicesView>
-        <final v-if="reveal === 5"></final>
+        <sign v-if="reveal === 5"></sign>
         <slot></slot>
-        <v-divider></v-divider>
+        <v-divider class="mx-4"></v-divider>
         <v-card-actions>
-          <v-btn :disabled="reveal === 0" color="#0A75F3" class="white--text" @click="previousPage" width="100px"
-            height="45px">
-            <v-icon light>
-              mdi-arrow-left
-            </v-icon>
+          <v-btn :disabled="reveal === 0" color="#0A75F3" class="accent white--text" @click="previousPage">
+            <v-icon light>mdi-arrow-left</v-icon>
+            previous
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="#0A75F3" class="white--text" @click="nextPage" width="100px" height="45px">
-            <v-icon v-if="reveal < 5" light>
-              mdi-arrow-right
-            </v-icon>
-            <label v-if="reveal === 5">
-              sign
-            </label>
+          <v-btn color="#0A75F3" class="white--text" @click="nextPage">
+            <label v-if="reveal < 5">next</label>
+            <v-icon v-if="reveal < 5" light>mdi-arrow-right</v-icon>
+            <label v-if="reveal === 5">sign</label>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -52,7 +47,7 @@ import parameter from '~/components/parameter.vue';
 import proposal from '~/components/proposal.vue';
 import statement from '~/components/statement.vue';
 import polls from '~/components/poll.vue';
-import final from '~/components/sign.vue';
+import sign from '~/components/sign.vue';
 
 
 export default {
@@ -69,8 +64,8 @@ export default {
     },
     nextPage() {
       if (this.reveal === 5) {
-        this.reveal = 0
         this.dialog = false
+        this.reveal = 0
       } else {
         this.reveal++
       }
@@ -82,6 +77,6 @@ export default {
       }
     }
   },
-  components: { choicesView, parameter, proposal, statement, polls, final },
+  components: { choicesView, parameter, proposal, statement, polls, sign },
 }
 </script>
