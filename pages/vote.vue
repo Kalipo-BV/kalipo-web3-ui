@@ -16,6 +16,7 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-divider class="mx-4"></v-divider>
         <proposal v-if="reveal === 0"></proposal>
         <polls v-if="reveal === 1"></polls>
         <parameter v-if="reveal === 2"></parameter>
