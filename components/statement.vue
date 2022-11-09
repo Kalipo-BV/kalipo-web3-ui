@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-card-title class="font-poppins primary--text"> Creating a new poll</v-card-title>
-    <v-card-subtitle class="black--text">
-      Give us your statement and describe why you're creating this poll
+    <v-card-subtitle class="font-roboto">
+      Give us your statement and describe why you're creating this poll.
     </v-card-subtitle>
-    <v-container>
+    <v-container class="">
       <v-row>
         <v-col sm="12">
           <v-text-field

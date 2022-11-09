@@ -6,8 +6,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - web3-ui',
-    title: 'web3-ui',
+    // titleTemplate: '%s - web3-ui',
+    title: 'Kalipo',
     htmlAttrs: {
       lang: 'en'
     },
@@ -28,6 +28,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    {
+      src: '~/plugins/LiskClient.js',
+      ssr: false
+    }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -80,7 +84,7 @@ export default {
         light: {
           primary: '#212A42', // heading title
           accent: '#F7F9FB', //surface web background
-          secondary: '#0A75F3', // primary color kalipo
+          secondary: '#0565E3', // primary color kalipo
           info: '#0089EC',
           warning: '#FFBF00',
           error: '#EA444F',
@@ -92,5 +96,11 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+    extend (config, { isDev, isClient }) {
+
+       config.node = {
+            fs: 'empty'
+        }
+    }
+}
 }
