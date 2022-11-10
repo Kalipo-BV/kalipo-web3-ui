@@ -16,15 +16,40 @@
 -->
 
 <template>
-  <v-app id="default-layout">
-    <v-main class="primary">
-      <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
-      </div>
-    </v-main>
-    <MainMenu></MainMenu>
-  </v-app>
+  <div class="text-center">
+    <div class="text-h1 fade-animation-1">Welcome to Kalipo</div>
+  </div>
 </template>
 
 <script>
+export default {
+  data() {
+    return {};
+  },
+  mounted() {
+    setTimeout(() => {
+      this.$router.push("/dashboard");
+    }, 6000);
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+.fade-animation-1 {
+  animation: fade-animation ease-in-out 6s forwards;
+}
+@keyframes fade-animation {
+  0% {
+    display: none !important;
+    opacity: 0;
+  }
+  50% {
+    display: block !important;
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none !important;
+  }
+}
+</style>

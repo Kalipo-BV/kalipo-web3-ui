@@ -16,17 +16,51 @@
 -->
 
 <template>
-  <v-row align="center" justify="center" style="height: 100%">
-    <div class="text-h1">Kalipo</div>
-  </v-row>
+  <div>
+    <v-textarea
+      filled
+      auto-grow
+      label="Mission"
+      rows="4"
+      row-height="20"
+      maxlength="1024"
+      counter
+      v-model="missionValue"
+    ></v-textarea>
+
+    <v-textarea
+      filled
+      auto-grow
+      label="Vision"
+      rows="4"
+      row-height="20"
+      maxlength="1024"
+      counter
+      v-model="visionValue"
+    ></v-textarea>
+  </div>
 </template>
 <script>
 export default {
-  data() {
-    return {};
+  props: ["mission", "vision", "disabledNext"],
+  computed: {
+    missionValue: {
+      get: function () {
+        return this.mission;
+      },
+      set: function (newValue) {
+        this.$emit("update:mission", newValue);
+      },
+    },
+    visionValue: {
+      get: function () {
+        return this.vision;
+      },
+      set: function (newValue) {
+        this.$emit("update:vision", newValue);
+      },
+    },
   },
-  mounted() {
-    this.$nuxt.$emit("MainMenu-setPage", "home");
-  },
+  data: () => ({}),
 };
 </script>

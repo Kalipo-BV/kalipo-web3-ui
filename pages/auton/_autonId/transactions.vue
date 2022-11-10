@@ -16,15 +16,13 @@
 -->
 
 <template>
-  <v-app id="default-layout">
-    <v-main class="primary">
-      <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
-      </div>
-    </v-main>
-    <MainMenu></MainMenu>
-  </v-app>
+  <div></div>
 </template>
-
 <script>
+export default {
+  layout: "auton",
+  data: () => ({
+    dialog: true,
+  }),
+};
 </script>

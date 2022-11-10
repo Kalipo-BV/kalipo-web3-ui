@@ -16,15 +16,28 @@
 -->
 
 <template>
-  <v-app id="default-layout">
-    <v-main class="primary">
-      <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
-      </div>
-    </v-main>
-    <MainMenu></MainMenu>
-  </v-app>
-</template>
+  <div>
+    <v-card class="rounded-lg" link :color="active ? 'accent' : ''">
+      <v-card-text>
+        <div class="d-flex justify-center">
+          <v-avatar :color="active ? 'white' : 'primary'" size="35px">
+            <v-icon :color="active ? 'accent' : 'white'" small>{{
+              icon
+            }}</v-icon>
+          </v-avatar>
+        </div>
 
+        <div class="text-h5 mt-2 d-flex justify-center">
+          <span :class="active ? 'white--text' : 'primary--text'">{{
+            title
+          }}</span>
+        </div>
+      </v-card-text>
+    </v-card>
+  </div>
+</template>
 <script>
+export default {
+  props: ["icon", "title", "active"],
+};
 </script>
