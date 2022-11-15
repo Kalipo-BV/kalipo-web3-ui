@@ -24,15 +24,38 @@
       <v-row justify="start">
         <v-col cols="12" md="6">
           <div @click="selectedProposalTypeInput = 'membership-invitation'">
-            <ProposalTypeCard
-              icon="mdi-account-plus"
-              title="Membership invitation"
-              :active="selectedProposalTypeInput == 'membership-invitation'"
-            ></ProposalTypeCard>
+            <ProposalTypeCard icon="mdi-account-plus" title="Membership invitation"
+              :active="selectedProposalTypeInput == 'membership-invitation'"></ProposalTypeCard>
           </div>
         </v-col>
       </v-row>
       <v-divider class="mt-8"></v-divider>
+
+      <!-- I ADDED STUFF -->
+      <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
+        Polls & questionaires
+      </div>
+      <v-row justify="start">
+          <v-col cols="12" md="6">
+            <div @click="selectedProposalTypeInput = 'yes-no'">
+              <ProposalTypeCard 
+              icon="mdi-format-list-checks" 
+              title="Yes/No"
+              :active="selectedProposalTypeInput == 'yes-no'"></ProposalTypeCard>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div @click="selectedProposalTypeInput = 'Multi-option'">
+              <ProposalTypeCard 
+              icon="mdi-format-list-checkbox" 
+              title="Multi option"
+              :active="selectedProposalTypeInput == 'Multi-option'"></ProposalTypeCard>
+            </div>
+          </v-col>
+      </v-row>
+
+      <v-divider class="mt-8"></v-divider>
+      <!-- END -->
     </div>
   </div>
 </template>
@@ -57,4 +80,5 @@ export default {
 </script>
 
 <style>
+
 </style>
