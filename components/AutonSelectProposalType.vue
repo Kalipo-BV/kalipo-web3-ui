@@ -45,11 +45,11 @@
             </div>
           </v-col>
           <v-col cols="12" md="6">
-            <div @click="selectedProposalTypeInput = 'multi-option'">
+            <div @click="selectedProposalTypeInput = 'multi-choice'">
               <ProposalTypeCard 
               icon="mdi-format-list-checkbox" 
-              title="Multi option"
-              :active="selectedProposalTypeInput == 'multi-option'"></ProposalTypeCard>
+              title="Multi choice"
+              :active="selectedProposalTypeInput == 'multi-choice'"></ProposalTypeCard>
             </div>
           </v-col>
       </v-row>

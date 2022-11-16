@@ -71,19 +71,19 @@
         ></AutonProposalYesNo>
       </v-card-text>
 
-      <v-card-text v-if="step == 'multi-option'">
+      <v-card-text v-if="step == 'multi-choice'">
         <AutonStepperHeader
           title="Creating a poll"
           subtitle="Give us your title and describe why you're creating a poll"
         ></AutonStepperHeader>
 
-        <AutonProposalMultiOption
+        <AutonProposalMultiChoice
           :statementMessage.sync="statementMessage"
           :addedValueMessage.sync="addedValueMessage"
           :descriptionMessage.sync="descriptionMessage"
           class="mt-4"
           :autonId="autonId"
-        ></AutonProposalMultiOption>
+        ></AutonProposalMultiChoice>
       </v-card-text>
 
       <v-card-text v-if="step == 'parameter'">
@@ -196,13 +196,13 @@ export default {
             if (this.step == "select-proposal-type") {
               this.step = "proposal-profile";
             }
-            else if (this.step == "proposal-profile" && this.selectedProposalType == "multi-option") {
-              this.step = "multi-option";
+            else if (this.step == "proposal-profile" && this.selectedProposalType == "multi-choice") {
+              this.step = "multi-choice";
             }
-            else if (this.step == "multi-option" && this.selectedProposalType == "multi-option") {
+            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice") {
               this.step = "parameter";
             }
-            else if (this.step == "parameter" && this.selectedProposalType == "multi-option") {
+            else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
               this.step = "choices";
             }
             else if (this.step == "proposal-profile" && this.selectedProposalType == "yes-no") {
