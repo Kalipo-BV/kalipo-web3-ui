@@ -29,8 +29,8 @@
           </div>
         </v-col>
       </v-row>
-      <v-divider class="mt-8"></v-divider>
 
+      <v-divider class="mt-8"></v-divider>
       <!-- I ADDED STUFF -->
       <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
         Polls & questionaires
@@ -45,11 +45,11 @@
             </div>
           </v-col>
           <v-col cols="12" md="6">
-            <div @click="selectedProposalTypeInput = 'Multi-option'">
+            <div @click="selectedProposalTypeInput = 'multi-option'">
               <ProposalTypeCard 
               icon="mdi-format-list-checkbox" 
               title="Multi option"
-              :active="selectedProposalTypeInput == 'Multi-option'"></ProposalTypeCard>
+              :active="selectedProposalTypeInput == 'multi-option'"></ProposalTypeCard>
             </div>
           </v-col>
       </v-row>
