@@ -95,7 +95,21 @@
         <AutonProposalParameter
           class="mt-4"
           :autonId="autonId"
+          :selectedProposalType = "selectedProposalType"
         ></AutonProposalParameter>
+      </v-card-text>
+
+      <v-card-text v-if="step == 'choices'">
+        <AutonStepperHeader
+          title="Multiple choice"
+          subtitle="Give a clear description of your choices"
+        ></AutonStepperHeader>
+
+        <AutonProposalChoices
+          class="mt-4"
+          :autonId="autonId"
+          :selectedProposalType = "selectedProposalType"
+        ></AutonProposalChoices>
       </v-card-text>
       <!-- END -->
 
@@ -193,27 +207,30 @@ export default {
 
         // ADDED STUFF
         async nextStep() {
-            if (this.step == "select-proposal-type") {
-              this.step = "proposal-profile";
-            }
-            else if (this.step == "proposal-profile" && this.selectedProposalType == "multi-choice") {
-              this.step = "multi-choice";
-            }
-            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice") {
+            if (this.step == "select-proposal-type" && this.selectedProposalType == "multi-choice") {
               this.step = "parameter";
             }
-            else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
-              this.step = "choices";
+            else if (this.step == "select-proposal-type" && this.selectedProposalType == "yes-no") {
+              this.step = "parameter";
             }
-            else if (this.step == "proposal-profile" && this.selectedProposalType == "yes-no") {
-              this.step = "yes-no";
+            else if (this.step == "select-proposal-type" && this.selectedProposalType == "membership-invitation") {
+              this.step = "proposal-profile";
             }
-            // else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
-            //   this.step = "parameter";
-            // }
             else if (this.step == "proposal-profile" && this.selectedProposalType == "membership-invitation") {
               this.step = "membership-invitation";
             }
+            else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
+              this.step = "multi-choice";
+            }
+            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice") {
+              this.step = "choices";
+            }
+            else if (this.step == "parameter" && this.selectedProposalType == "yes-no") {
+              this.step = "yes-no";
+            }
+            // else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
+            //   this.step = "choices";
+            // }
             else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
               this.step = "sign";
             }

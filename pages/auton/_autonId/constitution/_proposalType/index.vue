@@ -26,7 +26,7 @@
                 ><v-icon>mdi-arrow-left</v-icon></v-btn
               >
               <div class="text-h4 primary--text ml-12 ml-xl-0">
-                Paramter settings
+                Parameter settings
               </div>
             </div>
           </v-card-text>

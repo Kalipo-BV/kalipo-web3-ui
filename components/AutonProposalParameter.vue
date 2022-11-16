@@ -1,161 +1,118 @@
+
 <template>
-    <div>
-      <v-form v-model="valid">
-        <v-textarea
-          filled
-          auto-grow
-          label="Title"
-          rows="2"
-          row-height="20"
-          maxlength="50"
-          counter
-          v-model="statementValue"
-        ></v-textarea>
+  <div>
+    <v-card flat class="mt-0 rounded-lg">
+      <v-card flat>
+        <v-card-text class="py-2">
+          <div class="" v-if="proposal">
+            <div class="text-h4 primary--text">{{ proposal.title }}</div>
+          </div>
+        </v-card-text>
+      </v-card>
 
-        <v-textarea
-          filled
-          auto-grow
-          label="Added value"
-          rows="2"
-          row-height="20"
-          maxlength="100"
-          counter
-          v-model="addedValue"
-        ></v-textarea>
+      <div v-for="(item, i) in list" :key="i">
+        <v-divider></v-divider>
 
-        <v-textarea
-          filled
-          auto-grow
-          label="Description"
-          rows="2"
-          row-height="20"
-          maxlength="300"
-          counter
-          v-model="descriptionValue"
-        ></v-textarea>
-      </v-form>
-    </div>
-  </template>
+        <v-card flat link @click="navigateTo(item.link)">
+          <v-card-text class="py-2">
+            <div class="d-flex align-center">
+              <v-avatar color="primary" size="25" class="white--text mr-2" v-if="item.icon">
+                <v-icon dark x-small>{{ item.icon }}</v-icon>
+              </v-avatar>
 
+              <div class="d-flex justify-space-between" style="width: 100%">
+                <div class="text-caption font-weight-medium">
+                  {{ item.leftText }}
+                </div>
+                <div class="text-caption">
+                  {{ item.rightText }}
+                </div>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+    </v-card>
+  </div>
+</template>
+  
 <script>
 export default {
-  props: ["descriptionMessage", "statementMessage", "addedValueMessage", "disabledNext", "autonId"],
   computed: {
-    statementValue: {
-        get: function () {
-        return this.statementMessage;
-      },
-      set: function (newValue) {
-        this.$emit("update:statementMessage", newValue);
-      },
-    },
-    addedValue: {
-        get: function () {
-        return this.addedValueMessage;
-      },
-      set: function (newValue) {
-        this.$emit("update:addedValueMessage", newValue);
-      },
-    },
-    descriptionValue: {
-      get: function () {
-        return this.descriptionMessage;
-      },
-      set: function (newValue) {
-        this.$emit("update:descriptionMessage", newValue);
-      },
-    },
+    account() {
+      return this.$store.state.wallet.account;
+    }
   },
-  watch: {
-    valid: {
-      handler: function (newValid) {
-        // this.iconValue = this.generatedIcons[newIndex];
-        this.$emit("update:disabledNext", !newValid);
-      },
-      deep: true,
-    },
-  },
+  props: ["submitter", "selectedProposalType"],
   data: () => ({
-    valid: false,
-    rules: {
-      required: (value) => !!value || "Required.",
-      min: (v) => v?.length >= 2 || "Min 2 characters",
-      max: (v) => v?.length <= 16 || "Max 16 characters",
-    },
-    isUpdating: true,
-    users: [{ header: "Most recent users" }],
+    proposal: null,
+    list: [],
+    userLang: null,
+    mainPath: null,
+    step: 1,
   }),
-  mounted() {
-    this.$emit("update:disabledNext", true);
-  },
-  destroyed() {
-    this.$emit("update:disabledNext", false);
-  },
-  methods: {
-    remove(item) {
-      const index = this.selectedValue.indexOf(item.name);
-      if (index >= 0) this.selectedValue.splice(index, 1);
-    },
-    getInitials(parseStr, max) {
-      if (parseStr != undefined) {
-        const nameList = parseStr.split(" ");
-        let result = "";
-        for (let index = 0; index < nameList.length; index++) {
-          if (index < max) {
-            const element = nameList[index];
-            if (element.length > 0) {
-              result += element[0].toUpperCase();
-            }
-          } else {
-            break;
-          }
-        }
-        return result;
-      } else {
-        return "";
-      }
-    },
-  },
+  async mounted() {
+    console.log("account ", this.account)
+    this.$nuxt.$emit("Auton-setPage", "proposals");
+    this.userLang = navigator.language || navigator.userLanguage;
 
-  mounted: async function () {
-    this.isUpdating = true;
-    const accountIdsWrapper = await this.$invoke("kalipoAccount:getAll");
-    console.log(accountIdsWrapper);
+    const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
+    const proposalIndex = parseInt(this.$route.params.proposalId) - 1;
 
-    const autonWrapper = await this.$invoke("auton:getByID", {
-      id: this.autonId,
+    this.userLang = navigator.language || navigator.userLanguage;
+    this.list.push({
+      icon: "mdi-calendar",
+
+      leftText: "Submission:",
+      rightText: new Date(
+        // parseInt(this.proposal.created) * 1000
+      ).toLocaleDateString(this.userLang, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      }),
     });
 
-    const alreadyMemberAccounts = [];
-    for (
-      let index = 0;
-      index < autonWrapper.result.memberships.length;
-      index++
-    ) {
-      const membershipId = autonWrapper.result.memberships[index];
+    this.list.push({
+      icon: "mdi-account",
+      leftText: "Proposer:",
+      rightText: "@" + this.account.username,
+      link: "/account/" + this.account.username,
+    });
 
-      const membershipWrapper = await this.$invoke("membership:getByID", {
-        id: membershipId,
-      });
-      if (BigInt(membershipWrapper.result.started) != BigInt(0)) {
-        alreadyMemberAccounts.push(membershipWrapper.result.accountId);
+    this.list.push({
+      icon: "mdi-bank",
+      leftText: "Proposal type:",
+      rightText: this.selectedProposalType,
+    });
+  },
+  methods: {
+    navigateTo(to) {
+      if (to) {
+        this.$router.push(to);
       }
-    }
-
-    if (!accountIdsWrapper.error) {
-      const ids = accountIdsWrapper.result.ids.reverse();
-      for (let index = 0; index < ids.length; index++) {
-        const id = ids[index];
-        const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
-          id: id,
-        });
-        if (!accountWrapper.error && alreadyMemberAccounts.indexOf(id) == -1) {
-          accountWrapper.result.id = id;
-          this.users.push(accountWrapper.result);
-        }
-      }
-    }
-    this.isUpdating = false;
+    },
+    //   getInitials(parseStr) {
+    //     if (parseStr != undefined) {
+    //       const nameList = parseStr.split(" ");
+    //       let result = "";
+    //       for (let index = 0; index < nameList.length; index++) {
+    //         if (index < 3) {
+    //           const element = nameList[index];
+    //           result += element[0].toUpperCase();
+    //         } else {
+    //           break;
+    //         }
+    //       }
+    //       return result;
+    //     }
+    //   },
   },
 };
 </script>
+  
+<style>
+
+</style>
