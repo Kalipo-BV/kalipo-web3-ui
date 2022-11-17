@@ -71,19 +71,19 @@
         ></AutonProposalYesNo>
       </v-card-text>
 
-      <v-card-text v-if="step == 'multi-option'">
+      <v-card-text v-if="step == 'multi-choice'">
         <AutonStepperHeader
           title="Creating a poll"
           subtitle="Give us your title and describe why you're creating a poll"
         ></AutonStepperHeader>
 
-        <AutonProposalMultiOption
+        <AutonProposalMultiChoice
           :statementMessage.sync="statementMessage"
           :addedValueMessage.sync="addedValueMessage"
           :descriptionMessage.sync="descriptionMessage"
           class="mt-4"
           :autonId="autonId"
-        ></AutonProposalMultiOption>
+        ></AutonProposalMultiChoice>
       </v-card-text>
 
       <v-card-text v-if="step == 'parameter'">
@@ -95,7 +95,21 @@
         <AutonProposalParameter
           class="mt-4"
           :autonId="autonId"
+          :selectedProposalType = "selectedProposalType"
         ></AutonProposalParameter>
+      </v-card-text>
+
+      <v-card-text v-if="step == 'choices'">
+        <AutonStepperHeader
+          title="Multiple choice"
+          subtitle="Give a clear description of your choices"
+        ></AutonStepperHeader>
+
+        <AutonProposalChoices
+          class="mt-4"
+          :autonId="autonId"
+          :selectedProposalType = "selectedProposalType"
+        ></AutonProposalChoices>
       </v-card-text>
       <!-- END -->
 
@@ -154,14 +168,30 @@ export default {
     },
     methods: {
         prevStep() {
-            if (this.step == "proposal-profile") {
-                this.step = "select-proposal-type";
+            if (this.step == "proposal-profile" || this.step == "parameter") {
+              this.step = "select-proposal-type";
             }
-            else if (this.step == "membership-invitation") {
-                this.step = "proposal-profile";
+            else if (this.step == "membership-invitation" && this.selectedProposalType == "membership-invitation") {
+              this.step = "proposal-profile";
             }
-            else if (this.step == "sign") {
-                this.step = "membership-invitation";
+            else if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
+              this.step = "membership-invitation";
+            }
+            else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
+              this.step = "parameter";
+            }
+            else if (this.step == "choices" && this.selectedProposalType == "yes-no") {
+              this.step = "yes-no"
+            }
+            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice"){
+              this.step = "parameter";
+            }
+            else if (this.step == "choices" && this.selectedProposalType == "multi-choice") {
+              console.log("hello")
+              this.step = "multi-choice"
+            }
+            else if (this.step == "sign" && (this.selectedProposalType == "yes-no" || this.selectedProposalType == "multi-choice")) {
+              this.step = "choices";
             }
         },
         finish() {
@@ -193,27 +223,30 @@ export default {
 
         // ADDED STUFF
         async nextStep() {
-            if (this.step == "select-proposal-type") {
-              this.step = "proposal-profile";
-            }
-            else if (this.step == "proposal-profile" && this.selectedProposalType == "multi-option") {
-              this.step = "multi-option";
-            }
-            else if (this.step == "multi-option" && this.selectedProposalType == "multi-option") {
+            if (this.step == "select-proposal-type" && this.selectedProposalType == "multi-choice") {
               this.step = "parameter";
             }
-            else if (this.step == "parameter" && this.selectedProposalType == "multi-option") {
-              this.step = "choices";
+            else if (this.step == "select-proposal-type" && this.selectedProposalType == "yes-no") {
+              this.step = "parameter";
             }
-            else if (this.step == "proposal-profile" && this.selectedProposalType == "yes-no") {
-              this.step = "yes-no";
+            else if (this.step == "select-proposal-type" && this.selectedProposalType == "membership-invitation") {
+              this.step = "proposal-profile";
             }
-            // else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
-            //   this.step = "parameter";
-            // }
             else if (this.step == "proposal-profile" && this.selectedProposalType == "membership-invitation") {
               this.step = "membership-invitation";
             }
+            else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
+              this.step = "multi-choice";
+            }
+            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice") {
+              this.step = "choices";
+            }
+            else if (this.step == "parameter" && this.selectedProposalType == "yes-no") {
+              this.step = "yes-no";
+            }
+            // else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
+            //   this.step = "choices";
+            // }
             else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
               this.step = "sign";
             }
