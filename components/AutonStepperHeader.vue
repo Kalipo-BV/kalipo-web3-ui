@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,15 +16,14 @@
 -->
 
 <template>
-  <v-app id="default-layout">
-    <v-main class="primary">
-      <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
-      </div>
-    </v-main>
-    <MainMenu></MainMenu>
-  </v-app>
+  <div>
+    <div class="text-h4 text--primary">{{ title }}</div>
+    <div class="text-body-1 text--primary">{{ subtitle }}</div>
+  </div>
 </template>
-
 <script>
+export default {
+  props: ["title", "subtitle"],
+  data: () => ({}),
+};
 </script>

@@ -1,0 +1,115 @@
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<template>
+  <div>
+    <v-form v-model="valid">
+      <v-text-field
+        solo
+        label="Name"
+        append-icon="mdi-web"
+        class="mt-4"
+        counter
+        style="max-width: 450px"
+        :error-messages="autonErrorMessage"
+        maxlength="16"
+        :rules="[rules.required, rules.min, rules.maxName]"
+        v-model="nameValue"
+        @keyup="nameAvailable"
+      ></v-text-field>
+
+      <v-text-field
+        solo
+        label="Brand message"
+        class="mt-4"
+        counter
+        style="max-width: 450px"
+        maxlength="64"
+        :rules="[rules.required, rules.min, rules.maxSlogan]"
+        v-model="sloganValue"
+      ></v-text-field>
+    </v-form>
+  </div>
+</template>
+<script>
+export default {
+  props: ["name", "slogan", "disabledNext"],
+  computed: {
+    nameValue: {
+      get: function () {
+        return this.name;
+      },
+      set: function (newValue) {
+        this.$emit("update:name", newValue);
+      },
+    },
+    sloganValue: {
+      get: function () {
+        return this.slogan;
+      },
+      set: function (newValue) {
+        this.$emit("update:slogan", newValue);
+      },
+    },
+  },
+  watch: {
+    valid: {
+      handler: function (newValid) {
+        // this.iconValue = this.generatedIcons[newIndex];
+        this.$emit("update:disabledNext", !newValid);
+      },
+      deep: true,
+    },
+  },
+  data: () => ({
+    valid: false,
+    autonName: "",
+    autonErrorMessage: "",
+    rules: {
+      required: (value) => !!value || "Required.",
+      min: (v) => v?.length >= 2 || "Min 2 characters",
+      maxSlogan: (v) => v?.length <= 64 || "Max 64 characters",
+      maxName: (v) => v?.length <= 16 || "Max 16 characters",
+    },
+  }),
+  mounted() {
+    this.$emit("update:disabledNext", true);
+  },
+  destroyed() {
+    this.$emit("update:disabledNext", false);
+  },
+  methods: {
+    async nameAvailable() {
+      const existingAutonIdWrapper = await this.$invoke(
+        "auton:getAutonIdByName",
+        {
+          name: this.nameValue,
+        }
+      );
+      console.log(existingAutonIdWrapper);
+      if (existingAutonIdWrapper.result !== null) {
+        this.autonErrorMessage = "Auton name is already taken";
+        setTimeout(() => {
+          this.autonErrorMessage = "";
+        }, 3000);
+      } else {
+        $nuxt.$emit("IAH-showEncryptionPin");
+      }
+    },
+  },
+};
+</script>

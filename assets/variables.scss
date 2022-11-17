@@ -1,4 +1,72 @@
+/* Kalipo B.V. - the DAO platform for business & societal impact 
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+$body-font-family: "Roboto";
+$heading-font-family: "Poppins";
+$font-size-root: 15px;
+$btn-font-weight: 400;
+$btn-text-transform: initial;
+$headings: (
+    'h1': ('weight': 700,
+        'size': 32px,
+        'line-height': 46px),
+    'h2': ('weight': 700,
+        'size': 24px,
+        'line-height': 36px),
+    'h3': ('weight': 700,
+        'size': 20px,
+        'line-height': 30px),
+    'h4': ('weight': 600,
+        'size': 18px,
+        'line-height': 28px),
+    'h5': ('weight': 600,
+        'size': 16px,
+        'line-height': 26px),
+    'h6': ('weight': 600,
+        'size': 15px,
+        'line-height': 24px),
+    'body-1': ('weight': 400,
+        'size': 15px,
+        'line-height': 24px),
+    'body-2': ('weight': 400,
+        'size': 18px,
+        'line-height': 28px),
+    'caption': ('weight': 400,
+        'size': 12px,
+        'line-height': 16px),
+    'button': ('weight': 500,
+        'size': 18px,
+        'line-height': 22px)
+);
+
+$grid-breakpoints: (
+    'xs': 0,
+    'sm': 500px,
+    'md': 900px,
+    'lg': 1370px,
+    'xl': 1500px
+);
+@import "~vuetify/src/styles/styles.sass";
+$container-max-widths: (
+    'md': 1383.75px,
+    'lg': 1383.75px,
+    'xl': 1383.75px
+);

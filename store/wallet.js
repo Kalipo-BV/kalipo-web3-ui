@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact
+/* Kalipo B.V. - the DAO platform for business & societal impact 
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -13,18 +13,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
+ */
 
-<template>
-  <v-app id="default-layout">
-    <v-main class="primary">
-      <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
-      </div>
-    </v-main>
-    <MainMenu></MainMenu>
-  </v-app>
-</template>
+export const state = () => ({
+    unlocked: false,
+    account: {},
+    accounts: []
+})
 
-<script>
-</script>
+export const mutations = {
+    init(state, accounts) {
+        state.accounts = accounts;
+    },
+    add(state, acc) {
+        state.accounts.push(acc)
+    },
+    remove(state, { acc }) {
+        state.accounts.splice(state.accounts.indexOf(acc), 1)
+    },
+    unlock(state, acc) {
+        state.account = acc
+        state.unlocked = true
+    },
+    lock(state) {
+        state.account = {}
+        state.unlocked = false
+    }
+}

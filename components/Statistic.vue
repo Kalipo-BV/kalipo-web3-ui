@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,15 +16,25 @@
 -->
 
 <template>
-  <v-app id="default-layout">
-    <v-main class="primary">
-      <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
-      </div>
-    </v-main>
-    <MainMenu></MainMenu>
-  </v-app>
+  <div>
+    <div class="text-subtitle-2">{{ title }}</div>
+    <div>
+      <span class="pr-1">{{ statistic }}</span>
+      <v-chip :color="chipColor" small>{{ percentage }}</v-chip>
+    </div>
+  </div>
 </template>
 
+<style>
+</style>
+
 <script>
+export default {
+  props: {
+    title: String,
+    statistic: String,
+    percentage: String,
+    chipColor: String,
+  },
+};
 </script>

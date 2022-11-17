@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 -->
 
 <template>
-  <v-app id="default-layout">
+  <v-app id="wallet-layout">
     <v-main class="primary">
       <div style="height: 100%; background: #eef1f6">
         <Nuxt class="px-8 px-lg-3" />
@@ -27,4 +27,14 @@
 </template>
 
 <script>
+export default {
+  computed: {},
+  data() {
+    return {};
+  },
+  methods: {},
+  mounted() {},
+};
 </script>
+<style>
+</style>
