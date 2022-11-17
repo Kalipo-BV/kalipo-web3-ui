@@ -1,30 +1,79 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
- * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
-
 <template>
-  <v-app id="default-layout">
-    <v-main class="primary">
-      <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
-      </div>
+  <v-app>
+    <v-navigation-drawer 
+    permanent 
+    class="primary" 
+    v-model="drawer" 
+    :clipped="clipped" 
+    fixed 
+    app>
+      <v-list>
+        <v-list-item 
+        v-for="(item, i) in items" 
+        :key="i" 
+        :to="item.to" 
+        router 
+        exact 
+        class="white--text">
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+   
+    <v-main>
+      <v-container>
+        <Nuxt />
+      </v-container>
     </v-main>
-    <MainMenu></MainMenu>
+ 
+    <!-- <v-footer :absolute="!fixed" app>
+      <span>&copy; {{ new Date().getFullYear() }}</span>
+    </v-footer> -->
   </v-app>
 </template>
 
 <script>
+export default {
+  name: 'DefaultLayout',
+  data() {
+    return {
+      clipped: false,
+      drawer: false,
+      fixed: false,
+      items: [
+        {
+          icon: 'mdi-home-city-outline',
+          title: 'Home',
+          to: '/'
+        },
+        {
+          icon: 'mdi-web',
+          title: 'Autons',
+          to: '/'
+        },
+        {
+          icon: 'mdi-account-multiple',
+          title: 'Users',
+          to: '/'
+        },
+        {
+          icon: 'mdi-text-search',
+          title: 'Logs',
+          to: '/'
+        },
+        {
+          icon: 'mdi-vote-outline',
+          title: 'Vote',
+          to: '/vote'
+        },
+      ],
+      title: 'Kalipo'
+    }
+  }
+}
 </script>
