@@ -168,14 +168,30 @@ export default {
     },
     methods: {
         prevStep() {
-            if (this.step == "proposal-profile") {
-                this.step = "select-proposal-type";
+            if (this.step == "proposal-profile" || this.step == "parameter") {
+              this.step = "select-proposal-type";
             }
-            else if (this.step == "membership-invitation") {
-                this.step = "proposal-profile";
+            else if (this.step == "membership-invitation" && this.selectedProposalType == "membership-invitation") {
+              this.step = "proposal-profile";
             }
-            else if (this.step == "sign") {
-                this.step = "membership-invitation";
+            else if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
+              this.step = "membership-invitation";
+            }
+            else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
+              this.step = "parameter";
+            }
+            else if (this.step == "choices" && this.selectedProposalType == "yes-no") {
+              this.step = "yes-no"
+            }
+            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice"){
+              this.step = "parameter";
+            }
+            else if (this.step == "choices" && this.selectedProposalType == "multi-choice") {
+              console.log("hello")
+              this.step = "multi-choice"
+            }
+            else if (this.step == "sign" && (this.selectedProposalType == "yes-no" || this.selectedProposalType == "multi-choice")) {
+              this.step = "choices";
             }
         },
         finish() {
