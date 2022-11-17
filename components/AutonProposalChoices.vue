@@ -2,8 +2,8 @@
     <div>
         <v-form v-model="valid">
             <v-card-text>
-                <v-row justify="center">
-                    <v-col cols="2" class="red">
+                <v-row justify="center" dense>
+                    <v-col cols="1">
                         <v-label>{{ textFieldsAmount }}/4</v-label>
                     </v-col>
                 </v-row>
@@ -27,7 +27,7 @@
                 </v-container>
                 <v-row justify="center">
                     <v-col cols="1" class="pl-1">
-                        <v-btn class="secondary" color="white" :disabled="textFieldsAmount > 3" @click="add" icon large>
+                        <v-btn class="secondary" color="white" :disabled="textFieldsAmount > 3" @click="add" icon small>
                             <v-icon>{{ "mdi-plus" }}</v-icon>
                         </v-btn>
                     </v-col>
