@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -109,6 +109,7 @@
           class="mt-4"
           :autonId="autonId"
           :selectedProposalType = "selectedProposalType"
+          @data:choices="getChoicesMessage"
         ></AutonProposalChoices>
       </v-card-text>
       <!-- END -->
@@ -134,6 +135,13 @@
           >
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
+          <v-btn
+            color="accent"
+            @click="tester"
+            :disabled="disabledNext || selectedProposalType == null"
+          >
+            next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -150,10 +158,11 @@ export default {
         selectedAccountId: null,
         invitationMessage: "",
         statementMessage: "",
-        addedValueMessage: "", 
+        addedValueMessage: "",
         descriptionMessage: "",
         proposalTitle: "",
         proposalDescription: "",
+        choicesMessage: "",
         uri: "",
         transaction: {
             moduleId: -1,
@@ -167,6 +176,12 @@ export default {
         this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
     },
     methods: {
+      tester(){
+        console.log(this.choicesMessage)
+      },
+      getChoicesMessage(value) {
+        this.choicesMessage = value;
+      },
         prevStep() {
             if (this.step == "proposal-profile" || this.step == "parameter") {
               this.step = "select-proposal-type";
