@@ -61,11 +61,9 @@ export default {
 
     this.userLang = navigator.language || navigator.userLanguage;
     this.list.push({
-      icon: "mdi-calendar",
-
-      leftText: "Submission:",
+      icon: "mdi-calendar-lock-open",
+      leftText: "Start date/time:" ,
       rightText: new Date(
-        // parseInt(this.proposal.created) * 1000
       ).toLocaleDateString(this.userLang, {
         day: "numeric",
         month: "long",
@@ -76,10 +74,41 @@ export default {
     });
 
     this.list.push({
-      icon: "mdi-account",
-      leftText: "Proposer:",
-      rightText: "@" + this.account.username,
-      link: "/account/" + this.account.username,
+      icon: "mdi-calendar-lock",
+      leftText: "End date/time:",
+      rightText: new Date(
+        Date.now() + (2 * 24 * 60 * 60 * 1000)
+      ).toLocaleDateString(this.userLang, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      }),
+    });
+    
+    this.list.push({
+      icon: "mdi-account-check",
+      leftText: "Eligible voter:",
+      rightText: "Full members and affiliated members",
+    });
+
+    this.list.push({
+      icon: "mdi-account-box-multiple-outline",
+      leftText: "Voting window:",
+      rightText: "2 Days",
+    });
+
+    this.list.push({
+      icon: "mdi-account-group",
+      leftText: "Quorum:",
+      rightText: "120",
+    });
+
+    this.list.push({
+      icon: "mdi-human-male-board-poll",
+      leftText: "% support:",
+      rightText: "55",
     });
 
     this.list.push({
