@@ -118,7 +118,7 @@
         :transaction="transaction"
         :uri="uri"
         callback="AutonProposalSubmit-PrevStep"
-        callbackFinish="AutonProposalSubmit-Finish2"
+        callbackFinish="AutonProposalSubmit-Finish"
         v-if="step == 'sign'"
         title="Submitting proposal"
       ></AccountSign>
@@ -169,6 +169,7 @@ export default {
         this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
     },
     methods: {
+
       getChoicesMessage(value) {
         this.choicesMessage = value;
       },
@@ -248,7 +249,8 @@ export default {
           }
 
 
-          if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
+        // the membership-invitation data that gets send when chosen:
+        if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
               const autonWrapper = await this.$invoke("auton:getByID", {id: this.autonId });
               this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
 
@@ -268,6 +270,7 @@ export default {
               this.transaction.assets = asset;
           }
 
+          // the multiple choice data that gets send when chosen:
           else if (this.step == "sign" && this.selectedProposalType == "multi-choice") {
               const autonWrapper = await this.$invoke("auton:getByID", {id: this.autonId });
               this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
@@ -281,8 +284,6 @@ export default {
                 answers: this.choicesMessage,
               };
 
-              console.log("asset multi-choice");
-              console.log(asset);
               this.transaction.moduleId = 1004;
               this.transaction.assetId = 1;
               this.transaction.assets = asset;
