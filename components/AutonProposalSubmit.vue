@@ -118,7 +118,7 @@
         :transaction="transaction"
         :uri="uri"
         callback="AutonProposalSubmit-PrevStep"
-        callbackFinish="AutonProposalSubmit-Finish"
+        callbackFinish="AutonProposalSubmit-Finish2"
         v-if="step == 'sign'"
         title="Submitting proposal"
       ></AccountSign>
@@ -131,13 +131,6 @@
           <v-btn
             color="accent"
             @click="nextStep"
-            :disabled="disabledNext || selectedProposalType == null"
-          >
-            next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
-          </v-btn>
-          <v-btn
-            color="accent"
-            @click="tester"
             :disabled="disabledNext || selectedProposalType == null"
           >
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
@@ -176,126 +169,129 @@ export default {
         this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
     },
     methods: {
-      tester(){
-        console.log(this.choicesMessage)
-      },
       getChoicesMessage(value) {
         this.choicesMessage = value;
       },
-        prevStep() {
-            if (this.step == "proposal-profile" || this.step == "parameter") {
-              this.step = "select-proposal-type";
-            }
-            else if (this.step == "membership-invitation" && this.selectedProposalType == "membership-invitation") {
-              this.step = "proposal-profile";
-            }
-            else if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
-              this.step = "membership-invitation";
-            }
-            else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
-              this.step = "parameter";
-            }
-            else if (this.step == "choices" && this.selectedProposalType == "yes-no") {
-              this.step = "yes-no"
-            }
-            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice"){
-              this.step = "parameter";
-            }
-            else if (this.step == "choices" && this.selectedProposalType == "multi-choice") {
-              console.log("hello")
-              this.step = "multi-choice"
-            }
-            else if (this.step == "sign" && (this.selectedProposalType == "yes-no" || this.selectedProposalType == "multi-choice")) {
-              this.step = "choices";
-            }
-        },
-        finish() {
-            if (this.callbackFinish) {
-                this.$nuxt.$emit(this.callbackFinish, true);
-                this.step = "select-proposal-type";
-                this.disabledNext = false;
-                this.selectedProposalType = null;
-                this.selectedAccountId = null;
-                this.invitationMessage = "";
-                this.proposalTitle = "";
-                this.proposalDescription = "";
-                (this.uri = ""),
-                    (this.transaction = {
-                        moduleId: -1,
-                        assetId: 0,
-                        assets: {},
-                    });
-            }
-        },
-        // async nextStep() {
-        //   if (this.step == "select-proposal-type") {
-        //     this.step = "proposal-profile";
-        //   } else if (this.step == "proposal-profile") {
-        //     this.step = "membership-invitation";
-        //   } else if (this.step == "membership-invitation") {
-        //     this.step = "sign";
-        //   }
 
-        // ADDED STUFF
-        async nextStep() {
-            if (this.step == "select-proposal-type" && this.selectedProposalType == "multi-choice") {
-              this.step = "parameter";
-            }
-            else if (this.step == "select-proposal-type" && this.selectedProposalType == "yes-no") {
-              this.step = "parameter";
-            }
-            else if (this.step == "select-proposal-type" && this.selectedProposalType == "membership-invitation") {
-              this.step = "proposal-profile";
-            }
-            else if (this.step == "proposal-profile" && this.selectedProposalType == "membership-invitation") {
-              this.step = "membership-invitation";
-            }
-            else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
-              this.step = "multi-choice";
-            }
-            else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice") {
-              this.step = "choices";
-            }
-            else if (this.step == "parameter" && this.selectedProposalType == "yes-no") {
-              this.step = "yes-no";
-            }
-            // else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
-            //   this.step = "choices";
-            // }
-            else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
-              this.step = "sign";
-            }
-        // END
+      finish() {
+        if (this.callbackFinish) {
+          this.$nuxt.$emit(this.callbackFinish, true);
+          this.step = "select-proposal-type";
+          this.disabledNext = false;
+          this.selectedProposalType = null;
+          this.selectedAccountId = null;
+          this.invitationMessage = "";
+          this.proposalTitle = "";
+          this.proposalDescription = "";
+          (this.uri = ""),
+            (this.transaction = {
+              moduleId: -1,
+              assetId: 0,
+              assets: {},
+            });
+        }
+      },
 
-            // The transaction prop interface:
-            // {
-            //   moduleId: 0,
-            //   assetId: 0,
-            //   assets: {};
-            // }
-            if (this.step == "sign") {
-                const autonWrapper = await this.$invoke("auton:getByID", {
-                    id: this.autonId,
-                });
-                this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
-                const asset = {
-                    title: this.proposalTitle,
-                    campaignComment: this.proposalDescription,
-                    proposalType: this.selectedProposalType,
-                    autonId: this.autonId,
-                    accountIdToInvite: this.selectedAccountId,
-                    invitationMessage: this.invitationMessage,
-                };
-                console.log("ASSETTTTT");
-                console.log(asset);
-                this.transaction.moduleId = 1004;
-                this.transaction.assetId = 0;
-                this.transaction.assets = asset;
-            }
-        },
-    },
+      prevStep() {
+          if (this.step == "proposal-profile" || this.step == "parameter") {
+            this.step = "select-proposal-type";
+          }
+          else if (this.step == "membership-invitation" && this.selectedProposalType == "membership-invitation") {
+            this.step = "proposal-profile";
+          }
+          else if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
+            this.step = "membership-invitation";
+          }
+          else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
+            this.step = "parameter";
+          }
+          else if (this.step == "choices" && this.selectedProposalType == "yes-no") {
+            this.step = "yes-no"
+          }
+          else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice"){
+            this.step = "parameter";
+          }
+          else if (this.step == "choices" && this.selectedProposalType == "multi-choice") {
+            console.log("hello")
+            this.step = "multi-choice"
+          }
+          else if (this.step == "sign" && (this.selectedProposalType == "yes-no" || this.selectedProposalType == "multi-choice")) {
+            this.step = "choices";
+          }
+      },
+
+
+      async nextStep() {
+          if (this.step == "select-proposal-type" && this.selectedProposalType == "multi-choice") {
+            this.step = "parameter";
+          }
+          else if (this.step == "select-proposal-type" && this.selectedProposalType == "yes-no") {
+            this.step = "parameter";
+          }
+          else if (this.step == "select-proposal-type" && this.selectedProposalType == "membership-invitation") {
+            this.step = "proposal-profile";
+          }
+          else if (this.step == "proposal-profile" && this.selectedProposalType == "membership-invitation") {
+            this.step = "membership-invitation";
+          }
+          else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
+            this.step = "multi-choice";
+          }
+          else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice") {
+            this.step = "choices";
+          }
+          else if (this.step == "parameter" && this.selectedProposalType == "yes-no") {
+            this.step = "yes-no";
+          }
+          else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
+            this.step = "sign";
+          }
+
+
+          if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
+              const autonWrapper = await this.$invoke("auton:getByID", {id: this.autonId });
+              this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
+
+              const asset = {
+                  title: this.proposalTitle,
+                  campaignComment: this.proposalDescription,
+                  proposalType: this.selectedProposalType,
+                  autonId: this.autonId,
+                  accountIdToInvite: this.selectedAccountId,
+                  invitationMessage: this.invitationMessage,
+              };
+
+              console.log("asset membership");
+              console.log(asset);
+              this.transaction.moduleId = 1004;
+              this.transaction.assetId = 0;
+              this.transaction.assets = asset;
+          }
+
+          else if (this.step == "sign" && this.selectedProposalType == "multi-choice") {
+              const autonWrapper = await this.$invoke("auton:getByID", {id: this.autonId });
+              this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
+
+              const asset = {
+                title: "Multi Prop",
+                campaignComment: "halloo",
+                proposalType: "multi-choice-poll",
+                autonId: this.autonId,
+                question: this.statementMessage,
+                answers: this.choicesMessage,
+              };
+
+              console.log("asset multi-choice");
+              console.log(asset);
+              this.transaction.moduleId = 1004;
+              this.transaction.assetId = 1;
+              this.transaction.assets = asset;
+          }
+      },
+  },
 };
-</script>
-<style>
 
+</script>
+
+<style>
 </style>
