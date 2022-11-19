@@ -15,7 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-
 <template>
   <div>
     <v-card v-if="unlocked && (!isSigning || error)">
@@ -114,17 +113,19 @@ export default {
         displayNotificationOnError
       );
 
+      console.log("wrapper");
       console.log(transactionWrapper);
       if (!transactionWrapper.error && transactionWrapper.result.success) {
         const transactionId = Buffer.from(
           transactionWrapper.result.message.transactionId,
           "hex"
         );
+        console.log("test 1");
         const transaction = await this.$invokeWithRetry(
           "app:getTransactionByID",
           { id: transactionId }
         );
-
+        console.log("test 2");
         if (transaction != null && !transaction.error) {
           console.log("OUI");
           if (this.callbackFinish != null) {

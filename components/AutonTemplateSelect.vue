@@ -27,11 +27,12 @@
               title="Starter template"
               subTitle="Kalipo's default"
               icon="mdi-shield-check"
+              template="default"
             ></OptionCard>
           </v-item>
         </v-col>
         <v-col cols="6">
-          <div class="d-flex align-center justify-center" style="height: 137px">
+          <!-- <div class="d-flex align-center justify-center" style="height: 137px">
             <div
               class="text-body-1"
               style="max-width: 200px; text-align: center"
@@ -39,6 +40,17 @@
               Soon more templates will become available
             </div>
           </div>
+        </v-col> -->
+          <v-item v-slot="{ active, toggle }">
+            <OptionCard
+              :active="active"
+              :toggle="toggle"
+              title="Event template"
+              subTitle="Create an event"
+              icon="mdi-calendar"
+              template="event"
+            ></OptionCard>
+          </v-item>
         </v-col>
       </v-row>
     </v-item-group>

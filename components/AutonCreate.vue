@@ -36,38 +36,87 @@
       </v-card-text>
 
       <v-card-text v-if="step == 2">
+        <!-- default template -->
         <AutonStepperHeader
+          v-if="template == 'DEFAULT'"
           title="Founding a new Auton"
           subtitle="Specify the name and slogan"
         ></AutonStepperHeader>
         <AutonNameSlogan
+          v-if="template == 'DEFAULT'"
           :name.sync="name"
           :slogan.sync="slogan"
           :disabledNext.sync="disabledNext"
         ></AutonNameSlogan>
+
+        <!-- event template -->
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new Auton"
+          subtitle="Specify the name and description"
+        ></AutonStepperHeader>
+        <AutonNameDescription
+          v-if="template == 'EVENT'"
+          :name.sync="name"
+          :description.sync="description"
+          :disabledNext.sync="disabledNext"
+        ></AutonNameDescription>
       </v-card-text>
 
       <v-card-text v-if="step == 3">
+        <!-- default template -->
         <AutonStepperHeader
+          v-if="template == 'DEFAULT'"
           title="Founding a new Auton"
           subtitle="Supply a brief mission and vision statement"
         ></AutonStepperHeader>
         <AutonMissionVision
+          v-if="template == 'DEFAULT'"
           :mission.sync="mission"
           :vision.sync="vision"
           class="mt-4"
         ></AutonMissionVision>
+
+        <!-- event template -->
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new Auton"
+          subtitle="Supply the date and time"
+        ></AutonStepperHeader>
+        <AutonStartEnd
+          v-if="template == 'EVENT'"
+          :startDate.sync="startDate"
+          :startTime.sync="startTime"
+          :endDate.sync="endDate"
+          :endTime.sync="endTime"
+        ></AutonStartEnd>
       </v-card-text>
 
       <v-card-text v-if="step == 4">
+        <!-- default template -->
         <AutonStepperHeader
+          v-if="template == 'DEFAULT'"
           title="Founding a new Auton"
           subtitle="Bulk invite members into your new auton"
         ></AutonStepperHeader>
         <AutonUserSelect
+          v-if="template == 'DEFAULT'"
           :selectedFounderIds.sync="selectedFounderIds"
           class="mt-4"
         ></AutonUserSelect>
+
+        <!-- event template -->
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new Auton"
+          subtitle="Supply some required data"
+        ></AutonStepperHeader>
+        <AutonReqData
+          v-if="template == 'EVENT'"
+          :location.sync="location"
+          :capacity.sync="capacity"
+          :price.sync="price"
+        ></AutonReqData>
       </v-card-text>
 
       <v-card-text v-if="step == 5">
@@ -110,39 +159,56 @@
   </div>
 </template>
 <script>
+import AutonNameDescription from "./event/AutonNameDescription.vue";
+import AutonStartEnd from "./event/AutonStartEnd.vue";
+import AutonReqData from "./event/AutonReqData.vue";
 export default {
+  components: {
+    AutonNameDescription,
+    AutonStartEnd,
+    AutonReqData,
+  },
   data: () => ({
     step: 0,
     uri: "",
+    template: "DEFAULT",
     transaction: {
       moduleId: 1003,
       assetId: 0,
       assets: {},
     },
-    icon: null,
-    name: null,
-    slogan: null,
-    mission: null,
-    vision: null,
+    icon: "",
+    name: "",
+    slogan: "",
+    mission: "",
+    vision: "",
     selectedFounderIds: null,
     tags: null,
     disabledNext: false,
+
+    // event
+    description: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    location: "",
+    capacity: "",
+    price: "",
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
     this.$nuxt.$on("AutonCreate-PrevStep", ($event) => this.step--);
+    this.$nuxt.$on(
+      "OptionCard-SelectTemplate",
+      ($event) => (this.template = $event)
+    );
   },
   methods: {
     makeTransaction() {},
     nextStep() {
       this.step++;
 
-      // The transaction prop interface:
-      // {
-      //   moduleId: 0,
-      //   assetId: 0,
-      //   assets: {};
-      // }
       if (this.step == 6) {
         this.uri = `auton/${this.name.replace(" ", "_")}`;
 
@@ -166,7 +232,17 @@ export default {
           vision: this.vision,
           bulkInviteAccountIds: this.selectedFounderIds,
           tags: this.tags,
+          type: this.template,
+          location: this.location,
+          price: BigInt(this.price),
+          capacity: BigInt(this.capacity.toString()),
+          description: this.description,
+          start: BigInt(
+            new Date(this.startDate + ":" + this.startTime).getTime()
+          ),
+          end: BigInt(new Date(this.endDate + ":" + this.endTime).getTime()),
         };
+
         this.transaction.assets = asset;
       }
 
@@ -177,6 +253,13 @@ export default {
       console.log(this.vision);
       console.log(this.selectedFounderIds);
       console.log(this.tags);
+
+      console.log(this.template);
+      console.log(this.location);
+      console.log(this.capacity);
+      console.log(this.price);
+      console.log(new Date(this.startDate + ":" + this.startTime).getTime());
+      console.log(new Date(this.endDate + ":" + this.endTime).getTime());
     },
   },
 };

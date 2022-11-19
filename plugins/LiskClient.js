@@ -201,6 +201,7 @@ export default ({ app }, inject) => {
     // });
 
     inject('createTransaction', async (moduleId, assetId, assets, pin, displayNotificationOnError) => {
+        console.log("createTransaction - LiskClient")
         const account = {
             publicKey: null,
             passphrase: null

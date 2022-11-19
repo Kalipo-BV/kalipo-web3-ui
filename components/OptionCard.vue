@@ -79,11 +79,15 @@
 
 <script>
 export default {
-  props: ["active", "toggle", "title", "subTitle", "icon", "width"],
+  props: ["active", "toggle", "title", "subTitle", "icon", "width", "template"],
   methods: {
     cardClicked: function () {
       if (this.toggle !== undefined) {
         this.toggle();
+        this.$nuxt.$emit(
+          "OptionCard-SelectTemplate",
+          this.template.toUpperCase()
+        );
       }
     },
   },
