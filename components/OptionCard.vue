@@ -83,7 +83,7 @@ export default {
   methods: {
     cardClicked: function () {
       if (this.toggle !== undefined) {
-        toggle();
+        this.toggle();
       }
     },
   },
