@@ -19,7 +19,7 @@
 
       <v-divider v-if="step !== 1"></v-divider>
 
-      <v-card-text>
+      <v-card-text v-if="step !== 1">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="step--">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
@@ -63,7 +63,10 @@ export default {
       this.step++;
 
       if (this.step == 1) {
-        this.uri = "";
+        this.uri = `/auton/${this.auton.autonProfile.name.replace(
+          " ",
+          "_"
+        )}/poas`;
 
         const asset = {
           autonId: this.autonId,
