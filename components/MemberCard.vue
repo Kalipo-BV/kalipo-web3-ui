@@ -33,7 +33,7 @@
         </div>
 
         <div class="d-flex justify-center text-caption text--primary mt-2">
-          Full-Member
+          {{ role }}
         </div>
       </v-card-text>
       <v-divider v-if="member.started"></v-divider>
@@ -68,7 +68,9 @@
           </div>
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
-            <div class="mt-1"></div>
+            <div class="mt-2">
+              <v-btn v-if="attendeeCard" :disabled="true">Issue poa</v-btn>
+            </div>
           </div>
         </div>
       </v-card-text>
@@ -77,9 +79,10 @@
 </template>
 <script>
 export default {
-  props: ["member"],
+  props: ["member", "attendeeCard"],
   data: () => ({
     userLang: null,
+    role: "",
   }),
   methods: {
     getInitials(parseStr) {
@@ -126,6 +129,14 @@ export default {
 
   mounted() {
     this.userLang = navigator.language || navigator.userLanguage;
+
+    if (this.member.role == "AFFILIATE_MEMBER") {
+      this.role = "Affiliate member";
+    }
+
+    if (this.member.role == "FULL_MEMBER") {
+      this.role = "Full member";
+    }
   },
 };
 </script>

@@ -76,6 +76,7 @@
                     class="ml-2"
                     color="accent"
                     @click="dialog = !dialog"
+                    :disabled="authorizedAddAttendee"
                   >
                     Add attendee
                   </v-btn>
@@ -155,10 +156,18 @@ export default {
     md() {
       return this.$vuetify.breakpoint.md;
     },
+    account() {
+      return this.$store.state.wallet.account;
+    },
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
   },
   data() {
     return {
+      authorizedAddAttendee: true,
       autondId: null,
+      id: "",
       autonName: null,
       auton: {
         autonProfile: {},
@@ -204,7 +213,7 @@ export default {
         {
           icon: "mdi-account-group",
           title: "Attendees",
-          to: "members",
+          to: "attendees",
         },
       ],
     };
@@ -217,6 +226,24 @@ export default {
     );
   },
   methods: {
+    async authorized() {
+      if (this.unlocked) {
+        const memberships = this.$store.state.wallet.account.memberships;
+        memberships.forEach(async (element) => {
+          const mship = await this.$invoke("membership:getByID", {
+            id: element,
+          });
+          if (
+            mship.result.autonId == this.id &&
+            mship.result.role == "FULL_MEMBER"
+          ) {
+            this.authorizedAddAttendee = false;
+          }
+        });
+      } else {
+        return true;
+      }
+    },
     setMenu(page) {
       if (page === "dashboard") {
         this.selectedItem = 0;
@@ -248,20 +275,21 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: urlParam,
     });
-    console.log(autonIdWrapper);
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + urlParam;
     } else {
       this.autondId = autonIdWrapper.result.id;
+      console.log(`set auton id to: ${autonIdWrapper.result.id}`);
+      this.id = autonIdWrapper.result.id;
       const autonWrapper = await this.$invoke("auton:getByID", {
         id: autonIdWrapper.result.id,
       });
       this.auton = autonWrapper.result;
       this.autonName = autonWrapper.result.autonProfile.name;
-      console.log("auton:");
-      console.log(this.auton.type);
     }
+
+    this.authorized();
   },
 };
 </script>

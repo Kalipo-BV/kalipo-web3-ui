@@ -131,7 +131,7 @@ export default {
           if (this.callbackFinish != null) {
             this.$nuxt.$emit(this.callbackFinish, true);
           }
-          this.$router.push(this.uri);
+          this.$router.replace(this.uri);
         }
       } else {
         if (transactionWrapper.error) {

@@ -128,6 +128,7 @@ export default {
     proposalsEnded: [],
     carousel: 0,
     news: [],
+    auton: null,
   }),
   async mounted() {
     this.$nuxt.$emit("Auton-setPage", "dashboard");
@@ -141,6 +142,8 @@ export default {
     const autonWrapper = await this.$invoke("auton:getByID", {
       id: autonIdWrapper.result.id,
     });
+
+    this.auton = autonWrapper.result;
 
     for (let index = 0; index < autonWrapper.result.proposals.length; index++) {
       const proposalId = autonWrapper.result.proposals[index];
