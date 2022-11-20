@@ -1,4 +1,4 @@
-<template lang="">
+<template>
   <v-container>
     <v-row class="mt-2" style="justify-content: left; align-items: center">
       <v-text-field
@@ -12,8 +12,16 @@
       <v-btn class="mb-2 ml-4 pa-6" text outlined>New poa</v-btn>
     </v-row>
     <v-row class="">
-      <v-col cols="4" v-for="(poa, i) in poas" :key="i">
-        <p>POA CARD</p>
+      <v-col xs="12" sm="6" md="4" lg="3" v-for="(poa, i) in poas" :key="i">
+        <v-card >
+          <v-img
+            class="white--text align-end"
+            height="200px"
+            :src=getImage(poa.staticImageId)
+          >
+          </v-img>
+          <v-card-title>{{poa.name}}</v-card-title>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -53,6 +61,11 @@ export default {
         this.poas.push(poaWrapper.result);
       }
     }
+  },
+  methods: {
+    getImage(id) {
+      return `/poa_images/${id}.png`
+    },
   },
 };
 </script>
