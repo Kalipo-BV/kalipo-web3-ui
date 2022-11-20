@@ -1,6 +1,6 @@
-<template lang="">
+<template>
   <v-container>
-    <v-row class="mt-2" style="justify-content: left; align-items: center">
+    <v-row class="mt-2 ml-1" style="justify-content: left; align-items: center">
       <v-text-field
         solo
         label="Search a poa"
@@ -9,22 +9,29 @@
         style="max-width: 250px"
         disabled
       ></v-text-field>
-      <v-btn class="mb-2 ml-4 pa-6" text outlined>New poa</v-btn>
+      <v-btn class="mb-2 ml-4 pa-6" text outlined @click="dialog = !dialog"
+        >New poa</v-btn
+      >
     </v-row>
     <v-row class="">
-      <v-col cols="4" v-for="(poa, i) in poas" :key="i">
-        <p>POA CARD</p>
+      <v-col xs="12" sm="6" md="4" lg="3" v-for="(poa, i) in poas" :key="i">
+        <PoaCard :poa="poa"></PoaCard>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="dialog" max-width="500px">
+      <PoaCreateDialog :autonId="autonId" :auton="auton"></PoaCreateDialog>
+    </v-dialog>
   </v-container>
 </template>
 <script>
 export default {
   layout: "auton",
   data: () => ({
-    dialog: true,
+    dialog: false,
     poas: [],
     auton: null,
+    autonId: null,
   }),
   async mounted() {
     // this.$nuxt.$emit("Auton-setPage", "poas");
@@ -38,7 +45,7 @@ export default {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
     } else {
-      this.autondId = autonIdWrapper.result.id;
+      this.autonId = autonIdWrapper.result.id;
       const autonWrapper = await this.$invoke("auton:getByID", {
         id: autonIdWrapper.result.id,
       });
@@ -53,6 +60,8 @@ export default {
         this.poas.push(poaWrapper.result);
       }
     }
+
+    console.log(this.poas);
   },
 };
 </script>
