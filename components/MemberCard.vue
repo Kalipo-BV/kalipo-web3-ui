@@ -33,7 +33,7 @@
         </div>
 
         <div class="d-flex justify-center text-caption text--primary mt-2">
-          Full-Member
+          {{ role }}
         </div>
       </v-card-text>
       <v-divider v-if="member.started"></v-divider>
@@ -80,6 +80,7 @@ export default {
   props: ["member"],
   data: () => ({
     userLang: null,
+    role: "",
   }),
   methods: {
     getInitials(parseStr) {
@@ -126,6 +127,14 @@ export default {
 
   mounted() {
     this.userLang = navigator.language || navigator.userLanguage;
+
+    if (this.member.role == "AFFILIATE_MEMBER") {
+      this.role = "Affiliate member";
+    }
+
+    if (this.member.role == "FULL_MEMBER") {
+      this.role = "Full member";
+    }
   },
 };
 </script>
