@@ -15,7 +15,7 @@
         text
         outlined
         @click="dialog = !dialog"
-        >New poa</v-btn
+        >Create poa</v-btn
       >
     </v-row>
     <v-row class="">
