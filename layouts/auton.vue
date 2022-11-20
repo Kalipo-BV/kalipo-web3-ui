@@ -213,7 +213,7 @@ export default {
         {
           icon: "mdi-account-group",
           title: "Attendees",
-          to: "members",
+          to: "attendees",
         },
       ],
     };

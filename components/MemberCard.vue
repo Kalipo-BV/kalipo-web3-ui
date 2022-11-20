@@ -68,7 +68,9 @@
           </div>
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
-            <div class="mt-1"></div>
+            <div class="mt-2">
+              <v-btn v-if="attendeeCard" :disabled="true">Issue poa</v-btn>
+            </div>
           </div>
         </div>
       </v-card-text>
@@ -77,7 +79,7 @@
 </template>
 <script>
 export default {
-  props: ["member"],
+  props: ["member", "attendeeCard"],
   data: () => ({
     userLang: null,
     role: "",
