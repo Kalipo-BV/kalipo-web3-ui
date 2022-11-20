@@ -9,7 +9,12 @@
         style="max-width: 250px"
         disabled
       ></v-text-field>
-      <v-btn class="mb-2 ml-4 pa-6" text outlined @click="dialog = !dialog"
+      <v-btn
+        class="mb-2 ml-4 pa-6"
+        :disabled="authorizedNewPoa"
+        text
+        outlined
+        @click="dialog = !dialog"
         >New poa</v-btn
       >
     </v-row>
@@ -32,7 +37,37 @@ export default {
     poas: [],
     auton: null,
     autonId: null,
+    authorizedNewPoa: true,
   }),
+  computed: {
+    account() {
+      return this.$store.state.wallet.account;
+    },
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
+  },
+  methods: {
+    async authorized() {
+      if (this.unlocked) {
+        const memberships = this.$store.state.wallet.account.memberships;
+        memberships.forEach(async (element) => {
+          const mship = await this.$invoke("membership:getByID", {
+            id: element,
+          });
+          console.log(mship.result.autonId == this.autonId);
+          if (
+            mship.result.autonId == this.autonId &&
+            mship.result.role == "FULL_MEMBER"
+          ) {
+            this.authorizedNewPoa = false;
+          }
+        });
+      } else {
+        return true;
+      }
+    },
+  },
   async mounted() {
     // this.$nuxt.$emit("Auton-setPage", "poas");
 
@@ -61,7 +96,8 @@ export default {
       }
     }
 
-    console.log(this.poas);
+    this.authorized();
+    console.log(this.autonId);
   },
 };
 </script>
