@@ -38,7 +38,11 @@
         </div>
 
         <div class="d-flex justify-center text-caption text--primary mt-2">
-          {{ auton.autonProfile.subtitle }}
+          {{
+            auton.autonProfile.subtitle != ""
+              ? auton.autonProfile.subtitle
+              : "This is an event"
+          }}
         </div>
       </v-card-text>
       <v-divider></v-divider>

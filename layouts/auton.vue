@@ -91,7 +91,17 @@
 
                   <v-tab
                     v-if="auton.type == 'DEFAULT'"
-                    v-for="(item, idx) in tabItems"
+                    v-for="(item, idx) in tabItemsDefault"
+                    :key="idx"
+                    @click="navigate(item.to)"
+                  >
+                    <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                    {{ item.title }}
+                  </v-tab>
+
+                  <v-tab
+                    v-if="auton.type == 'EVENT'"
+                    v-for="(item, idx) in tabItemsEvent"
                     :key="idx"
                     @click="navigate(item.to)"
                   >
@@ -116,19 +126,25 @@
         callbackFinish="Auton-ProposalModalClose"
       ></AutonProposalSubmit>
 
-      <AutonProposalSubmit
+      <!-- <AutonProposalSubmit
         v-if="auton.type == 'EVENT'"
         :autonId="autondId"
         :autonName="autonName"
         callbackFinish="Auton-ProposalModalClose"
-      ></AutonProposalSubmit>
+      ></AutonProposalSubmit> -->
+      <AutonAddAttendee
+        v-if="auton.type == 'EVENT'"
+        :autonId="autondId"
+      ></AutonAddAttendee>
     </v-dialog>
   </v-app>
 </template>
 
 <script>
+import AutonAddAttendee from "~/components/event/AutonAddAttendee.vue";
+
 export default {
-  components: {},
+  components: { AutonAddAttendee },
   computed: {
     xs() {
       return this.$vuetify.breakpoint.xs;
@@ -152,7 +168,7 @@ export default {
       miniVariant: false,
       selectedItem: 0,
       userLang: null,
-      tabItems: [
+      tabItemsDefault: [
         {
           icon: "mdi-monitor-dashboard",
           title: "Dashboard",
@@ -174,6 +190,23 @@ export default {
           to: "constitution",
         },
       ],
+      tabItemsEvent: [
+        {
+          icon: "mdi-monitor-dashboard",
+          title: "Dashboard",
+          to: "/",
+        },
+        {
+          icon: "mdi-trophy",
+          title: "Poas",
+          to: "poas",
+        },
+        {
+          icon: "mdi-account-group",
+          title: "Attendees",
+          to: "members",
+        },
+      ],
     };
   },
   created() {
@@ -193,6 +226,10 @@ export default {
         this.selectedItem = 2;
       } else if (page === "constitution") {
         this.selectedItem = 3;
+      } else if (page === "poas") {
+        this.selectedItem = 2;
+      } else if (page === "attendees") {
+        this.selectedItem = 2;
       }
     },
     navigate(to) {
