@@ -195,6 +195,9 @@ export default {
     location: "",
     capacity: "",
     price: "",
+
+    start: BigInt(1),
+    end: BigInt(1),
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
@@ -224,6 +227,17 @@ export default {
         if (this.selectedFounderIds == null) {
           this.selectedFounderIds = [];
         }
+        if (this.startDate != "") {
+          this.start = BigInt(
+            new Date(this.startDate + ":" + this.startTime).getTime()
+          );
+        }
+        if (this.endDate != "") {
+          this.end = BigInt(
+            new Date(this.endDate + ":" + this.endTime).getTime()
+          );
+        }
+
         const asset = {
           icon: this.icon,
           name: this.name,
@@ -237,10 +251,8 @@ export default {
           price: BigInt(this.price),
           capacity: BigInt(this.capacity.toString()),
           description: this.description,
-          start: BigInt(
-            new Date(this.startDate + ":" + this.startTime).getTime()
-          ),
-          end: BigInt(new Date(this.endDate + ":" + this.endTime).getTime()),
+          start: this.start,
+          end: this.end,
         };
 
         this.transaction.assets = asset;

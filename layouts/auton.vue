@@ -64,8 +64,20 @@
                   </div>
                 </v-col>
                 <v-col class="d-flex justify-end">
-                  <v-btn color="accent" @click="dialog = !dialog">
+                  <v-btn
+                    v-if="auton.type == 'DEFAULT'"
+                    color="accent"
+                    @click="dialog = !dialog"
+                  >
                     New proposal
+                  </v-btn>
+                  <v-btn
+                    v-if="auton.type == 'EVENT'"
+                    class="ml-2"
+                    color="accent"
+                    @click="dialog = !dialog"
+                  >
+                    Add attendee
                   </v-btn>
                 </v-col>
               </v-row>
@@ -78,6 +90,7 @@
                   <v-tabs-slider color="primary"></v-tabs-slider>
 
                   <v-tab
+                    v-if="auton.type == 'DEFAULT'"
                     v-for="(item, idx) in tabItems"
                     :key="idx"
                     @click="navigate(item.to)"
@@ -97,6 +110,14 @@
 
     <v-dialog v-model="dialog" max-width="500">
       <AutonProposalSubmit
+        v-if="auton.type == 'DEFAULT'"
+        :autonId="autondId"
+        :autonName="autonName"
+        callbackFinish="Auton-ProposalModalClose"
+      ></AutonProposalSubmit>
+
+      <AutonProposalSubmit
+        v-if="auton.type == 'EVENT'"
         :autonId="autondId"
         :autonName="autonName"
         callbackFinish="Auton-ProposalModalClose"
@@ -107,6 +128,7 @@
 
 <script>
 export default {
+  components: {},
   computed: {
     xs() {
       return this.$vuetify.breakpoint.xs;
@@ -200,10 +222,10 @@ export default {
       });
       this.auton = autonWrapper.result;
       this.autonName = autonWrapper.result.autonProfile.name;
-      console.log(this.auton);
+      console.log("auton:");
+      console.log(this.auton.type);
     }
   },
 };
 </script>
-<style>
-</style>
+<style></style>

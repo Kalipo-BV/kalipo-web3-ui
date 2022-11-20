@@ -115,6 +115,7 @@ export default {
       }
     }
     this.isUpdating = false;
+    console.log("AUTON USER SELECT");
   },
   methods: {
     remove(item) {
