@@ -17,7 +17,7 @@
 
 <template>
   <v-container>
-    <v-row class="mt-2">
+    <v-row class="mt-2 ml-1">
       <v-text-field
         solo
         label="Search a member"
