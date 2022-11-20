@@ -17,6 +17,15 @@
 
 <template>
   <v-container style="height: 100%">
+    <v-text-field
+      solo
+      label="Search a user"
+      append-icon="mdi-magnify"
+      class="mt-4"
+      style="max-width: 250px"
+      disabled
+      v-model="search"
+    ></v-text-field>
     <v-row dense>
       <v-col cols="3" v-for="(account, index) in accounts" :key="index">
         <MemberCard :member="account"></MemberCard>
@@ -31,7 +40,7 @@ import * as cryptography from "@liskhq/lisk-cryptography";
 
 export default {
   layout: "wallet",
-  data: () => ({ accounts: [] }),
+  data: () => ({ accounts: [], search: "" }),
   created() {},
   mounted: async function () {
     this.$nuxt.$emit("MainMenu-setPage", "users");

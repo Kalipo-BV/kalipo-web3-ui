@@ -17,6 +17,15 @@
 
 <template>
   <v-container style="height: 100%">
+    <v-text-field
+      solo
+      label="Search an auton"
+      append-icon="mdi-magnify"
+      class="mt-4"
+      style="max-width: 250px"
+      v-model="search"
+      disabled
+    ></v-text-field>
     <v-row dense>
       <v-col cols="12" md="3" v-for="(auton, i) in autons" :key="i">
         <div @click="navigate(i)">
@@ -27,12 +36,12 @@
   </v-container>
 </template>
 <script>
-import { Mnemonic } from "@liskhq/lisk-passphrase";
-import * as cryptography from "@liskhq/lisk-cryptography";
-
 export default {
   layout: "wallet",
-  data: () => ({ autons: [] }),
+  data: () => ({ autons: [], search: "" }),
+  computed: {
+    async filtered() {},
+  },
   created() {},
   mounted: async function () {
     this.$nuxt.$emit("MainMenu-setPage", "autons");

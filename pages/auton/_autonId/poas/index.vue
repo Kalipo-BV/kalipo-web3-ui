@@ -1,11 +1,22 @@
 <template lang="">
   <v-container>
-    <v-row class="mt-2">
+    <v-row class="mt-2" style="justify-content: left; align-items: center">
+      <v-text-field
+        solo
+        label="Search a poa"
+        append-icon="mdi-magnify"
+        class="mt-4"
+        style="max-width: 250px"
+        disabled
+      ></v-text-field>
+      <v-btn class="mb-2 ml-4 pa-6" text outlined>New poa</v-btn>
+    </v-row>
+    <v-row class="">
       <v-col cols="4" v-for="(poa, i) in poas" :key="i">
         <p>POA CARD</p>
       </v-col>
-    </v-row></v-container
-  >
+    </v-row>
+  </v-container>
 </template>
 <script>
 export default {

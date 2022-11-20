@@ -18,6 +18,16 @@
 <template>
   <v-container>
     <v-row class="mt-2">
+      <v-text-field
+        solo
+        label="Search a member"
+        append-icon="mdi-magnify"
+        class="mt-4"
+        style="max-width: 250px"
+        disabled
+      ></v-text-field>
+    </v-row>
+    <v-row class="mt-2">
       <v-col cols="4" v-for="(member, i) in members" :key="i">
         <MemberCard :member="member"></MemberCard>
       </v-col>
