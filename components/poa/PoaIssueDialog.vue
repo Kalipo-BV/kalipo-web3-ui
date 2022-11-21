@@ -10,6 +10,8 @@
         <AvailablePoasIssue
           v-if="!isFetching"
           :poas="auton.poas"
+          :member="member"
+          :selected.sync="selected"
         ></AvailablePoasIssue>
       </v-card-text>
 
@@ -50,10 +52,11 @@ export default {
       step: 0,
       name: null,
       image: null,
+      selected: null,
       uri: "",
       isFetching: true,
       transaction: {
-        moduleId: 1008,
+        moduleId: 1009,
         assetId: 0,
         assets: {},
       },
@@ -66,24 +69,29 @@ export default {
     });
     this.auton = autonWrapper.result;
     this.isFetching = false;
-    console.log("this.auton in DIALOG");
-    console.log(this.auton);
+
+    console.log(this.member);
   },
   computed: {},
   methods: {
-    nextStep() {
+    async nextStep() {
       this.step++;
 
       if (this.step == 1) {
-        // this.uri = `/auton/${this.auton.autonProfile.name.replace(
-        //   " ",
-        //   "_"
-        // )}/poas`;
+        this.uri = `/auton/${this.auton.autonProfile.name.replace(
+          " ",
+          "_"
+        )}/poas`;
+
+        const poaIds = [];
+
+        for (let i = 0; i < this.selected.length; i++) {
+          poaIds.push(this.selected[i].id);
+        }
 
         const asset = {
-          autonId: this.autonId,
-          name: this.name,
-          staticImageId: this.image,
+          receiverAddress: this.member.accountId,
+          poaIds: poaIds,
         };
 
         this.transaction.assets = asset;

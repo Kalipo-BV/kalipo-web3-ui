@@ -78,7 +78,10 @@
     </v-card>
 
     <v-dialog v-model="dialog" max-width="500">
-      <PoaIssueDialog :autonId="member.autonId"></PoaIssueDialog>
+      <PoaIssueDialog
+        :member="member"
+        :autonId="member.autonId"
+      ></PoaIssueDialog>
     </v-dialog>
   </div>
 </template>
