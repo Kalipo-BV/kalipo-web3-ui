@@ -29,7 +29,11 @@
     </v-row>
     <v-row class="mt-2">
       <v-col cols="4" v-for="(member, i) in members" :key="i">
-        <MemberCard :attendeeCard="true" :member="member"></MemberCard>
+        <MemberCard
+          :autonId="autonId"
+          :attendeeCard="true"
+          :member="member"
+        ></MemberCard>
       </v-col>
     </v-row>
   </v-container>
@@ -41,6 +45,7 @@ export default {
     dialog: true,
     members: [],
     auton: null,
+    autonId: "",
   }),
   async mounted() {
     this.$nuxt.$emit("Auton-setPage", "attendees");
@@ -50,7 +55,7 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    console.log(autonIdWrapper);
+    this.autonId = autonIdWrapper.result;
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
