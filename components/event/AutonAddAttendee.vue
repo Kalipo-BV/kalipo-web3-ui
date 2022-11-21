@@ -6,13 +6,17 @@
           title="Inviting attendees"
           subtitle="Select profiles you want to invite"
         ></AutonStepperHeader>
+        <AutonUserSelect
+          :selectedFounderIds.sync="selectedFounderIds"
+          class="mt-4"
+        ></AutonUserSelect>
       </v-card-text>
 
       <AccountSign
         :transaction="transaction"
         :uri="uri"
         v-if="step == 'sign'"
-        title="Submitting proposal"
+        title="Adding members"
       ></AccountSign>
 
       <v-card-text v-if="step !== 'sign'">
@@ -34,6 +38,13 @@ export default {
   data() {
     return {
       step: "invite-attendees",
+      selectedFounderIds: [],
+      uri: "",
+      transaction: {
+        moduleId: 1002,
+        assetId: 2,
+        assets: {},
+      }
     };
   },
   methods: {
@@ -52,20 +63,13 @@ export default {
           id: this.autonId,
         });
 
-        // const asset = {
-        //   title: this.proposalTitle,
-        //   campaignComment: this.proposalDescription,
-        //   proposalType: this.selectedProposalType,
-        //   autonId: this.autonId,
-        //   accountIdToInvite: this.selectedAccountId,
-        //   invitationMessage: this.invitationMessage,
-        // };
+        const auton = autonWrapper.result;
+        const asset = {
+          receiverAddresses: this.selectedFounderIds,
+          autonId: this.autonId,
+        }
 
-        // console.log("ASSETTTTT");
-        // console.log(asset);
-        // this.transaction.moduleId = 1004;
-        // this.transaction.assetId = 0;
-        // this.transaction.assets = asset;
+        this.transaction.assets = asset;
       }
     },
   },
