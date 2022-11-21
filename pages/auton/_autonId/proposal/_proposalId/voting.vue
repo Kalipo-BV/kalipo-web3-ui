@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,164 +26,166 @@
         ></ProposalMain>
       </v-col>
       <v-col cols="12" md="7">
-        <v-row>
-          <v-col cols="12" md="4">
-            <v-card class="mt-4 rounded-lg" flat>
-              <v-card-text v-if="proposal">
-                <div class="text-h4 primary--text mb-1">Status</div>
-                <v-chip color="accent" v-if="proposal.status == 'CAMPAIGNING'"
-                  >not open yet</v-chip
-                >
-                <v-chip
-                  color="accent"
-                  v-if="
-                    proposal.status != 'CAMPAIGNING' &&
-                    proposal.binaryVoteResult.result == 'UNDECIDED'
-                  "
-                  >in progress</v-chip
-                >
-                <v-chip
-                  color="success"
-                  v-if="
-                    proposal.status != 'CAMPAIGNING' &&
-                    proposal.binaryVoteResult.result == 'ACCEPTED'
-                  "
-                  >decision reached</v-chip
-                >
-                <v-chip
-                  color="error"
-                  v-if="
-                    proposal.status != 'CAMPAIGNING' &&
-                    proposal.binaryVoteResult.result == 'REJECTED'
-                  "
-                  >decision reached</v-chip
-                >
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="8">
-            <v-card class="mt-4 rounded-lg" flat>
-              <v-card-text>
-                <div
-                  class="d-flex align-center justify-start"
-                  v-if="quorum != 0"
-                >
-                  <v-progress-circular
-                    :rotate="-270"
-                    :size="65"
-                    :width="7"
-                    :color="
-                      acceptCount + refuseCount >= quorum ? 'success' : 'accent'
-                    "
-                    :value="((acceptCount + refuseCount) / quorum) * 100"
-                    class="mr-4 text-caption"
-                  >
-                    {{ acceptCount + refuseCount }} / {{ quorum }}
-                  </v-progress-circular>
-                  <div>
-                    <div class="text-h4 primary--text">Attendance criteria</div>
-                    <div
-                      class="text-body-1 secondary--text"
-                      v-if="acceptCount + refuseCount < quorum"
-                    >
-                      Not reached yet
-                    </div>
-                    <div
-                      class="text-body-1 secondary--text"
-                      v-if="acceptCount + refuseCount >= quorum"
-                    >
-                      Reached
-                    </div>
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-card class="mt-5 rounded-lg" flat>
-          <v-card-text>
-            <div class="px-8">
-              <div
-                class="d-flex align-center justify-center"
-                style="margin-bottom: 70px; position: relative"
-              >
-                <div
-                  v-if="minAcceptance"
-                  :style="'position: absolute; left: ' + minAcceptance + '%'"
-                  class="mb-2"
-                >
-                  <div class="support-label-container">
-                    <div class="support-label">
-                      <v-chip
-                        class="ma-2 text-center"
-                        style="height: 45px"
-                        label
-                        outlined
-                      >
-                        <div class="">
-                          <div class="text-caption">{{ minAcceptance }}%</div>
-                          <div
-                            class="text-caption"
-                            style="margin-top: -6px; font-size: 10px !important"
-                          >
-                            needed
-                          </div>
-                        </div></v-chip
-                      >
-                      <div
-                        class="d-flex justify-center"
-                        style="margin-top: -10px"
-                      >
-                        <v-icon>mdi-chevron-down</v-icon>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<!--        <v-row>-->
+<!--          <v-col cols="12" md="4">-->
+<!--            <v-card class="mt-4 rounded-lg" flat>-->
+<!--              <v-card-text v-if="proposal">-->
+<!--                <div class="text-h4 primary&#45;&#45;text mb-1">Status</div>-->
+<!--                <v-chip color="accent" v-if="proposal.status == 'CAMPAIGNING'"-->
+<!--                  >not open yet</v-chip-->
+<!--                >-->
+<!--                <v-chip-->
+<!--                  color="accent"-->
+<!--                  v-if="-->
+<!--                    proposal.status != 'CAMPAIGNING' &&-->
+<!--                    proposal.binaryVoteResult.result == 'UNDECIDED'-->
+<!--                  "-->
+<!--                  >in progress</v-chip-->
+<!--                >-->
+<!--                <v-chip-->
+<!--                  color="success"-->
+<!--                  v-if="-->
+<!--                    proposal.status != 'CAMPAIGNING' &&-->
+<!--                    proposal.binaryVoteResult.result == 'ACCEPTED'-->
+<!--                  "-->
+<!--                  >decision reached</v-chip-->
+<!--                >-->
+<!--                <v-chip-->
+<!--                  color="error"-->
+<!--                  v-if="-->
+<!--                    proposal.status != 'CAMPAIGNING' &&-->
+<!--                    proposal.binaryVoteResult.result == 'REJECTED'-->
+<!--                  "-->
+<!--                  >decision reached</v-chip-->
+<!--                >-->
+<!--              </v-card-text>-->
+<!--            </v-card>-->
+<!--          </v-col>-->
+<!--          <v-col cols="12" md="8">-->
+<!--            <v-card class="mt-4 rounded-lg" flat>-->
+<!--              <v-card-text>-->
+<!--                <div-->
+<!--                  class="d-flex align-center justify-start"-->
+<!--                  v-if="quorum != 0"-->
+<!--                >-->
+<!--                  <v-progress-circular-->
+<!--                    :rotate="-270"-->
+<!--                    :size="65"-->
+<!--                    :width="7"-->
+<!--                    :color="-->
+<!--                      acceptCount + refuseCount >= quorum ? 'success' : 'accent'-->
+<!--                    "-->
+<!--                    :value="((acceptCount + refuseCount) / quorum) * 100"-->
+<!--                    class="mr-4 text-caption"-->
+<!--                  >-->
+<!--                    {{ acceptCount + refuseCount }} / {{ quorum }}-->
+<!--                  </v-progress-circular>-->
+<!--                  <div>-->
+<!--                    <div class="text-h4 primary&#45;&#45;text">Attendance criteria</div>-->
+<!--                    <div-->
+<!--                      class="text-body-1 secondary&#45;&#45;text"-->
+<!--                      v-if="acceptCount + refuseCount < quorum"-->
+<!--                    >-->
+<!--                      Not reached yet-->
+<!--                    </div>-->
+<!--                    <div-->
+<!--                      class="text-body-1 secondary&#45;&#45;text"-->
+<!--                      v-if="acceptCount + refuseCount >= quorum"-->
+<!--                    >-->
+<!--                      Reached-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </v-card-text>-->
+<!--            </v-card>-->
+<!--          </v-col>-->
+<!--        </v-row>-->
+<!--        <v-card class="mt-5 rounded-lg" flat>-->
+<!--          <v-card-text>-->
+<!--            <div class="px-8">-->
+<!--              <div-->
+<!--                class="d-flex align-center justify-center"-->
+<!--                style="margin-bottom: 70px; position: relative"-->
+<!--              >-->
+<!--                <div-->
+<!--                  v-if="minAcceptance"-->
+<!--                  :style="'position: absolute; left: ' + minAcceptance + '%'"-->
+<!--                  class="mb-2"-->
+<!--                >-->
+<!--                  <div class="support-label-container">-->
+<!--                    <div class="support-label">-->
+<!--                      <v-chip-->
+<!--                        class="ma-2 text-center"-->
+<!--                        style="height: 45px"-->
+<!--                        label-->
+<!--                        outlined-->
+<!--                      >-->
+<!--                        <div class="">-->
+<!--                          <div class="text-caption">{{ minAcceptance }}%</div>-->
+<!--                          <div-->
+<!--                            class="text-caption"-->
+<!--                            style="margin-top: -6px; font-size: 10px !important"-->
+<!--                          >-->
+<!--                            needed-->
+<!--                          </div>-->
+<!--                        </div></v-chip-->
+<!--                      >-->
+<!--                      <div-->
+<!--                        class="d-flex justify-center"-->
+<!--                        style="margin-top: -10px"-->
+<!--                      >-->
+<!--                        <v-icon>mdi-chevron-down</v-icon>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
 
-              <v-progress-linear
-                :background-color="
-                  acceptCount + refuseCount == 0 ? '' : 'error'
-                "
-                color="success"
-                :value="(acceptCount / (acceptCount + refuseCount)) * 100"
-                height="7px"
-              ></v-progress-linear>
-              <div class="d-flex justify-space-between mt-2">
-                <div>
-                  <div class="text-h4 success--text" v-if="acceptCount == 1">
-                    {{ acceptCount }} member
-                  </div>
-                  <div class="text-h4 success--text" v-if="acceptCount != 1">
-                    {{ acceptCount }} members
-                  </div>
-                  <div class="text-body-1 secondary--text">in favor</div>
-                </div>
-                <div>
-                  <div class="text-h4 primary--text" v-if="refuseCount == 1">
-                    {{ refuseCount }} member
-                  </div>
-                  <div class="text-h4 primary--text" v-if="refuseCount != 1">
-                    {{ refuseCount }} members
-                  </div>
-                  <div class="text-body-1 secondary--text float-right">
-                    against
-                  </div>
-                </div>
-              </div>
-            </div>
-          </v-card-text>
-        </v-card>
+<!--              <v-progress-linear-->
+<!--                :background-color="-->
+<!--                  acceptCount + refuseCount == 0 ? '' : 'error'-->
+<!--                "-->
+<!--                color="success"-->
+<!--                :value="(acceptCount / (acceptCount + refuseCount)) * 100"-->
+<!--                height="7px"-->
+<!--              ></v-progress-linear>-->
+<!--              <div class="d-flex justify-space-between mt-2">-->
+<!--                <div>-->
+<!--                  <div class="text-h4 success&#45;&#45;text" v-if="acceptCount == 1">-->
+<!--                    {{ acceptCount }} member-->
+<!--                  </div>-->
+<!--                  <div class="text-h4 success&#45;&#45;text" v-if="acceptCount != 1">-->
+<!--                    {{ acceptCount }} members-->
+<!--                  </div>-->
+<!--                  <div class="text-body-1 secondary&#45;&#45;text">in favor</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                  <div class="text-h4 primary&#45;&#45;text" v-if="refuseCount == 1">-->
+<!--                    {{ refuseCount }} member-->
+<!--                  </div>-->
+<!--                  <div class="text-h4 primary&#45;&#45;text" v-if="refuseCount != 1">-->
+<!--                    {{ refuseCount }} members-->
+<!--                  </div>-->
+<!--                  <div class="text-body-1 secondary&#45;&#45;text float-right">-->
+<!--                    against-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </v-card-text>-->
+<!--        </v-card>-->
 
-        <v-card class="mt-4 rounded-lg" flat>
-          <v-card-text>
-            <div class="text-h4 primary"></div>
-            <div class="d-flex justify-space-between align-center">
-              <v-btn color="success" @click="accept">Accept</v-btn>
-              <v-btn color="error" @click="refuse">Refuse</v-btn>
-            </div>
-          </v-card-text>
-        </v-card>
+<!--        <v-card class="mt-4 rounded-lg" flat>-->
+<!--          <v-card-text>-->
+<!--            <div class="text-h4 primary"></div>-->
+<!--            <div class="d-flex justify-space-between align-center">-->
+<!--              <v-btn color="success" @click="accept">Accept</v-btn>-->
+<!--              <v-btn color="error" @click="refuse">Refuse</v-btn>-->
+<!--            </div>-->
+<!--          </v-card-text>-->
+<!--        </v-card>-->
+        <ProposalChoicesOverview>
+        </ProposalChoicesOverview>
       </v-col>
     </v-row>
 

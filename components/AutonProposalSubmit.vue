@@ -63,12 +63,13 @@
           subtitle="Give us your title and describe why you're creating a poll"
         ></AutonStepperHeader>
 
-        <AutonProposalYesNo
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalYesNo>
+<!--        :selectedAccountId.sync="selectedAccountId"-->
+<!--        :invitationMessage.sync="invitationMessage"-->
+<!--        class="mt-4"-->
+<!--        :autonId="autonId"-->
+        <ProposalChoicesOverview
+
+        ></ProposalChoicesOverview>
       </v-card-text>
 
       <v-card-text v-if="step == 'multi-choice'">
@@ -275,8 +276,8 @@ export default {
               this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
 
               const asset = {
-                title: "Multi Prop",
-                campaignComment: "halloo",
+                title: this.statementMessage,
+                campaignComment: this.descriptionMessage,
                 proposalType: "multi-choice-poll",
                 autonId: this.autonId,
                 question: this.statementMessage,
