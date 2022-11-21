@@ -24,6 +24,8 @@
         class="mt-4"
         style="max-width: 500px"
         v-model="nameValue"
+        counter
+        maxlength="30"
       ></v-text-field>
 
       <v-text-field

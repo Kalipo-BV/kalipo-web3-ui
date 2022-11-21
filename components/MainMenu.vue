@@ -75,6 +75,24 @@
                 </div>
               </v-list-item-content>
             </v-list-item>
+            <v-list-item
+              link
+              v-if="unlocked"
+              @click="$router.replace(`/account/${account.username}`)"
+            >
+              <v-list-item-icon class="pl-1">
+                <v-icon color="white">mdi-account</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <div
+                  class="text-h6 font-weight-medium white--text"
+                  style="margin-top: -1px"
+                >
+                  My profile
+                </div>
+              </v-list-item-content>
+            </v-list-item>
             <v-list-item link @click="$router.push('/autons')">
               <v-list-item-icon class="pl-1">
                 <v-icon color="white">mdi-web</v-icon>
@@ -273,5 +291,6 @@ export default {
       }
     },
   },
+  mounted() {},
 };
 </script>
