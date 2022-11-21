@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@
     </v-card>
     <v-card v-if="isSigning && error == null" class="py-6">
       <WaitingAnimation
-        subtitle="Wating for next block"
+        subtitle="Waiting for next block"
         :title="title"
       ></WaitingAnimation>
     </v-card>

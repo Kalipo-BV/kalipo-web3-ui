@@ -112,7 +112,6 @@
           @data:choices="getChoicesMessage"
         ></AutonProposalChoices>
       </v-card-text>
-      <!-- END -->
 
       <AccountSign
         :transaction="transaction"
