@@ -17,12 +17,8 @@
 
 <template>
   <div>
-    <v-card
-      flat
-      link
-      @click="$router.push('/account/' + member.account.username)"
-    >
-      <v-card-text>
+    <v-card flat link>
+      <v-card-text @click="$router.push('/account/' + member.account.username)">
         <div class="d-flex justify-center">
           <v-avatar size="90" color="primary" class="white--text text-h2">{{
             getInitials(member.account.name)
@@ -69,12 +65,21 @@
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
             <div class="mt-2">
-              <v-btn v-if="attendeeCard" :disabled="true">Issue poa</v-btn>
+              <v-btn
+                v-if="attendeeCard"
+                :disabled="false"
+                @click="dialog = !dialog"
+                >Issue poa</v-btn
+              >
             </div>
           </div>
         </div>
       </v-card-text>
     </v-card>
+
+    <v-dialog v-model="dialog" max-width="500">
+      <PoaIssueDialog :autonId="member.autonId"></PoaIssueDialog>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -83,6 +88,7 @@ export default {
   data: () => ({
     userLang: null,
     role: "",
+    dialog: false,
   }),
   methods: {
     getInitials(parseStr) {
@@ -126,8 +132,7 @@ export default {
       }
     },
   },
-
-  mounted() {
+  async mounted() {
     this.userLang = navigator.language || navigator.userLanguage;
 
     if (this.member.role == "AFFILIATE_MEMBER") {
@@ -137,6 +142,8 @@ export default {
     if (this.member.role == "FULL_MEMBER") {
       this.role = "Full member";
     }
+
+    console.log(this.member.autonId);
   },
 };
 </script>

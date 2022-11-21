@@ -3,18 +3,21 @@
     <v-card>
       <v-card-text v-if="step == 0">
         <AutonStepperHeader
-          title="Creating a new poa"
-          subtitle="First choose a name and image id"
+          title="Issue a poa"
+          subtitle="Choose a poa which is available to issue"
         ></AutonStepperHeader>
 
-        <PoaNameImage :name.sync="name" :image.sync="image"></PoaNameImage>
+        <AvailablePoasIssue
+          v-if="!isFetching"
+          :poas="auton.poas"
+        ></AvailablePoasIssue>
       </v-card-text>
 
       <AccountSign
         :transaction="transaction"
         v-if="step == 1"
         :uri="uri"
-        title="Creating poa"
+        title="Issueing a poa"
       ></AccountSign>
 
       <v-divider v-if="step !== 1"></v-divider>
@@ -33,10 +36,14 @@
   </div>
 </template>
 <script>
+import AvailablePoasIssue from "./AvailablePoasIssue.vue";
 export default {
+  components: {
+    AvailablePoasIssue,
+  },
   props: {
+    member: Object,
     autonId: String,
-    auton: Object,
   },
   data() {
     return {
@@ -44,18 +51,23 @@ export default {
       name: null,
       image: null,
       uri: "",
-
+      isFetching: true,
       transaction: {
         moduleId: 1008,
         assetId: 0,
         assets: {},
       },
+      auton: null,
     };
   },
-  mounted() {
-    console.log("autonId - PoaCreateDialog");
-    console.log(this.autonId);
-    console.log(this.auton.autonProfile.name);
+  async mounted() {
+    const autonWrapper = await this.$invoke("auton:getByID", {
+      id: this.autonId,
+    });
+    this.auton = autonWrapper.result;
+    this.isFetching = false;
+    console.log("this.auton in DIALOG");
+    console.log(this.auton);
   },
   computed: {},
   methods: {
@@ -63,7 +75,10 @@ export default {
       this.step++;
 
       if (this.step == 1) {
-        this.uri = `/auton/${this.auton.autonProfile.name.replace(" ", "_")}/`;
+        // this.uri = `/auton/${this.auton.autonProfile.name.replace(
+        //   " ",
+        //   "_"
+        // )}/poas`;
 
         const asset = {
           autonId: this.autonId,

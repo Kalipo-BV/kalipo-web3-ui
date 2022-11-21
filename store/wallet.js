@@ -38,5 +38,8 @@ export const mutations = {
     lock(state) {
         state.account = {}
         state.unlocked = false
+    },
+    refreshMemberships(state, memberships) {
+        state.account.memberships = memberships;
     }
 }

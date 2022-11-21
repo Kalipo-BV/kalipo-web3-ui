@@ -131,7 +131,10 @@ export default {
           if (this.callbackFinish != null) {
             this.$nuxt.$emit(this.callbackFinish, true);
           }
-          this.$router.replace(this.uri);
+
+          this.$router.push({
+            path: this.uri,
+          });
         }
       } else {
         if (transactionWrapper.error) {
@@ -141,6 +144,16 @@ export default {
           this.disabled = true;
         }
       }
+
+      // refresh account in store
+      const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
+        id: this.account.accountId,
+      });
+
+      this.$store.commit(
+        "wallet/refreshMemberships",
+        accountWrapper.result.memberships
+      );
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {
