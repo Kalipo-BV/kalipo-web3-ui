@@ -67,7 +67,7 @@
             <div class="mt-2">
               <v-btn
                 v-if="attendeeCard"
-                :disabled="false"
+                :disabled="authorizedIssuePoa"
                 @click="dialog = !dialog"
                 >Issue poa</v-btn
               >
@@ -78,19 +78,49 @@
     </v-card>
 
     <v-dialog v-model="dialog" max-width="500">
-      <PoaIssueDialog :autonId="member.autonId"></PoaIssueDialog>
+      <PoaIssueDialog
+        :member="member"
+        :autonId="member.autonId"
+      ></PoaIssueDialog>
     </v-dialog>
   </div>
 </template>
 <script>
 export default {
-  props: ["member", "attendeeCard"],
+  props: ["member", "attendeeCard", "autonId"],
+  computed: {
+    account() {
+      return this.$store.state.wallet.account;
+    },
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
+  },
   data: () => ({
     userLang: null,
     role: "",
     dialog: false,
+    authorizedIssuePoa: true,
   }),
   methods: {
+    async authorized() {
+      if (this.unlocked) {
+        const memberships = this.$store.state.wallet.account.memberships;
+        memberships.forEach(async (element) => {
+          const mship = await this.$invoke("membership:getByID", {
+            id: element,
+          });
+          if (
+            mship.result.autonId == this.autonId.id &&
+            mship.result.role == "FULL_MEMBER"
+          ) {
+            this.authorizedIssuePoa = false;
+          }
+        });
+      } else {
+        return true;
+      }
+    },
     getInitials(parseStr) {
       if (parseStr != undefined) {
         const nameList = parseStr.split(" ");
@@ -143,7 +173,7 @@ export default {
       this.role = "Full member";
     }
 
-    console.log(this.member.autonId);
+    this.authorized();
   },
 };
 </script>
