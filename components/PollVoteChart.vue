@@ -6,7 +6,7 @@
         <v-divider></v-divider>
         <v-card-text class="yellow">
             <div>
-                <apexchart width="340" type="donut" :options="chartOptions" :series="series"></apexchart>            
+                <apexchart :options="chartOptions" :series="series"></apexchart>            
             </div>
         </v-card-text>
     </v-card>
