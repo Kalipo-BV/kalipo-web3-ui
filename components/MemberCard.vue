@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-card flat link min-height="350px">
+    <v-card flat link min-height="360px">
       <v-card-text @click="$router.push('/account/' + member.account.username)">
         <div class="d-flex justify-center">
           <v-avatar size="90" color="primary" class="white--text text-h2">{{
