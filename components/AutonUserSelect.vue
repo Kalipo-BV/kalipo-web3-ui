@@ -33,7 +33,7 @@
       :items="users"
       chips
       color="blue-grey lighten-2"
-      label="Additional founding members"
+      label="Add additional members"
       item-text="name"
       item-value="id"
       multiple
@@ -114,8 +114,10 @@ export default {
         }
       }
     }
+    // filter so you cant add yourself
+    this.users = this.users.filter(item => item.id !== this.account.accountId); 
     this.isUpdating = false;
-    console.log("AUTON USER SELECT");
+
   },
   methods: {
     remove(item) {

@@ -55,7 +55,6 @@ export default {
           const mship = await this.$invoke("membership:getByID", {
             id: element,
           });
-          console.log(mship.result.autonId == this.autonId);
           if (
             mship.result.autonId == this.autonId &&
             mship.result.role == "FULL_MEMBER"
@@ -88,6 +87,7 @@ export default {
 
       for (let index = 0; index < this.auton.poas.length; index++) {
         const poaId = this.auton.poas[index];
+        console.log(poaId);
         const poaWrapper = await this.$invoke("poa:getByID", {
           id: poaId,
         });
@@ -97,7 +97,6 @@ export default {
     }
 
     this.authorized();
-    console.log(this.autonId);
   },
 };
 </script>
