@@ -154,7 +154,9 @@
         <v-list-item-group
           active-class="blue--text text--lighten-3 "
         >
-          <v-list-item v-for="page in navItems" :key="page.title" v-if="!page.hide">
+          <v-list-item v-for="page in navItems" :key="page.title"
+                       v-if="!page.hide && (page.showIfUnlocked === unlocked || page.showIfUnlocked === undefined)">
+
             <v-list-item-title @click="$router.push(page.to)"><v-icon>{{page.icon}}</v-icon> {{page.title}}</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
