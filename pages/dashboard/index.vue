@@ -59,6 +59,9 @@
           </v-col>
         </v-row>
       </v-col>
+      <v-col>
+        <PollVoteChart></PollVoteChart>
+      </v-col>
       <v-col cols="12" md="4">
         <div class="text-h2 primary--text">Personal backlog</div>
 
@@ -173,151 +176,129 @@
   </v-container>
 </template>
 <script>
+import PollVoteChart from '~/components/PollVoteChart.vue';
+
 export default {
-  layout: "user",
-  computed: {
-    account() {
-      return this.$store.state.wallet.account;
+    layout: "user",
+    computed: {
+        account() {
+            return this.$store.state.wallet.account;
+        },
     },
-  },
-  data: () => ({
-    autons: [],
-    memberships: [],
-    membershipInvitations: [],
-    dialog: false,
-    genericDialog: false,
-    actionText: "",
-    chipText: "",
-    uri: null,
-    transaction: {
-      moduleId: 1002,
-      assetId: 0,
-      assets: {
-        membershipId: null,
-      },
+    data: () => ({
+        autons: [],
+        memberships: [],
+        membershipInvitations: [],
+        dialog: false,
+        genericDialog: false,
+        actionText: "",
+        chipText: "",
+        uri: null,
+        transaction: {
+            moduleId: 1002,
+            assetId: 0,
+            assets: {
+                membershipId: null,
+            },
+        },
+    }),
+    methods: {
+        acceptMembership(membership) {
+            this.uri =
+                "/auton/" + membership.auton.autonProfile.name.replaceAll(" ", "_");
+            this.transaction.assetId = 0;
+            this.transaction.assets.membershipId = membership.id;
+            this.actionText = "Joining: " + membership.auton.autonProfile.name;
+            this.chipText = "Accept";
+            this.genericDialog = true;
+        },
+        rejecttMembership(membership) {
+            this.uri = this.$route.path;
+            this.transaction.assetId = 1;
+            this.transaction.assets.membershipId = membership.id;
+            this.actionText = "Joining: " + membership.auton.autonProfile.name;
+            this.chipText = "Reject";
+            this.genericDialog = true;
+        },
     },
-  }),
-  methods: {
-    acceptMembership(membership) {
-      this.uri =
-        "/auton/" + membership.auton.autonProfile.name.replaceAll(" ", "_");
-      this.transaction.assetId = 0;
-      this.transaction.assets.membershipId = membership.id;
-      this.actionText = "Joining: " + membership.auton.autonProfile.name;
-      this.chipText = "Accept";
-      this.genericDialog = true;
+    created() {
+        this.$nuxt.$on("Dashboard-ModalClose", ($event) => (this.genericDialog = false));
     },
-    rejecttMembership(membership) {
-      this.uri = this.$route.path;
-      this.transaction.assetId = 1;
-      this.transaction.assets.membershipId = membership.id;
-      this.actionText = "Joining: " + membership.auton.autonProfile.name;
-      this.chipText = "Reject";
-      this.genericDialog = true;
-    },
-  },
-  created() {
-    this.$nuxt.$on(
-      "Dashboard-ModalClose",
-      ($event) => (this.genericDialog = false)
-    );
-  },
-  async mounted() {
-    this.$nuxt.$emit("MainMenu-setPage", "home");
-    const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
-      id: this.account.accountId,
-    });
-    console.log(accountWrapper);
-
-    const account = accountWrapper.result;
-    console.log(account);
-
-    for (let index = 0; index < account.memberships.length; index++) {
-      const membershipId = account.memberships[index];
-      const membershipWrapper = await this.$invoke("membership:getByID", {
-        id: membershipId,
-      });
-      const membership = membershipWrapper.result;
-      this.memberships.push(membership);
-
-      const autonWrapper = await this.$invoke("auton:getByID", {
-        id: membership.autonId,
-      });
-      const auton = autonWrapper.result;
-
-      const now = new Date();
-      const nowInSec = BigInt(Math.floor(now / 1000));
-
-      auton.activeMembershipsCount = 0;
-      for (let indexQ = 0; indexQ < auton.memberships.length; indexQ++) {
-        const autonMembershipId = auton.memberships[indexQ];
-        const autonMembershipWrapper = await this.$invoke(
-          "membership:getByID",
-          {
-            id: autonMembershipId,
-          }
-        );
-        if (
-          BigInt(autonMembershipWrapper.result.started) != BigInt(0) &&
-          nowInSec > BigInt(autonMembershipWrapper.result.started)
-        ) {
-          auton.activeMembershipsCount++;
-        }
-      }
-
-      if (
-        BigInt(membership.started) != BigInt(0) &&
-        nowInSec >= BigInt(membership.started)
-      ) {
-        auton.votable = 0;
-        for (let indexY = 0; indexY < auton.proposals.length; indexY++) {
-          const proposalId = auton.proposals[indexY];
-          const proposalWrapper = await this.$invoke("proposal:getByID", {
-            id: proposalId,
-          });
-          const proposal = proposalWrapper.result;
-          let didAlreadyVote = false;
-          if (
-            BigInt(proposal.created) >= BigInt(membership.started) &&
-            (proposal.status == "VOTING" || proposal.status == "DECIDED")
-          ) {
-            for (let indexZ = 0; indexZ < proposal.votes.length; indexZ++) {
-              const voteId = proposal.votes[indexZ];
-              const voteWrapper = await this.$invoke("vote:getByID", {
-                id: voteId,
-              });
-              if (voteWrapper.result.membershipId == membershipId) {
-                didAlreadyVote = true;
-                break;
-              }
-            }
-            if (!didAlreadyVote) {
-              auton.votable++;
-            }
-          }
-        }
-
-        this.autons.push(auton);
-      } else if (
-        nowInSec >= BigInt(membership.invitation.validStart) &&
-        nowInSec < BigInt(membership.invitation.validEnd)
-      ) {
-        const proposalWrapper = await this.$invoke("proposal:getByID", {
-          id: membership.invitation.proposalId,
+    async mounted() {
+        this.$nuxt.$emit("MainMenu-setPage", "home");
+        const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
+            id: this.account.accountId,
         });
-        const proposal = proposalWrapper.result;
-        membership.proposal = proposal;
-
-        membership.proposalIndex = auton.proposals.indexOf(
-          membership.invitation.proposalId
-        );
-        membership.auton = auton;
-        membership.id = membershipId;
-        this.membershipInvitations.push(membership);
-      }
-    }
-
-    console.log(this.memberships);
-  },
+        console.log(accountWrapper);
+        const account = accountWrapper.result;
+        console.log(account);
+        for (let index = 0; index < account.memberships.length; index++) {
+            const membershipId = account.memberships[index];
+            const membershipWrapper = await this.$invoke("membership:getByID", {
+                id: membershipId,
+            });
+            const membership = membershipWrapper.result;
+            this.memberships.push(membership);
+            const autonWrapper = await this.$invoke("auton:getByID", {
+                id: membership.autonId,
+            });
+            const auton = autonWrapper.result;
+            const now = new Date();
+            const nowInSec = BigInt(Math.floor(now / 1000));
+            auton.activeMembershipsCount = 0;
+            for (let indexQ = 0; indexQ < auton.memberships.length; indexQ++) {
+                const autonMembershipId = auton.memberships[indexQ];
+                const autonMembershipWrapper = await this.$invoke("membership:getByID", {
+                    id: autonMembershipId,
+                });
+                if (BigInt(autonMembershipWrapper.result.started) != BigInt(0) &&
+                    nowInSec > BigInt(autonMembershipWrapper.result.started)) {
+                    auton.activeMembershipsCount++;
+                }
+            }
+            if (BigInt(membership.started) != BigInt(0) &&
+                nowInSec >= BigInt(membership.started)) {
+                auton.votable = 0;
+                for (let indexY = 0; indexY < auton.proposals.length; indexY++) {
+                    const proposalId = auton.proposals[indexY];
+                    const proposalWrapper = await this.$invoke("proposal:getByID", {
+                        id: proposalId,
+                    });
+                    const proposal = proposalWrapper.result;
+                    let didAlreadyVote = false;
+                    if (BigInt(proposal.created) >= BigInt(membership.started) &&
+                        (proposal.status == "VOTING" || proposal.status == "DECIDED")) {
+                        for (let indexZ = 0; indexZ < proposal.votes.length; indexZ++) {
+                            const voteId = proposal.votes[indexZ];
+                            const voteWrapper = await this.$invoke("vote:getByID", {
+                                id: voteId,
+                            });
+                            if (voteWrapper.result.membershipId == membershipId) {
+                                didAlreadyVote = true;
+                                break;
+                            }
+                        }
+                        if (!didAlreadyVote) {
+                            auton.votable++;
+                        }
+                    }
+                }
+                this.autons.push(auton);
+            }
+            else if (nowInSec >= BigInt(membership.invitation.validStart) &&
+                nowInSec < BigInt(membership.invitation.validEnd)) {
+                const proposalWrapper = await this.$invoke("proposal:getByID", {
+                    id: membership.invitation.proposalId,
+                });
+                const proposal = proposalWrapper.result;
+                membership.proposal = proposal;
+                membership.proposalIndex = auton.proposals.indexOf(membership.invitation.proposalId);
+                membership.auton = auton;
+                membership.id = membershipId;
+                this.membershipInvitations.push(membership);
+            }
+        }
+        console.log(this.memberships);
+    },
 };
 </script>
