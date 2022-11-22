@@ -20,7 +20,7 @@
     <v-container>
       <v-row class="mt-1">
         <v-col cols="12" md="6">
-          <div>
+          <div v-if="auton != null && auton.type == 'DEFAULT'">
             <div class="d-flex align-center justify-space-between">
               <div class="text-h2 primary--text">
                 {{ proposalsRunning.length }} running proposal{{
@@ -55,6 +55,80 @@
             </v-carousel>
             <div class="secondary--text"></div>
           </div>
+          <!-- EVENT -->
+          <v-card
+            class="mt-2"
+            flat
+            v-if="auton != null && auton.type == 'EVENT'"
+          >
+            <v-card-text>
+              <div class="text-h6 primary--text">Event details</div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <div class="text-body-1">
+                <v-icon>mdi-clipboard-text-outline</v-icon>
+                {{ "&nbsp; Description: " + auton.event.description }}
+              </div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <div class="text-body-1">
+                <v-icon>mdi-map-marker</v-icon>
+                {{ "&nbsp; Location: " + auton.event.location }}
+              </div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <div class="text-body-1">
+                <v-icon>mdi-account-group</v-icon>
+                {{ "&nbsp; Capacity: " + auton.event.capacity + " people" }}
+              </div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <div class="text-body-1">
+                <v-icon>mdi-currency-eur</v-icon>
+                {{ "&nbsp; Price: " + auton.event.price }}
+              </div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <div v-if="start != null" class="text-body-1">
+                <v-icon>mdi-calendar-check</v-icon>
+                {{
+                  "&nbsp; Start: " +
+                  start.getFullYear() +
+                  "/" +
+                  start.getDate() +
+                  "/" +
+                  start.getMonth() +
+                  " at " +
+                  start.getHours() +
+                  ":" +
+                  start.getMinutes()
+                }}
+              </div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <div v-if="end != null" class="text-body-1">
+                <v-icon>mdi-calendar-remove</v-icon>
+                {{
+                  "&nbsp; End: " +
+                  end.getFullYear() +
+                  "/" +
+                  end.getDate() +
+                  "/" +
+                  end.getMonth() +
+                  " at " +
+                  end.getHours() +
+                  ":" +
+                  end.getMinutes()
+                }}
+              </div>
+            </v-card-text>
+          </v-card>
         </v-col>
         <v-col cols="12" md="6">
           <div class="d-flex align-center justify-space-between">
@@ -129,8 +203,10 @@ export default {
     carousel: 0,
     news: [],
     auton: null,
+    start: null,
+    end: null,
   }),
-  async mounted() {
+  async beforeCreate() {
     this.$nuxt.$emit("Auton-setPage", "autons");
 
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
@@ -197,6 +273,11 @@ export default {
           message: `@${memberAccountWrapper.result.username} joined the auton`,
         });
       }
+    }
+
+    if (this.auton != null) {
+      this.start = new Date(parseInt(this.auton.event.start));
+      this.end = new Date(parseInt(this.auton.event.end));
     }
 
     this.news.reverse();
