@@ -257,7 +257,7 @@ export default {
           icon: "mdi-account",
           title: "My profile",
           showIfUnlocked: true,
-          to: this.account ? "/account/organizer" : "/account"
+          to: this.getAccount() ? `/account/${this.getAccount().username}` : "/account"
         },
         {
           icon: "mdi-file-sign",
@@ -289,8 +289,12 @@ export default {
     this.$nuxt.$on("MainMenu-setPage", (page) => this.setMenu(page));
   },
   methods: {
+    getAccount() {
+      return this.$store.state.wallet.account;
+    },
+
     setMenu(page) {
-      if (!this.unlocked) { // unlocked means logged i (probably)
+      if (!this.unlocked) { // unlocked means logged in (probably)
         if (page === "home") {
           this.selectedItem = 0;
         } else if (page === "autons") {
@@ -301,18 +305,17 @@ export default {
           this.selectedItem = -1;
         }
       } else {
+        console.log(page)
         if (page === "home") {
           this.selectedItem = 0;
         } else if (page === "dashboard") {
           this.selectedItem = 1;
-        } else if (page === "account") {
+        } else if (page === "my-profile") {
           this.selectedItem = 2;
         } else if (page === "autons") {
           this.selectedItem = 3;
         } else if (page === "users") {
           this.selectedItem = 4;
-        } else if (page === "logs") {
-          this.selectedItem = 5;
         } else {
           this.selectedItem = -1;
         }
