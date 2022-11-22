@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-card flat link>
+    <v-card flat link min-height="360px">
       <v-card-text @click="$router.push('/account/' + member.account.username)">
         <div class="d-flex justify-center">
           <v-avatar size="90" color="primary" class="white--text text-h2">{{
@@ -61,6 +61,14 @@
             <v-btn color="accent" fab x-small class="mr-1"
               ><v-icon small>{{ getIcon(social.social) }}</v-icon></v-btn
             >
+            <div class="mt-2">
+              <v-btn
+                v-if="attendeeCard"
+                :disabled="authorizedIssuePoa"
+                @click="dialog = !dialog"
+                >Issue poa</v-btn
+              >
+            </div>
           </div>
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
