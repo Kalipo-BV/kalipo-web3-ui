@@ -1,22 +1,26 @@
 <template>
   <v-container>
     <v-row class="mt-2 ml-1" style="justify-content: left; align-items: center">
-      <v-text-field
-        solo
-        label="Search a poa"
-        append-icon="mdi-magnify"
-        class="mt-4"
-        style="max-width: 250px"
-        disabled
-      ></v-text-field>
-      <v-btn
-        class="mb-2 ml-4 pa-6"
-        :disabled="authorizedNewPoa"
-        text
-        outlined
-        @click="dialog = !dialog"
-        >Create poa</v-btn
-      >
+      <div>
+        <v-text-field
+          solo
+          label="Search a poa"
+          append-icon="mdi-magnify"
+          class="mt-4 mr-4"
+          style="max-width: 250px"
+          disabled
+        ></v-text-field>
+      </div>
+      <div>
+        <v-btn
+          class="mb-2 pa-6"
+          :disabled="authorizedNewPoa"
+          text
+          outlined
+          @click="dialog = !dialog"
+          >Create poa</v-btn
+        >
+      </div>
     </v-row>
     <v-row class="">
       <v-col xs="12" sm="6" md="4" lg="3" v-for="(poa, i) in poas" :key="i">
