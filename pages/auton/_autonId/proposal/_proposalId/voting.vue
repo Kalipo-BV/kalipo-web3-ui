@@ -26,166 +26,170 @@
         ></ProposalMain>
       </v-col>
       <v-col cols="12" md="7">
-<!--        <v-row>-->
-<!--          <v-col cols="12" md="4">-->
-<!--            <v-card class="mt-4 rounded-lg" flat>-->
-<!--              <v-card-text v-if="proposal">-->
-<!--                <div class="text-h4 primary&#45;&#45;text mb-1">Status</div>-->
-<!--                <v-chip color="accent" v-if="proposal.status == 'CAMPAIGNING'"-->
-<!--                  >not open yet</v-chip-->
-<!--                >-->
-<!--                <v-chip-->
-<!--                  color="accent"-->
-<!--                  v-if="-->
-<!--                    proposal.status != 'CAMPAIGNING' &&-->
-<!--                    proposal.binaryVoteResult.result == 'UNDECIDED'-->
-<!--                  "-->
-<!--                  >in progress</v-chip-->
-<!--                >-->
-<!--                <v-chip-->
-<!--                  color="success"-->
-<!--                  v-if="-->
-<!--                    proposal.status != 'CAMPAIGNING' &&-->
-<!--                    proposal.binaryVoteResult.result == 'ACCEPTED'-->
-<!--                  "-->
-<!--                  >decision reached</v-chip-->
-<!--                >-->
-<!--                <v-chip-->
-<!--                  color="error"-->
-<!--                  v-if="-->
-<!--                    proposal.status != 'CAMPAIGNING' &&-->
-<!--                    proposal.binaryVoteResult.result == 'REJECTED'-->
-<!--                  "-->
-<!--                  >decision reached</v-chip-->
-<!--                >-->
-<!--              </v-card-text>-->
-<!--            </v-card>-->
-<!--          </v-col>-->
-<!--          <v-col cols="12" md="8">-->
-<!--            <v-card class="mt-4 rounded-lg" flat>-->
-<!--              <v-card-text>-->
-<!--                <div-->
-<!--                  class="d-flex align-center justify-start"-->
-<!--                  v-if="quorum != 0"-->
-<!--                >-->
-<!--                  <v-progress-circular-->
-<!--                    :rotate="-270"-->
-<!--                    :size="65"-->
-<!--                    :width="7"-->
-<!--                    :color="-->
-<!--                      acceptCount + refuseCount >= quorum ? 'success' : 'accent'-->
-<!--                    "-->
-<!--                    :value="((acceptCount + refuseCount) / quorum) * 100"-->
-<!--                    class="mr-4 text-caption"-->
-<!--                  >-->
-<!--                    {{ acceptCount + refuseCount }} / {{ quorum }}-->
-<!--                  </v-progress-circular>-->
-<!--                  <div>-->
-<!--                    <div class="text-h4 primary&#45;&#45;text">Attendance criteria</div>-->
-<!--                    <div-->
-<!--                      class="text-body-1 secondary&#45;&#45;text"-->
-<!--                      v-if="acceptCount + refuseCount < quorum"-->
-<!--                    >-->
-<!--                      Not reached yet-->
-<!--                    </div>-->
-<!--                    <div-->
-<!--                      class="text-body-1 secondary&#45;&#45;text"-->
-<!--                      v-if="acceptCount + refuseCount >= quorum"-->
-<!--                    >-->
-<!--                      Reached-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </v-card-text>-->
-<!--            </v-card>-->
-<!--          </v-col>-->
-<!--        </v-row>-->
-<!--        <v-card class="mt-5 rounded-lg" flat>-->
-<!--          <v-card-text>-->
-<!--            <div class="px-8">-->
-<!--              <div-->
-<!--                class="d-flex align-center justify-center"-->
-<!--                style="margin-bottom: 70px; position: relative"-->
-<!--              >-->
-<!--                <div-->
-<!--                  v-if="minAcceptance"-->
-<!--                  :style="'position: absolute; left: ' + minAcceptance + '%'"-->
-<!--                  class="mb-2"-->
-<!--                >-->
-<!--                  <div class="support-label-container">-->
-<!--                    <div class="support-label">-->
-<!--                      <v-chip-->
-<!--                        class="ma-2 text-center"-->
-<!--                        style="height: 45px"-->
-<!--                        label-->
-<!--                        outlined-->
-<!--                      >-->
-<!--                        <div class="">-->
-<!--                          <div class="text-caption">{{ minAcceptance }}%</div>-->
-<!--                          <div-->
-<!--                            class="text-caption"-->
-<!--                            style="margin-top: -6px; font-size: 10px !important"-->
-<!--                          >-->
-<!--                            needed-->
-<!--                          </div>-->
-<!--                        </div></v-chip-->
-<!--                      >-->
-<!--                      <div-->
-<!--                        class="d-flex justify-center"-->
-<!--                        style="margin-top: -10px"-->
-<!--                      >-->
-<!--                        <v-icon>mdi-chevron-down</v-icon>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-card  class="mt-4 rounded-lg" flat>
+              <v-card-text  v-if="proposal">
+                <div class="text-h4 primary--text mb-1">Status</div>
+                <v-chip color="accent" v-if="proposal.status == 'CAMPAIGNING'"
+                  >not open yet</v-chip
+                >
+                <v-chip
+                  color="accent"
+                  v-if="
+                    proposal.status != 'CAMPAIGNING' &&
+                    proposal.binaryVoteResult.result == 'UNDECIDED'
+                  "
+                  >in progress</v-chip
+                >
+                <v-chip
+                  color="success"
+                  v-if="
+                    proposal.status != 'CAMPAIGNING' &&
+                    proposal.binaryVoteResult.result == 'ACCEPTED'
+                  "
+                  >decision reached</v-chip
+                >
+                <v-chip
+                  color="error"
+                  v-if="
+                    proposal.status != 'CAMPAIGNING' &&
+                    proposal.binaryVoteResult.result == 'REJECTED'
+                  "
+                  >decision reached</v-chip
+                >
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="8">
+            <v-card class="mt-4 rounded-lg" flat>
+              <v-card-text v-if="membership">
+                <div
+                  class="d-flex align-center justify-start"
+                  v-if="quorum != 0"
+                >
+                  <v-progress-circular
+                    :rotate="-270"
+                    :size="65"
+                    :width="7"
+                    :color="
+                      acceptCount + refuseCount >= quorum ? 'success' : 'accent'
+                    "
+                    :value="((acceptCount + refuseCount) / quorum) * 100"
+                    class="mr-4 text-caption"
+                  >
+                    {{ acceptCount + refuseCount }} / {{ quorum }}
+                  </v-progress-circular>
+                  <div>
+                    <div class="text-h4 primary--text">Attendance criteria</div>
+                    <div
+                      class="text-body-1 secondary--text"
+                      v-if="acceptCount + refuseCount < quorum"
+                    >
+                      Not reached yet
+                    </div>
+                    <div
+                      class="text-body-1 secondary--text"
+                      v-if="acceptCount + refuseCount >= quorum"
+                    >
+                      Reached
+                    </div>
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-card v-if="membership" class="mt-5 rounded-lg" flat>
+          <v-card-text>
+            <div class="px-8">
+              <div
+                class="d-flex align-center justify-center"
+                style="margin-bottom: 70px; position: relative"
+              >
+                <div
+                  v-if="minAcceptance"
+                  :style="'position: absolute; left: ' + minAcceptance + '%'"
+                  class="mb-2"
+                >
+                  <div class="support-label-container">
+                    <div class="support-label">
+                      <v-chip
+                        class="ma-2 text-center"
+                        style="height: 45px"
+                        label
+                        outlined
+                      >
+                        <div class="">
+                          <div class="text-caption">{{ minAcceptance }}%</div>
+                          <div
+                            class="text-caption"
+                            style="margin-top: -6px; font-size: 10px !important"
+                          >
+                            needed
+                          </div>
+                        </div></v-chip
+                      >
+                      <div
+                        class="d-flex justify-center"
+                        style="margin-top: -10px"
+                      >
+                        <v-icon>mdi-chevron-down</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-<!--              <v-progress-linear-->
-<!--                :background-color="-->
-<!--                  acceptCount + refuseCount == 0 ? '' : 'error'-->
-<!--                "-->
-<!--                color="success"-->
-<!--                :value="(acceptCount / (acceptCount + refuseCount)) * 100"-->
-<!--                height="7px"-->
-<!--              ></v-progress-linear>-->
-<!--              <div class="d-flex justify-space-between mt-2">-->
-<!--                <div>-->
-<!--                  <div class="text-h4 success&#45;&#45;text" v-if="acceptCount == 1">-->
-<!--                    {{ acceptCount }} member-->
-<!--                  </div>-->
-<!--                  <div class="text-h4 success&#45;&#45;text" v-if="acceptCount != 1">-->
-<!--                    {{ acceptCount }} members-->
-<!--                  </div>-->
-<!--                  <div class="text-body-1 secondary&#45;&#45;text">in favor</div>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <div class="text-h4 primary&#45;&#45;text" v-if="refuseCount == 1">-->
-<!--                    {{ refuseCount }} member-->
-<!--                  </div>-->
-<!--                  <div class="text-h4 primary&#45;&#45;text" v-if="refuseCount != 1">-->
-<!--                    {{ refuseCount }} members-->
-<!--                  </div>-->
-<!--                  <div class="text-body-1 secondary&#45;&#45;text float-right">-->
-<!--                    against-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </v-card-text>-->
-<!--        </v-card>-->
+              <v-progress-linear
+                :background-color="
+                  acceptCount + refuseCount == 0 ? '' : 'error'
+                "
+                color="success"
+                :value="(acceptCount / (acceptCount + refuseCount)) * 100"
+                height="7px"
+              ></v-progress-linear>
+              <div class="d-flex justify-space-between mt-2">
+                <div>
+                  <div class="text-h4 success--text" v-if="acceptCount == 1">
+                    {{ acceptCount }} member
+                  </div>
+                  <div class="text-h4 success--text" v-if="acceptCount != 1">
+                    {{ acceptCount }} members
+                  </div>
+                  <div class="text-body-1 secondary--text">in favor</div>
+                </div>
+                <div>
+                  <div class="text-h4 primary--text" v-if="refuseCount == 1">
+                    {{ refuseCount }} member
+                  </div>
+                  <div class="text-h4 primary--text" v-if="refuseCount != 1">
+                    {{ refuseCount }} members
+                  </div>
+                  <div class="text-body-1 secondary--text float-right">
+                    against
+                  </div>
+                </div>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
 
-<!--        <v-card class="mt-4 rounded-lg" flat>-->
-<!--          <v-card-text>-->
-<!--            <div class="text-h4 primary"></div>-->
-<!--            <div class="d-flex justify-space-between align-center">-->
-<!--              <v-btn color="success" @click="accept">Accept</v-btn>-->
-<!--              <v-btn color="error" @click="refuse">Refuse</v-btn>-->
-<!--            </div>-->
-<!--          </v-card-text>-->
-<!--        </v-card>-->
-        <ProposalChoicesOverview>
-        </ProposalChoicesOverview>
+        <v-card v-if="membership" class="mt-4 rounded-lg" flat>
+          <v-card-text>
+            <div class="text-h4 primary"></div>
+            <div class="d-flex justify-space-between align-center">
+              <v-btn color="success" @click="accept">Accept</v-btn>
+              <v-btn color="error" @click="refuse">Refuse</v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+        <ProposalChoicesOverview
+          v-if="!membership"
+          :statement="statement"
+          :choices="answers"
+          @update:answerValue="getAnswerValue"
+        ></ProposalChoicesOverview>
       </v-col>
     </v-row>
 
@@ -222,14 +226,17 @@ export default {
     dialog: false,
     chipText: null,
     uri: null,
+    membership: false,
     transaction: {
       moduleId: 1005,
       assetId: 0,
       assets: {
         proposalId: null,
         answer: null,
-      },
+      }
     },
+    statement: null,
+    answers: [],
   }),
   created() {
     this.$nuxt.$on(
@@ -272,6 +279,7 @@ export default {
         id: provisionId,
       });
 
+
       for (let index = 0; index < this.auton.memberships.length; index++) {
         const autonMembershipId = this.auton.memberships[index];
         const autonMembershipWrapper = await this.$invoke(
@@ -289,74 +297,95 @@ export default {
         }
       }
 
-      const rawQuorum =
-        this.eligibleVoters * (provisionWrapper.result.attendance / 100);
-      if (rawQuorum % 1 != 0) {
-        this.quorum = Math.ceil(rawQuorum);
-      } else {
-        this.quorum = rawQuorum;
+      if (this.proposal.type == "multi-choice-poll") {
+        this.transaction.assetId = 1;
+        this.membership = false;
       }
+        this.statement = this.proposal.multiChoicePollArguments.question;
+        for (let i = 0;i < this.proposal.multiChoicePollArguments.answers.length;i++) {
+          this.answers.push(this.proposal.multiChoicePollArguments.answers[i])
+        }
 
-      this.minAcceptance = provisionWrapper.result.acceptance;
+        if (this.proposal.type == "membership-invitation") {
+          this.transaction.assetId = 0;
+          this.membership = true;
+        }
+        const rawQuorum =
+          this.eligibleVoters * (provisionWrapper.result.attendance / 100);
+        if (rawQuorum % 1 != 0) {
+          this.quorum = Math.ceil(rawQuorum);
+        } else {
+          this.quorum = rawQuorum;
+        }
 
-      const membershipId = this.proposal.membershipId;
-      const membershipWrapper = await this.$invoke("membership:getByID", {
-        id: membershipId,
-      });
+        this.minAcceptance = provisionWrapper.result.acceptance;
 
-      const submitterId = membershipWrapper.result.accountId;
-      const submitterWrapper = await this.$invoke("kalipoAccount:getByID", {
-        id: submitterId,
-      });
-
-      this.submitter = submitterWrapper.result;
-
-      for (let index = 0; index < this.proposal.votes.length; index++) {
-        const voteId = this.proposal.votes[index];
-        this.voteIds.push(voteId);
-        const voteWrapper = await this.$invoke("vote:getByID", {
-          id: voteId,
+        const membershipId = this.proposal.membershipId;
+        const membershipWrapper = await this.$invoke("membership:getByID", {
+          id: membershipId,
         });
 
-        this.votes.push(voteWrapper.result);
+        const submitterId = membershipWrapper.result.accountId;
+        const submitterWrapper = await this.$invoke("kalipoAccount:getByID", {
+          id: submitterId,
+        });
 
-        if (voteWrapper.result.answer == "ACCEPT") {
-          this.acceptCount++;
-        } else if (voteWrapper.result.answer == "REFUSE") {
-          this.refuseCount++;
-        }
-      }
+        this.submitter = submitterWrapper.result;
 
-      const client = await this.$client();
-      client.subscribe("vote:newVote", async (data) => {
-        console.log("NEW  VOTE");
-        console.log(data);
-        if (
-          !this.voteIds.includes(data.id) &&
-          data.vote.proposalId == this.proposalId
-        ) {
-          this.votes.push(data.vote);
-          this.voteIds.push(data.id);
+        for (let index = 0; index < this.proposal.votes.length; index++) {
+          const voteId = this.proposal.votes[index];
+          this.voteIds.push(voteId);
+          const voteWrapper = await this.$invoke("vote:getByID", {
+            id: voteId,
+          });
 
-          if (data.vote.answer == "ACCEPT") {
+          this.votes.push(voteWrapper.result);
+
+          if (voteWrapper.result.answer == "ACCEPT") {
             this.acceptCount++;
-          } else if (data.vote.answer == "REFUSE") {
+          } else if (voteWrapper.result.answer == "REFUSE") {
             this.refuseCount++;
           }
         }
-      });
 
-      client.subscribe("proposal:gotDecided", async (data) => {
-        console.log("GOT DECIDED");
-        console.log(data);
-        if (data.id == this.proposalId) {
-          this.proposal = data.proposal;
-        }
-      });
-      console.log(this.proposal);
+        const client = await this.$client();
+        client.subscribe("vote:newVote", async (data) => {
+          console.log("NEW  VOTE");
+          console.log(data);
+          if (
+            !this.voteIds.includes(data.id) &&
+            data.vote.proposalId == this.proposalId
+          ) {
+            this.votes.push(data.vote);
+            this.voteIds.push(data.id);
+
+            if (data.vote.answer == "ACCEPT") {
+              this.acceptCount++;
+            } else if (data.vote.answer == "REFUSE") {
+              this.refuseCount++;
+            }
+          }
+        });
+
+        client.subscribe("proposal:gotDecided", async (data) => {
+          console.log("GOT DECIDED");
+          console.log(data);
+          if (data.id == this.proposalId) {
+            this.proposal = data.proposal;
+          }
+        });
+        console.log(this.proposal);
+
     }
   },
   methods: {
+
+    getAnswerValue(value){
+      this.transaction.assets.answer = value
+      this.chipText = value
+      this.dialog = true;
+    },
+
     getInitials(parseStr) {
       if (parseStr != undefined) {
         const nameList = parseStr.split(" ");
@@ -382,6 +411,11 @@ export default {
       this.transaction.assets.answer = "REFUSE";
       this.dialog = true;
     },
+
+    CHOPPER(value) {
+      this.transaction.assets.answer = value
+      this.dialog = true;
+    }
   },
 };
 </script>
