@@ -134,6 +134,7 @@
       id="navbar-drawer"
       fixed
       v-model="drawer"
+      color="primary"
     >
 
 
@@ -151,13 +152,16 @@
       </template>
 
       <v-list >
-        <v-list-item-group
-          active-class="blue--text text--lighten-3 "
-        >
+        <v-list-item-group>
           <v-list-item v-for="page in navItems" :key="page.title"
                        v-if="!page.hide && (page.showIfUnlocked === unlocked || page.showIfUnlocked === undefined)">
 
-            <v-list-item-title @click="$router.push(page.to)"><v-icon>{{page.icon}}</v-icon> {{page.title}}</v-list-item-title>
+            <v-list-item-title
+              class="text-h6 font-weight-medium white--text"
+               @click="$router.push(page.to)">
+                <v-icon color="white" class="mr-4"> {{page.icon}}</v-icon>
+              {{page.title}}
+            </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
