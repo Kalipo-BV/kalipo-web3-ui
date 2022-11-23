@@ -17,10 +17,10 @@
 
 <template>
   <div>
-    <v-card width="400">
+    <v-card :width="xs || sm ? '100%' : '400'">
       <v-card-text>
         <div class="d-flex justify-space-between align-center">
-          <div class="text-h4 primary--text">Kalipo Accounts</div>
+          <div class="text-h4 primary--text pr-2 pr-md-0">Kalipo Accounts</div>
           <div>
             <v-btn
               color="accent"
@@ -108,6 +108,15 @@ export default {
       set: function (newValue) {
         this.$emit("update:accounts", newValue);
       },
+    },
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
     },
   },
   data: () => ({}),

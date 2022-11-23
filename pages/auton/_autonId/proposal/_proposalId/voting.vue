@@ -19,17 +19,13 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="5">
-        <ProposalMain
-          v-if="proposal && submitter"
-          :proposal="proposal"
-          :submitter="submitter"
-        ></ProposalMain>
+        <ProposalMain v-if="proposal && submitter" :proposal="proposal" :submitter="submitter"></ProposalMain>
       </v-col>
       <v-col cols="12" md="7">
         <v-row>
           <v-col cols="12" md="4">
-            <v-card  class="mt-4 rounded-lg" flat>
-              <v-card-text  v-if="proposal">
+            <v-card class="mt-4 rounded-lg" flat>
+              <v-card-text v-if="proposal">
                 <div class="text-h4 primary--text mb-1">Status</div>
                 <v-chip color="accent" v-if="proposal.status == 'CAMPAIGNING'"
                   >not open yet</v-chip
@@ -62,7 +58,16 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="8">
-            <v-card class="mt-4 rounded-lg" flat>
+            <v-card class="mt-4 rounded-lg" v-if="!membership" flat>
+              <v-card elevation="0">
+                <v-card-title
+                  class="text--primary text-h4">
+                  Description:
+                </v-card-title>
+                <v-card-subtitle class="text-h6">
+                  {{description}}
+                </v-card-subtitle>
+              </v-card>
               <v-card-text v-if="membership">
                 <div
                   class="d-flex align-center justify-start"
@@ -184,12 +189,8 @@
             </div>
           </v-card-text>
         </v-card>
-        <ProposalChoicesOverview
-          v-if="!membership"
-          :statement="statement"
-          :choices="answers"
-          @update:answerValue="getAnswerValue"
-        ></ProposalChoicesOverview>
+        <ProposalChoicesOverview v-if="!membership && !voted" :statement="statement" :choices="answers"
+          @update:answerValue="getAnswerValue"></ProposalChoicesOverview>
         <PollVoteChart
           v-if="!membership && voted"
           :countPerAnswer="countPerAnswer"
@@ -199,15 +200,9 @@
     </v-row>
 
     <v-dialog v-model="dialog" max-width="500" v-if="proposal">
-      <GenericTransaction
-        title="Casting a vote"
-        subtitle="You are about to cast the following vote"
-        :actionText="proposal.title"
-        :chipText="chipText"
-        :uri="uri"
-        :transaction="transaction"
-        callbackFinish="ProposalVoting-ModalClose"
-      ></GenericTransaction>
+      <GenericTransaction title="Casting a vote" subtitle="You are about to cast the following vote"
+        :actionText="proposal.title" :chipText="chipText" :uri="uri" :transaction="transaction"
+        callbackFinish="ProposalVoting-ModalClose"></GenericTransaction>
     </v-dialog>
   </v-container>
 </template>
@@ -217,6 +212,7 @@ export default {
   data: () => ({
     autonId: null,
     proposalId: null,
+    proposalType: null,
     auton: null,
     proposal: null,
     submitter: null,
@@ -232,6 +228,7 @@ export default {
     chipText: null,
     uri: null,
     membership: false,
+    voted: false,
     transaction: {
       moduleId: 1005,
       assetId: 0,
@@ -243,12 +240,36 @@ export default {
     statement: null,
     answers: [],
     countPerAnswer: [],
-    voted: false,
+    description: '',
   }),
   created() {
     this.$nuxt.$on(
       "ProposalVoting-ModalClose",
-      ($event) => (this.dialog = false)
+      ($event) => {
+        this.dialog = false;
+        const proposalIdLocalStorage = JSON.parse(localStorage.getItem("proposalId"));
+        if (this.proposalType == "multi-choice-poll") {
+
+          let votedProposals;
+          if (localStorage.getItem("votedProposals") != null) {
+            votedProposals = JSON.parse(localStorage.getItem("votedProposals"))
+            votedProposals.push(this.proposalId)
+          } else {
+            votedProposals = [this.proposalId]
+          }
+          localStorage.setItem("votedProposals", JSON.stringify(votedProposals));
+
+          // if (localStorage.getItem("votedProposals") == null) {
+          //   const proposals = [proposalIdLocalStorage];
+          //   localStorage.setItem("votedProposals", JSON.stringify(proposals));
+          // } else {
+          //   const data = JSON.parse(localStorage.getItem("votedProposals"));
+          //   data.push(proposalIdLocalStorage);
+          //   localStorage.setItem("votedProposals", data)
+          // }
+          this.voted = true;
+        }
+      }
     );
   },
   async mounted() {
@@ -298,25 +319,41 @@ export default {
         if (
           BigInt(autonMembershipWrapper.result.started) != BigInt(0) &&
           BigInt(autonMembershipWrapper.result.started) <
-            BigInt(this.proposal.created)
+          BigInt(this.proposal.created)
         ) {
           this.eligibleVoters++;
         }
       }
 
-      if (this.proposal.type == "multi-choice-poll") {
+      this.proposalType = this.proposal.type;
+
+      // localStorage.setItem("proposalId", JSON.stringify(this.proposalId))
+
+      if (this.proposalType == "multi-choice-poll") {
         this.transaction.assetId = 1;
         this.membership = false;
-      }
+
+        const commentId = this.proposal.comments[0];
+        const commentWrapper = await this.$invoke("comment:getByID", {
+          id: commentId,
+        });
+
+        this.description = commentWrapper.result.comment;
         this.statement = this.proposal.multiChoicePollArguments.question;
-        for (let i = 0;i < this.proposal.multiChoicePollArguments.answers.length;i++) {
+        for (let i = 0; i < this.proposal.multiChoicePollArguments.answers.length; i++) {
           this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
           console.log(this.proposal.multiChoicePollArguments.answers[i].answer);
           this.countPerAnswer.push(parseInt(this.proposal.multiChoicePollArguments.answers[i].count));
-          // this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
+          this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
         }
-        console.log('answer' , this.countPerAnswer);
-        // console.log('count', this.totalCounts);
+        if (localStorage.getItem("votedProposals") != null) {
+          const votedProposals = JSON.parse(localStorage.getItem("votedProposals"))
+          for (let i = 0; i < votedProposals.length; i++) {
+            if (this.proposalId == votedProposals[i]) {
+              this.voted = true;
+            }
+          }
+      }
 
         if (this.proposal.type == "membership-invitation") {
           this.transaction.assetId = 0;
@@ -388,6 +425,7 @@ export default {
         });
         console.log(this.proposal);
 
+      }
     }
   },
   methods: {
@@ -422,14 +460,9 @@ export default {
       this.chipText = "Against";
       this.transaction.assets.answer = "REFUSE";
       this.dialog = true;
-    },
-
-    CHOPPER(value) {
-      this.transaction.assets.answer = value
-      this.dialog = true;
     }
-  },
-};
+  }
+}
 </script>
 <style scoped>
 .support-label-container {

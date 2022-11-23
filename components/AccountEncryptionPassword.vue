@@ -16,8 +16,8 @@
 -->
 
 <template>
-  <div>
-    <v-card width="700">
+  <div :style="xs || sm ? 'width: 100%' : ''">
+    <v-card :width="xs || sm ? '100%' : '700'">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
           Encrypt your passphrase
@@ -84,6 +84,15 @@ export default {
       set: function (newValue) {
         this.$emit("update:password", newValue);
       },
+    },
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
     },
   },
   data: () => ({

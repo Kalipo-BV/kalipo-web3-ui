@@ -45,7 +45,7 @@
               icon="mdi-card-account-details-star"
               title="Add existing account"
               class="mr-2"
-              width="185px"
+              :width="xs || sm ? '140px' : '185px'"
             ></OptionCard>
           </div>
 
@@ -53,7 +53,7 @@
             <OptionCard
               icon="mdi-account-plus"
               title="Create new account"
-              width="185px"
+              :width="xs || sm ? '140px' : '185px'"
             ></OptionCard>
           </div>
         </div>
@@ -108,6 +108,17 @@ import * as cryptography from "@liskhq/lisk-cryptography";
 
 export default {
   layout: "wallet",
+  computed: {
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
+    },
+  },
   data: () => ({
     screen: "AccountSelection",
     selectedId: "",

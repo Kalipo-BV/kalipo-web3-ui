@@ -12,23 +12,23 @@
           v-model="statementValue"
         ></v-textarea>
 
-        <v-textarea
-          filled
-          auto-grow
-          label="Added value"
-          rows="2"
-          row-height="20"
-          maxlength="100"
-          counter
-          v-model="addedValue"
-        ></v-textarea>
+<!--        <v-textarea-->
+<!--          filled-->
+<!--          auto-grow-->
+<!--          label="Added value"-->
+<!--          rows="2"-->
+<!--          row-height="20"-->
+<!--          maxlength="100"-->
+<!--          counter-->
+<!--          v-model="addedValue"-->
+<!--        ></v-textarea>-->
 
         <v-textarea
           filled
           auto-grow
           label="Description"
           rows="2"
-          row-height="20"
+          row-height="40"
           maxlength="300"
           counter
           v-model="descriptionValue"
@@ -49,14 +49,14 @@ export default {
         this.$emit("update:statementMessage", newValue);
       },
     },
-    addedValue: {
-        get: function () {
-        return this.addedValueMessage;
-      },
-      set: function (newValue) {
-        this.$emit("update:addedValueMessage", newValue);
-      },
-    },
+    // addedValue: {
+    //     get: function () {
+    //     return this.addedValueMessage;
+    //   },
+    //   set: function (newValue) {
+    //     this.$emit("update:addedValueMessage", newValue);
+    //   },
+    // },
     descriptionValue: {
       get: function () {
         return this.descriptionMessage;
