@@ -28,19 +28,31 @@
         maxlength="30"
       ></v-text-field>
 
-      <v-text-field
+      <!-- <v-text-field
         solo
-        label="Image id"
+        label="Static image id"
         class="mt-4"
         style="max-width: 500px"
         v-model="imageValue"
-      ></v-text-field>
+      ></v-text-field> -->
+      <v-select
+        :items="items"
+        v-model="imageValue"
+        solo
+        label="Static image id"
+      >
+      </v-select>
     </v-form>
   </div>
 </template>
 <script>
 export default {
   props: ["name", "image"],
+  data() {
+    return {
+      items: ["1", "2"],
+    };
+  },
   computed: {
     nameValue: {
       get: function () {

@@ -3,12 +3,13 @@
     <v-row class="mt-2 ml-1" style="justify-content: left; align-items: center">
       <div>
         <v-text-field
+          v-if="poas.length != null"
           solo
           label="Search a poa"
           append-icon="mdi-magnify"
           class="mt-4 mr-4"
           style="max-width: 250px"
-          disabled
+          v-model="search"
         ></v-text-field>
       </div>
       <div>
@@ -18,12 +19,12 @@
           text
           outlined
           @click="dialog = !dialog"
-          >Create poa</v-btn
+          >Create POA template</v-btn
         >
       </div>
     </v-row>
     <v-row class="">
-      <v-col xs="12" sm="6" md="4" lg="3" v-for="(poa, i) in poas" :key="i">
+      <v-col xs="12" sm="6" md="4" lg="3" v-for="(poa, i) in filtered" :key="i">
         <PoaCard :poa="poa"></PoaCard>
       </v-col>
     </v-row>
@@ -42,6 +43,7 @@ export default {
     auton: null,
     autonId: null,
     authorizedNewPoa: true,
+    search: "",
   }),
   computed: {
     account() {
@@ -49,6 +51,11 @@ export default {
     },
     unlocked() {
       return this.$store.state.wallet.unlocked;
+    },
+    filtered() {
+      return this.poas.filter((poa) =>
+        poa.name.toLowerCase().includes(this.search.toLowerCase())
+      );
     },
   },
   methods: {

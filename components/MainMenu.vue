@@ -118,7 +118,9 @@
 
 
 <!--    Everything beneath this is for the hamburger menu (mobile nav-drawe)-->
-    <v-app-bar v-if="this.$vuetify.breakpoint.width < 1264" id="app" app class="header" color="primary" >
+    <v-app-bar v-if="this.$vuetify.breakpoint.width < 1264" app
+               color="primary" elevation="2"
+              class="">
 
       <router-link to="/">
         <v-img src="/Kalipo_logo_512x512.png" max-width="40" max-height="100"></v-img>
