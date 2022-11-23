@@ -16,7 +16,7 @@
 -->
 
 <template>
-  <div class="text-center master">
+  <v-container class="text-center master">
     <div v-if="!error">
       <div class="d-flex justify-center align-center">
         <div class="" v-if="encrypting">
@@ -51,7 +51,7 @@
     <div v-if="error">
       <div class="text-h4 error--text">{{ errorMessage }}</div>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>

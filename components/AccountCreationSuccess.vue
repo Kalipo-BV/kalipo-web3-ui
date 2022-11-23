@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,11 @@
 -->
 
 <template>
-  <div class="text-center">
-    <div class="text-h1 fade-animation-1">Welcome to Kalipo</div>
-  </div>
+  <v-container>
+    <div class="text-center">
+      <div class="text-h1 fade-animation-1">Welcome to Kalipo</div>
+    </div>
+  </v-container>
 </template>
 
 <script>

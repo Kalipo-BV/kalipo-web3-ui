@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,10 @@
 -->
 
 <template>
-  <v-container style="height: 100%">
+<!--  TODO: add this to container to center but it becomes not mobile friendly anymore
+    TODO: succes page is too wide
+-->
+  <v-container style="height: 100%" >
     <div class="d-flex align-center justify-center" style="height: 100%">
       <AccountSelection
         class="mt-4"

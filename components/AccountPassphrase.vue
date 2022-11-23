@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,8 +16,9 @@
 -->
 
 <template>
-  <div>
-    <v-card width="700">
+
+  <v-container>
+    <v-card width="700" >
       <v-btn
         fab
         outlined
@@ -26,7 +27,7 @@
         right
         class="mt-3 mr-n1"
         @click="$nuxt.$emit('IAH-showChooseOperation')"
-        ><v-icon>mdi-close</v-icon></v-btn
+      ><v-icon>mdi-close</v-icon></v-btn
       >
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
@@ -77,7 +78,8 @@
         >
       </v-card-text>
     </v-card>
-  </div>
+  </v-container>
+
 </template>
 <script>
 export default {

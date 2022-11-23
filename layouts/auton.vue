@@ -19,7 +19,7 @@
   <v-app id="auton-layout">
     <v-main class="primary">
       <div style="height: 100%; background: #eef1f6">
-        <v-app-bar height="108px" color="white" flat>
+        <v-app-bar height="148px" color="white" flat>
           <v-row>
             <v-container>
               <v-row no-gutters class="d-flex align-center">
