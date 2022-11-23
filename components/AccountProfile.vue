@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 -->
 
 <template>
-  <div>
+  <v-container>
     <v-card width="700">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
@@ -87,7 +87,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-  </div>
+  </v-container>
 </template>
 <script>
 import { cryptography, passphrase } from "@liskhq/lisk-client";
