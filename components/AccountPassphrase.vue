@@ -16,8 +16,8 @@
 -->
 
 <template>
-  <div>
-    <v-card width="700">
+  <div :style="xs || sm ? 'width: 100%' : ''">
+    <v-card :width="xs || sm ? '100%' : '700'">
       <v-btn
         fab
         outlined
@@ -53,7 +53,13 @@
 
       <v-card-text>
         <v-row class="passphrase">
-          <v-col cols="4" md="2" v-for="(word, index) in words" :key="index">
+          <v-col
+            cols="6"
+            sm="4"
+            md="2"
+            v-for="(word, index) in words"
+            :key="index"
+          >
             <v-text-field
               filled
               :label="index + 1 + '.'"
@@ -82,6 +88,17 @@
 <script>
 export default {
   props: ["passphrase"],
+  computed: {
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
+    },
+  },
   data() {
     return {
       words: [],

@@ -33,7 +33,7 @@
               <AutonCard class="mt-4" :auton="auton"></AutonCard>
             </div>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="12" sm="6" md="4">
             <v-card
               class="mt-4"
               height="230.567"
@@ -249,6 +249,8 @@ export default {
       const nowInSec = BigInt(Math.floor(now / 1000));
 
       auton.activeMembershipsCount = 0;
+
+      console.log(auton);
       for (let indexQ = 0; indexQ < auton.memberships.length; indexQ++) {
         const autonMembershipId = auton.memberships[indexQ];
         const autonMembershipWrapper = await this.$invoke(
