@@ -85,9 +85,8 @@
             </v-container>
           </v-row>
           <template v-slot:extension class="mt-2">
-            <v-row>
               <v-container
-                ><v-tabs v-model="selectedItem">
+                ><v-tabs show-arrows v-model="selectedItem">
                   <v-tabs-slider color="primary"></v-tabs-slider>
 
                   <v-tab
@@ -111,7 +110,6 @@
                   </v-tab>
                 </v-tabs>
               </v-container>
-            </v-row>
           </template>
         </v-app-bar>
         <Nuxt class="mt-n2 px-8 px-lg-3" :auton="auton" />
