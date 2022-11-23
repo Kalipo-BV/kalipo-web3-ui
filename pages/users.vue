@@ -27,7 +27,14 @@
       v-model="search"
     ></v-text-field>
     <v-row dense>
-      <v-col cols="3" v-for="(account, index) in accounts" :key="index">
+      <v-col
+        xs="12"
+        sm="6"
+        md="4"
+        lg="3"
+        v-for="(account, index) in accounts"
+        :key="index"
+      >
         <MemberCard :member="account"></MemberCard>
         <!-- {{ account }} -->
       </v-col>
@@ -35,9 +42,6 @@
   </v-container>
 </template>
 <script>
-import { Mnemonic } from "@liskhq/lisk-passphrase";
-import * as cryptography from "@liskhq/lisk-cryptography";
-
 export default {
   layout: "wallet",
   data: () => ({ accounts: [], search: "" }),
