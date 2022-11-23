@@ -17,7 +17,10 @@
 
 <template>
   <v-container>
-    <v-row v-if="account">
+    <v-row v-if="!isFetching">
+      <v-container >
+        <span v-if="poas.length == 0" class="text-h3 d-flex justify-center mt-12">This user hasn't earned any POAs yet, go out and earn some!</span>
+      </v-container>
       <v-container>
         <v-row class="mt-1">
           <v-col lg="3" md="4" sm="6" v-for="poa in poas" :key="poa.poaId">
@@ -39,7 +42,9 @@ export default {
   data() {
     return {
       account: null,
-      poas: []
+      poas: [],
+      isFetching: true,
+
     };
   },
 
@@ -89,6 +94,8 @@ export default {
       };
       this.poas.push(mergedPoas);
     }
+
+    this.isFetching = false;
   },
   methods: {
     getSocialIcon(socialName) {
