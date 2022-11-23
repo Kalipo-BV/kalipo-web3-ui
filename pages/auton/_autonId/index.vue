@@ -134,11 +134,11 @@
                   </v-col>
                   <v-col cols="8" class="pl-0">
                     {{
-                      start.getFullYear() +
-                      "/" +
                       start.getDate() +
                       "/" +
                       start.getMonth() +
+                      "/" +
+                      start.getFullYear() +
                       " at " +
                       start.getHours() +
                       ":" +
@@ -159,11 +159,11 @@
                   </v-col>
                   <v-col cols="8" class="pl-0">
                     {{
-                      end.getFullYear() +
-                      "/" +
                       end.getDate() +
                       "/" +
                       end.getMonth() +
+                      "/" +
+                      end.getFullYear() +
                       " at " +
                       end.getHours() +
                       ":" +

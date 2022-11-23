@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card color="white" @click.stop="dialog = true">
-      <v-img src="https://as2.ftcdn.net/v2/jpg/03/03/62/45/1000_F_303624505_u0bFT1Rnoj8CMUSs8wMCwoKlnWlh5Jiq.jpg" height="200px"></v-img>
+      <v-img :src="getImage(poa.staticImageId)" height="200px"></v-img>
       <v-card-title class="black--text">{{ poa.name }}</v-card-title>
       <v-card-text>
         <v-row class="mx-0 mb-2" v-if="!isFetching">
@@ -29,7 +29,7 @@
             <v-card-text>
             <v-icon>mdi-clipboard-text-clock</v-icon>
             <span class="ml-2">Issue date:</span>
-            <span class="float-right">{{poa.issueDate}}</span>
+            <span class="float-right">{{issueDate}}</span>
             </v-card-text>
         </div>
         <v-divider></v-divider>
@@ -37,7 +37,7 @@
             <v-card-text>
             <v-icon>mdi-image</v-icon>
             <span class="ml-2">Image URL:</span>
-            <a class="float-right" target="_blank" href="#">Link to image</a>
+            <a class="float-right" target="_blank" :href="getImage(poa.staticImageId)">Link to image</a>
             </v-card-text>
         </div>
         <v-divider></v-divider>
@@ -46,6 +46,14 @@
             <v-icon>mdi-calendar</v-icon>
             <span class="ml-2">Event:</span>
             <a class="float-right" v-if="!isFetching" :href="`/auton/${auton.autonProfile.name}`">{{auton.autonProfile.name}}</a>
+            </v-card-text>
+        </div>
+        <v-divider></v-divider>
+        <div class="ml-5 mr-12">
+            <v-card-text>
+            <v-icon>mdi-crown</v-icon>
+            <span class="ml-2">Owner:</span>
+            <a class="float-right" v-if="!isFetching" :href="`/account/${account.name}`">{{account.name}}</a>
             </v-card-text>
         </div>
 
@@ -70,6 +78,8 @@ export default {
     return {
         dialog: false,
         auton: {},
+        account: {},
+        issueDate: "",
         isFetching: true,
     };
   },
@@ -79,6 +89,21 @@ export default {
     });
     
    this.auton = autonWrapper.result;
+
+   const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
+      id: this.poa.accountId,
+    });
+
+   this.account = accountWrapper.result;
+
+   const date = new Date(parseInt(this.poa.issueDate));
+
+   this.issueDate =   date.getDate() +
+                      "/" +
+                      date.getMonth() +
+                      "/" +
+                      date.getFullYear() 
+
    this.isFetching = false;
    console.log(this.auton);
    console.log(this.poa);
@@ -86,12 +111,9 @@ export default {
   methods: {
     getImage(id) {
       return `/poa_images/${id}.png`;
-    },
+    }
   },
 };
 </script>
 <style scoped>
-    a {
-        text-decoration: none;
-    }
 </style>
