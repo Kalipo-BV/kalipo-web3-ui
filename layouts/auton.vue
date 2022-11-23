@@ -222,6 +222,7 @@ export default {
       "Auton-ProposalModalClose",
       ($event) => (this.dialog = false)
     );
+
   },
   methods: {
     async authorized() {
