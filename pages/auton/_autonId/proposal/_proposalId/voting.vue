@@ -304,6 +304,7 @@ export default {
         this.statement = this.proposal.multiChoicePollArguments.question;
         for (let i = 0;i < this.proposal.multiChoicePollArguments.answers.length;i++) {
           this.answers.push(this.proposal.multiChoicePollArguments.answers[i])
+          console.log(this.proposal.multiChoicePollArguments.answers[i].answer)
         }
 
         if (this.proposal.type == "membership-invitation") {
