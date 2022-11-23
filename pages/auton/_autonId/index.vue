@@ -106,7 +106,7 @@
                   " at " +
                   start.getHours() +
                   ":" +
-                  start.getMinutes()
+                  (start.getMinutes() === 0 ? "00" : start.getMinutes())
                 }}
               </div>
             </v-card-text>
@@ -124,7 +124,7 @@
                   " at " +
                   end.getHours() +
                   ":" +
-                  end.getMinutes()
+                  (end.getMinutes() === 0 ? "00" : end.getMinutes())
                 }}
               </div>
             </v-card-text>
