@@ -290,7 +290,6 @@ export default {
       } else {
         this.proposalsRunning.push(proposalWrapper.result);
       }
-      console.log(this.proposals);
     }
 
     if (this.auton.type == "DEFAULT") {

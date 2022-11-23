@@ -125,12 +125,6 @@
         callbackFinish="Auton-ProposalModalClose"
       ></AutonProposalSubmit>
 
-      <!-- <AutonProposalSubmit
-        v-if="auton.type == 'EVENT'"
-        :autonId="autondId"
-        :autonName="autonName"
-        callbackFinish="Auton-ProposalModalClose"
-      ></AutonProposalSubmit> -->
       <AutonAddAttendee
         v-if="auton.type == 'EVENT'"
         :autonId="autondId"
