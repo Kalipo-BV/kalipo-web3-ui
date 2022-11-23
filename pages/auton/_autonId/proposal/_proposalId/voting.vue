@@ -62,7 +62,16 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="8">
-            <v-card class="mt-4 rounded-lg" flat>
+            <v-card class="mt-4 rounded-lg" v-if="!membership" flat>
+              <v-card elevation="0">
+                <v-card-title
+                  class="text--primary text-h4">
+                  Description:
+                </v-card-title>
+                <v-card-subtitle class="text-h6">
+                  {{description}}
+                </v-card-subtitle>
+              </v-card>
               <v-card-text v-if="membership">
                 <div
                   class="d-flex align-center justify-start"
@@ -238,6 +247,7 @@ export default {
     statement: null,
     answers: [],
     countPerAnswer: [],
+    description: '',
   }),
   created() {
     this.$nuxt.$on(
@@ -301,15 +311,16 @@ export default {
       if (this.proposal.type == "multi-choice-poll") {
         this.transaction.assetId = 1;
         this.membership = false;
-      }
+
+        this.description = this.proposal.comments[0];
         this.statement = this.proposal.multiChoicePollArguments.question;
-        for (let i = 0;i < this.proposal.multiChoicePollArguments.answers.length;i++) {
+        for (let i = 0; i < this.proposal.multiChoicePollArguments.answers.length; i++) {
           this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
           console.log(this.proposal.multiChoicePollArguments.answers[i].answer);
           this.countPerAnswer.push(parseInt(this.proposal.multiChoicePollArguments.answers[i].count));
           // this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
         }
-console.log('answer' , this.countPerAnswer);
+        console.log('answer', this.countPerAnswer);
         // console.log('count', this.totalCounts);
 
         if (this.proposal.type == "membership-invitation") {
@@ -381,7 +392,7 @@ console.log('answer' , this.countPerAnswer);
           }
         });
         console.log(this.proposal);
-
+      }
     }
   },
   methods: {
