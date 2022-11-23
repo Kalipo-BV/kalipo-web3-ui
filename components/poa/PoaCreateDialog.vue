@@ -3,8 +3,8 @@
     <v-card>
       <v-card-text v-if="step == 0">
         <AutonStepperHeader
-          title="Creating a new poa"
-          subtitle="First choose a name and image id"
+          title="Creating a new poa template"
+          subtitle="First choose a name and static image id"
         ></AutonStepperHeader>
 
         <PoaNameImage :name.sync="name" :image.sync="image"></PoaNameImage>
@@ -14,7 +14,7 @@
         :transaction="transaction"
         v-if="step == 1"
         :uri="uri"
-        title="Creating poa"
+        title="Creating poa template"
       ></AccountSign>
 
       <v-divider v-if="step !== 1"></v-divider>
