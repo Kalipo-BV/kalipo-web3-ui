@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-card width="700">
+    <v-card :width="xs || sm ? '100%' : '700'">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
           Register your personal profile
@@ -109,6 +109,15 @@ export default {
       set: function (newValue) {
         this.$emit("update:username", newValue);
       },
+    },
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
     },
   },
   data: () => ({

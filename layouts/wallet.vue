@@ -19,7 +19,7 @@
   <v-app id="wallet-layout">
     <v-main class="primary">
       <div style="height: 100%; background: #eef1f6">
-        <Nuxt class="px-8 px-lg-3" />
+        <Nuxt class="px-2 px-md-8 px-lg-3" />
       </div>
     </v-main>
     <MainMenu></MainMenu>

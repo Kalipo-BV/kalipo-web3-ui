@@ -16,8 +16,8 @@
 -->
 
 <template>
-  <div>
-    <v-card width="400">
+  <div :style="xs || sm ? 'width: 100%' : ''">
+    <v-card :width="xs || sm ? '100%' : '400'">
       <v-card-text>
         <div class="d-flex justify-center">
           <div>
@@ -75,6 +75,17 @@ import * as cryptography from "@liskhq/lisk-cryptography";
 
 export default {
   props: ["account"],
+  computed: {
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
+    },
+  },
   data: () => ({
     show1: false,
     password: "",
