@@ -54,7 +54,7 @@
               >
                 <div>
                   <div>
-                    <v-btn color="accent" fab small
+                    <v-btn color="accent" fab small disabled
                       ><v-icon dark @click="dialog = !dialog"
                         >mdi-plus</v-icon
                       ></v-btn

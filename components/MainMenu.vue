@@ -43,15 +43,19 @@
           :mandatory="selectedItem > -1"
         >
           <div>
-
-
-            <v-list-item v-for="page in navItems"
-                         :key="page.title"
-                         v-if="!page.hide && (page.showIfUnlocked === unlocked || page.showIfUnlocked === undefined)"
-                         @click="$router.push(page.to)"
-                         link>
+            <v-list-item
+              v-for="page in navItems"
+              :key="page.title"
+              v-if="
+                !page.hide &&
+                (page.showIfUnlocked === unlocked ||
+                  page.showIfUnlocked === undefined)
+              "
+              @click="$router.push(page.to)"
+              link
+            >
               <v-list-item-icon class="pl-1">
-                <v-icon color="white">{{page.icon}}</v-icon>
+                <v-icon color="white">{{ page.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -63,7 +67,6 @@
                 </div>
               </v-list-item-content>
             </v-list-item>
-
           </div>
         </v-list-item-group>
       </v-list>
@@ -116,21 +119,34 @@
       </template>
     </v-navigation-drawer>
 
-
-<!--    Everything beneath this is for the hamburger menu (mobile nav-drawe)-->
-    <v-app-bar v-if="this.$vuetify.breakpoint.width < 1264" app
-               color="primary" elevation="2"
-              class="">
-
+    <!--    Everything beneath this is for the hamburger menu (mobile nav-drawe)-->
+    <v-app-bar
+      v-if="this.$vuetify.breakpoint.width < 1264"
+      app
+      color="primary"
+      elevation="2"
+      class=""
+    >
       <router-link to="/">
-        <v-img src="/Kalipo_logo_512x512.png" max-width="40" max-height="100"></v-img>
+        <v-img
+          src="/Kalipo_logo_512x512.png"
+          max-width="40"
+          max-height="100"
+        ></v-img>
       </router-link>
-      <div @click="$router.push('/')" class="text-h3 white--text ml-2 v-chip--clickable">Kalipo</div>
+      <div
+        @click="$router.push('/')"
+        class="text-h3 white--text ml-2 v-chip--clickable"
+      >
+        Kalipo
+      </div>
 
       <v-spacer></v-spacer>
-      <v-app-bar-nav-icon color="white" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        color="white"
+        @click.stop="drawer = !drawer"
+      ></v-app-bar-nav-icon>
     </v-app-bar>
-
 
     <v-navigation-drawer
       id="navbar-drawer"
@@ -138,13 +154,14 @@
       v-model="drawer"
       color="primary"
     >
-
-
       <template v-slot:prepend class="primary">
         <v-list-item two-line dark class="primary">
-
           <v-list-item-avatar>
-            <v-img src="/Kalipo_logo_512x512.png" max-width="40" max-height="40"></v-img>
+            <v-img
+              src="/Kalipo_logo_512x512.png"
+              max-width="40"
+              max-height="40"
+            ></v-img>
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -153,16 +170,23 @@
         </v-list-item>
       </template>
 
-      <v-list >
+      <v-list>
         <v-list-item-group>
-          <v-list-item v-for="page in navItems" :key="page.title"
-                       v-if="!page.hide && (page.showIfUnlocked === unlocked || page.showIfUnlocked === undefined)">
-
+          <v-list-item
+            v-for="page in navItems"
+            :key="page.title"
+            v-if="
+              !page.hide &&
+              (page.showIfUnlocked === unlocked ||
+                page.showIfUnlocked === undefined)
+            "
+          >
             <v-list-item-title
               class="text-h6 font-weight-medium white--text"
-               @click="$router.push(page.to)">
-                <v-icon color="white" class="mr-4"> {{page.icon}}</v-icon>
-              {{page.title}}
+              @click="$router.push(page.to)"
+            >
+              <v-icon color="white" class="mr-4"> {{ page.icon }}</v-icon>
+              {{ page.title }}
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
@@ -181,9 +205,9 @@
               <div class="d-flex align-center justify-space-between">
                 <div class="d-flex align-center">
                   <v-avatar color="white" size="35"
-                  ><div class="text-caption">
-                    {{ getInitials(account.name) }}
-                  </div></v-avatar
+                    ><div class="text-caption">
+                      {{ getInitials(account.name) }}
+                    </div></v-avatar
                   >
                   <div class="white--text ml-2">
                     <div class="text-body-caption">{{ account.name }}</div>
@@ -191,9 +215,9 @@
                   </div>
                 </div>
                 <v-btn fab x-small color="white" @click="lockAccount"
-                ><v-icon color="primary lighten-1"
-                >mdi-lock-open</v-icon
-                ></v-btn
+                  ><v-icon color="primary lighten-1"
+                    >mdi-lock-open</v-icon
+                  ></v-btn
                 >
               </div>
             </v-card-text>
@@ -215,14 +239,11 @@
           </v-card>
         </div>
       </template>
-
     </v-navigation-drawer>
-
   </div>
 </template>
 
 <script>
-
 export default {
   computed: {
     account() {
@@ -240,7 +261,6 @@ export default {
     md() {
       return this.$vuetify.breakpoint.md;
     },
-
   },
   data() {
     return {
@@ -251,7 +271,7 @@ export default {
         {
           icon: "mdi-home-city",
           title: "Home",
-          to: "/"
+          to: "/",
         },
         {
           icon: "mdi-monitor-dashboard",
@@ -263,7 +283,9 @@ export default {
           icon: "mdi-account",
           title: "My profile",
           showIfUnlocked: true,
-          to: this.getAccount() ? `/account/${this.getAccount().username}` : "/account"
+          to: this.getAccount()
+            ? `/account/${this.getAccount().username}`
+            : "/account",
         },
         {
           icon: "mdi-file-sign",
@@ -279,7 +301,7 @@ export default {
         {
           icon: "mdi-account-multiple",
           title: "Users",
-          to: `/users`
+          to: `/users`,
         },
         {
           icon: "mdi-account-cog",
@@ -300,7 +322,8 @@ export default {
     },
 
     setMenu(page) {
-      if (!this.unlocked) { // unlocked means logged in (probably)
+      if (!this.unlocked) {
+        // unlocked means logged in (probably)
         if (page === "home") {
           this.selectedItem = 0;
         } else if (page === "autons") {
@@ -311,7 +334,6 @@ export default {
           this.selectedItem = -1;
         }
       } else {
-        console.log(page)
         if (page === "home") {
           this.selectedItem = 0;
         } else if (page === "dashboard") {
