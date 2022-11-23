@@ -34,10 +34,13 @@
                       </div></v-avatar
                     >
                     <div class="ml-2">
-                      <div class="text-h3 primary--text">
+                      <div class="text-h3 primary--text mb-n1">
                         {{ this.account.name }}
                       </div>
-                      <div class="d-flex align-center text-caption">
+                      <div class="text-caption secondary--text">
+                        @{{ this.account.username }}
+                      </div>
+                      <div class="d-flex align-center text-caption mt-1">
                         <v-avatar
                           size="12"
                           color="success"
