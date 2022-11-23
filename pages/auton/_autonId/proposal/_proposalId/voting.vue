@@ -298,7 +298,7 @@ export default {
         if (
           BigInt(autonMembershipWrapper.result.started) != BigInt(0) &&
           BigInt(autonMembershipWrapper.result.started) <
-            BigInt(this.proposal.created)
+          BigInt(this.proposal.created)
         ) {
           this.eligibleVoters++;
         }
@@ -308,7 +308,12 @@ export default {
         this.transaction.assetId = 1;
         this.membership = false;
 
-        this.description = this.proposal.comments[0];
+        const commentId = this.proposal.comments[0];
+        const commentWrapper = await this.$invoke("comment:getByID", {
+          id: commentId,
+        });
+
+        this.description = commentWrapper.result.comment;
         this.statement = this.proposal.multiChoicePollArguments.question;
         for (let i = 0; i < this.proposal.multiChoicePollArguments.answers.length; i++) {
           this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
@@ -389,6 +394,7 @@ export default {
         });
         console.log(this.proposal);
 
+      }
     }
   },
   methods: {
