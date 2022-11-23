@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,8 +28,8 @@
       <v-col cols="12" md="7">
         <v-row>
           <v-col cols="12" md="4">
-            <v-card class="mt-4 rounded-lg" flat>
-              <v-card-text v-if="proposal">
+            <v-card  class="mt-4 rounded-lg" flat>
+              <v-card-text  v-if="proposal">
                 <div class="text-h4 primary--text mb-1">Status</div>
                 <v-chip color="accent" v-if="proposal.status == 'CAMPAIGNING'"
                   >not open yet</v-chip
@@ -63,7 +63,7 @@
           </v-col>
           <v-col cols="12" md="8">
             <v-card class="mt-4 rounded-lg" flat>
-              <v-card-text>
+              <v-card-text v-if="membership">
                 <div
                   class="d-flex align-center justify-start"
                   v-if="quorum != 0"
@@ -100,7 +100,7 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-card class="mt-5 rounded-lg" flat>
+        <v-card v-if="membership" class="mt-5 rounded-lg" flat>
           <v-card-text>
             <div class="px-8">
               <div
@@ -175,7 +175,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card class="mt-4 rounded-lg" flat>
+        <v-card v-if="membership" class="mt-4 rounded-lg" flat>
           <v-card-text>
             <div class="text-h4 primary"></div>
             <div class="d-flex justify-space-between align-center">
@@ -184,6 +184,12 @@
             </div>
           </v-card-text>
         </v-card>
+        <ProposalChoicesOverview
+          v-if="!membership"
+          :statement="statement"
+          :choices="answers"
+          @update:answerValue="getAnswerValue"
+        ></ProposalChoicesOverview>
       </v-col>
     </v-row>
 
@@ -220,14 +226,18 @@ export default {
     dialog: false,
     chipText: null,
     uri: null,
+    membership: false,
     transaction: {
       moduleId: 1005,
       assetId: 0,
       assets: {
         proposalId: null,
         answer: null,
-      },
+      }
     },
+    statement: null,
+    answers: [],
+    countPerAnswer: [],
   }),
   created() {
     this.$nuxt.$on(
@@ -270,6 +280,7 @@ export default {
         id: provisionId,
       });
 
+
       for (let index = 0; index < this.auton.memberships.length; index++) {
         const autonMembershipId = this.auton.memberships[index];
         const autonMembershipWrapper = await this.$invoke(
@@ -287,74 +298,100 @@ export default {
         }
       }
 
-      const rawQuorum =
-        this.eligibleVoters * (provisionWrapper.result.attendance / 100);
-      if (rawQuorum % 1 != 0) {
-        this.quorum = Math.ceil(rawQuorum);
-      } else {
-        this.quorum = rawQuorum;
+      if (this.proposal.type == "multi-choice-poll") {
+        this.transaction.assetId = 1;
+        this.membership = false;
       }
+        this.statement = this.proposal.multiChoicePollArguments.question;
+        for (let i = 0;i < this.proposal.multiChoicePollArguments.answers.length;i++) {
+          this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
+          console.log(this.proposal.multiChoicePollArguments.answers[i].answer);
+          this.countPerAnswer.push(parseInt(this.proposal.multiChoicePollArguments.answers[i].count));
+          // this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
+        }
+console.log('answer' , this.countPerAnswer);
+        // console.log('count', this.totalCounts);
 
-      this.minAcceptance = provisionWrapper.result.acceptance;
+        if (this.proposal.type == "membership-invitation") {
+          this.transaction.assetId = 0;
+          this.membership = true;
+        }
+        const rawQuorum =
+          this.eligibleVoters * (provisionWrapper.result.attendance / 100);
+        if (rawQuorum % 1 != 0) {
+          this.quorum = Math.ceil(rawQuorum);
+        } else {
+          this.quorum = rawQuorum;
+        }
 
-      const membershipId = this.proposal.membershipId;
-      const membershipWrapper = await this.$invoke("membership:getByID", {
-        id: membershipId,
-      });
+        this.minAcceptance = provisionWrapper.result.acceptance;
 
-      const submitterId = membershipWrapper.result.accountId;
-      const submitterWrapper = await this.$invoke("kalipoAccount:getByID", {
-        id: submitterId,
-      });
-
-      this.submitter = submitterWrapper.result;
-
-      for (let index = 0; index < this.proposal.votes.length; index++) {
-        const voteId = this.proposal.votes[index];
-        this.voteIds.push(voteId);
-        const voteWrapper = await this.$invoke("vote:getByID", {
-          id: voteId,
+        const membershipId = this.proposal.membershipId;
+        const membershipWrapper = await this.$invoke("membership:getByID", {
+          id: membershipId,
         });
 
-        this.votes.push(voteWrapper.result);
+        const submitterId = membershipWrapper.result.accountId;
+        const submitterWrapper = await this.$invoke("kalipoAccount:getByID", {
+          id: submitterId,
+        });
 
-        if (voteWrapper.result.answer == "ACCEPT") {
-          this.acceptCount++;
-        } else if (voteWrapper.result.answer == "REFUSE") {
-          this.refuseCount++;
-        }
-      }
+        this.submitter = submitterWrapper.result;
 
-      const client = await this.$client();
-      client.subscribe("vote:newVote", async (data) => {
-        console.log("NEW  VOTE");
-        console.log(data);
-        if (
-          !this.voteIds.includes(data.id) &&
-          data.vote.proposalId == this.proposalId
-        ) {
-          this.votes.push(data.vote);
-          this.voteIds.push(data.id);
+        for (let index = 0; index < this.proposal.votes.length; index++) {
+          const voteId = this.proposal.votes[index];
+          this.voteIds.push(voteId);
+          const voteWrapper = await this.$invoke("vote:getByID", {
+            id: voteId,
+          });
 
-          if (data.vote.answer == "ACCEPT") {
+          this.votes.push(voteWrapper.result);
+
+          if (voteWrapper.result.answer == "ACCEPT") {
             this.acceptCount++;
-          } else if (data.vote.answer == "REFUSE") {
+          } else if (voteWrapper.result.answer == "REFUSE") {
             this.refuseCount++;
           }
         }
-      });
 
-      client.subscribe("proposal:gotDecided", async (data) => {
-        console.log("GOT DECIDED");
-        console.log(data);
-        if (data.id == this.proposalId) {
-          this.proposal = data.proposal;
-        }
-      });
-      console.log(this.proposal);
+        const client = await this.$client();
+        client.subscribe("vote:newVote", async (data) => {
+          console.log("NEW  VOTE");
+          console.log(data);
+          if (
+            !this.voteIds.includes(data.id) &&
+            data.vote.proposalId == this.proposalId
+          ) {
+            this.votes.push(data.vote);
+            this.voteIds.push(data.id);
+
+            if (data.vote.answer == "ACCEPT") {
+              this.acceptCount++;
+            } else if (data.vote.answer == "REFUSE") {
+              this.refuseCount++;
+            }
+          }
+        });
+
+        client.subscribe("proposal:gotDecided", async (data) => {
+          console.log("GOT DECIDED");
+          console.log(data);
+          if (data.id == this.proposalId) {
+            this.proposal = data.proposal;
+          }
+        });
+        console.log(this.proposal);
+
     }
   },
   methods: {
+
+    getAnswerValue(value){
+      this.transaction.assets.answer = value
+      this.chipText = value
+      this.dialog = true;
+    },
+
     getInitials(parseStr) {
       if (parseStr != undefined) {
         const nameList = parseStr.split(" ");
@@ -380,6 +417,11 @@ export default {
       this.transaction.assets.answer = "REFUSE";
       this.dialog = true;
     },
+
+    CHOPPER(value) {
+      this.transaction.assets.answer = value
+      this.dialog = true;
+    }
   },
 };
 </script>
