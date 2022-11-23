@@ -247,7 +247,6 @@ export default {
       "ProposalVoting-ModalClose",
       ($event) => {
         this.dialog = false;
-        const proposalIdLocalStorage = JSON.parse(localStorage.getItem("proposalId"));
         if (this.proposalType == "multi-choice-poll") {
 
           let votedProposals;
@@ -258,15 +257,6 @@ export default {
             votedProposals = [this.proposalId]
           }
           localStorage.setItem("votedProposals", JSON.stringify(votedProposals));
-
-          // if (localStorage.getItem("votedProposals") == null) {
-          //   const proposals = [proposalIdLocalStorage];
-          //   localStorage.setItem("votedProposals", JSON.stringify(proposals));
-          // } else {
-          //   const data = JSON.parse(localStorage.getItem("votedProposals"));
-          //   data.push(proposalIdLocalStorage);
-          //   localStorage.setItem("votedProposals", data)
-          // }
           this.voted = true;
         }
       }
@@ -306,7 +296,6 @@ export default {
         id: provisionId,
       });
 
-
       for (let index = 0; index < this.auton.memberships.length; index++) {
         const autonMembershipId = this.auton.memberships[index];
         const autonMembershipWrapper = await this.$invoke(
@@ -325,8 +314,6 @@ export default {
       }
 
       this.proposalType = this.proposal.type;
-
-      // localStorage.setItem("proposalId", JSON.stringify(this.proposalId))
 
       if (this.proposalType == "multi-choice-poll") {
         this.transaction.assetId = 1;
@@ -353,47 +340,68 @@ export default {
           }
         }
 
-        if (this.proposal.type == "membership-invitation") {
-          this.transaction.assetId = 0;
-          this.membership = true;
-        }
-        const rawQuorum =
-          this.eligibleVoters * (provisionWrapper.result.attendance / 100);
-        if (rawQuorum % 1 != 0) {
-          this.quorum = Math.ceil(rawQuorum);
-        } else {
-          this.quorum = rawQuorum;
-        }
+      }
+      if (this.proposalType == "membership-invitation") {
+        this.transaction.assetId = 0;
+        this.membership = true;
+        this.voted = false;
+      }
+      const rawQuorum =
+        this.eligibleVoters * (provisionWrapper.result.attendance / 100);
+      if (rawQuorum % 1 != 0) {
+        this.quorum = Math.ceil(rawQuorum);
+      } else {
+        this.quorum = rawQuorum;
+      }
 
-        this.minAcceptance = provisionWrapper.result.acceptance;
+      this.minAcceptance = provisionWrapper.result.acceptance;
 
-        const membershipId = this.proposal.membershipId;
-        const membershipWrapper = await this.$invoke("membership:getByID", {
-          id: membershipId,
+      const membershipId = this.proposal.membershipId;
+      const membershipWrapper = await this.$invoke("membership:getByID", {
+        id: membershipId,
+      });
+
+      const submitterId = membershipWrapper.result.accountId;
+      const submitterWrapper = await this.$invoke("kalipoAccount:getByID", {
+        id: submitterId,
+      });
+
+      this.submitter = submitterWrapper.result;
+
+      for (let index = 0; index < this.proposal.votes.length; index++) {
+        const voteId = this.proposal.votes[index];
+        this.voteIds.push(voteId);
+        const voteWrapper = await this.$invoke("vote:getByID", {
+          id: voteId,
         });
 
-        const submitterId = membershipWrapper.result.accountId;
-        const submitterWrapper = await this.$invoke("kalipoAccount:getByID", {
-          id: submitterId,
-        });
+        this.votes.push(voteWrapper.result);
 
-        this.submitter = submitterWrapper.result;
+        if (voteWrapper.result.answer == "ACCEPT") {
+          this.acceptCount++;
+        } else if (voteWrapper.result.answer == "REFUSE") {
+          this.refuseCount++;
+        }
+      }
 
-        for (let index = 0; index < this.proposal.votes.length; index++) {
-          const voteId = this.proposal.votes[index];
-          this.voteIds.push(voteId);
-          const voteWrapper = await this.$invoke("vote:getByID", {
-            id: voteId,
-          });
+      const client = await this.$client();
+      client.subscribe("vote:newVote", async (data) => {
+        console.log("NEW  VOTE");
+        console.log(data);
+        if (
+          !this.voteIds.includes(data.id) &&
+          data.vote.proposalId == this.proposalId
+        ) {
+          this.votes.push(data.vote);
+          this.voteIds.push(data.id);
 
-          this.votes.push(voteWrapper.result);
-
-          if (voteWrapper.result.answer == "ACCEPT") {
+          if (data.vote.answer == "ACCEPT") {
             this.acceptCount++;
-          } else if (voteWrapper.result.answer == "REFUSE") {
+          } else if (data.vote.answer == "REFUSE") {
             this.refuseCount++;
           }
         }
+      });
 
         const client = await this.$client();
         client.subscribe("vote:newVote", async (data) => {
@@ -418,6 +426,7 @@ export default {
           }
         });
       }
+
     }
   },
   methods: {
