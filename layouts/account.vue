@@ -53,12 +53,11 @@
             </v-container>
           </v-row>
           <template v-slot:extension>
-            <v-row>
-              <v-container
-                ><v-tabs v-model="selectedItem">
+              <v-container>
+              <v-tabs show-arrows v-model="selectedItem">
                   <v-tabs-slider color="primary"></v-tabs-slider>
 
-                  <v-tab
+                  <v-tab 
                     v-for="(item, idx) in tabItems"
                     :key="idx"
                     @click="navigate(item.to)"
@@ -66,9 +65,10 @@
                     <v-icon small class="mr-2">{{ item.icon }}</v-icon>
                     {{ item.title }}
                   </v-tab>
-                </v-tabs></v-container
-              ></v-row
-            >
+
+                  
+                </v-tabs>
+                </v-container>
           </template>
         </v-app-bar>
         <Nuxt class="mt-n2" />
@@ -159,7 +159,6 @@ export default {
       } else if (page === "poas") {
         this.selectedItem = 4;
       }
-      console.log(page);
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {
@@ -187,7 +186,6 @@ export default {
     if (this.accountId() === this.getAccount().username) {
       this.$nuxt.$emit("MainMenu-setPage", "my-profile");
       this.account = this.getAccount();
-      console.log("YESSSSS")
       return
     } else {
       this.$nuxt.$emit("MainMenu-setPage", "users");
