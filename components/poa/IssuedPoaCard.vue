@@ -5,7 +5,10 @@
       <v-card-title class="black--text">{{ poa.name }}</v-card-title>
       <v-card-text>
         <v-row class="mx-0 mb-2" v-if="!isFetching">
+        <div class="d-flex align-start">
             This POA was created during the {{ auton.autonProfile.name }} event!
+            <v-icon small class="mr-2 pl-5">{{ "mdi-trophy" }}</v-icon>
+          </div>
         </v-row>
       </v-card-text>
       <v-divider class="mx-4"></v-divider>
@@ -45,7 +48,7 @@
             <v-card-text>
             <v-icon>mdi-calendar</v-icon>
             <span class="ml-2">Event:</span>
-            <a class="float-right" v-if="!isFetching" :href="`/auton/${auton.autonProfile.name}`">{{auton.autonProfile.name}}</a>
+            <a class="float-right" style="text-decoration: underline;" v-if="!isFetching" @click="$router.push(`/auton/${auton.autonProfile.name}`)">{{auton.autonProfile.name}}</a>
             </v-card-text>
         </div>
         <v-divider></v-divider>
@@ -53,7 +56,7 @@
             <v-card-text>
             <v-icon>mdi-crown</v-icon>
             <span class="ml-2">Owner:</span>
-            <a class="float-right" v-if="!isFetching" :href="`/account/${account.name}`">{{account.name}}</a>
+            <a class="float-right" style="text-decoration: underline;" v-if="!isFetching" @click="$router.push(`/account/${account.name}`)">{{account.name}}</a>
             </v-card-text>
         </div>
 
