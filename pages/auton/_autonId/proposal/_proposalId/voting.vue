@@ -244,14 +244,24 @@ export default {
         this.dialog = false;
         const proposalIdLocalStorage = JSON.parse(localStorage.getItem("proposalId"));
         if (this.proposalType == "multi-choice-poll") {
-          if (localStorage.getItem("votedProposals") == null) {
-            const proposals = [proposalIdLocalStorage];
-            localStorage.setItem("votedProposals", JSON.stringify(proposals));
+
+          let votedProposals;
+          if (localStorage.getItem("votedProposals") != null) {
+            votedProposals = JSON.parse(localStorage.getItem("votedProposals"))
+            votedProposals.push(this.proposalId)
           } else {
-            const data = JSON.parse(localStorage.getItem("votedProposals"));
-            data.push(proposalIdLocalStorage);
-            localStorage.setItem("votedProposals", data)
+            votedProposals = [this.proposalId]
           }
+          localStorage.setItem("votedProposals", JSON.stringify(votedProposals));
+
+          // if (localStorage.getItem("votedProposals") == null) {
+          //   const proposals = [proposalIdLocalStorage];
+          //   localStorage.setItem("votedProposals", JSON.stringify(proposals));
+          // } else {
+          //   const data = JSON.parse(localStorage.getItem("votedProposals"));
+          //   data.push(proposalIdLocalStorage);
+          //   localStorage.setItem("votedProposals", data)
+          // }
           this.voted = true;
         }
       }
@@ -311,7 +321,8 @@ export default {
       }
 
       this.proposalType = this.proposal.type;
-      localStorage.setItem("proposalId", JSON.stringify(this.proposalId))
+
+      // localStorage.setItem("proposalId", JSON.stringify(this.proposalId))
 
       if (this.proposalType == "multi-choice-poll") {
         this.transaction.assetId = 1;
@@ -331,8 +342,9 @@ export default {
           this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
         }
         if (localStorage.getItem("votedProposals") != null) {
-          for (let i = 0; i < localStorage.getItem("votedProposals").length; i++) {
-            if (this.proposalId == JSON.parse(localStorage.getItem("votedProposals")[i])) {
+          const votedProposals = JSON.parse(localStorage.getItem("votedProposals"))
+          for (let i = 0; i < votedProposals.length; i++) {
+            if (this.proposalId == votedProposals[i]) {
               this.voted = true;
             }
           }
