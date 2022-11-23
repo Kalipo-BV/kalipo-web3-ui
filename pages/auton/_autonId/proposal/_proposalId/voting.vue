@@ -237,6 +237,7 @@ export default {
     },
     statement: null,
     answers: [],
+    countPerAnswer: [],
   }),
   created() {
     this.$nuxt.$on(
@@ -304,9 +305,12 @@ export default {
         this.statement = this.proposal.multiChoicePollArguments.question;
         for (let i = 0;i < this.proposal.multiChoicePollArguments.answers.length;i++) {
           this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
-          this.countPerAnswer.push(this.proposal.multiChoicePollArguments.answers[i].count);
-          this.totalCounts += this.proposal.multiChoicePollArguments.answers[i].count;
+          console.log(this.proposal.multiChoicePollArguments.answers[i].answer);
+          this.countPerAnswer.push(parseInt(this.proposal.multiChoicePollArguments.answers[i].count));
+          // this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
         }
+console.log('answer' , this.countPerAnswer);
+        // console.log('count', this.totalCounts);
 
         if (this.proposal.type == "membership-invitation") {
           this.transaction.assetId = 0;
