@@ -303,8 +303,9 @@ export default {
       }
         this.statement = this.proposal.multiChoicePollArguments.question;
         for (let i = 0;i < this.proposal.multiChoicePollArguments.answers.length;i++) {
-          this.answers.push(this.proposal.multiChoicePollArguments.answers[i])
-          console.log(this.proposal.multiChoicePollArguments.answers[i].answer)
+          this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
+          this.countPerAnswer.push(this.proposal.multiChoicePollArguments.answers[i].count);
+          this.totalCounts += this.proposal.multiChoicePollArguments.answers[i].count;
         }
 
         if (this.proposal.type == "membership-invitation") {
