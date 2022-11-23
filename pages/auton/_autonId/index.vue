@@ -118,7 +118,7 @@
                     {{ "&nbsp; Price: " }}
                   </v-col>
                   <v-col cols="8" class="pl-0">
-                    {{ auton.event.price }}
+                    {{ auton.event.price + " euro" }}
                   </v-col>
                 </v-row>
               </v-row>
