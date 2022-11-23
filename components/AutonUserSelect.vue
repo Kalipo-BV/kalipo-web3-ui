@@ -100,7 +100,6 @@ export default {
   mounted: async function () {
     this.isUpdating = true;
     const accountIdsWrapper = await this.$invoke("kalipoAccount:getAll");
-    console.log(accountIdsWrapper);
     if (!accountIdsWrapper.error) {
       const ids = accountIdsWrapper.result.ids.reverse();
       for (let index = 0; index < ids.length; index++) {
@@ -115,9 +114,10 @@ export default {
       }
     }
     // filter so you cant add yourself
-    this.users = this.users.filter(item => item.id !== this.account.accountId); 
+    this.users = this.users.filter(
+      (item) => item.id !== this.account.accountId
+    );
     this.isUpdating = false;
-
   },
   methods: {
     remove(item) {

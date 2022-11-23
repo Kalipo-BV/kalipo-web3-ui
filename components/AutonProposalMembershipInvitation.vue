@@ -159,7 +159,6 @@ export default {
   mounted: async function () {
     this.isUpdating = true;
     const accountIdsWrapper = await this.$invoke("kalipoAccount:getAll");
-    console.log(accountIdsWrapper);
 
     const autonWrapper = await this.$invoke("auton:getByID", {
       id: this.autonId,
@@ -199,5 +198,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

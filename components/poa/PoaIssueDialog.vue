@@ -69,8 +69,6 @@ export default {
     });
     this.auton = autonWrapper.result;
     this.isFetching = false;
-
-    console.log(this.member);
   },
   computed: {},
   methods: {

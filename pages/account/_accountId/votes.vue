@@ -163,8 +163,6 @@ export default {
         });
         const membership = membershipWrapper.result;
 
-        console.log(membership);
-
         for (let z = 0; z < membership.votes.length; z++) {
           const voteId = membership.votes[z];
 
@@ -225,7 +223,6 @@ export default {
             title: proposalWrapper.result.title,
             result: proposalWrapper.result.binaryVoteResult.result,
           });
-          console.log(this.proposals);
         }
       }
     }
@@ -265,7 +262,6 @@ export default {
       }
     },
     navigate(index) {
-      console.log(this.autons[index].autonProfile.name);
       this.$router.push(
         "/auton/" +
           this.autons[index].autonProfile.name
@@ -277,5 +273,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

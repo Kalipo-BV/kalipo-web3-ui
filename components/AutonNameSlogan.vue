@@ -100,7 +100,6 @@ export default {
           name: this.nameValue,
         }
       );
-      console.log(existingAutonIdWrapper);
       if (existingAutonIdWrapper.result !== null) {
         this.autonErrorMessage = "Auton name is already taken";
         setTimeout(() => {

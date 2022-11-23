@@ -152,8 +152,6 @@ export default {
         });
         const membership = membershipWrapper.result;
 
-        console.log(membership);
-
         for (let z = 0; z < membership.proposals.length; z++) {
           const proposalId = membership.proposals[z];
 
@@ -194,7 +192,6 @@ export default {
             author: "@" + this.account.username,
             result: proposalWrapper.result.binaryVoteResult.result,
           });
-          console.log(this.proposals);
         }
       }
     }
@@ -218,7 +215,6 @@ export default {
       return "accent";
     },
     navigate(index) {
-      console.log(this.autons[index].autonProfile.name);
       this.$router.push(
         "/auton/" +
           this.autons[index].autonProfile.name
@@ -230,5 +226,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

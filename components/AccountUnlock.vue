@@ -95,14 +95,14 @@ export default {
       return result;
     },
     async unlock() {
-      console.log(this.account.crypt);
-      console.log(cryptography.parseEncryptedPassphrase(this.account.crypt));
+      // console.log(this.account.crypt);
+      // console.log(cryptography.parseEncryptedPassphrase(this.account.crypt));
       try {
         const decryptToLayerOneStr = cryptography.decryptPassphraseWithPassword(
           cryptography.parseEncryptedPassphrase(this.account.crypt),
           this.password
         );
-        console.log(decryptToLayerOneStr);
+        // console.log(decryptToLayerOneStr);
 
         const accountIdWrapper = await this.$invoke(
           "kalipoAccount:getAccountIdByLiskId",

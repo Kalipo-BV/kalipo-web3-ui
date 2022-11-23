@@ -168,8 +168,6 @@ export default {
           accountIdToInvite: this.selectedAccountId,
           invitationMessage: this.invitationMessage,
         };
-        console.log("ASSETTTTT");
-        console.log(asset);
         this.transaction.moduleId = 1004;
         this.transaction.assetId = 0;
         this.transaction.assets = asset;
@@ -178,5 +176,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>

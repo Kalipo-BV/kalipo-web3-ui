@@ -88,7 +88,6 @@ export default {
     unlocked() {
       return this.$store.state.wallet.unlocked;
     },
-
   },
   methods: {
     prev() {
@@ -99,8 +98,7 @@ export default {
     async sign() {
       this.isSigning = true;
       console.log("SIGNING");
-      console.log(this.uri)
-
+      console.log(this.uri);
 
       console.log(this.transaction);
       const moduleId = this.transaction.moduleId;
@@ -124,12 +122,10 @@ export default {
           transactionWrapper.result.message.transactionId,
           "hex"
         );
-        console.log("test 1");
         const transaction = await this.$invokeWithRetry(
           "app:getTransactionByID",
           { id: transactionId }
         );
-        console.log("test 2");
         if (transaction != null && !transaction.error) {
           console.log("OUI");
           if (this.callbackFinish != null) {
@@ -138,10 +134,10 @@ export default {
 
           if (this.$route.path.endsWith("attendees/")) {
             this.$nuxt.$emit("Auton-ProposalModalClose", 0);
-            await this.$router.push(this.uri)
+            await this.$router.push(this.uri);
           } else {
             this.$nuxt.$emit("Auton-ProposalModalClose", 2);
-            await this.$router.push( `${this.uri}/attendees/`);
+            await this.$router.push(`${this.uri}/attendees/`);
           }
         }
       } else {

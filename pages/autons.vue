@@ -53,8 +53,6 @@ export default {
     this.$nuxt.$emit("MainMenu-setPage", "autons");
 
     const autons = await this.$invoke("auton:getAll", {});
-    console.log(autons);
-    console.log("success2");
     if (autons != null) {
       for (let index = 0; index < autons.result.ids.length; index++) {
         const autonId = autons.result.ids[index];
@@ -90,7 +88,6 @@ export default {
   },
   methods: {
     navigate(index) {
-      console.log(this.autons[index].autonProfile.name);
       this.$router.push(
         "/auton/" +
           this.autons[index].autonProfile.name

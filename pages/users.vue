@@ -50,7 +50,6 @@ export default {
     this.$nuxt.$emit("MainMenu-setPage", "users");
 
     const kalipoAccounts = await this.$invoke("kalipoAccount:getAll", {});
-    console.log(kalipoAccounts);
     for (let index = 0; index < kalipoAccounts.result.ids.length; index++) {
       const kalipoAccountId = kalipoAccounts.result.ids[index];
       const kalipoAccount = await this.$invoke("kalipoAccount:getByID", {

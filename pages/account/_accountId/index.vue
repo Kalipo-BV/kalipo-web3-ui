@@ -74,7 +74,6 @@ export default {
     } else {
       this.$nuxt.$emit("Account-setPage", "users");
     }
-    console.log("JA");
 
     let accountIdParam = this.$route.params.accountId;
     if (accountIdParam.indexOf("@") == 0) {
@@ -132,5 +131,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
