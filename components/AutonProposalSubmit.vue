@@ -184,6 +184,9 @@ export default {
           this.invitationMessage = "";
           this.proposalTitle = "";
           this.proposalDescription = "";
+          this.statementMessage =  "";
+          this.addedValueMessage =  "";
+          this.descriptionMessage = "";
           (this.uri = ""),
             (this.transaction = {
               moduleId: -1,
