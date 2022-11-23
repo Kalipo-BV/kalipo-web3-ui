@@ -215,7 +215,10 @@ export default {
     this.$nuxt.$on("Auton-setPage", (page) => this.setMenu(page));
     this.$nuxt.$on(
       "Auton-ProposalModalClose",
-      ($event) => (this.dialog = false)
+      (newSelectedItem) => {
+        this.dialog = false
+        this.selectedItem = newSelectedItem
+      }
     );
 
   },

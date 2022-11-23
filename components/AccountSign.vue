@@ -136,8 +136,13 @@ export default {
             this.$nuxt.$emit(this.callbackFinish, true);
           }
 
-          this.$nuxt.$emit("Auton-ProposalModalClose");
-          await this.$router.push(this.$route.path.endsWith("attendees/") ? this.uri : `${this.uri}/attendees/`);
+          if (this.$route.path.endsWith("attendees/")) {
+            this.$nuxt.$emit("Auton-ProposalModalClose", 0);
+            await this.$router.push(this.uri)
+          } else {
+            this.$nuxt.$emit("Auton-ProposalModalClose", 2);
+            await this.$router.push( `${this.uri}/attendees/`);
+          }
         }
       } else {
         if (transactionWrapper.error) {
