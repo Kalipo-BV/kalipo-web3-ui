@@ -189,25 +189,15 @@
             </div>
           </v-card-text>
         </v-card>
-        <ProposalChoicesOverview
-          v-if="!membership"
-          :statement="statement"
-          :choices="answers"
-          @update:answerValue="getAnswerValue"
-        ></ProposalChoicesOverview>
+        <ProposalChoicesOverview v-if="!membership && !voted" :statement="statement" :choices="answers"
+          @update:answerValue="getAnswerValue"></ProposalChoicesOverview>
       </v-col>
     </v-row>
 
     <v-dialog v-model="dialog" max-width="500" v-if="proposal">
-      <GenericTransaction
-        title="Casting a vote"
-        subtitle="You are about to cast the following vote"
-        :actionText="proposal.title"
-        :chipText="chipText"
-        :uri="uri"
-        :transaction="transaction"
-        callbackFinish="ProposalVoting-ModalClose"
-      ></GenericTransaction>
+      <GenericTransaction title="Casting a vote" subtitle="You are about to cast the following vote"
+        :actionText="proposal.title" :chipText="chipText" :uri="uri" :transaction="transaction"
+        callbackFinish="ProposalVoting-ModalClose"></GenericTransaction>
     </v-dialog>
   </v-container>
 </template>
@@ -217,6 +207,7 @@ export default {
   data: () => ({
     autonId: null,
     proposalId: null,
+    proposalType: null,
     auton: null,
     proposal: null,
     submitter: null,
@@ -232,6 +223,7 @@ export default {
     chipText: null,
     uri: null,
     membership: false,
+    voted: false,
     transaction: {
       moduleId: 1005,
       assetId: 0,
@@ -248,7 +240,21 @@ export default {
   created() {
     this.$nuxt.$on(
       "ProposalVoting-ModalClose",
-      ($event) => (this.dialog = false)
+      ($event) => {
+        this.dialog = false;
+        const proposalIdLocalStorage = JSON.parse(localStorage.getItem("proposalId"));
+        if (this.proposalType == "multi-choice-poll") {
+          if (localStorage.getItem("votedProposals") == null) {
+            const proposals = [proposalIdLocalStorage];
+            localStorage.setItem("votedProposals", JSON.stringify(proposals));
+          } else {
+            const data = JSON.parse(localStorage.getItem("votedProposals"));
+            data.push(proposalIdLocalStorage);
+            localStorage.setItem("votedProposals", data)
+          }
+          this.voted = true;
+        }
+      }
     );
   },
   async mounted() {
@@ -304,7 +310,10 @@ export default {
         }
       }
 
-      if (this.proposal.type == "multi-choice-poll") {
+      this.proposalType = this.proposal.type;
+      localStorage.setItem("proposalId", JSON.stringify(this.proposalId))
+
+      if (this.proposalType == "multi-choice-poll") {
         this.transaction.assetId = 1;
         this.membership = false;
 
@@ -319,10 +328,15 @@ export default {
           this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
           console.log(this.proposal.multiChoicePollArguments.answers[i].answer);
           this.countPerAnswer.push(parseInt(this.proposal.multiChoicePollArguments.answers[i].count));
-          // this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
+          this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
         }
-        console.log('answer', this.countPerAnswer);
-        // console.log('count', this.totalCounts);
+        if (localStorage.getItem("votedProposals") != null) {
+          for (let i = 0; i < localStorage.getItem("votedProposals").length; i++) {
+            if (this.proposalId == JSON.parse(localStorage.getItem("votedProposals")[i])) {
+              this.voted = true;
+            }
+          }
+      }
 
         if (this.proposal.type == "membership-invitation") {
           this.transaction.assetId = 0;
@@ -429,14 +443,9 @@ export default {
       this.chipText = "Against";
       this.transaction.assets.answer = "REFUSE";
       this.dialog = true;
-    },
-
-    CHOPPER(value) {
-      this.transaction.assets.answer = value
-      this.dialog = true;
     }
-  },
-};
+  }
+}
 </script>
 <style scoped>
 .support-label-container {
