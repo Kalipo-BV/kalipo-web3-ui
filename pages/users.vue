@@ -27,14 +27,7 @@
       v-model="search"
     ></v-text-field>
     <v-row dense>
-      <v-col
-        xs="12"
-        sm="6"
-        md="4"
-        lg="3"
-        v-for="(account, index) in accounts"
-        :key="index"
-      >
+      <v-col cols="12" md="3" v-for="(account, index) in accounts" :key="index">
         <MemberCard :member="account"></MemberCard>
         <!-- {{ account }} -->
       </v-col>
