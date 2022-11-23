@@ -24,11 +24,12 @@
         append-icon="mdi-magnify"
         class="mt-4"
         style="max-width: 250px"
-        disabled
+        v-model="search"
+        v-if="auton != null"
       ></v-text-field>
     </v-row>
     <v-row class="mt-2">
-      <v-col cols="12" md="3" v-for="(member, i) in members" :key="i">
+      <v-col cols="12" md="3" v-for="(member, i) in filtered" :key="i">
         <MemberCard
           :autonId="autonId"
           :attendeeCard="true"
@@ -46,7 +47,15 @@ export default {
     members: [],
     auton: null,
     autonId: "",
+    search: "",
   }),
+  computed: {
+    filtered() {
+      return this.members.filter((member) =>
+        member.account.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
+  },
   async mounted() {
     this.$nuxt.$emit("Auton-setPage", "attendees");
 

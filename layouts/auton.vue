@@ -85,31 +85,31 @@
             </v-container>
           </v-row>
           <template v-slot:extension class="mt-2">
-              <v-container
-                ><v-tabs show-arrows v-model="selectedItem">
-                  <v-tabs-slider color="primary"></v-tabs-slider>
+            <v-container
+              ><v-tabs show-arrows v-model="selectedItem">
+                <v-tabs-slider color="primary"></v-tabs-slider>
 
-                  <v-tab
-                    v-if="auton.type == 'DEFAULT'"
-                    v-for="(item, idx) in tabItemsDefault"
-                    :key="idx"
-                    @click="navigate(item.to)"
-                  >
-                    <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                    {{ item.title }}
-                  </v-tab>
+                <v-tab
+                  v-if="auton.type == 'DEFAULT'"
+                  v-for="(item, idx) in tabItemsDefault"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
 
-                  <v-tab
-                    v-if="auton.type == 'EVENT'"
-                    v-for="(item, idx) in tabItemsEvent"
-                    :key="idx"
-                    @click="navigate(item.to)"
-                  >
-                    <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                    {{ item.title }}
-                  </v-tab>
-                </v-tabs>
-              </v-container>
+                <v-tab
+                  v-if="auton.type == 'EVENT'"
+                  v-for="(item, idx) in tabItemsEvent"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
+              </v-tabs>
+            </v-container>
           </template>
         </v-app-bar>
         <Nuxt class="mt-n2 px-8 px-lg-3" :auton="auton" />
@@ -134,6 +134,7 @@
       <AutonAddAttendee
         v-if="auton.type == 'EVENT'"
         :autonId="autondId"
+        callbackFinish="Auton-ProposalModalClose"
       ></AutonAddAttendee>
     </v-dialog>
   </v-app>

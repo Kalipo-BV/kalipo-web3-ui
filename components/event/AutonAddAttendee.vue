@@ -44,7 +44,7 @@ export default {
         moduleId: 1002,
         assetId: 2,
         assets: {},
-      }
+      },
     };
   },
   methods: {
@@ -63,17 +63,14 @@ export default {
           id: this.autonId,
         });
 
-
         const auton = autonWrapper.result;
 
         this.uri = `/auton/${auton.autonProfile.name.replace(" ", "_")}`;
 
-        console.log(auton);
-
         const asset = {
           receiverAddresses: this.selectedFounderIds,
           autonId: this.autonId,
-        }
+        };
 
         this.transaction.assets = asset;
       }

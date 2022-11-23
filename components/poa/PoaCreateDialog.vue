@@ -52,11 +52,7 @@ export default {
       },
     };
   },
-  mounted() {
-    console.log("autonId - PoaCreateDialog");
-    console.log(this.autonId);
-    console.log(this.auton.autonProfile.name);
-  },
+  mounted() {},
   computed: {},
   methods: {
     nextStep() {
