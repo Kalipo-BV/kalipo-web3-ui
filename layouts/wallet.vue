@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,22 +18,46 @@
 <template>
   <v-app id="wallet-layout">
     <v-main class="primary">
+      <v-btn fab class="float-end" @click="open=!open">
+        <v-icon>
+          mdi-menu
+        </v-icon>
+      </v-btn>
       <div style="height: 100%; background: #eef1f6">
         <Nuxt class="px-2 px-md-8 px-lg-3" />
       </div>
     </v-main>
-    <MainMenu></MainMenu>
+    <MainMenu
+      :open="open"
+    ></MainMenu>
   </v-app>
 </template>
 
 <script>
 export default {
-  computed: {},
+  computed: {
+      xs() {
+        return this.$vuetify.breakpoint.xs;
+      },
+      sm() {
+        return this.$vuetify.breakpoint.sm;
+      },
+      md() {
+        return this.$vuetify.breakpoint.md;
+      },
+  },
+
   data() {
-    return {};
+    return {
+      open: true
+    };
   },
   methods: {},
-  mounted() {},
+  mounted() {
+    if(this.xs || this.sm){
+      this.open = false;
+    }
+  },
 };
 </script>
 <style>

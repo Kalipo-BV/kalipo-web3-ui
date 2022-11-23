@@ -18,13 +18,27 @@
 <template>
   <v-app id="default-layout">
     <v-main class="primary">
+      <v-btn fab class="float-end" @click="open=!open">
+        <v-icon>
+          mdi-menu
+        </v-icon>
+      </v-btn>
       <div style="height: 100%; background: #eef1f6">
         <Nuxt class="px-8 px-lg-3" />
       </div>
     </v-main>
-    <MainMenu></MainMenu>
+    <MainMenu :open="open"></MainMenu>
   </v-app>
 </template>
 
 <script>
+export default {
+
+  data() {
+    return {
+      open: true
+    };
+  },
+  methods: {},
+};
 </script>

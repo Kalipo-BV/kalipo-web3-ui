@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,11 @@
 <template>
   <v-app id="user-layout">
     <v-main class="primary">
+      <v-btn fab class="float-end" @click="open=!open">
+        <v-icon>
+          mdi-menu
+        </v-icon>
+      </v-btn>
       <div style="height: 100%; background: #eef1f6">
         <v-app-bar height="85px" color="white" flat>
           <v-row>
@@ -70,7 +75,7 @@
         <Nuxt class="mt-n2" />
       </div>
     </v-main>
-    <MainMenu></MainMenu>
+    <MainMenu :open="open "></MainMenu>
   </v-app>
 </template>
 
@@ -92,6 +97,7 @@ export default {
   },
   data() {
     return {
+      open: true,
       miniVariant: false,
       selectedItem: 0,
       tabItems: [

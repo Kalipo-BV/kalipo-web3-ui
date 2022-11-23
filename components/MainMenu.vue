@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,11 +18,12 @@
 <template>
   <div>
     <v-navigation-drawer
+      v-model="open"
+      fixed
       :mini-variant="sm"
       app
       clipped
       color="primary"
-      v-if="!xs"
     >
       <template v-slot:prepend>
         <v-list-item two-line dark class="my-2">
@@ -173,6 +174,7 @@
 
 <script>
 export default {
+  props: ['open'],
   computed: {
     account() {
       return this.$store.state.wallet.account;

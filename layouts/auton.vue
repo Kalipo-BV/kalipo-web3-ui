@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,11 @@
 <template>
   <v-app id="auton-layout">
     <v-main class="primary">
+      <v-btn fab class="float-end" @click="open=!open">
+        <v-icon>
+          mdi-menu
+        </v-icon>
+      </v-btn>
       <div style="height: 100%; background: #eef1f6">
         <v-app-bar height="108px" color="white" flat>
           <v-row>
@@ -93,7 +98,7 @@
         <Nuxt class="mt-n2 px-8 px-lg-3" :auton="auton" />
       </div>
     </v-main>
-    <MainMenu></MainMenu>
+    <MainMenu :open="open"></MainMenu>
 
     <v-dialog v-model="dialog" max-width="500">
       <AutonProposalSubmit
@@ -120,6 +125,7 @@ export default {
   },
   data() {
     return {
+      open: true,
       autondId: null,
       autonName: null,
       auton: {
