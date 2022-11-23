@@ -14,15 +14,14 @@
   
 <script>
 export default {
-    data: function() {
+  props: ['countPerAnswer', 'answer'],
+  data: function() {
     return {
-        series: [44, 55, 41, 17],
+      series:[400, 430, 448, 470, 540],
         chartOptions: {
-            chart: {
-                width: 340,
-                type: 'donut',
+          chart: {
+            type: 'donut',
             },
-            labels: ['A','B','C','D']
         },
     }
   }

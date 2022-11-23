@@ -190,6 +190,11 @@
           :choices="answers"
           @update:answerValue="getAnswerValue"
         ></ProposalChoicesOverview>
+        <PollVoteChart
+          v-if="!membership && voted"
+          :countPerAnswer="countPerAnswer"
+          :choices="answers"
+        ></PollVoteChart>
       </v-col>
     </v-row>
 
@@ -238,6 +243,7 @@ export default {
     statement: null,
     answers: [],
     countPerAnswer: [],
+    voted: false,
   }),
   created() {
     this.$nuxt.$on(
@@ -309,7 +315,7 @@ export default {
           this.countPerAnswer.push(parseInt(this.proposal.multiChoicePollArguments.answers[i].count));
           // this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
         }
-console.log('answer' , this.countPerAnswer);
+        console.log('answer' , this.countPerAnswer);
         // console.log('count', this.totalCounts);
 
         if (this.proposal.type == "membership-invitation") {
