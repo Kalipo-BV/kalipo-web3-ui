@@ -386,8 +386,6 @@ export default {
 
       const client = await this.$client();
       client.subscribe("vote:newVote", async (data) => {
-        console.log("NEW  VOTE");
-        console.log(data);
         if (
           !this.voteIds.includes(data.id) &&
           data.vote.proposalId == this.proposalId
@@ -400,33 +398,13 @@ export default {
           } else if (data.vote.answer == "REFUSE") {
             this.refuseCount++;
           }
-        }
-      });
-
-        const client = await this.$client();
-        client.subscribe("vote:newVote", async (data) => {
-          if (
-            !this.voteIds.includes(data.id) &&
-            data.vote.proposalId == this.proposalId
-          ) {
-            this.votes.push(data.vote);
-            this.voteIds.push(data.id);
-
-            if (data.vote.answer == "ACCEPT") {
-              this.acceptCount++;
-            } else if (data.vote.answer == "REFUSE") {
-              this.refuseCount++;
-            }
-          }
-        });
+        }});
 
         client.subscribe("proposal:gotDecided", async (data) => {
           if (data.id == this.proposalId) {
             this.proposal = data.proposal;
           }
         });
-      }
-
     }
   },
   methods: {
