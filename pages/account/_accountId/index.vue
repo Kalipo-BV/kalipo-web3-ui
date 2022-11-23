@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import account from "~/layouts/account";
+
 export default {
   layout: "account",
   data() {
@@ -66,9 +68,13 @@ export default {
       account: null,
     };
   },
-
   async mounted() {
-    this.$nuxt.$emit("Account-setPage", "profile");
+    if (this.getAccount().username === this.accountId()) {
+      this.$nuxt.$emit("Account-setPage", "my-profile");
+    } else {
+      this.$nuxt.$emit("Account-setPage", "users");
+    }
+    console.log("JA");
 
     let accountIdParam = this.$route.params.accountId;
     if (accountIdParam.indexOf("@") == 0) {
@@ -87,9 +93,16 @@ export default {
       });
 
       this.account = accountWrapper.result;
+      this.$nuxt.$emit("Account-setAccount", this.account);
     }
   },
   methods: {
+    accountId() {
+      return this.$route.params.accountId;
+    },
+    getAccount() {
+      return this.$store.state.wallet.account;
+    },
     getSocialIcon(socialName) {
       socialName = socialName.toLowerCase();
       if (socialName == "twitter") {

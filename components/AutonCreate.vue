@@ -20,7 +20,7 @@
     <v-card>
       <v-card-text v-if="step == 0">
         <AutonStepperHeader
-          title="Founding a new Auton"
+          title="Founding a new auton"
           subtitle="First choose your template"
         ></AutonStepperHeader>
 
@@ -29,8 +29,14 @@
 
       <v-card-text v-if="step == 1">
         <AutonStepperHeader
-          title="Founding a new Auton"
+          v-if="template == 'DEFAULT'"
+          title="Founding a new auton"
           subtitle="Select an icon that suits your auton"
+        ></AutonStepperHeader>
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new event"
+          subtitle="Select an icon that suits your event"
         ></AutonStepperHeader>
         <AutonRandomIcons :icon.sync="icon"></AutonRandomIcons>
       </v-card-text>
@@ -39,7 +45,7 @@
         <!-- default template -->
         <AutonStepperHeader
           v-if="template == 'DEFAULT'"
-          title="Founding a new Auton"
+          title="Founding a new auton"
           subtitle="Specify the name and slogan"
         ></AutonStepperHeader>
         <AutonNameSlogan
@@ -52,7 +58,7 @@
         <!-- event template -->
         <AutonStepperHeader
           v-if="template == 'EVENT'"
-          title="Founding a new Auton"
+          title="Founding a new event"
           subtitle="Specify the name and description"
         ></AutonStepperHeader>
         <AutonNameDescription
@@ -67,7 +73,7 @@
         <!-- default template -->
         <AutonStepperHeader
           v-if="template == 'DEFAULT'"
-          title="Founding a new Auton"
+          title="Founding a new auton"
           subtitle="Supply a brief mission and vision statement"
         ></AutonStepperHeader>
         <AutonMissionVision
@@ -80,7 +86,7 @@
         <!-- event template -->
         <AutonStepperHeader
           v-if="template == 'EVENT'"
-          title="Founding a new Auton"
+          title="Founding a new event"
           subtitle="Supply the date and time"
         ></AutonStepperHeader>
         <AutonStartEnd
@@ -96,7 +102,7 @@
         <!-- default template -->
         <AutonStepperHeader
           v-if="template == 'DEFAULT'"
-          title="Founding a new Auton"
+          title="Founding a new auton"
           subtitle="Bulk invite members into your new auton"
         ></AutonStepperHeader>
         <AutonUserSelect
@@ -108,7 +114,7 @@
         <!-- event template -->
         <AutonStepperHeader
           v-if="template == 'EVENT'"
-          title="Founding a new Auton"
+          title="Founding a new event"
           subtitle="Supply some required data"
         ></AutonStepperHeader>
         <AutonReqData
@@ -121,8 +127,14 @@
 
       <v-card-text v-if="step == 5">
         <AutonStepperHeader
-          title="Founding a new Auton"
+          v-if="template == 'DEFAULT'"
+          title="Founding a new auton"
           subtitle="Specify tags so users can find your auton"
+        ></AutonStepperHeader>
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new event"
+          subtitle="Specify tags so users can find your event"
         ></AutonStepperHeader>
         <AutonTagSelect :tags.sync="tags" class="mt-4"></AutonTagSelect>
       </v-card-text>
@@ -130,9 +142,17 @@
       <AccountSign
         :transaction="transaction"
         :uri="uri"
-        v-if="step == 6"
+        v-if="step == 6 && template == 'DEFAULT'"
         callback="AutonCreate-PrevStep"
         title="Creating auton"
+      ></AccountSign>
+
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        v-if="step == 6 && template == 'EVENT'"
+        callback="AutonCreate-PrevStep"
+        title="Creating event"
       ></AccountSign>
 
       <v-divider v-if="step !== 6"></v-divider>

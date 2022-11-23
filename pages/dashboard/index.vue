@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,14 @@
         <div class="text-h2 primary--text">My autons</div>
 
         <v-row>
-          <v-col cols="4" v-for="(auton, i) in autons" :key="i">
+          <v-col
+            xs="12"
+            sm="6"
+            md="4"
+            lg="3"
+            v-for="(auton, i) in autons"
+            :key="i"
+          >
             <div
               @click="
                 $router.push(
@@ -33,7 +40,7 @@
               <AutonCard class="mt-4" :auton="auton"></AutonCard>
             </div>
           </v-col>
-          <v-col cols="4">
+          <v-col xs="12" sm="6" md="4" lg="3">
             <v-card
               class="mt-4"
               height="230.567"
@@ -223,7 +230,7 @@ export default {
     );
   },
   async mounted() {
-    this.$nuxt.$emit("MainMenu-setPage", "home");
+    this.$nuxt.$emit("MainMenu-setPage", "dashboard");
     const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
       id: this.account.accountId,
     });

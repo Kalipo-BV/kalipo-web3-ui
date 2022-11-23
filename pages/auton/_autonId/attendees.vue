@@ -28,7 +28,14 @@
       ></v-text-field>
     </v-row>
     <v-row class="mt-2">
-      <v-col cols="4" v-for="(member, i) in members" :key="i">
+      <v-col
+        xs="12"
+        sm="6"
+        md="4"
+        lg="3"
+        v-for="(member, i) in members"
+        :key="i"
+      >
         <MemberCard
           :autonId="autonId"
           :attendeeCard="true"

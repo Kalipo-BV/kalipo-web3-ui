@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
     <v-container>
       <v-row class="mt-1">
         <v-col cols="12" md="6">
-          <div>
+          <div v-if="auton != null && auton.type == 'DEFAULT'">
             <div class="d-flex align-center justify-space-between">
               <div class="text-h2 primary--text">
                 {{ proposalsRunning.length }} running proposal{{
@@ -55,6 +55,125 @@
             </v-carousel>
             <div class="secondary--text"></div>
           </div>
+          <!-- EVENT -->
+          <v-card
+            class="mt-2"
+            flat
+            v-if="auton != null && auton.type == 'EVENT'"
+          >
+            <v-card-text>
+              <div class="text-h6 primary--text">Event details</div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4">
+                  <v-col cols="4" class="pr-0">
+                    <v-icon>mdi-clipboard-text-outline</v-icon>
+
+                    {{ "&nbsp; Description: " }}
+                  </v-col>
+                  <v-col cols="8" class="pl-0">
+                    {{ auton.event.description }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4">
+                  <v-col cols="4" class="pr-0">
+                    <v-icon>mdi-map-marker</v-icon>
+
+                    {{ "&nbsp; Location: " }}
+                  </v-col>
+                  <v-col cols="8" class="pl-0">
+                    {{ auton.event.location }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4">
+                  <v-col cols="4" class="pr-0">
+                    <v-icon>mdi-account-group</v-icon>
+                    {{ "&nbsp; Capacity: " }}
+                  </v-col>
+                  <v-col cols="8" class="pl-0">
+                    {{ auton.event.capacity + " people" }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4">
+                  <v-col cols="4" class="pr-0">
+                    <v-icon>mdi-currency-eur</v-icon>
+
+                    {{ "&nbsp; Price: " }}
+                  </v-col>
+                  <v-col cols="8" class="pl-0">
+                    {{ auton.event.price + " euro" }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4" v-if="start != null">
+                  <v-col cols="4" class="pr-0">
+                    <v-icon>mdi-calendar-check</v-icon>
+
+                    {{ "&nbsp; Start: " }}
+                  </v-col>
+                  <v-col cols="8" class="pl-0">
+                    {{
+                      start.getFullYear() +
+                      "/" +
+                      start.getDate() +
+                      "/" +
+                      start.getMonth() +
+                      " at " +
+                      start.getHours() +
+                      ":" +
+                      (start.getMinutes() === 0 ? "00" : start.getMinutes())
+                    }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4" v-if="end != null">
+                  <v-col cols="4" class="pr-0">
+                    <v-icon>mdi-calendar-remove</v-icon>
+
+                    {{ "&nbsp; End: " }}
+                  </v-col>
+                  <v-col cols="8" class="pl-0">
+                    {{
+                      end.getFullYear() +
+                      "/" +
+                      end.getDate() +
+                      "/" +
+                      end.getMonth() +
+                      " at " +
+                      end.getHours() +
+                      ":" +
+                      (end.getMinutes() === 0 ? "00" : end.getMinutes())
+                    }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+          </v-card>
         </v-col>
         <v-col cols="12" md="6">
           <div class="d-flex align-center justify-space-between">
@@ -129,9 +248,11 @@ export default {
     carousel: 0,
     news: [],
     auton: null,
+    start: null,
+    end: null,
   }),
-  async mounted() {
-    this.$nuxt.$emit("Auton-setPage", "dashboard");
+  async beforeCreate() {
+    this.$nuxt.$emit("Auton-setPage", "autons");
 
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
 
@@ -172,9 +293,17 @@ export default {
       console.log(this.proposals);
     }
 
-    this.news.push({
-      message: `Auton was created`,
-    });
+    if (this.auton.type == "DEFAULT") {
+      this.news.push({
+        message: `Auton was created`,
+      });
+    }
+
+    if (this.auton.type == "EVENT") {
+      this.news.push({
+        message: `Event was created`,
+      });
+    }
 
     for (
       let index = 0;
@@ -193,10 +322,24 @@ export default {
             id: membershipWrapper.result.accountId,
           }
         );
-        this.news.push({
-          message: `@${memberAccountWrapper.result.username} joined the auton`,
-        });
+
+        if (this.auton.type == "DEFAULT") {
+          this.news.push({
+            message: `@${memberAccountWrapper.result.username} joined the auton`,
+          });
+        }
+
+        if (this.auton.type == "EVENT") {
+          this.news.push({
+            message: `@${memberAccountWrapper.result.username} joined the event`,
+          });
+        }
       }
+    }
+
+    if (this.auton != null) {
+      this.start = new Date(parseInt(this.auton.event.start));
+      this.end = new Date(parseInt(this.auton.event.end));
     }
 
     this.news.reverse();

@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,9 +43,15 @@
           :mandatory="selectedItem > -1"
         >
           <div>
-            <v-list-item link v-if="!unlocked" @click="$router.push('/')">
+
+
+            <v-list-item v-for="page in navItems"
+                         :key="page.title"
+                         v-if="!page.hide && (page.showIfUnlocked === unlocked || page.showIfUnlocked === undefined)"
+                         @click="$router.push(page.to)"
+                         link>
               <v-list-item-icon class="pl-1">
-                <v-icon color="white">mdi-home-city</v-icon>
+                <v-icon color="white">{{page.icon}}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -53,88 +59,11 @@
                   class="text-h6 font-weight-medium white--text"
                   style="margin-top: -1px"
                 >
-                  Home
+                  {{ page.title }}
                 </div>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item
-              link
-              v-if="unlocked"
-              @click="$router.push('/dashboard')"
-            >
-              <v-list-item-icon class="pl-1">
-                <v-icon color="white">mdi-monitor-dashboard</v-icon>
-              </v-list-item-icon>
 
-              <v-list-item-content>
-                <div
-                  class="text-h6 font-weight-medium white--text"
-                  style="margin-top: -1px"
-                >
-                  Dashboard
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              link
-              v-if="unlocked"
-              @click="$router.replace(`/account/${account.username}`)"
-            >
-              <v-list-item-icon class="pl-1">
-                <v-icon color="white">mdi-account</v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <div
-                  class="text-h6 font-weight-medium white--text"
-                  style="margin-top: -1px"
-                >
-                  My profile
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item link @click="$router.push('/autons')">
-              <v-list-item-icon class="pl-1">
-                <v-icon color="white">mdi-web</v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <div
-                  class="text-h6 font-weight-medium white--text"
-                  style="margin-top: -1px"
-                >
-                  Autons
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item link @click="$router.push('/users')">
-              <v-list-item-icon class="pl-1">
-                <v-icon color="white">mdi-account-multiple</v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <div
-                  class="text-h6 font-weight-medium white--text"
-                  style="margin-top: -1px"
-                >
-                  Users
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item link>
-              <v-list-item-icon class="pl-1">
-                <v-icon color="white">mdi-text-search</v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <div
-                  class="text-h6 font-weight-medium white--text"
-                  style="margin-top: -1px"
-                >
-                  Logs
-                </div>
-              </v-list-item-content>
-            </v-list-item>
           </div>
         </v-list-item-group>
       </v-list>
@@ -186,10 +115,112 @@
         </div>
       </template>
     </v-navigation-drawer>
+
+
+<!--    Everything beneath this is for the hamburger menu (mobile nav-drawe)-->
+    <v-app-bar v-if="this.$vuetify.breakpoint.width < 1264" id="app" app class="header" color="primary" >
+
+      <router-link to="/">
+        <v-img src="/Kalipo_logo_512x512.png" max-width="40" max-height="100"></v-img>
+      </router-link>
+      <div @click="$router.push('/')" class="text-h3 white--text ml-2 v-chip--clickable">Kalipo</div>
+
+      <v-spacer></v-spacer>
+      <v-app-bar-nav-icon color="white" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    </v-app-bar>
+
+
+    <v-navigation-drawer
+      id="navbar-drawer"
+      fixed
+      v-model="drawer"
+      color="primary"
+    >
+
+
+      <template v-slot:prepend class="primary">
+        <v-list-item two-line dark class="primary">
+
+          <v-list-item-avatar>
+            <v-img src="/Kalipo_logo_512x512.png" max-width="40" max-height="40"></v-img>
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <div class="text-h3 white--text">Kalipo</div>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+
+      <v-list >
+        <v-list-item-group>
+          <v-list-item v-for="page in navItems" :key="page.title"
+                       v-if="!page.hide && (page.showIfUnlocked === unlocked || page.showIfUnlocked === undefined)">
+
+            <v-list-item-title
+              class="text-h6 font-weight-medium white--text"
+               @click="$router.push(page.to)">
+                <v-icon color="white" class="mr-4"> {{page.icon}}</v-icon>
+              {{page.title}}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+
+      <template v-slot:append>
+        <div class="pa-4">
+          <v-card
+            link
+            flat
+            color="primary lighten-1"
+            v-if="unlocked"
+            @click="$router.push('/account_settings')"
+          >
+            <v-card-text>
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
+                  <v-avatar color="white" size="35"
+                  ><div class="text-caption">
+                    {{ getInitials(account.name) }}
+                  </div></v-avatar
+                  >
+                  <div class="white--text ml-2">
+                    <div class="text-body-caption">{{ account.name }}</div>
+                    <div class="text-caption">@{{ account.username }}</div>
+                  </div>
+                </div>
+                <v-btn fab x-small color="white" @click="lockAccount"
+                ><v-icon color="primary lighten-1"
+                >mdi-lock-open</v-icon
+                ></v-btn
+                >
+              </div>
+            </v-card-text>
+          </v-card>
+          <v-card
+            link
+            flat
+            color="primary lighten-1"
+            v-if="!unlocked"
+            @click="$router.push('/wallet')"
+          >
+            <v-card-text>
+              <div
+                class="d-flex align-center justify-center text-h6 white--text"
+              >
+                Sign-in
+              </div>
+            </v-card-text>
+          </v-card>
+        </div>
+      </template>
+
+    </v-navigation-drawer>
+
   </div>
 </template>
 
 <script>
+
 export default {
   computed: {
     account() {
@@ -207,16 +238,30 @@ export default {
     md() {
       return this.$vuetify.breakpoint.md;
     },
+
   },
   data() {
     return {
+      drawer: false,
       miniVariant: false,
       selectedItem: 1,
       navItems: [
         {
           icon: "mdi-home-city",
           title: "Home",
-          to: "/",
+          to: "/"
+        },
+        {
+          icon: "mdi-monitor-dashboard",
+          title: "Dashboard",
+          showIfUnlocked: true,
+          to: "/dashboard",
+        },
+        {
+          icon: "mdi-account",
+          title: "My profile",
+          showIfUnlocked: true,
+          to: this.getAccount() ? `/account/${this.getAccount().username}` : "/account"
         },
         {
           icon: "mdi-file-sign",
@@ -227,27 +272,19 @@ export default {
         {
           icon: "mdi-web",
           title: "Autons",
-          to: "/proposals",
+          to: "/autons",
         },
         {
           icon: "mdi-account-multiple",
           title: "Users",
-          to: "/users",
-        },
-        {
-          icon: "mdi-text-search",
-          title: "Logs",
-          to: "/logs",
-        },
-        {
-          icon: "mdi-monitor-dashboard",
-          title: "Dashboard",
-          to: "/proposals",
+          to: `/users`
         },
         {
           icon: "mdi-account-cog",
           title: "Account settings",
-          to: "/account",
+          to: "account_settings",
+          hide: true,
+          showIfUnlocked: true,
         },
       ],
     };
@@ -256,19 +293,36 @@ export default {
     this.$nuxt.$on("MainMenu-setPage", (page) => this.setMenu(page));
   },
   methods: {
+    getAccount() {
+      return this.$store.state.wallet.account;
+    },
+
     setMenu(page) {
-      if (page === "home") {
-        this.selectedItem = 0;
-      } else if (page === "autons") {
-        this.selectedItem = 1;
-      } else if (page === "users") {
-        this.selectedItem = 2;
-      } else if (page === "logs") {
-        this.selectedItem = 3;
-      } else if (page === "wallet") {
-        this.selectedItem = -1;
-      } else if (page === "account_settings") {
-        this.selectedItem = -1;
+      if (!this.unlocked) { // unlocked means logged in (probably)
+        if (page === "home") {
+          this.selectedItem = 0;
+        } else if (page === "autons") {
+          this.selectedItem = 1;
+        } else if (page === "users") {
+          this.selectedItem = 2;
+        } else {
+          this.selectedItem = -1;
+        }
+      } else {
+        console.log(page)
+        if (page === "home") {
+          this.selectedItem = 0;
+        } else if (page === "dashboard") {
+          this.selectedItem = 1;
+        } else if (page === "my-profile") {
+          this.selectedItem = 2;
+        } else if (page === "autons") {
+          this.selectedItem = 3;
+        } else if (page === "users") {
+          this.selectedItem = 4;
+        } else {
+          this.selectedItem = -1;
+        }
       }
     },
     lockAccount() {

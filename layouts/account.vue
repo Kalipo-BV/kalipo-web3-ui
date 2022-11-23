@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -137,6 +137,7 @@ export default {
   },
   created() {
     this.$nuxt.$on("Account-setPage", (page) => this.setMenu(page));
+    this.$nuxt.$on("Account-setAccount", (account) => (this.account = account));
   },
   methods: {
     navigate(to) {
@@ -175,9 +176,25 @@ export default {
         return result;
       }
     },
+    accountId() {
+      return this.$route.params.accountId;
+    },
+    getAccount() {
+      return this.$store.state.wallet.account;
+    }
   },
   async mounted() {
-    this.$nuxt.$emit("MainMenu-setPage", "users");
+    if (this.accountId() === this.getAccount().username) {
+      this.$nuxt.$emit("MainMenu-setPage", "my-profile");
+      this.account = this.getAccount();
+      console.log("YESSSSS")
+      return
+    } else {
+      this.$nuxt.$emit("MainMenu-setPage", "users");
+    }
+
+
+
 
     let accountIdParam = this.$route.params.accountId;
     if (accountIdParam.indexOf("@") == 0) {
