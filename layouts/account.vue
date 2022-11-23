@@ -53,22 +53,20 @@
             </v-container>
           </v-row>
           <template v-slot:extension>
-              <v-container>
+            <v-container>
               <v-tabs show-arrows v-model="selectedItem">
-                  <v-tabs-slider color="primary"></v-tabs-slider>
+                <v-tabs-slider color="primary"></v-tabs-slider>
 
-                  <v-tab 
-                    v-for="(item, idx) in tabItems"
-                    :key="idx"
-                    @click="navigate(item.to)"
-                  >
-                    <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                    {{ item.title }}
-                  </v-tab>
-
-                  
-                </v-tabs>
-                </v-container>
+                <v-tab
+                  v-for="(item, idx) in tabItems"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
+              </v-tabs>
+            </v-container>
           </template>
         </v-app-bar>
         <Nuxt class="mt-n2" />
@@ -129,7 +127,7 @@ export default {
         },
         {
           icon: "mdi-trophy",
-          title: "My poas",
+          title: "Personal poas",
           to: "poas",
         },
       ],
@@ -180,19 +178,16 @@ export default {
     },
     getAccount() {
       return this.$store.state.wallet.account;
-    }
+    },
   },
   async mounted() {
     if (this.accountId() === this.getAccount().username) {
       this.$nuxt.$emit("MainMenu-setPage", "my-profile");
       this.account = this.getAccount();
-      return
+      return;
     } else {
       this.$nuxt.$emit("MainMenu-setPage", "users");
     }
-
-
-
 
     let accountIdParam = this.$route.params.accountId;
     if (accountIdParam.indexOf("@") == 0) {
@@ -217,5 +212,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>
