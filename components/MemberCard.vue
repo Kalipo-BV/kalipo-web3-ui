@@ -112,21 +112,23 @@ export default {
   }),
   methods: {
     async authorized() {
-      if (this.unlocked) {
-        const memberships = this.$store.state.wallet.account.memberships;
-        memberships.forEach(async (element) => {
-          const mship = await this.$invoke("membership:getByID", {
-            id: element,
+      if (this.autonId != null) {
+        if (this.unlocked) {
+          const memberships = this.$store.state.wallet.account.memberships;
+          memberships.forEach(async (element) => {
+            const mship = await this.$invoke("membership:getByID", {
+              id: element,
+            });
+            if (
+              mship.result.autonId == this.autonId.id &&
+              mship.result.role == "FULL_MEMBER"
+            ) {
+              this.authorizedIssuePoa = false;
+            }
           });
-          if (
-            mship.result.autonId == this.autonId.id &&
-            mship.result.role == "FULL_MEMBER"
-          ) {
-            this.authorizedIssuePoa = false;
-          }
-        });
-      } else {
-        return true;
+        } else {
+          return true;
+        }
       }
     },
     getInitials(parseStr) {
