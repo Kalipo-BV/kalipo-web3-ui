@@ -48,7 +48,7 @@
             <v-card-text>
             <v-icon>mdi-calendar</v-icon>
             <span class="ml-2">Event:</span>
-            <a class="float-right" v-if="!isFetching" :href="`/auton/${auton.autonProfile.name}`">{{auton.autonProfile.name}}</a>
+            <a class="float-right" style="text-decoration: underline;" v-if="!isFetching" @click="$router.push(`/auton/${auton.autonProfile.name}`)">{{auton.autonProfile.name}}</a>
             </v-card-text>
         </div>
         <v-divider></v-divider>
@@ -56,7 +56,7 @@
             <v-card-text>
             <v-icon>mdi-crown</v-icon>
             <span class="ml-2">Owner:</span>
-            <a class="float-right" v-if="!isFetching" :href="`/account/${account.name}`">{{account.name}}</a>
+            <a class="float-right" style="text-decoration: underline;" v-if="!isFetching" @click="$router.push(`/account/${account.name}`)">{{account.name}}</a>
             </v-card-text>
         </div>
 
