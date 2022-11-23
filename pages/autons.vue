@@ -18,16 +18,16 @@
 <template>
   <v-container style="height: 100%">
     <v-text-field
+      v-if="autons.length != null"
       solo
       label="Search an auton"
       append-icon="mdi-magnify"
       class="mt-4"
       style="max-width: 250px"
       v-model="search"
-      disabled
     ></v-text-field>
     <v-row dense>
-      <v-col cols="12" md="3" v-for="(auton, i) in autons" :key="i">
+      <v-col cols="12" md="3" v-for="(auton, i) in filtered" :key="i">
         <div @click="navigate(i)">
           <AutonCard :auton="auton"></AutonCard>
         </div>
@@ -40,7 +40,13 @@ export default {
   layout: "wallet",
   data: () => ({ autons: [], search: "" }),
   computed: {
-    async filtered() {},
+    filtered() {
+      return this.autons.filter((auton) =>
+        auton.autonProfile.name
+          .toLowerCase()
+          .includes(this.search.toLowerCase())
+      );
+    },
   },
   created() {},
   mounted: async function () {
