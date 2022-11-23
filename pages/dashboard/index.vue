@@ -59,9 +59,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col>
-        <PollVoteChart></PollVoteChart>
-      </v-col>
+     
       <v-col cols="12" md="4">
         <div class="text-h2 primary--text">Personal backlog</div>
 
@@ -176,8 +174,6 @@
   </v-container>
 </template>
 <script>
-import PollVoteChart from "~/components/PollVoteChart.vue";
-
 export default {
   layout: "user",
   computed: {
@@ -232,9 +228,7 @@ export default {
     const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
       id: this.account.accountId,
     });
-    console.log(accountWrapper);
     const account = accountWrapper.result;
-    console.log(account);
     for (let index = 0; index < account.memberships.length; index++) {
       const membershipId = account.memberships[index];
       const membershipWrapper = await this.$invoke("membership:getByID", {
@@ -313,7 +307,6 @@ export default {
         this.membershipInvitations.push(membership);
       }
     }
-    console.log(this.memberships);
   },
 };
 </script>

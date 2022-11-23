@@ -191,6 +191,11 @@
         </v-card>
         <ProposalChoicesOverview v-if="!membership && !voted" :statement="statement" :choices="answers"
           @update:answerValue="getAnswerValue"></ProposalChoicesOverview>
+        <PollVoteChart
+          v-if="!membership && voted"
+          :countPerAnswer="countPerAnswer"
+          :choices="answers"
+        ></PollVoteChart>
       </v-col>
     </v-row>
 
@@ -268,7 +273,6 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    console.log(autonIdWrapper);
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
@@ -324,7 +328,6 @@ export default {
         this.statement = this.proposal.multiChoicePollArguments.question;
         for (let i = 0; i < this.proposal.multiChoicePollArguments.answers.length; i++) {
           this.answers.push(this.proposal.multiChoicePollArguments.answers[i].answer);
-          console.log(this.proposal.multiChoicePollArguments.answers[i].answer);
           this.countPerAnswer.push(parseInt(this.proposal.multiChoicePollArguments.answers[i].count));
           this.totalCounts += parseInt(this.proposal.multiChoicePollArguments.answers[i].count);
         }
@@ -336,6 +339,7 @@ export default {
             }
           }
         }
+
       }
       if (this.proposalType == "membership-invitation") {
         this.transaction.assetId = 0;
@@ -399,14 +403,29 @@ export default {
         }
       });
 
-      client.subscribe("proposal:gotDecided", async (data) => {
-        console.log("GOT DECIDED");
-        console.log(data);
-        if (data.id == this.proposalId) {
-          this.proposal = data.proposal;
-        }
-      });
-      console.log(this.proposal);
+        const client = await this.$client();
+        client.subscribe("vote:newVote", async (data) => {
+          if (
+            !this.voteIds.includes(data.id) &&
+            data.vote.proposalId == this.proposalId
+          ) {
+            this.votes.push(data.vote);
+            this.voteIds.push(data.id);
+
+            if (data.vote.answer == "ACCEPT") {
+              this.acceptCount++;
+            } else if (data.vote.answer == "REFUSE") {
+              this.refuseCount++;
+            }
+          }
+        });
+
+        client.subscribe("proposal:gotDecided", async (data) => {
+          if (data.id == this.proposalId) {
+            this.proposal = data.proposal;
+          }
+        });
+      }
 
     }
   },
