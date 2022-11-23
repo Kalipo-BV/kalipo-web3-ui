@@ -18,16 +18,16 @@
 <template>
   <v-container style="height: 100%">
     <v-text-field
+      v-if="accounts.length != null"
       solo
       label="Search a user"
       append-icon="mdi-magnify"
       class="mt-4"
       style="max-width: 250px"
-      disabled
       v-model="search"
     ></v-text-field>
     <v-row dense>
-      <v-col cols="12" md="3" v-for="(account, index) in accounts" :key="index">
+      <v-col cols="12" md="3" v-for="(account, index) in filtered" :key="index">
         <MemberCard :member="account"></MemberCard>
         <!-- {{ account }} -->
       </v-col>
@@ -39,6 +39,13 @@ export default {
   layout: "wallet",
   data: () => ({ accounts: [], search: "" }),
   created() {},
+  computed: {
+    filtered() {
+      return this.accounts.filter((acc) =>
+        acc.account.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
+  },
   mounted: async function () {
     this.$nuxt.$emit("MainMenu-setPage", "users");
 
