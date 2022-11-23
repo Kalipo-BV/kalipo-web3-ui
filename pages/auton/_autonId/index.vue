@@ -68,12 +68,12 @@
             <v-card-text>
               <v-row>
                 <v-row class="text-body-1 pa-4">
-                  <v-col cols="4" class="pr-0">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
                     <v-icon>mdi-clipboard-text-outline</v-icon>
 
                     {{ "&nbsp; Description: " }}
                   </v-col>
-                  <v-col cols="8" class="pl-0">
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
                     {{ auton.event.description }}
                   </v-col>
                 </v-row>
@@ -83,12 +83,12 @@
             <v-card-text>
               <v-row>
                 <v-row class="text-body-1 pa-4">
-                  <v-col cols="4" class="pr-0">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
                     <v-icon>mdi-map-marker</v-icon>
 
                     {{ "&nbsp; Location: " }}
                   </v-col>
-                  <v-col cols="8" class="pl-0">
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
                     {{ auton.event.location }}
                   </v-col>
                 </v-row>
@@ -98,11 +98,11 @@
             <v-card-text>
               <v-row>
                 <v-row class="text-body-1 pa-4">
-                  <v-col cols="4" class="pr-0">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
                     <v-icon>mdi-account-group</v-icon>
                     {{ "&nbsp; Capacity: " }}
                   </v-col>
-                  <v-col cols="8" class="pl-0">
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
                     {{ auton.event.capacity + " people" }}
                   </v-col>
                 </v-row>
@@ -112,12 +112,12 @@
             <v-card-text>
               <v-row>
                 <v-row class="text-body-1 pa-4">
-                  <v-col cols="4" class="pr-0">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
                     <v-icon>mdi-currency-eur</v-icon>
 
                     {{ "&nbsp; Price: " }}
                   </v-col>
-                  <v-col cols="8" class="pl-0">
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
                     {{ auton.event.price + " euro" }}
                   </v-col>
                 </v-row>
@@ -127,12 +127,12 @@
             <v-card-text>
               <v-row>
                 <v-row class="text-body-1 pa-4" v-if="start != null">
-                  <v-col cols="4" class="pr-0">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
                     <v-icon>mdi-calendar-check</v-icon>
 
                     {{ "&nbsp; Start: " }}
                   </v-col>
-                  <v-col cols="8" class="pl-0">
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
                     {{
                       start.getDate() +
                       "/" +
@@ -152,12 +152,12 @@
             <v-card-text>
               <v-row>
                 <v-row class="text-body-1 pa-4" v-if="end != null">
-                  <v-col cols="4" class="pr-0">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
                     <v-icon>mdi-calendar-remove</v-icon>
 
                     {{ "&nbsp; End: " }}
                   </v-col>
-                  <v-col cols="8" class="pl-0">
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
                     {{
                       end.getDate() +
                       "/" +
