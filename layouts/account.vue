@@ -127,6 +127,11 @@ export default {
           title: "Personal votes",
           to: "votes",
         },
+        {
+          icon: "mdi-trophy",
+          title: "My poas",
+          to: "poas",
+        },
       ],
     };
   },
@@ -150,9 +155,10 @@ export default {
         this.selectedItem = 2;
       } else if (page === "votes") {
         this.selectedItem = 3;
-      } else if (page === "comments") {
+      } else if (page === "poas") {
         this.selectedItem = 4;
       }
+      console.log(page);
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {
