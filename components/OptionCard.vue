@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 -->
 
 <template>
-  <!-- 
+  <!--
  Example implementation of parent component:
 
 <item-group v-model="selected" mandatory>
@@ -45,10 +45,11 @@
       </v-item>
     </v-col>
   </v-row>
-</v-item-group> 
+</v-item-group>
 
 -->
   <v-card
+    disabled
     flat
     link
     :elevation="active ? '5' : '0'"

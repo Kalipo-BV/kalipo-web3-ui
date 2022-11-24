@@ -18,7 +18,7 @@
 <template>
   <v-app id="default-layout">
     <v-main class="primary">
-      <v-btn fab class="float-end ma-3" @click="open=!open">
+      <v-btn fab class="float-end ma-3" v-if="xs||sm" @click="open=!open">
         <v-icon>
           mdi-menu
         </v-icon>
@@ -35,6 +35,17 @@
 
 <script>
 export default {
+  computed: {
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
+    },
+  },
 
   data() {
     return {

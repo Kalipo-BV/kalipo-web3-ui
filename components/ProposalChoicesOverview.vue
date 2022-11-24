@@ -32,7 +32,7 @@
     </v-card>
 
     <v-card class="mt-4 rounded-lg" max-width="750" elevation="0">
-      <v-btn outlined @click="rejectAll" block color="error" class="white--text" width="100px" height="45px">Reject all</v-btn>
+      <v-btn outlined @click="rejectAll" disabled block color="error" class="white--text " width="100px" height="45px">Pass</v-btn>
     </v-card>
   </v-container>
 </template>
@@ -49,7 +49,7 @@ export default {
 
   methods: {
     rejectAll(){
-      console.log("allemaal weg");
+
     },
 
     selectChoice(value){

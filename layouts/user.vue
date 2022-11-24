@@ -52,7 +52,7 @@
               </v-row>
             </v-container>
           </v-row>
-          <v-btn fab class="float-end" @click="open=!open">
+          <v-btn fab class="float-end" v-if="xs||sm" @click="open=!open">
             <v-icon>
               mdi-menu
             </v-icon>

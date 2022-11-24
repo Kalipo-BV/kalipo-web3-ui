@@ -178,7 +178,7 @@ export default {
   computed: {
     openInput: {
       get: function () {
-        return this.open;
+        return this.xs||this.sm?this.open:true;
       },
       set: function (newValue) {
         this.$emit("update:open", newValue);
