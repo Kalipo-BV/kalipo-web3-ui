@@ -18,7 +18,7 @@
 <template>
   <div>
     <v-navigation-drawer
-      v-model="open"
+      v-model="openInput"
       fixed
       :mini-variant="sm"
       app
@@ -176,6 +176,14 @@
 export default {
   props: ['open'],
   computed: {
+    openInput: {
+      get: function () {
+        return this.open;
+      },
+      set: function (newValue) {
+        this.$emit("update:open", newValue);
+      },
+    },
     account() {
       return this.$store.state.wallet.account;
     },

@@ -18,11 +18,6 @@
 <template>
   <v-app id="auton-layout">
     <v-main class="primary">
-      <v-btn fab class="float-end" @click="open=!open">
-        <v-icon>
-          mdi-menu
-        </v-icon>
-      </v-btn>
       <div style="height: 100%; background: #eef1f6">
         <v-app-bar height="108px" color="white" flat>
           <v-row>
@@ -76,6 +71,11 @@
               </v-row>
             </v-container>
           </v-row>
+          <v-btn fab class="float-end" @click="open=!open">
+            <v-icon>
+              mdi-menu
+            </v-icon>
+          </v-btn>
           <template v-slot:extension class="mt-2">
             <v-row>
               <v-container
@@ -98,7 +98,9 @@
         <Nuxt class="mt-n2 px-8 px-lg-3" :auton="auton" />
       </div>
     </v-main>
-    <MainMenu :open="open"></MainMenu>
+    <MainMenu
+      :open.sync="open"
+    ></MainMenu>
 
     <v-dialog v-model="dialog" max-width="500">
       <AutonProposalSubmit
@@ -125,7 +127,7 @@ export default {
   },
   data() {
     return {
-      open: true,
+      open: false,
       autondId: null,
       autonName: null,
       auton: {

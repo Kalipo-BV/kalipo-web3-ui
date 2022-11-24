@@ -18,11 +18,6 @@
 <template>
   <v-app id="account-layout">
     <v-main class="primary" v-if="account">
-      <v-btn fab class="float-end" @click="open=!open">
-        <v-icon>
-          mdi-menu
-        </v-icon>
-      </v-btn>
       <div style="height: 100%; background: #eef1f6">
         <v-app-bar height="85px" color="white" flat>
           <v-row>
@@ -57,6 +52,11 @@
               </v-row>
             </v-container>
           </v-row>
+          <v-btn fab class="float-end" @click="open=!open">
+            <v-icon>
+              mdi-menu
+            </v-icon>
+          </v-btn>
           <template v-slot:extension>
             <v-row>
               <v-container
@@ -89,7 +89,9 @@
         </div>
       </v-row>
     </v-main>
-    <MainMenu :open="open"></MainMenu>
+    <MainMenu
+      :open.sync="open"
+    ></MainMenu>
   </v-app>
 </template>
 
@@ -108,7 +110,7 @@ export default {
   },
   data() {
     return {
-      open: true,
+      open: false,
       miniVariant: false,
       selectedItem: 0,
       account: null,

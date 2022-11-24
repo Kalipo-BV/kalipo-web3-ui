@@ -18,7 +18,7 @@
 <template>
   <v-app id="default-layout">
     <v-main class="primary">
-      <v-btn fab class="float-end" @click="open=!open">
+      <v-btn fab class="float-end ma-3" @click="open=!open">
         <v-icon>
           mdi-menu
         </v-icon>
@@ -27,7 +27,9 @@
         <Nuxt class="px-8 px-lg-3" />
       </div>
     </v-main>
-    <MainMenu :open="open"></MainMenu>
+    <MainMenu
+      :open.sync="open"
+    ></MainMenu>
   </v-app>
 </template>
 
@@ -36,7 +38,7 @@ export default {
 
   data() {
     return {
-      open: true
+      open: false
     };
   },
   methods: {},
