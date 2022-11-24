@@ -18,13 +18,40 @@
 <template>
   <v-app id="default-layout">
     <v-main class="primary">
+      <v-btn fab class="float-end ma-3" v-if="xs||sm" @click="open=!open">
+        <v-icon>
+          mdi-menu
+        </v-icon>
+      </v-btn>
       <div style="height: 100%; background: #eef1f6">
         <Nuxt class="px-8 px-lg-3" />
       </div>
     </v-main>
-    <MainMenu></MainMenu>
+    <MainMenu
+      :open.sync="open"
+    ></MainMenu>
   </v-app>
 </template>
 
 <script>
+export default {
+  computed: {
+    xs() {
+      return this.$vuetify.breakpoint.xs;
+    },
+    sm() {
+      return this.$vuetify.breakpoint.sm;
+    },
+    md() {
+      return this.$vuetify.breakpoint.md;
+    },
+  },
+
+  data() {
+    return {
+      open: false
+    };
+  },
+  methods: {},
+};
 </script>

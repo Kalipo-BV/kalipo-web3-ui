@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -52,6 +52,11 @@
               </v-row>
             </v-container>
           </v-row>
+          <v-btn fab class="float-end" v-if="xs||sm" @click="open=!open">
+            <v-icon>
+              mdi-menu
+            </v-icon>
+          </v-btn>
           <template v-slot:extension>
             <v-row>
               <v-container
@@ -84,7 +89,9 @@
         </div>
       </v-row>
     </v-main>
-    <MainMenu></MainMenu>
+    <MainMenu
+      :open.sync="open"
+    ></MainMenu>
   </v-app>
 </template>
 
@@ -103,6 +110,7 @@ export default {
   },
   data() {
     return {
+      open: false,
       miniVariant: false,
       selectedItem: 0,
       account: null,
