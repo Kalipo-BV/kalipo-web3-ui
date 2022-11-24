@@ -191,11 +191,11 @@
         </v-card>
         <ProposalChoicesOverview v-if="!membership && !voted" :statement="statement" :choices="answers"
           @update:answerValue="getAnswerValue"></ProposalChoicesOverview>
-        <PollVoteChart
-          v-if="!membership && voted"
-          :countPerAnswer="countPerAnswer"
-          :choices="answers"
-        ></PollVoteChart>
+          <PollVoteChart
+            v-if="!membership && voted"
+            :countPerAnswer="countPerAnswer"
+            :choices="answers"
+          ></PollVoteChart>
       </v-col>
     </v-row>
 
