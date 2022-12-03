@@ -25,12 +25,12 @@
       v-if="!xs"
     >
       <template v-slot:prepend>
-        <v-list-item two-line dark class="my-2">
-          <v-list-item-avatar>
+        <v-list-item two-line dark class="my-2" >
+          <v-list-item-avatar class="v-card--link" @click="$router.push('/')">
             <img src="/Kalipo_Logo_512x512.png" />
           </v-list-item-avatar>
 
-          <v-list-item-content>
+          <v-list-item-content class="v-card--link" @click="$router.push('/')">
             <div class="text-h3">Kalipo</div>
           </v-list-item-content>
         </v-list-item>
@@ -87,7 +87,7 @@
     >
       <router-link to="/">
         <v-img
-          src="/Kalipo_logo_512x512.png"
+          src="/Kalipo_Logo_512x512.png"
           max-width="40"
           max-height="100"
         ></v-img>
