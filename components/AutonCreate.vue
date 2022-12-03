@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -122,6 +122,7 @@
           :location.sync="location"
           :capacity.sync="capacity"
           :price.sync="price"
+          :disabledNext.sync="disabledNextStep4"
         ></AutonReqData>
       </v-card-text>
 
@@ -166,7 +167,7 @@
             color="accent"
             v-if="step != 6"
             @click="nextStep"
-            :disabled="disabledNext"
+            :disabled="disabledNext || disabledNextStep4"
           >
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
@@ -205,6 +206,7 @@ export default {
     selectedFounderIds: null,
     tags: null,
     disabledNext: false,
+    disabledNextStep4: false,
 
     // event
     description: "",
@@ -213,8 +215,8 @@ export default {
     endDate: "",
     endTime: "",
     location: "",
-    capacity: "",
-    price: "",
+    capacity: 0,
+    price: 0,
 
     start: BigInt(1),
     end: BigInt(1),
@@ -233,6 +235,7 @@ export default {
       this.step++;
 
       if (this.step == 6) {
+
         this.uri = `auton/${this.name.replace(" ", "_")}`;
 
         if (this.tags == null) {
@@ -287,9 +290,9 @@ export default {
       // console.log(this.tags);
 
       // console.log(this.template);
-      // console.log(this.location);
-      // console.log(this.capacity);
-      // console.log(this.price);
+      console.log(this.location);
+      console.log(this.capacity);
+      console.log(this.price);
       // console.log(new Date(this.startDate + ":" + this.startTime).getTime());
       // console.log(new Date(this.endDate + ":" + this.endTime).getTime());
     },

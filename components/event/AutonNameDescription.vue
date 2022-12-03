@@ -1,4 +1,4 @@
-<template lang="">
+<template >
   <div>
     <v-form v-model="valid">
       <v-text-field

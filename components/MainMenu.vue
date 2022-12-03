@@ -70,53 +70,11 @@
           </div>
         </v-list-item-group>
       </v-list>
+
       <template v-slot:append>
-        <div class="pa-4">
-          <v-card
-            link
-            flat
-            color="primary lighten-1"
-            v-if="unlocked"
-            @click="$router.push('/account_settings')"
-          >
-            <v-card-text>
-              <div class="d-flex align-center justify-space-between">
-                <div class="d-flex align-center">
-                  <v-avatar color="white" size="35"
-                    ><div class="text-caption">
-                      {{ getInitials(account.name) }}
-                    </div></v-avatar
-                  >
-                  <div class="white--text ml-2">
-                    <div class="text-body-caption">{{ account.name }}</div>
-                    <div class="text-caption">@{{ account.username }}</div>
-                  </div>
-                </div>
-                <v-btn fab x-small color="white" @click="lockAccount"
-                  ><v-icon color="primary lighten-1"
-                    >mdi-lock-open</v-icon
-                  ></v-btn
-                >
-              </div>
-            </v-card-text>
-          </v-card>
-          <v-card
-            link
-            flat
-            color="primary lighten-1"
-            v-if="!unlocked"
-            @click="$router.push('/wallet')"
-          >
-            <v-card-text>
-              <div
-                class="d-flex align-center justify-center text-h6 white--text"
-              >
-                Sign-in
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
+        <SignInButton :account="account"></SignInButton>
       </template>
+
     </v-navigation-drawer>
 
     <!--    Everything beneath this is for the hamburger menu (mobile nav-drawe)-->
@@ -193,58 +151,16 @@
       </v-list>
 
       <template v-slot:append>
-        <div class="pa-4">
-          <v-card
-            link
-            flat
-            color="primary lighten-1"
-            v-if="unlocked"
-            @click="$router.push('/account_settings')"
-          >
-            <v-card-text>
-              <div class="d-flex align-center justify-space-between">
-                <div class="d-flex align-center">
-                  <v-avatar color="white" size="35"
-                    ><div class="text-caption">
-                      {{ getInitials(account.name) }}
-                    </div></v-avatar
-                  >
-                  <div class="white--text ml-2">
-                    <div class="text-body-caption">{{ account.name }}</div>
-                    <div class="text-caption">@{{ account.username }}</div>
-                  </div>
-                </div>
-                <v-btn fab x-small color="white" @click="lockAccount"
-                  ><v-icon color="primary lighten-1"
-                    >mdi-lock-open</v-icon
-                  ></v-btn
-                >
-              </div>
-            </v-card-text>
-          </v-card>
-          <v-card
-            link
-            flat
-            color="primary lighten-1"
-            v-if="!unlocked"
-            @click="$router.push('/wallet')"
-          >
-            <v-card-text>
-              <div
-                class="d-flex align-center justify-center text-h6 white--text"
-              >
-                Sign-in
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
+        <SignInButton :account="account"></SignInButton>
       </template>
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
+import SignInButton from "~/components/account/SignInButton";
 export default {
+  components: {SignInButton},
   computed: {
     account() {
       return this.$store.state.wallet.account;
@@ -272,12 +188,16 @@ export default {
           icon: "mdi-home-city",
           title: "Home",
           to: "/",
+          selectedItem: 0,
+          unlockedSelectedItem: 0,
         },
         {
           icon: "mdi-monitor-dashboard",
           title: "Dashboard",
           showIfUnlocked: true,
           to: "/dashboard",
+          selectedItem: null, //dashboard is only visible when logged in
+          unlockedSelectedItem: 1,
         },
         {
           icon: "mdi-account",
@@ -286,22 +206,30 @@ export default {
           to: this.getAccount()
             ? `/account/${this.getAccount().username}`
             : "/account",
+          selectedItem: null, //profile is only visible when logged in
+          unlockedSelectedItem: 2,
         },
         {
           icon: "mdi-file-sign",
           title: "Petitions",
           to: "/petitions",
           hide: true,
+          selectedItem: -1, // these are yet to be implemented
+          unlockedSelectedItem: -1,
         },
         {
           icon: "mdi-web",
           title: "Autons",
           to: "/autons",
+          selectedItem: 1,
+          unlockedSelectedItem: 3,
         },
         {
           icon: "mdi-account-multiple",
           title: "Users",
           to: `/users`,
+          selectedItem: 2,
+          unlockedSelectedItem: 4,
         },
         {
           icon: "mdi-account-cog",
@@ -309,6 +237,8 @@ export default {
           to: "account_settings",
           hide: true,
           showIfUnlocked: true,
+          selectedItem: -1, //yet to be implemented
+          unlockedSelectedItem: -1,
         },
       ],
     };
@@ -322,30 +252,17 @@ export default {
     },
 
     setMenu(page) {
-      if (!this.unlocked) {
-        // unlocked means logged in (probably)
-        if (page === "home") {
-          this.selectedItem = 0;
-        } else if (page === "autons") {
-          this.selectedItem = 1;
-        } else if (page === "users") {
-          this.selectedItem = 2;
-        } else {
-          this.selectedItem = -1;
-        }
-      } else {
-        if (page === "home") {
-          this.selectedItem = 0;
-        } else if (page === "dashboard") {
-          this.selectedItem = 1;
-        } else if (page === "my-profile") {
-          this.selectedItem = 2;
-        } else if (page === "autons") {
-          this.selectedItem = 3;
-        } else if (page === "users") {
-          this.selectedItem = 4;
-        } else {
-          this.selectedItem = -1;
+
+      // emits for setMenu have to be done in lowercase so that they can match with the title of  navItems
+      for (let navItem of this.navItems) {
+        if (navItem.title.toLowerCase() === page) {
+
+          if (this.unlocked) {
+            this.selectedItem = navItem.unlockedSelectedItem;
+          } else {
+            this.selectedItem = navItem.selectedItem;
+          }
+
         }
       }
     },

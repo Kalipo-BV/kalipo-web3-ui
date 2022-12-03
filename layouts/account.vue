@@ -185,7 +185,7 @@ export default {
   },
   async mounted() {
     if (this.accountId() === this.getAccount().username) {
-      this.$nuxt.$emit("MainMenu-setPage", "my-profile");
+      this.$nuxt.$emit("MainMenu-setPage", "my profile");
       this.account = this.getAccount();
       return;
     } else {

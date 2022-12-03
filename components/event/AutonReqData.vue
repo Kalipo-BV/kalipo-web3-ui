@@ -1,4 +1,4 @@
-<template lang="">
+<template >
   <div>
     <v-form v-model="valid">
       <v-text-field
@@ -19,7 +19,8 @@
         class="mt-4"
         counter
         style="max-width: 500px"
-        :rules="[rules.required]"
+        persistent-hint
+        hint="Leave the capacity empty if you don't want to limit the number of members"
         v-model="capacityValue"
       ></v-text-field>
 
@@ -29,8 +30,9 @@
         type="number"
         class="mt-4"
         counter
+        persistent-hint
+        hint="Leave the price empty if you don't want to charge for the event"
         style="max-width: 500px"
-        :rules="[rules.required]"
         v-model="priceValue"
       ></v-text-field>
     </v-form>
@@ -46,7 +48,17 @@ export default {
         return this.location;
       },
       set: function (newValue) {
+        if (!newValue) {
+          this.$emit("update:disabledNext", true);
+          this.disabledNext = true;
+          this.$emit("update:location", "");
+          return
+        }
+
+        this.$emit("update:disabledNext", false);
+        this.disabledNext = false;
         this.$emit("update:location", newValue);
+
       },
     },
     capacityValue: {
@@ -54,6 +66,12 @@ export default {
         return this.capacity;
       },
       set: function (newValue) {
+        if (!newValue) { // if the value is empty
+          this.$emit("update:capacity", 0);
+          return
+        }
+
+
         this.$emit("update:capacity", newValue);
       },
     },
@@ -62,6 +80,11 @@ export default {
         return this.price;
       },
       set: function (newValue) {
+        if (!newValue) { // if the value is empty
+          this.$emit("update:price", 0)
+          return
+        }
+
         this.$emit("update:price", newValue);
       },
     },
@@ -77,6 +100,7 @@ export default {
   },
   data: () => ({
     valid: false,
+    disabledNext: true,
     rules: {
       required: (value) => !!value || "Required.",
     },

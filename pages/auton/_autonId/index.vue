@@ -103,7 +103,7 @@
                     {{ "&nbsp; Capacity: " }}
                   </v-col>
                   <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.event.capacity + " people" }}
+                    {{ auton.event.capacity != 0 ? auton.event.capacity + " people" : "Everyone is welcome!" }}
                   </v-col>
                 </v-row>
               </v-row>
@@ -118,7 +118,7 @@
                     {{ "&nbsp; Price: " }}
                   </v-col>
                   <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.event.price + " euro" }}
+                    {{ auton.event.price != 0 ? auton.event.price + " euro" : "Free" }}
                   </v-col>
                 </v-row>
               </v-row>
