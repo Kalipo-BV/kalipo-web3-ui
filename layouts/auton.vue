@@ -18,6 +18,14 @@
 <template>
   <v-app id="auton-layout">
     <v-main class="primary">
+      <v-toolbar v-if="xs||sm" elevation="0">
+        <v-spacer></v-spacer>
+        <v-btn class="white" elevation="0" v-if="xs||sm" @click="open=!open">
+          <v-icon>
+            mdi-menu
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
       <div style="height: 100%; background: #eef1f6">
         <v-app-bar height="108px" color="white" flat>
           <v-row>
@@ -71,11 +79,6 @@
               </v-row>
             </v-container>
           </v-row>
-          <v-btn fab class="float-end" v-if="xs||sm" @click="open=!open">
-            <v-icon>
-              mdi-menu
-            </v-icon>
-          </v-btn>
           <template v-slot:extension class="mt-2">
             <v-row>
               <v-container

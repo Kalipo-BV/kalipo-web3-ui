@@ -18,11 +18,14 @@
 <template>
   <v-app id="default-layout">
     <v-main class="primary">
-      <v-btn fab class="float-end ma-3" v-if="xs||sm" @click="open=!open">
-        <v-icon>
-          mdi-menu
-        </v-icon>
-      </v-btn>
+      <v-toolbar v-if="xs||sm" elevation="0">
+        <v-spacer></v-spacer>
+        <v-btn class="white" elevation="0" v-if="xs||sm" @click="open=!open">
+          <v-icon>
+            mdi-menu
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
       <div style="height: 100%; background: #eef1f6">
         <Nuxt class="px-8 px-lg-3" />
       </div>
