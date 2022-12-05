@@ -16,9 +16,6 @@
 -->
 
 <template>
-  <!--  TODO: add this to container to center but it becomes not mobile friendly anymore
-    TODO: succes page is too wide
--->
   <v-container style="height: 100%" :class="getStyle()">
     <div class="d-flex align-center justify-center" style="height: 100%">
       <AccountSelection
