@@ -1,6 +1,6 @@
 <template >
   <div>
-    <v-form v-model="valid">
+    <v-form v-model="valid" @submit.prevent>
       <v-text-field
         solo
         label="Location"

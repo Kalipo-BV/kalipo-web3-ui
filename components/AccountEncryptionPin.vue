@@ -16,7 +16,13 @@
 -->
 
 <template>
+
   <v-container>
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="create"
+              v-if="pinInput.length === 6"
+    />
     <v-card width="700">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
@@ -74,6 +80,9 @@
 </template>
 <script>
 export default {
+  components: {
+    Keypress: () => import('vue-keypress')
+  },
   props: ["pin"],
   computed: {
     pinInput: {

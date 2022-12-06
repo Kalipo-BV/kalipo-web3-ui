@@ -17,6 +17,11 @@
 
 <template>
   <v-container>
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="next"
+              v-if="valid"
+    />
     <v-card width="700">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
@@ -42,7 +47,7 @@
       <v-divider></v-divider>
 
       <v-card-text>
-        <v-form v-model="valid">
+        <v-form v-model="valid" @submit.prevent>
           <v-text-field
             v-model="passwordInput"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -75,6 +80,9 @@
 </template>
 <script>
 export default {
+  components: {
+    Keypress: () => import('vue-keypress')
+  },
   props: ["password"],
   computed: {
     passwordInput: {

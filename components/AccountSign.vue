@@ -17,6 +17,12 @@
 
 <template>
   <div>
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="sign"
+              v-if="pin.length === 6 && !disabled"
+    />
+
     <v-card v-if="unlocked && (!isSigning || error)">
       <v-card-text>
         <div class="d-flex justify-center">
@@ -74,6 +80,9 @@
 </template>
 <script>
 export default {
+  components: {
+    Keypress : () => import('vue-keypress'),
+  },
   props: ["transaction", "uri", "title", "callback", "callbackFinish"],
   data: () => ({
     isSigning: false,

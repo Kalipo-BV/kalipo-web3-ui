@@ -1,6 +1,6 @@
-<template lang="">
+<template >
   <div>
-    <v-form>
+    <v-form @submit.prevent>
       <v-select
         v-model="selectedValue"
         :items="availablePoasNames"

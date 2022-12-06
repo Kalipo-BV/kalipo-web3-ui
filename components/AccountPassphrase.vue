@@ -15,9 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<template>
+<template >
 
-  <v-container>
+  <v-container >
+
+    <!--    Key code 13 is Enter key-->
+      <Keypress key-event="keyup"
+                :key-code="13"
+                @success="$nuxt.$emit('IAH-showEncryptionPassword')"
+      />
     <v-card width="700" >
       <v-btn
         fab
@@ -84,6 +90,9 @@
 <script>
 export default {
   props: ["passphrase"],
+  components: {
+    Keypress: () => import("vue-keypress"),
+  },
   data() {
     return {
       words: [],

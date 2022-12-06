@@ -188,8 +188,9 @@ export default {
           icon: "mdi-home-city",
           title: "Home",
           to: "/",
+          showIfUnlocked: false,
           selectedItem: 0,
-          unlockedSelectedItem: 0,
+          unlockedSelectedItem: -1,
         },
         {
           icon: "mdi-monitor-dashboard",
@@ -197,7 +198,7 @@ export default {
           showIfUnlocked: true,
           to: "/dashboard",
           selectedItem: null, //dashboard is only visible when logged in
-          unlockedSelectedItem: 1,
+          unlockedSelectedItem: 0,
         },
         {
           icon: "mdi-account",
@@ -207,7 +208,7 @@ export default {
             ? `/account/${this.getAccount().username}`
             : "/account",
           selectedItem: null, //profile is only visible when logged in
-          unlockedSelectedItem: 2,
+          unlockedSelectedItem: 1,
         },
         {
           icon: "mdi-file-sign",
@@ -222,14 +223,14 @@ export default {
           title: "Autons",
           to: "/autons",
           selectedItem: 1,
-          unlockedSelectedItem: 3,
+          unlockedSelectedItem: 2,
         },
         {
           icon: "mdi-account-multiple",
           title: "Users",
           to: `/users`,
           selectedItem: 2,
-          unlockedSelectedItem: 4,
+          unlockedSelectedItem: 3,
         },
         {
           icon: "mdi-account-cog",

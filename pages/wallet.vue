@@ -16,7 +16,9 @@
 -->
 
 <template>
+
   <v-container style="height: 100%" :class="getStyle()">
+
     <div class="d-flex align-center justify-center" style="height: 100%">
       <AccountSelection
         class="mt-4"
@@ -108,6 +110,9 @@ import * as cryptography from "@liskhq/lisk-cryptography";
 
 export default {
   layout: "wallet",
+  components: {
+    Keypress: () => import('vue-keypress')
+  },
   data: () => ({
     screen: "AccountSelection",
     selectedId: "",

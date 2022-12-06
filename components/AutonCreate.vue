@@ -17,6 +17,13 @@
 
 <template>
   <div class="">
+<!--    Key code 13 is Enter key-->
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="nextStep"
+              v-if="!(disabledNext || disabledNextStep4) && step !== 6"
+    />
+
     <v-card>
       <v-card-text v-if="step == 0">
         <AutonStepperHeader
@@ -188,6 +195,7 @@ export default {
     AutonNameDescription,
     AutonStartEnd,
     AutonReqData,
+    Keypress: () => import('vue-keypress')
   },
   data: () => ({
     step: 0,
@@ -232,6 +240,7 @@ export default {
   methods: {
     makeTransaction() {},
     nextStep() {
+
       this.step++;
 
       if (this.step == 6) {

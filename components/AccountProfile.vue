@@ -17,6 +17,12 @@
 
 <template>
   <v-container>
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="next"
+              v-if="valid"
+    />
+
     <v-card width="700">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
@@ -41,7 +47,7 @@
       <v-divider></v-divider>
 
       <v-card-text>
-        <v-form v-model="valid">
+        <v-form v-model="valid" @submit.prevent>
           <v-row class="register-personal-profile">
             <v-col cols="12" md="6">
               <v-text-field
@@ -92,6 +98,9 @@
 <script>
 import { cryptography, passphrase } from "@liskhq/lisk-client";
 export default {
+  components: {
+    Keypress: () => import('vue-keypress')
+  },
   props: ["name", "username", "passphrase", "publicKey", "address"],
   computed: {
     nameInput: {
