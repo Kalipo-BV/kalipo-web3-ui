@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <v-form v-model="valid" @submit.prevent>
       <v-text-field
@@ -74,25 +74,5 @@ export default {
       },
     },
   },
-  watch: {
-    valid: {
-      handler: function (newValid) {
-        // this.iconValue = this.generatedIcons[newIndex];
-        this.$emit("update:disabledNext", !newValid);
-      },
-      deep: true,
-    },
-  },
-  data: () => ({
-    valid: false,
-    rules: {},
-  }),
-  mounted() {
-    this.$emit("update:disabledNext", true);
-  },
-  destroyed() {
-    this.$emit("update:disabledNext", false);
-  },
-  methods: {},
 };
 </script>

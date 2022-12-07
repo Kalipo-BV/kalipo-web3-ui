@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <v-form v-model="valid" @submit.prevent>
       <v-text-field
@@ -52,13 +52,12 @@ export default {
           this.$emit("update:disabledNext", true);
           this.disabledNext = true;
           this.$emit("update:location", "");
-          return
+          return;
         }
 
         this.$emit("update:disabledNext", false);
         this.disabledNext = false;
         this.$emit("update:location", newValue);
-
       },
     },
     capacityValue: {
@@ -66,11 +65,11 @@ export default {
         return this.capacity;
       },
       set: function (newValue) {
-        if (!newValue) { // if the value is empty
+        if (!newValue) {
+          // if the value is empty
           this.$emit("update:capacity", 0);
-          return
+          return;
         }
-
 
         this.$emit("update:capacity", newValue);
       },
@@ -80,22 +79,14 @@ export default {
         return this.price;
       },
       set: function (newValue) {
-        if (!newValue) { // if the value is empty
-          this.$emit("update:price", 0)
-          return
+        if (!newValue) {
+          // if the value is empty
+          this.$emit("update:price", 0);
+          return;
         }
 
         this.$emit("update:price", newValue);
       },
-    },
-  },
-  watch: {
-    valid: {
-      handler: function (newValid) {
-        // this.iconValue = this.generatedIcons[newIndex];
-        this.$emit("update:disabledNext", !newValid);
-      },
-      deep: true,
     },
   },
   data: () => ({
@@ -105,12 +96,5 @@ export default {
       required: (value) => !!value || "Required.",
     },
   }),
-  mounted() {
-    this.$emit("update:disabledNext", true);
-  },
-  destroyed() {
-    this.$emit("update:disabledNext", false);
-  },
-  methods: {},
 };
 </script>
