@@ -17,7 +17,9 @@
     <v-dialog v-model="dialog" width="550">
       <v-card>
         <v-card-title class="text-h5 white--text primary">
-          <span class="ml-4">POA view</span>
+          <span class="ml-4">POA information</span>
+          <v-spacer></v-spacer>
+          <v-icon class="white--text">{{ "mdi-trophy" }}</v-icon>
         </v-card-title>
 
         <div class="ml-5 mr-12">
