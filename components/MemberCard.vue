@@ -138,6 +138,9 @@ export default {
         for (let index = 0; index < nameList.length; index++) {
           if (index < 3) {
             const element = nameList[index];
+            if(element[0] == undefined) {
+              continue;
+            }
             result += element[0].toUpperCase();
           } else {
             break;
