@@ -26,11 +26,12 @@
                 <v-row>
                   <v-col cols="12" md="4">
                     <v-text-field
-                      prepend-inner-icon="mdi-magnify"
-                      label="Search"
+                      append-icon="mdi-magnify"
+                      label="Search a vote"
                       solo
                       hide-details
                       v-model="search"
+                      style="max-width: 250px"
                     ></v-text-field>
                   </v-col>
                 </v-row>
