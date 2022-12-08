@@ -26,9 +26,6 @@
 
       <v-card-text v-if="step !== 1">
         <div class="d-flex align-center justify-space-between">
-          <v-btn :disabled="step == 0" @click="step--">
-            <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
-          </v-btn>
           <v-btn color="accent" v-if="step == 0" @click="nextStep">
             sign <v-icon class="ml-2" small>mdi-draw-pen</v-icon>
           </v-btn>
