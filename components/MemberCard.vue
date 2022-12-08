@@ -61,27 +61,20 @@
             <v-btn color="accent" fab x-small class="mr-1"
               ><v-icon small>{{ getIcon(social.social) }}</v-icon></v-btn
             >
-            <div class="mt-2">
-              <v-btn
-                v-if="attendeeCard"
-                :disabled="authorizedIssuePoa"
-                @click="dialog = !dialog"
-                >Issue poa</v-btn
-              >
-            </div>
           </div>
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
+          </div>
+        </div>
             <div class="mt-2">
               <v-btn
                 v-if="attendeeCard"
                 :disabled="authorizedIssuePoa"
                 @click="dialog = !dialog"
+                :style="{left: '50%', transform:'translateX(-50%)'}"
                 >Issue poa</v-btn
               >
-            </div>
-          </div>
-        </div>
+            </div>  
       </v-card-text>
     </v-card>
 

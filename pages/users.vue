@@ -26,7 +26,7 @@
       style="max-width: 250px"
       v-model="search"
     ></v-text-field>
-    <v-row dense>
+    <v-row align="stretch" dense>
       <v-col cols="12" md="3" v-for="(account, index) in filtered" :key="index">
         <MemberCard :member="account"></MemberCard>
         <!-- {{ account }} -->

@@ -28,7 +28,7 @@
         v-if="auton != null"
       ></v-text-field>
     </v-row>
-    <v-row class="mt-2">
+    <v-row align="stretch" class="mt-2">
       <v-col cols="12" md="3" v-for="(member, i) in filtered" :key="i">
         <MemberCard
           :autonId="autonId"
