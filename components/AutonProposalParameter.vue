@@ -45,11 +45,15 @@ export default {
   },
   props: ["submitter", "selectedProposalType"],
   data: () => ({
+    autonId: null,
+    auton: null,
     proposal: null,
+    proposalId: null,
     list: [],
     userLang: null,
     mainPath: null,
     step: 1,
+    provision: null,
   }),
   async mounted() {
     console.log("account ", this.account)
@@ -57,9 +61,45 @@ export default {
     this.userLang = navigator.language || navigator.userLanguage;
 
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
-    const proposalIndex = parseInt(this.$route.params.proposalId) - 1;
+    // const proposalIndex = parseInt(this.$route.params.proposalId) - 1;
 
-    this.userLang = navigator.language || navigator.userLanguage;
+    const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
+      name: autonIdParam,
+    });
+
+    if (autonIdWrapper.result === null) {
+      this.auton = null;
+      this.error = "Auton not found: " + autonIdParam;
+    } else {
+      this.autonId = autonIdWrapper.result.id;
+
+      const autonWrapper = await this.$invoke("auton:getByID", {
+        id: autonIdWrapper.result.id,
+      });
+
+      this.auton = autonWrapper.result;
+      // const hello =  this.auton.constitution[1].provisions
+
+      // for(let i=0; i< hello.length; i++){
+      //   console.log("hei" ,hello[i])
+      // }
+      // this.proposalId = this.auton.proposals[proposalIndex];
+      // this.transaction.assets.proposalId = this.proposalId;
+
+      const provisionWrapper = await this.$invoke("auton:getProvisionByID",{
+        id: this.auton.constitution[1].provisions[0]
+      });
+      console.log(provisionWrapper);
+
+      this.provision = provisionWrapper.result;
+
+      console.log( "hi", this.provision);
+      // const proposalWrapper = await this.$invoke("proposal:getByID", {
+      //   id: this.proposalId,
+      // });
+
+      // this.proposal = proposalWrapper.result;
+    }
     this.list.push({
       icon: "mdi-calendar-lock-open",
       leftText: "Start date/time:" ,
@@ -77,7 +117,7 @@ export default {
       icon: "mdi-calendar-lock",
       leftText: "End date/time:",
       rightText: new Date(
-        Date.now() + (2 * 24 * 60 * 60 * 1000)
+        Date.now() + (60 * 10)
       ).toLocaleDateString(this.userLang, {
         day: "numeric",
         month: "long",
@@ -96,19 +136,19 @@ export default {
     this.list.push({
       icon: "mdi-account-box-multiple-outline",
       leftText: "Voting window:",
-      rightText: "2 Days",
+      rightText: this.provision.votingWindow,
     });
 
     this.list.push({
       icon: "mdi-account-group",
       leftText: "Quorum:",
-      rightText: "120",
+      rightText: this.provision.attendance,
     });
 
     this.list.push({
       icon: "mdi-human-male-board-poll",
       leftText: "% support:",
-      rightText: "55",
+      rightText: this.provision.acceptance,
     });
 
     this.list.push({
