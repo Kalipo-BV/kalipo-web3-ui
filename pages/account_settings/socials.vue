@@ -133,7 +133,7 @@ export default {
     if (account.socials.length > 0) {
       this.socials = account.socials;
     }
-    console.log(account);
+    
   },
   methods: {
     update() {

@@ -139,7 +139,7 @@ export default {
           username: this.usernameInput,
         }
       );
-      console.log(existingAccoundIdWrapper);
+      
       if (existingAccoundIdWrapper.result !== null) {
         this.usernameErrorMessage = "Username is already taken";
         setTimeout(() => {

@@ -81,7 +81,7 @@ export default {
     });
   },
   async mounted() {
-    console.log(Buffer.from(this.address).toString("hex"));
+    
     const create = await this.$invoke("kalipoAccount:registerNewAccount", {
       accountAddress: Buffer.from(this.address).toString("hex"),
     });
@@ -127,7 +127,7 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error);
+        
         this.retriesLeft--;
         if (this.retriesLeft === 0) {
           this.error = true;

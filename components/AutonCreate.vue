@@ -290,20 +290,20 @@ export default {
         this.transaction.assets = asset;
       }
 
-      // console.log(this.icon);
-      // console.log(this.name);
-      // console.log(this.slogan);
-      // console.log(this.mission);
-      // console.log(this.vision);
-      // console.log(this.selectedFounderIds);
-      // console.log(this.tags);
+      // 
+      // 
+      // 
+      // 
+      // 
+      // 
+      // 
 
-      // console.log(this.template);
-      console.log(this.location);
-      console.log(this.capacity);
-      console.log(this.price);
-      // console.log(new Date(this.startDate + ":" + this.startTime).getTime());
-      // console.log(new Date(this.endDate + ":" + this.endTime).getTime());
+      // 
+      
+      
+      
+      // 
+      // 
     },
   },
 };

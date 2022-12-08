@@ -234,10 +234,10 @@ export default {
     const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
       id: this.account.accountId,
     });
-    console.log(accountWrapper);
+    
 
     const account = accountWrapper.result;
-    console.log(account);
+    
 
     for (let index = 0; index < account.memberships.length; index++) {
       const membershipId = account.memberships[index];
@@ -324,7 +324,7 @@ export default {
       }
     }
 
-    console.log(this.memberships);
+    
   },
 };
 </script>

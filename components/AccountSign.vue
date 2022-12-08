@@ -106,10 +106,10 @@ export default {
     },
     async sign() {
       this.isSigning = true;
-      console.log("SIGNING");
-      console.log(this.uri);
+      
+      
 
-      console.log(this.transaction);
+      
       const moduleId = this.transaction.moduleId;
       const assetId = this.transaction.assetId;
       const asset = this.transaction.assets;
@@ -124,8 +124,8 @@ export default {
         displayNotificationOnError
       );
 
-      console.log("wrapper");
-      console.log(transactionWrapper);
+      
+      
       if (!transactionWrapper.error && transactionWrapper.result.success) {
         const transactionId = Buffer.from(
           transactionWrapper.result.message.transactionId,
@@ -136,7 +136,7 @@ export default {
           { id: transactionId }
         );
         if (transaction != null && !transaction.error) {
-          console.log("OUI");
+          
           if (this.callbackFinish != null) {
             this.$nuxt.$emit(this.callbackFinish, true);
           }

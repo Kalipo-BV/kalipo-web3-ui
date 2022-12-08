@@ -98,7 +98,7 @@ export default {
 
       for (let index = 0; index < this.auton.poas.length; index++) {
         const poaId = this.auton.poas[index];
-        console.log(poaId);
+        
         const poaWrapper = await this.$invoke("poa:getByID", {
           id: poaId,
         });

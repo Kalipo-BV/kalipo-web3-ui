@@ -95,14 +95,14 @@ export default {
       return result;
     },
     async unlock() {
-      // console.log(this.account.crypt);
-      // console.log(cryptography.parseEncryptedPassphrase(this.account.crypt));
+      // 
+      // 
       try {
         const decryptToLayerOneStr = cryptography.decryptPassphraseWithPassword(
           cryptography.parseEncryptedPassphrase(this.account.crypt),
           this.password
         );
-        // console.log(decryptToLayerOneStr);
+        // 
 
         const accountIdWrapper = await this.$invoke(
           "kalipoAccount:getAccountIdByLiskId",
@@ -141,9 +141,9 @@ export default {
         //   JSON.parse(decryptToLayerOneStr),
         //   "123456"
         // );
-        // console.log(decrypted);
+        // 
       } catch (error) {
-        console.log(error);
+        
         this.passwordErrorMessage = "Entered password is not correct!";
         setTimeout(() => {
           this.passwordErrorMessage = "";

@@ -166,7 +166,7 @@ export default {
         author: submitterAccountWrapper.result.username,
         result: proposalWrapper.result.binaryVoteResult.result,
       });
-      console.log(this.proposals);
+      
     }
   },
   methods: {
