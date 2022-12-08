@@ -102,6 +102,7 @@
           :startTime.sync="startTime"
           :endDate.sync="endDate"
           :endTime.sync="endTime"
+          :disabledNext.sync="disabledNext"
         ></AutonStartEnd>
       </v-card-text>
 

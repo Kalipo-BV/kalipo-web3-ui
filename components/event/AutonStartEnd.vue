@@ -7,6 +7,7 @@
         style="max-width: 500px"
         v-model="startDateValue"
         :min="new Date().toISOString().substr(0, 10)"
+        :rules="[rules.required, rules.startDateNotBefore]"
         label="Start date"
       ></v-text-field>
 
@@ -22,6 +23,7 @@
         style="max-width: 500px"
         v-model="endDateValue"
         :min="new Date().toISOString().substr(0, 10)"
+        :rules="[beforeValidation]"
         label="End date"
       ></v-text-field>
 
@@ -36,7 +38,32 @@
 <script>
 export default {
   name: "AutonStartEnd",
-  props: ["startDate", "startTime", "endDate", "endTime"],
+  props: ["startDate", "startTime", "endDate", "endTime", "disabledNext"],
+  data: () => ({
+    valid: false,
+    rules: {
+      required: (v) => !!v || "Required.",
+      startDateNotBefore: (v) => new Date(v).getTime() > Date.now() || "Start date must be in the future" ,
+    },
+  }),
+  mounted() {
+    this.$emit("update:disabledNext", true);
+  },
+  destroyed() {
+    this.$emit("update:disabledNext", false);
+  },
+  methods: {
+    beforeValidation() {
+      console.log(this.startDate);
+      console.log(this.endDate);
+      if (this.startDate && this.endDate) {
+        if (new Date(this.startDate + ":" + this.startTime).getTime() > new Date(this.endDate + ":" + this.endTime).getTime()) {
+          return "Start date must be before end date";
+        }
+      }
+      return true;
+    },
+  },
   computed: {
     // TODO:
     // 1. validate start < end
@@ -74,5 +101,14 @@ export default {
       },
     },
   },
+  watch: {
+    valid: {
+      handler: function (newValid) {
+        // this.iconValue = this.generatedIcons[newIndex];
+        this.$emit("update:disabledNext", !newValid);
+      },
+      deep: true,
+    }
+  }
 };
 </script>
