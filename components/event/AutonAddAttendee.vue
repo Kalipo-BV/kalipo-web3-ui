@@ -20,7 +20,8 @@
       ></AccountSign>
 
       <v-card-text v-if="step !== 'sign'">
-        <div class="d-flex align-center justify-space-between">
+        <div class="d-flex align-right justify-space-between">
+          <v-spacer></v-spacer>
           <v-btn color="accent" @click="nextStep">
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
