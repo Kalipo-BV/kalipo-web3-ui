@@ -17,6 +17,11 @@
 
 <template>
   <div>
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="unlock"
+              v-if="passwordErrorMessage === ''"
+    />
     <v-card width="400">
       <v-card-text>
         <div class="d-flex justify-center">
@@ -74,6 +79,9 @@
 import * as cryptography from "@liskhq/lisk-cryptography";
 
 export default {
+  components: {
+    Keypress: () => import('vue-keypress')
+  },
   props: ["account"],
   data: () => ({
     show1: false,
@@ -95,14 +103,14 @@ export default {
       return result;
     },
     async unlock() {
-      // 
-      // 
+      //
+      //
       try {
         const decryptToLayerOneStr = cryptography.decryptPassphraseWithPassword(
           cryptography.parseEncryptedPassphrase(this.account.crypt),
           this.password
         );
-        // 
+        //
 
         const accountIdWrapper = await this.$invoke(
           "kalipoAccount:getAccountIdByLiskId",
@@ -141,9 +149,9 @@ export default {
         //   JSON.parse(decryptToLayerOneStr),
         //   "123456"
         // );
-        // 
+        //
       } catch (error) {
-        
+
         this.passwordErrorMessage = "Entered password is not correct!";
         setTimeout(() => {
           this.passwordErrorMessage = "";
