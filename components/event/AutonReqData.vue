@@ -49,14 +49,10 @@ export default {
       },
       set: function (newValue) {
         if (!newValue) {
-          this.$emit("update:disabledNext", true);
-          this.disabledNext = true;
           this.$emit("update:location", "");
           return;
         }
 
-        this.$emit("update:disabledNext", false);
-        this.disabledNext = false;
         this.$emit("update:location", newValue);
       },
     },
@@ -89,6 +85,12 @@ export default {
       },
     },
   },
+  mounted() {
+    this.$emit("update:disabledNext", true);
+  },
+  destroyed() {
+    this.$emit("update:disabledNext", false);
+  },
   data: () => ({
     valid: false,
     disabledNext: true,
@@ -96,5 +98,14 @@ export default {
       required: (value) => !!value || "Required.",
     },
   }),
+  watch: {
+    valid: {
+      handler: function (newValid) {
+        // this.iconValue = this.generatedIcons[newIndex];
+        this.$emit("update:disabledNext", !newValid);
+      },
+      deep: true,
+    },
+  },
 };
 </script>

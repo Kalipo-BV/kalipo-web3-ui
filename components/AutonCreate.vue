@@ -130,7 +130,7 @@
           :location.sync="location"
           :capacity.sync="capacity"
           :price.sync="price"
-          :disabledNext.sync="disabledNextStep4"
+          :disabledNext.sync="disabledNext"
         ></AutonReqData>
       </v-card-text>
 
@@ -291,20 +291,6 @@ export default {
         this.transaction.assets = asset;
       }
 
-      // 
-      // 
-      // 
-      // 
-      // 
-      // 
-      // 
-
-      // 
-      
-      
-      
-      // 
-      // 
     },
   },
 };
