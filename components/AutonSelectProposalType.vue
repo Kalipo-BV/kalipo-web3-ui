@@ -33,9 +33,9 @@
       <v-divider class="mt-8"></v-divider>
       <!-- I ADDED STUFF -->
       <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
-        Polls & questionaires
+        Polls & questionnaires
       </div>
-      <v-row justify="start">
+      <v-row justify="start" >
           <v-col cols="12" md="6">
             <div @click="selectedProposalTypeInput = 'yes-no'">
               <ProposalTypeCard 
@@ -50,6 +50,14 @@
               icon="mdi-format-list-checkbox" 
               title="Multi choice"
               :active="selectedProposalTypeInput == 'multi-choice'"></ProposalTypeCard>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div @click="selectedProposalTypeInput = 'questionnaire'">
+              <ProposalTypeCard 
+              icon="mdi-frequently-asked-questions" 
+              title="Questionnaire"
+              :active="selectedProposalTypeInput == 'questionnaire'"></ProposalTypeCard>
             </div>
           </v-col>
       </v-row>
