@@ -36,14 +36,14 @@
         Polls & questionnaires
       </div>
       <v-row justify="start" >
-          <v-col cols="12" md="6">
+          <!-- <v-col cols="12" md="6">
             <div @click="selectedProposalTypeInput = 'yes-no'">
               <ProposalTypeCard 
               icon="mdi-format-list-checks" 
               title="Yes/No"
               :active="selectedProposalTypeInput == 'yes-no'"></ProposalTypeCard>
             </div>
-          </v-col>
+          </v-col> -->
           <v-col cols="12" md="6">
             <div @click="selectedProposalTypeInput = 'multi-choice'">
               <ProposalTypeCard 

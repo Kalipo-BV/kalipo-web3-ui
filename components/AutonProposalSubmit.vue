@@ -57,34 +57,28 @@
       </v-card-text>
 
       <!-- ADDED STUF -->
-      <v-card-text v-if="step == 'yes-no'">
+      <!-- <v-card-text v-if="step == 'yes-no'">
         <AutonStepperHeader
           title="Creating a poll"
           subtitle="Give us your title and describe why you're creating a poll"
         ></AutonStepperHeader>
-
-<!--        :selectedAccountId.sync="selectedAccountId"-->
-<!--        :invitationMessage.sync="invitationMessage"-->
-<!--        class="mt-4"-->
-<!--        :autonId="autonId"-->
         <ProposalChoicesOverview
 
         ></ProposalChoicesOverview>
-      </v-card-text>
+      </v-card-text> -->
 
-      <v-card-text v-if="step == 'multi-choice'">
+      <v-card-text v-if="step == 'title-description'">
         <AutonStepperHeader
-          title="Creating a poll"
-          subtitle="Give us your title and describe why you're creating a poll"
+          :title="title"
+          :subtitle="subTitle"
         ></AutonStepperHeader>
 
-        <AutonProposalMultiChoice
-          :statementMessage.sync="statementMessage"
-          :addedValueMessage.sync="addedValueMessage"
+        <AutonProposalTitleDescription
+          :titelMessage.sync="titelMessage"
           :descriptionMessage.sync="descriptionMessage"
           class="mt-4"
           :autonId="autonId"
-        ></AutonProposalMultiChoice>
+        ></AutonProposalTitleDescription>
       </v-card-text>
 
       <v-card-text v-if="step == 'parameter'">
@@ -103,6 +97,20 @@
       <v-card-text v-if="step == 'choices'">
         <AutonStepperHeader
           title="Multiple choice"
+          subtitle="Give a clear description of your choices"
+        ></AutonStepperHeader>
+
+        <AutonProposalChoices
+          class="mt-4"
+          :autonId="autonId"
+          :selectedProposalType = "selectedProposalType"
+          @data:choices="getChoicesMessage"
+        ></AutonProposalChoices>
+      </v-card-text>
+
+      <v-card-text v-if="step == 'questions'">
+        <AutonStepperHeader
+          title="Questions"
           subtitle="Give a clear description of your choices"
         ></AutonStepperHeader>
 
@@ -150,8 +158,11 @@ export default {
         selectedProposalType: null,
         selectedAccountId: null,
         invitationMessage: "",
-        statementMessage: "",
-        addedValueMessage: "",
+        // statementMessage: "",
+        subTitle: "",
+        title: "",
+        titleMessage: "",
+        // addedValueMessage: "",
         descriptionMessage: "",
         proposalTitle: "",
         proposalDescription: "",
@@ -185,6 +196,7 @@ export default {
           this.proposalTitle = "";
           this.proposalDescription = "";
           this.statementMessage =  "";
+          this.titelMessage = "",
           this.addedValueMessage =  "";
           this.descriptionMessage = "";
           (this.uri = ""),
@@ -206,12 +218,12 @@ export default {
           else if (this.step == "sign" && this.selectedProposalType == "membership-invitation") {
             this.step = "membership-invitation";
           }
-          else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
-            this.step = "parameter";
-          }
-          else if (this.step == "choices" && this.selectedProposalType == "yes-no") {
-            this.step = "yes-no"
-          }
+          // else if (this.step == "yes-no" && this.selectedProposalType == "yes-no") {
+          //   this.step = "parameter";
+          // }
+          // else if (this.step == "choices" && this.selectedProposalType == "yes-no") {
+          //   this.step = "yes-no"
+          // }
           else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice"){
             this.step = "parameter";
           }
@@ -219,7 +231,10 @@ export default {
             console.log("hello")
             this.step = "multi-choice"
           }
-          else if (this.step == "sign" && (this.selectedProposalType == "yes-no" || this.selectedProposalType == "multi-choice")) {
+          // else if (this.step == "sign" && (this.selectedProposalType == "yes-no" || this.selectedProposalType == "multi-choice")) {
+          //   this.step = "choices";
+          // }
+          else if (this.step == "sign" && this.selectedProposalType == "multi-choice") {
             this.step = "choices";
           }
       },
@@ -229,8 +244,11 @@ export default {
           if (this.step == "select-proposal-type" && this.selectedProposalType == "multi-choice") {
             this.step = "parameter";
           }
-          else if (this.step == "select-proposal-type" && this.selectedProposalType == "yes-no") {
-            this.step = "parameter";
+          // else if (this.step == "select-proposal-type" && this.selectedProposalType == "yes-no") {
+          //   this.step = "parameter";
+          // }
+          else if (this.step == "select-proposal-type" && this.selectedProposalType == "questionnaire") {
+            this.step = "parameter"
           }
           else if (this.step == "select-proposal-type" && this.selectedProposalType == "membership-invitation") {
             this.step = "proposal-profile";
@@ -238,16 +256,29 @@ export default {
           else if (this.step == "proposal-profile" && this.selectedProposalType == "membership-invitation") {
             this.step = "membership-invitation";
           }
-          else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
-            this.step = "multi-choice";
+          else if (this.step == "parameter" && this.selectedProposalType == "questionnaire") {
+            this.step = "title-description";
+            this.title = "Questionnaire";
+            this.subTitle = "Describe your statement by providing a title and description";
           }
-          else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice") {
+          else if (this.step == "parameter" && this.selectedProposalType == "multi-choice") {
+            this.step = "title-description";
+            this.title = "Creating a poll";
+            this.subTitle = "Give us your title and describe why you're creating a poll";
+          }
+          else if (this.step == "title-description" && this.selectedProposalType == "multi-choice") {
             this.step = "choices";
           }
-          else if (this.step == "parameter" && this.selectedProposalType == "yes-no") {
-            this.step = "yes-no";
+          else if (this.step == "title-description" && this.selectedProposalType == "questionnaire") {
+            this.step = "questions";
           }
-          else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
+          // else if (this.step == "parameter" && this.selectedProposalType == "yes-no") {
+          //   this.step = "yes-no";
+          // }
+          // else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
+          //   this.step = "sign";
+          // }
+          else if (this.step == "membership-invitation" || this.step == "choices") {
             this.step = "sign";
           }
 
