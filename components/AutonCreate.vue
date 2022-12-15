@@ -348,8 +348,6 @@ export default {
         };
 
         this.transaction.assets = asset;
-
-        console.log(asset);
       }
 
       if (this.step == 6) {
