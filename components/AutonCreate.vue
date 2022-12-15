@@ -96,6 +96,7 @@
           :date.sync="date"
           :startTime.sync="startTime"
           :endTime.sync="endTime"
+          :disabledNext.sync="disabledNext"
         ></LessonInformation>
       </v-card-text>
 
@@ -339,8 +340,8 @@ export default {
           tags: [],
           type: this.template,
           location: this.location,
-          price: 0,
-          capacity: 0,
+          price: BigInt(0),
+          capacity: BigInt(0),
           description: this.description,
           start: this.start,
           end: this.end,

@@ -17,10 +17,11 @@
 
 <template>
   <div>
-    <Keypress key-event="keyup"
-              :key-code="13"
-              @success="sign"
-              v-if="pin.length === 6 && !disabled"
+    <Keypress
+      key-event="keyup"
+      :key-code="13"
+      @success="sign"
+      v-if="pin.length === 6 && !disabled"
     />
 
     <v-card v-if="unlocked && (!isSigning || error)">
@@ -81,7 +82,7 @@
 <script>
 export default {
   components: {
-    Keypress : () => import('vue-keypress'),
+    Keypress: () => import("vue-keypress"),
   },
   props: ["transaction", "uri", "title", "callback", "callbackFinish"],
   data: () => ({
@@ -106,10 +107,11 @@ export default {
     },
     async sign() {
       this.isSigning = true;
-      
-      
 
-      
+      console.log("sign function");
+
+      console.log(this.transaction);
+
       const moduleId = this.transaction.moduleId;
       const assetId = this.transaction.assetId;
       const asset = this.transaction.assets;
@@ -124,8 +126,8 @@ export default {
         displayNotificationOnError
       );
 
-      
-      
+      console.log(transactionWrapper);
+
       if (!transactionWrapper.error && transactionWrapper.result.success) {
         const transactionId = Buffer.from(
           transactionWrapper.result.message.transactionId,
@@ -136,7 +138,6 @@ export default {
           { id: transactionId }
         );
         if (transaction != null && !transaction.error) {
-          
           if (this.callbackFinish != null) {
             this.$nuxt.$emit(this.callbackFinish, true);
           }

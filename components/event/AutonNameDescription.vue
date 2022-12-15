@@ -54,7 +54,6 @@ export default {
   watch: {
     valid: {
       handler: function (newValid) {
-        // this.iconValue = this.generatedIcons[newIndex];
         this.$emit("update:disabledNext", !newValid);
       },
       deep: true,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent>
+    <v-form v-model="valid" @submit.prevent>
       <v-text-field
         solo
         label="Subject"
@@ -9,6 +9,7 @@
         style="max-width: 500px"
         maxlength="30"
         v-model="subjectValue"
+        :rules="[rules.required]"
       ></v-text-field>
       <v-text-field
         solo
@@ -17,6 +18,7 @@
         style="max-width: 500px"
         maxlength="50"
         v-model="lessonNameValue"
+        :rules="[rules.required]"
       ></v-text-field>
       <v-textarea
         filled
@@ -28,6 +30,7 @@
         maxlength="1024"
         counter
         v-model="descriptionValue"
+        :rules="[rules.required]"
       ></v-textarea>
       <v-text-field
         solo
@@ -36,19 +39,29 @@
         style="max-width: 500px"
         maxlength="50"
         v-model="locationValue"
+        :rules="[rules.required]"
       ></v-text-field>
       <v-text-field
         type="date"
         style="max-width: 500px"
         v-model="dateValue"
         label="Date"
+        :rules="[rules.required]"
       ></v-text-field>
       <v-row>
         <v-col cols="6"
-          ><v-text-field type="time" label="Start time"></v-text-field
+          ><v-text-field
+            type="time"
+            label="Start time"
+            :rules="[rules.required]"
+          ></v-text-field
         ></v-col>
         <v-col cols="6"
-          ><v-text-field type="time" label="End time"></v-text-field
+          ><v-text-field
+            type="time"
+            label="End time"
+            :rules="[rules.required]"
+          ></v-text-field
         ></v-col>
       </v-row>
     </v-form>
@@ -56,6 +69,19 @@
 </template>
 <script>
 export default {
+  props: ["disabledNext"],
+  data: () => ({
+    valid: false,
+    rules: {
+      required: (value) => !!value || "Required.",
+    },
+  }),
+  mounted() {
+    this.$emit("update:disabledNext", true);
+  },
+  destroyed() {
+    this.$emit("update:disabledNext", false);
+  },
   props: [
     "subject",
     "lessonName",
@@ -65,6 +91,14 @@ export default {
     "startTime",
     "endTime",
   ],
+  watch: {
+    valid: {
+      handler: function (newValid) {
+        this.$emit("update:disabledNext", !newValid);
+      },
+      deep: true,
+    },
+  },
   computed: {
     subjectValue: {
       get: function () {
