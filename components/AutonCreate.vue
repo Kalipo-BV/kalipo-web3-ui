@@ -17,11 +17,12 @@
 
 <template>
   <div class="">
-<!--    Key code 13 is Enter key-->
-    <Keypress key-event="keyup"
-              :key-code="13"
-              @success="nextStep"
-              v-if="!(disabledNext || disabledNextStep4) && step !== 6"
+    <!--    Key code 13 is Enter key-->
+    <Keypress
+      key-event="keyup"
+      :key-code="13"
+      @success="nextStep"
+      v-if="!(disabledNext || disabledNextStep4) && step !== 6"
     />
 
     <v-card>
@@ -44,6 +45,11 @@
           v-if="template == 'EVENT'"
           title="Founding a new event"
           subtitle="Select an icon that suits your event"
+        ></AutonStepperHeader>
+        <AutonStepperHeader
+          v-if="template == 'LESSON'"
+          title="Founding a new lesson"
+          subtitle="Select an icon that suits your lesson"
         ></AutonStepperHeader>
         <AutonRandomIcons :icon.sync="icon"></AutonRandomIcons>
       </v-card-text>
@@ -74,6 +80,23 @@
           :description.sync="description"
           :disabledNext.sync="disabledNext"
         ></AutonNameDescription>
+
+        <!-- lesson template -->
+        <AutonStepperHeader
+          v-if="template == 'LESSON'"
+          title="Founding a new lesson"
+          subtitle="Specify all information about this lesson"
+        ></AutonStepperHeader>
+        <LessonInformation
+          v-if="template == 'LESSON'"
+          :subject.sync="subject"
+          :lessonName.sync="lessonName"
+          :description.sync="description"
+          :location.sync="location"
+          :date.sync="date"
+          :startTime.sync="startTime"
+          :endTime.sync="endTime"
+        ></LessonInformation>
       </v-card-text>
 
       <v-card-text v-if="step == 3">
@@ -104,6 +127,18 @@
           :endTime.sync="endTime"
           :disabledNext.sync="disabledNext"
         ></AutonStartEnd>
+
+        <!-- lesson template -->
+        <AutonStepperHeader
+          v-if="template == 'LESSON'"
+          title="Founding a new lesson"
+          subtitle="Bulk invite students into your new lesson"
+        ></AutonStepperHeader>
+        <AutonUserSelect
+          v-if="template == 'LESSON'"
+          :selectedFounderIds.sync="studentIds"
+          class="mt-4"
+        ></AutonUserSelect>
       </v-card-text>
 
       <v-card-text v-if="step == 4">
@@ -164,9 +199,42 @@
         title="Creating event"
       ></AccountSign>
 
-      <v-divider v-if="step !== 6"></v-divider>
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        v-if="step == 4 && template == 'LESSON'"
+        callback="AutonCreate-PrevStep"
+        title="Creating lesson"
+      ></AccountSign>
 
-      <v-card-text v-if="step !== 6">
+      <!-- FIX DEZE IF's -->
+      <v-divider
+        v-if="(step < 6 && template == 'EVENT') || template == 'DEFAULT'"
+      ></v-divider>
+      <v-divider v-if="step < 4 && template == 'LESSON'"></v-divider>
+
+      <v-card-text
+        v-if="(step < 6 && template == 'EVENT') || template == 'DEFAULT'"
+      >
+        <div class="d-flex align-center justify-space-between">
+          <v-btn :disabled="step == 0" @click="step--">
+            <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
+          </v-btn>
+          <v-btn
+            color="accent"
+            v-if="step != 6"
+            @click="nextStep"
+            :disabled="disabledNext || disabledNextStep4"
+          >
+            next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
+          </v-btn>
+          <v-btn color="accent" v-if="step == 6" @click="step++">
+            sign <v-icon class="ml-2" small>mdi-draw-pen</v-icon>
+          </v-btn>
+        </div>
+      </v-card-text>
+      <!-- VERDWIJN WANNEER STEP 4 IS && template == 'LESSON' -->
+      <v-card-text v-if="step < 4 && template == 'LESSON'">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="step--">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
@@ -196,7 +264,7 @@ export default {
     AutonNameDescription,
     AutonStartEnd,
     AutonReqData,
-    Keypress: () => import('vue-keypress')
+    Keypress: () => import("vue-keypress"),
   },
   data: () => ({
     step: 0,
@@ -217,18 +285,25 @@ export default {
     disabledNext: false,
     disabledNextStep4: false,
 
-    // event
-    description: "",
-    startDate: "",
+    // event and lesson
     startTime: "",
-    endDate: "",
     endTime: "",
+    description: "",
     location: "",
+    start: BigInt(1),
+    end: BigInt(1),
+
+    // event
+    startDate: "",
+    endDate: "",
     capacity: 0,
     price: 0,
 
-    start: BigInt(1),
-    end: BigInt(1),
+    // lesson
+    subject: "",
+    lessonName: "",
+    date: "",
+    studentIds: null,
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
@@ -241,11 +316,43 @@ export default {
   methods: {
     makeTransaction() {},
     nextStep() {
-
       this.step++;
 
-      if (this.step == 6) {
+      if (this.step == 4 && this.template == "LESSON") {
+        this.uri = this.uri = `auton/${this.lessonName.replace(" ", "_")}`;
 
+        if (this.date != "") {
+          this.start = BigInt(
+            new Date(this.date + ":" + this.startTime).getTime()
+          );
+          this.end = BigInt(new Date(this.date + ":" + this.endTime).getTime());
+        }
+
+        // auton lesson asset
+        const asset = {
+          icon: this.icon,
+          name: this.lessonName,
+          subtitle: "",
+          mission: "",
+          vision: "",
+          bulkInviteAccountIds: this.studentIds,
+          tags: [],
+          type: this.template,
+          location: this.location,
+          price: 0,
+          capacity: 0,
+          description: this.description,
+          start: this.start,
+          end: this.end,
+          subject: this.subject,
+        };
+
+        this.transaction.assets = asset;
+
+        console.log(asset);
+      }
+
+      if (this.step == 6) {
         this.uri = `auton/${this.name.replace(" ", "_")}`;
 
         if (this.tags == null) {
@@ -286,11 +393,11 @@ export default {
           description: this.description,
           start: this.start,
           end: this.end,
+          subject: "",
         };
 
         this.transaction.assets = asset;
       }
-
     },
   },
 };
