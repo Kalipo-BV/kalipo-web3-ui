@@ -46,6 +46,7 @@
         style="max-width: 500px"
         v-model="dateValue"
         label="Date"
+        :min="new Date().toISOString().substr(0, 10)"
         :rules="[rules.required]"
       ></v-text-field>
       <v-row>
