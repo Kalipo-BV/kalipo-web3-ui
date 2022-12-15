@@ -43,7 +43,7 @@ export default {
     valid: false,
     rules: {
       required: (v) => !!v || "Required.",
-      startDateNotBefore: (v) => new Date(v).getTime() > Date.now() || "Start date must be in the future" ,
+      startDateNotBefore: (v) => new Date(v).getDate() >= (new Date().getDate())|| "Start date must be in the future" ,
     },
   }),
   mounted() {
@@ -54,8 +54,6 @@ export default {
   },
   methods: {
     beforeValidation() {
-      console.log(this.startDate);
-      console.log(this.endDate);
       if (this.startDate && this.endDate) {
         if (new Date(this.startDate + ":" + this.startTime).getTime() > new Date(this.endDate + ":" + this.endTime).getTime()) {
           return "Start date must be before end date";
