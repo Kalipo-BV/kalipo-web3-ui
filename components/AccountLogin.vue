@@ -152,18 +152,16 @@ export default {
   },
   methods: {
     async unlock() {
-      // first we need to check if username and password match
+      console.log("hello");
 
-      // first we need to decrypt the passphrase with password
+      // const accountIdWrapper = await this.$invoke(
+      //   "kalipoAccount:getAccountIdByUsername",
+      //   {
+      //     username: this.username,
+      //   }
+      // );
 
-      const accountIdWrapper = await this.$invoke(
-        "kalipoAccount:getAccountIdByUsername",
-        {
-          username: this.username,
-        }
-      );
-
-      console.log(accountIdWrapper);
+      // console.log(accountIdWrapper);
     },
   },
 };
