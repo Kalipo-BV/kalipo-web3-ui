@@ -74,7 +74,7 @@
         ></AutonStepperHeader>
 
         <AutonProposalTitleDescription
-          :titelMessage.sync="titelMessage"
+          :titleMessage.sync="titleMessage"
           :descriptionMessage.sync="descriptionMessage"
           class="mt-4"
           :autonId="autonId"
@@ -114,12 +114,12 @@
           subtitle="Give a clear description of your choices"
         ></AutonStepperHeader>
 
-        <AutonProposalChoices
+        <AutonProposalQuestions
           class="mt-4"
           :autonId="autonId"
           :selectedProposalType = "selectedProposalType"
           @data:choices="getChoicesMessage"
-        ></AutonProposalChoices>
+        ></AutonProposalQuestions>
       </v-card-text>
 
       <AccountSign
@@ -195,8 +195,7 @@ export default {
           this.invitationMessage = "";
           this.proposalTitle = "";
           this.proposalDescription = "";
-          this.statementMessage =  "";
-          this.titelMessage = "",
+          this.titleMessage =  "";
           this.addedValueMessage =  "";
           this.descriptionMessage = "";
           (this.uri = ""),
@@ -224,18 +223,26 @@ export default {
           // else if (this.step == "choices" && this.selectedProposalType == "yes-no") {
           //   this.step = "yes-no"
           // }
-          else if (this.step == "multi-choice" && this.selectedProposalType == "multi-choice"){
-            this.step = "parameter";
-          }
-          else if (this.step == "choices" && this.selectedProposalType == "multi-choice") {
-            console.log("hello")
-            this.step = "multi-choice"
-          }
           // else if (this.step == "sign" && (this.selectedProposalType == "yes-no" || this.selectedProposalType == "multi-choice")) {
           //   this.step = "choices";
           // }
+          else if (this.step == "title-description" && this.selectedProposalType == "multi-choice"){
+            this.step = "parameter";
+          }
+          else if (this.step == "choices" && this.selectedProposalType == "multi-choice") {
+            this.step = "title-description"
+          }
           else if (this.step == "sign" && this.selectedProposalType == "multi-choice") {
             this.step = "choices";
+          }
+          else if (this.step == "title-description" && this.selectedProposalType == "questionnaire"){
+            this.step = "parameter";
+          }
+          else if (this.step == "questions" && this.selectedProposalType == "questionnaire") {
+            this.step = "title-description"
+          }
+          else if (this.step == "sign" && this.selectedProposalType == "quetionnaire") {
+            this.step = "questions";
           }
       },
 
@@ -278,7 +285,7 @@ export default {
           // else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
           //   this.step = "sign";
           // }
-          else if (this.step == "membership-invitation" || this.step == "choices") {
+          else if (this.step == "membership-invitation" || this.step == "choices" || this.step == "questions") {
             this.step = "sign";
           }
 
@@ -297,8 +304,6 @@ export default {
                   invitationMessage: this.invitationMessage,
               };
 
-              console.log("asset membership");
-              console.log(asset);
               this.transaction.moduleId = 1004;
               this.transaction.assetId = 0;
               this.transaction.assets = asset;
@@ -310,16 +315,35 @@ export default {
               this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
 
               const asset = {
-                title: this.statementMessage,
+                title: this.titleMessage,
                 campaignComment: this.descriptionMessage,
                 proposalType: "multi-choice-poll",
                 autonId: this.autonId,
-                question: this.statementMessage,
+                question: this.titleMessage,
                 answers: this.choicesMessage,
               };
 
               this.transaction.moduleId = 1004;
               this.transaction.assetId = 1;
+              this.transaction.assets = asset;
+          }
+
+          //questionnaire data that gets send when chosen:
+          else if (this.step == "sign" && this.selectedProposalType == "questionnaire") {
+            const autonWrapper = await this.$invoke("auton:getByID", {id: this.autonId });
+              this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
+
+              const asset = {
+                title: this.titleMessage,
+                campaignComment: this.descriptionMessage,
+                proposalType: "questionnaire",
+                autonId: this.autonId,
+                question: this.titleMessage,
+                answers: this.choicesMessage,
+              };
+
+              this.transaction.moduleId = 1004;
+              this.transaction.assetId = 2;
               this.transaction.assets = asset;
           }
       },
