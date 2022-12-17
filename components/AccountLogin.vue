@@ -54,6 +54,15 @@
                 </v-row>
               </v-form>
             </v-card-text>
+            <v-card-text class="pt-0" v-if="!validLiskPassphrase">
+              <div
+                class="text-body-1 red--text d-flex justify-center text-center"
+              >
+                <div style="max-width: 400px">
+                  This is not a valid Lisk passphrase!
+                </div>
+              </div>
+            </v-card-text>
             <v-card-text>
               <v-row
                 ><v-spacer></v-spacer
@@ -168,6 +177,7 @@ export default {
       username: "No account retrieved!",
       password: "",
       pinInput: "",
+      validLiskPassphrase: true,
       // words: [
       //   "design",
       //   "top",
@@ -198,35 +208,39 @@ export default {
       const addressAndPublicKeyFromPassphrase =
         cryptography.getAddressAndPublicKeyFromPassphrase(this.words.join(" "));
 
-      // get Kalipo acc ID from Lisk address
-      const kalipoAccountIdByLiskIdFromPassphrase = await this.$invoke(
-        "kalipoAccount:getAccountIdByLiskId",
-        {
-          id: addressAndPublicKeyFromPassphrase.address.toString("hex"),
-        }
-      );
+      try {
+        // get Kalipo acc ID from Lisk address
+        const kalipoAccountIdByLiskIdFromPassphrase = await this.$invoke(
+          "kalipoAccount:getAccountIdByLiskId",
+          {
+            id: addressAndPublicKeyFromPassphrase.address.toString("hex"),
+          }
+        );
 
-      // Kalipo account
-      const kalipoAccount = await this.$invoke("kalipoAccount:getByID", {
-        id: kalipoAccountIdByLiskIdFromPassphrase.result.id,
-      });
+        // Kalipo account
+        const kalipoAccount = await this.$invoke("kalipoAccount:getByID", {
+          id: kalipoAccountIdByLiskIdFromPassphrase.result.id,
+        });
 
-      // set all front end Kalipo acc information
-      this.frontAccToAdd = {
-        accountId: kalipoAccountIdByLiskIdFromPassphrase.result.id,
-        username: kalipoAccount.result.username,
-        name: kalipoAccount.result.name,
-        address: addressAndPublicKeyFromPassphrase.address,
-        publicKey: addressAndPublicKeyFromPassphrase.publicKey,
-        memberships: kalipoAccount.result.memberships,
-        socials: kalipoAccount.result.socials,
-      };
+        // set all front end Kalipo acc information
+        this.frontAccToAdd = {
+          accountId: kalipoAccountIdByLiskIdFromPassphrase.result.id,
+          username: kalipoAccount.result.username,
+          name: kalipoAccount.result.name,
+          address: addressAndPublicKeyFromPassphrase.address,
+          publicKey: addressAndPublicKeyFromPassphrase.publicKey,
+          memberships: kalipoAccount.result.memberships,
+          socials: kalipoAccount.result.socials,
+        };
 
-      // set retrieved username
-      this.username = kalipoAccount.result.username;
+        // set retrieved username
+        this.username = kalipoAccount.result.username;
 
-      // set step to two
-      this.step = 2;
+        // set step to two
+        this.step = 2;
+      } catch (error) {
+        this.validLiskPassphrase = false;
+      }
     },
     async addNewAccount() {
       // Pin(Passphrase)
