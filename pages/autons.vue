@@ -54,8 +54,6 @@ export default {
 
     const autons = await this.$invoke("auton:getAll", {});
     if (autons != null) {
-      // FOR LOOP MOET OP 0, BREEKT NU OMDAT EERSTE 10 AUTONS OUD ZIJN.
-
       for (let index = 10; index < autons.result.ids.length; index++) {
         const autonId = autons.result.ids[index];
         const autonWrapper = await this.$invoke("auton:getByID", {

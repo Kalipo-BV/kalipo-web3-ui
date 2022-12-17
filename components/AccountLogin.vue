@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card width="500">
+    <v-card width="800">
       <v-btn
         fab
         outlined
@@ -11,105 +11,225 @@
         @click="$nuxt.$emit('IAH-showChooseOperation')"
         ><v-icon>mdi-close</v-icon></v-btn
       >
-      <div v-if="step == 0">
-        <v-card-text>
-          <div class="text-h4 primary--text d-flex justify-center mt-2">
-            Login
-          </div>
-          <div
-            class="text-body-1 primary--text d-flex justify-center mt-2 text-center"
+      <v-stepper v-model="step" alt-labels>
+        <v-stepper-header>
+          <v-stepper-step color="accent" :complete="step > 1" :step="1" :key="1"
+            >Passphrase</v-stepper-step
           >
-            <div style="max-width: 300px">
-              Please provide your username and password.
-            </div>
-          </div>
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-text class="pb-0">
-          <v-text-field
-            v-model="username"
-            class="mt-6"
-            label="Username"
-            solo
-          ></v-text-field>
-          <v-text-field
-            v-model="password"
-            label="Password"
-            solo
-            :type="show1 ? 'text' : 'password'"
-            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="show1 = !show1"
-          ></v-text-field>
-        </v-card-text>
-      </div>
-
-      <div v-if="step == 1">
-        <v-card-text>
-          <div class="text-h4 primary--text d-flex justify-center mt-2">
-            Login
-          </div>
-          <div
-            class="text-body-1 primary--text d-flex justify-center mt-2 text-center"
+          <v-divider></v-divider>
+          <v-stepper-step color="accent" :complete="step > 2" :step="2" :key="2"
+            >Encrypt</v-stepper-step
           >
-            <div style="max-width: 300px">Please provide your PIN.</div>
-          </div>
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-otp-input
-            v-model="pinInput"
-            :type="show ? 'text' : 'password'"
-            length="6"
-          ></v-otp-input>
-          <div class="d-flex justify-center">
-            <v-btn @click="show = !show"
-              ><v-icon v-text="show ? 'mdi-eye' : 'mdi-eye-off'"></v-icon
-            ></v-btn></div
-        ></v-card-text>
-      </div>
-
-      <v-divider class="my-4"></v-divider>
-      <v-row>
-        <v-col>
-          <div class="d-flex justify-end ml-4 mr-4">
-            <v-btn v-if="step == 0" block color="accent" @click="step++">
-              Login <v-icon small class="ml-1">mdi-lock-open</v-icon>
-            </v-btn>
-            <v-btn v-if="step == 1" block color="accent" @click="unlock">
-              Sign <v-icon small class="ml-1">mdi-draw-pen</v-icon>
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
+          <v-divider></v-divider>
+          <v-stepper-step color="accent" :step="3" :key="3">PIN</v-stepper-step>
+        </v-stepper-header>
+        <v-stepper-items>
+          <v-stepper-content :step="1">
+            <!-- Step 1 content goes here -->
+            <v-card-text>
+              <div
+                class="text-body-1 primary--text d-flex justify-center text-center"
+              >
+                <div style="max-width: 400px">
+                  Please provide your passphrase from your Lisk account.
+                </div>
+              </div>
+            </v-card-text>
+            <v-card-text>
+              <v-row>
+                <v-col
+                  cols="4"
+                  md="2"
+                  v-for="(word, index) in words"
+                  :key="index"
+                >
+                  <v-text-field
+                    filled
+                    :label="index + 1 + '.'"
+                    v-model="words[index]"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-card-text>
+            <v-card-text>
+              <v-row
+                ><v-spacer></v-spacer
+                ><v-btn
+                  class="mr-2"
+                  color="accent"
+                  @click="retreiveAccountByPassphrase"
+                  >Next</v-btn
+                ></v-row
+              >
+            </v-card-text>
+          </v-stepper-content>
+          <v-stepper-content :step="2">
+            <!-- Step 2 content goes here -->
+            <v-card-text>
+              <div
+                class="text-body-1 primary--text d-flex justify-center text-center"
+              >
+                <div style="max-width: 400px">
+                  Please encrypt your passphrase with a secure password. This
+                  password will be saved on this device.
+                </div>
+              </div></v-card-text
+            >
+            <v-card-text class="pb-0">
+              <v-text-field
+                disabled
+                solo
+                hint="Is this username not yours? Go back and check your passphrase."
+                persistent-hint
+                :value="username"
+              ></v-text-field>
+              <v-text-field
+                v-model="password"
+                class="mt-2"
+                label="Password"
+                solo
+              ></v-text-field>
+            </v-card-text>
+            <v-card-text>
+              <v-row>
+                <v-btn @click="step = 1" class="ml-2">Back</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn color="accent" @click="step = 3" class="mr-2"
+                  >Next</v-btn
+                >
+              </v-row>
+            </v-card-text>
+          </v-stepper-content>
+          <v-stepper-content :step="3">
+            <!-- Step 3 content goes here -->
+            <v-card-text>
+              <div
+                class="text-body-1 primary--text d-flex justify-center text-center"
+              >
+                <div style="max-width: 400px">
+                  Your passphrase is also protected by a PIN. This PIN is used
+                  to sign all transactions.
+                </div>
+              </div>
+            </v-card-text>
+            <v-card-text>
+              <v-otp-input
+                v-model="pin"
+                :type="show ? 'text' : 'password'"
+                length="6"
+              ></v-otp-input>
+              <div class="d-flex justify-center">
+                <v-btn @click="show = !show"
+                  ><v-icon v-text="show ? 'mdi-eye' : 'mdi-eye-off'"></v-icon
+                ></v-btn>
+              </div>
+            </v-card-text>
+            <v-card-text
+              ><v-row>
+                <v-btn @click="step = 2" class="ml-2">Back</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn color="accent" @click="addNewAccount" class="mr-2">
+                  Sign <v-icon small class="ml-1">mdi-draw-pen</v-icon>
+                </v-btn></v-row
+              ></v-card-text
+            >
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
     </v-card>
   </v-container>
 </template>
 <script>
+import * as cryptography from "@liskhq/lisk-cryptography";
+
 export default {
   data() {
     return {
-      step: 0,
+      step: 1,
       show: false,
-      show1: false,
-      username: "",
+      pin: "",
+      username: "No account retreived!",
       password: "",
       pinInput: "",
+      words: ["", "", "", "", "", "", "", "", "", "", "", ""],
+      frontAccToAdd: {},
+      show: false,
     };
   },
   methods: {
-    async unlock() {
-      // first we need to check if username and password match
+    async retreiveAccountByPassphrase() {
+      console.log("retreiveAccountByPassphrase");
 
-      // first we need to decrypt the passphrase with password
+      // get address and pk from passphrase user fills in
+      const addressAndPublicKeyFromPassphrase =
+        cryptography.getAddressAndPublicKeyFromPassphrase(this.words.join(" "));
 
-      const accountIdWrapper = await this.$invoke(
-        "kalipoAccount:getAccountIdByUsername",
+      // get Kalipo acc ID from Lisk address
+      const kalipoAccountIdByLiskIdFromPassphrase = await this.$invoke(
+        "kalipoAccount:getAccountIdByLiskId",
         {
-          username: this.username,
+          id: addressAndPublicKeyFromPassphrase.address.toString("hex"),
         }
       );
 
-      console.log(accountIdWrapper);
+      // Kalipo account
+      const kalipoAccount = await this.$invoke("kalipoAccount:getByID", {
+        id: kalipoAccountIdByLiskIdFromPassphrase.result.id,
+      });
+
+      // set all front end Kalipo acc information
+      this.frontAccToAdd = {
+        accountId: kalipoAccountIdByLiskIdFromPassphrase.result.id,
+        username: kalipoAccount.result.username,
+        name: kalipoAccount.result.name,
+        address: addressAndPublicKeyFromPassphrase.address,
+        publicKey: addressAndPublicKeyFromPassphrase.publicKey,
+        memberships: kalipoAccount.result.memberships,
+        socials: kalipoAccount.result.socials,
+      };
+
+      // set retrieved username
+      this.username = kalipoAccount.result.username;
+
+      // set step to two
+      this.step = 2;
+    },
+    async addNewAccount() {
+      // Pin(Passphrase)
+      const encryptedLayerOne = cryptography.encryptPassphraseWithPassword(
+        this.words.join(" "),
+        this.pin,
+        5000
+      );
+      encryptedLayerOne.layer = 1;
+      const encryptedLayerOneStr = JSON.stringify(encryptedLayerOne);
+      this.frontAccToAdd.crypt = encryptedLayerOneStr;
+
+      // Password(Pin(Passphrase))
+      const encryptedLayerTwo = cryptography.encryptPassphraseWithPassword(
+        encryptedLayerOneStr,
+        this.password,
+        5000
+      );
+      encryptedLayerTwo.layer = 2;
+
+      const persistAccount = {};
+      persistAccount.username = this.frontAccToAdd.username;
+      persistAccount.name = this.frontAccToAdd.name;
+      persistAccount.publicKey = cryptography.bufferToHex(
+        this.frontAccToAdd.publicKey
+      );
+      persistAccount.address = cryptography.bufferToHex(
+        this.frontAccToAdd.address
+      );
+      persistAccount.crypt =
+        cryptography.stringifyEncryptedPassphrase(encryptedLayerTwo);
+
+      // Add account to local storage using parent method
+      this.$parent.toLocalStorage(persistAccount);
+
+      // Push user to account selection
+      this.$nuxt.$emit("IAH-showSelection");
     },
   },
 };
