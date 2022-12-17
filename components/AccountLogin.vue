@@ -148,7 +148,7 @@ export default {
       step: 1,
       show: false,
       pin: "",
-      username: "No account retreived!",
+      username: "No account retrieved!",
       password: "",
       pinInput: "",
       words: ["", "", "", "", "", "", "", "", "", "", "", ""],
