@@ -47,6 +47,7 @@
                     filled
                     :label="index + 1 + '.'"
                     v-model="words[index]"
+                    :rules="[rules.required]"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -87,6 +88,9 @@
                 v-model="password"
                 class="mt-2"
                 label="Password"
+                :type="showPassword ? 'text' : 'password'"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
                 solo
               ></v-text-field>
             </v-card-text>
@@ -147,13 +151,32 @@ export default {
     return {
       step: 1,
       show: false,
+      showPassword: false,
       pin: "",
       username: "No account retrieved!",
       password: "",
       pinInput: "",
-      words: ["", "", "", "", "", "", "", "", "", "", "", ""],
+      words: [
+        "design",
+        "top",
+        "hello",
+        "neutral",
+        "frequent",
+        "quit",
+        "jazz",
+        "woman",
+        "conduct",
+        "search",
+        "tragic",
+        "live",
+      ],
       frontAccToAdd: {},
       show: false,
+      rules: {
+        required: (value) => !!value || "Required.",
+        min: (v) => v.length >= 12 || "Min 12 characters",
+        max: (v) => v.length <= 256 || "Max 256 characters",
+      },
     };
   },
   methods: {
