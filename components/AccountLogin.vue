@@ -222,6 +222,8 @@ export default {
           id: kalipoAccountIdByLiskIdFromPassphrase.result.id,
         });
 
+        // TODO: if Lisk account exists but Kalipo account does not exist -> create new Kalipo account
+
         // set all front end Kalipo acc information
         this.frontAccToAdd = {
           accountId: kalipoAccountIdByLiskIdFromPassphrase.result.id,
