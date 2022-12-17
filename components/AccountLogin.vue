@@ -225,7 +225,11 @@ export default {
       persistAccount.crypt =
         cryptography.stringifyEncryptedPassphrase(encryptedLayerTwo);
 
+      // Add account to local storage using parent method
       this.$parent.toLocalStorage(persistAccount);
+
+      // Push user to account selection
+      this.$nuxt.$emit("IAH-showSelection");
     },
   },
 };
