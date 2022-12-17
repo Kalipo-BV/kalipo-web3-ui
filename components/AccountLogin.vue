@@ -36,21 +36,23 @@
               </div>
             </v-card-text>
             <v-card-text>
-              <v-row>
-                <v-col
-                  cols="4"
-                  md="2"
-                  v-for="(word, index) in words"
-                  :key="index"
-                >
-                  <v-text-field
-                    filled
-                    :label="index + 1 + '.'"
-                    v-model="words[index]"
-                    :rules="[rules.required]"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
+              <v-form v-model="isPassphraseFormValid">
+                <v-row>
+                  <v-col
+                    cols="4"
+                    md="2"
+                    v-for="(word, index) in 12"
+                    :key="index"
+                  >
+                    <v-text-field
+                      filled
+                      :label="index + 1 + '.'"
+                      v-model="words[index]"
+                      :rules="[rules.required]"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-form>
             </v-card-text>
             <v-card-text>
               <v-row
@@ -58,6 +60,7 @@
                 ><v-btn
                   class="mr-2"
                   color="accent"
+                  :disabled="!isPassphraseFormValid"
                   @click="retreiveAccountByPassphrase"
                   >Next</v-btn
                 ></v-row
@@ -84,21 +87,28 @@
                 persistent-hint
                 :value="username"
               ></v-text-field>
-              <v-text-field
-                v-model="password"
-                class="mt-2"
-                label="Password"
-                :type="showPassword ? 'text' : 'password'"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showPassword = !showPassword"
-                solo
-              ></v-text-field>
+              <v-form v-model="isPasswordFormValid">
+                <v-text-field
+                  v-model="password"
+                  class="mt-2"
+                  label="Password"
+                  :type="showPassword ? 'text' : 'password'"
+                  :rules="[rules.required, rules.min, rules.max]"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="showPassword = !showPassword"
+                  solo
+                ></v-text-field>
+              </v-form>
             </v-card-text>
             <v-card-text>
               <v-row>
                 <v-btn @click="step = 1" class="ml-2">Back</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="accent" @click="step = 3" class="mr-2"
+                <v-btn
+                  color="accent"
+                  @click="step = 3"
+                  class="mr-2"
+                  :disabled="!isPasswordFormValid"
                   >Next</v-btn
                 >
               </v-row>
@@ -152,37 +162,38 @@ export default {
       step: 1,
       show: false,
       showPassword: false,
+      isPassphraseFormValid: false,
+      isPasswordFormValid: false,
       pin: "",
       username: "No account retrieved!",
       password: "",
       pinInput: "",
-      words: [
-        "design",
-        "top",
-        "hello",
-        "neutral",
-        "frequent",
-        "quit",
-        "jazz",
-        "woman",
-        "conduct",
-        "search",
-        "tragic",
-        "live",
-      ],
+      // words: [
+      //   "design",
+      //   "top",
+      //   "hello",
+      //   "neutral",
+      //   "frequent",
+      //   "quit",
+      //   "jazz",
+      //   "woman",
+      //   "conduct",
+      //   "search",
+      //   "tragic",
+      //   "live",
+      // ],
+      words: [],
       frontAccToAdd: {},
       show: false,
       rules: {
-        required: (value) => !!value || "Required.",
+        required: (value) => !!value || "Required",
         min: (v) => v.length >= 12 || "Min 12 characters",
-        max: (v) => v.length <= 256 || "Max 256 characters",
+        max: (v) => v.length <= 36 || "Max 36 characters",
       },
     };
   },
   methods: {
     async retreiveAccountByPassphrase() {
-      console.log("retreiveAccountByPassphrase");
-
       // get address and pk from passphrase user fills in
       const addressAndPublicKeyFromPassphrase =
         cryptography.getAddressAndPublicKeyFromPassphrase(this.words.join(" "));
