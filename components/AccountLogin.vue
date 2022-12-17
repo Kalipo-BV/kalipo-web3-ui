@@ -54,7 +54,10 @@
             <v-card-text>
               <v-row
                 ><v-spacer></v-spacer
-                ><v-btn class="mr-2" color="accent" @click="step = 2"
+                ><v-btn
+                  class="mr-2"
+                  color="accent"
+                  @click="&quot;(step = 2), retreiveAccountByPassphrase&quot;;"
                   >Next</v-btn
                 ></v-row
               >
@@ -137,6 +140,8 @@
   </v-container>
 </template>
 <script>
+import * as cryptography from "@liskhq/lisk-cryptography";
+
 export default {
   data() {
     return {
@@ -151,8 +156,65 @@ export default {
     };
   },
   methods: {
+    async retreiveAccountByPassphrase() {
+      console.log("retreiveAccountByPassphrase");
+
+      // get address and pk from passphrase user fills in
+      const addressAndPublicKeyFromPassphrase =
+        cryptography.getAddressAndPublicKeyFromPassphrase(
+          "design top hello neutral frequent quit jazz woman conduct search tragic live"
+        );
+
+      // get Kalipo acc ID from Lisk address
+      const kalipoAccountIdByLiskIdFromPassphrase = await this.$invoke(
+        "kalipoAccount:getAccountIdByLiskId",
+        {
+          id: addressAndPublicKeyFromPassphrase.address.toString("hex"),
+        }
+      );
+
+      // Kalipo account
+      const kalipoAccount = await this.$invoke("kalipoAccount:getByID", {
+        id: kalipoAccountIdByLiskIdFromPassphrase.result.id,
+      });
+
+      // set retrieved username
+      this.username = kalipoAccount.result.username;
+    },
     async unlock() {
-      console.log("hello");
+      // get address and pk from passphrase user fills in
+      const addressAndPublicKeyFromPassphrase =
+        cryptography.getAddressAndPublicKeyFromPassphrase(
+          "design top hello neutral frequent quit jazz woman conduct search tragic live"
+        );
+
+      // get Kalipo acc ID from Lisk address
+      const kalipoAccountIdByLiskIdFromPassphrase = await this.$invoke(
+        "kalipoAccount:getAccountIdByLiskId",
+        {
+          id: addressAndPublicKeyFromPassphrase.address.toString("hex"),
+        }
+      );
+
+      // Kalipo account
+      const kalipoAccount = await this.$invoke("kalipoAccount:getByID", {
+        id: kalipoAccountIdByLiskIdFromPassphrase.result.id,
+      });
+
+      // set retrieved username
+      this.username = kalipoAccount.result.username;
+
+      console.log(kalipoAccount);
+
+      // check if Lisk address has a Kalipo account
+      // get all Kalipo accounts
+      // const kalipoAccounts = await this.$invoke("kalipoAccount:getAll");
+
+      // for (let i = 0; i < kalipoAccounts.result.ids.length; i++) {
+      //   const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
+      //     id: kalipoAccounts.result.ids[i],
+      //   });
+      // }
 
       // const accountIdWrapper = await this.$invoke(
       //   "kalipoAccount:getAccountIdByUsername",
