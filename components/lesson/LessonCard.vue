@@ -21,14 +21,14 @@
                 class="float-left text-h6 ml-n4 mt-n2"
                 style="text-decoration: underline"
                 @click="$router.push(`/auton/${auton.autonProfile.name}`)">
-                {{ auton.lessonProfile.lessonName }}
+                {{ auton.autonProfile.name.length > 24 ? auton.autonProfile.name.slice(0, 25) + '...' : auton.autonProfile.name }}
               </a>
             </v-col>
             <v-col class="mt-n2">
 
               <p class="mb-n1 ml-n4">
               text
-                {{ auton.lessonProfile.description }}
+                {{ auton.lessonProfile.description.length > 50 ? auton.lessonProfile.description.slice(0, 50) + '...' : auton.lessonProfile.description }}
               </p>
             </v-col>
 
