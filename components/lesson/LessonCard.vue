@@ -20,7 +20,7 @@
               <a
                 class="float-left text-h6 ml-n4 mt-n2"
                 style="text-decoration: underline"
-                @click="$router.push(`/auton/${auton.autonProfile.name}`)">
+                @click="$router.push(`/auton/${auton.autonProfile.name.replaceAll(' ', '_')}`)">
                 {{ auton.autonProfile.name.length > 24 ? auton.autonProfile.name.slice(0, 25) + '...' : auton.autonProfile.name }}
               </a>
             </v-col>
