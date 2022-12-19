@@ -1,4 +1,4 @@
-<template lang="">
+<template >
   <div>
     <v-card>
       <v-card-text v-if="step == 0">
