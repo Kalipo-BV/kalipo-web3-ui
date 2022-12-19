@@ -20,7 +20,9 @@
         </v-card-title>
 
         <v-card-text>
-          <LessonCard :auton="auton" >
+          <LessonCard
+            :auton="auton"
+            :validAuton="validAuton">
           </LessonCard>
         </v-card-text>
 
@@ -36,6 +38,7 @@
           <v-btn
             color="blue darken-1 white--text"
             @click="checkIn"
+            :disabled="!validAuton"
           >
             Check-in
           </v-btn>
@@ -64,6 +67,7 @@ export default {
     dialog: false,
     isFetching: false,
     signing: false,
+    validAuton: true,
     transaction: {
       moduleId: 1002,
       assetId: 3,
@@ -71,6 +75,11 @@ export default {
     },
     uri: "",
   }),
+  mounted() {
+    if (!this.auton) {
+      this.validAuton = false;
+    }
+  },
   computed: {
     account() {
       return this.$store.state.wallet.account;
