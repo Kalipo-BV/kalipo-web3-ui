@@ -10,12 +10,12 @@ export default {
   data: () => ({
     auton: {
       autonProfile: {
-        name: "AutonName",
+        name: "Default lesson moment ",
       },
       lessonProfile: {
         lessonName: "Default lesson moment",
         subject: "pe3",
-        description: "Default lesson moment description",
+        description: "Default lesson moment description. And some more text. This is some text",
       },
     },
     methodes: {
