@@ -304,7 +304,7 @@ export default {
     subject: "",
     lessonName: "",
     date: "",
-    studentIds: null,
+    studentIds: [],
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
