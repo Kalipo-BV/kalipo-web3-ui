@@ -43,9 +43,7 @@ export default {
     valid: false,
     rules: {
       required: (v) => !!v || "Required.",
-      startDateNotBefore: (v) =>
-        new Date(v).getTime() > Date.now() ||
-        "Start date must be in the future",
+      startDateNotBefore: (v) => new Date(v).getDate() >= (new Date().getDate())|| "Start date must be in the future" ,
     },
   }),
   mounted() {

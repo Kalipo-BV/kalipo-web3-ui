@@ -15,7 +15,9 @@
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.15.1",
     "nuxt": "^2.15.7",
+    "qrcode.vue": "^1.7.0",
     "sodium-native": "^3.4.1",
+    "uuid": "^9.0.0",
     "vue-keypress": "^2.1.2",
     "vuetify": "^2.6.6"
   },

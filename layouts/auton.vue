@@ -66,6 +66,7 @@
                 <v-col class="d-flex justify-end">
                   <v-btn
                     v-if="auton.type == 'DEFAULT'"
+                    class="mr-12"
                     color="accent"
                     @click="dialog = !dialog"
                   >
@@ -73,12 +74,20 @@
                   </v-btn>
                   <v-btn
                     v-if="auton.type == 'EVENT'"
-                    class="ml-2"
+                    class="mr-12"
                     color="accent"
                     @click="dialog = !dialog"
                     :disabled="authorizedAddAttendee"
                   >
                     Add attendee
+                  </v-btn>
+                  <v-btn
+                    v-if="auton.type == 'LESSON'"
+                    class="mr-12"
+                    color="accent"
+                    @click="dialog = !dialog"
+                  >
+                    Check in
                   </v-btn>
                 </v-col>
               </v-row>
@@ -130,6 +139,12 @@
         :autonId="autondId"
         callbackFinish="Auton-ProposalModalClose"
       ></AutonAddAttendee>
+      
+      <LessonCheckIn
+        v-if="auton.type == 'LESSON'"
+        :autonId="autondId"
+        callbackFinish="Auton-ProposalModalClose"
+      ></LessonCheckIn>
     </v-dialog>
   </v-app>
 </template>
