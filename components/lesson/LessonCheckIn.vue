@@ -32,10 +32,10 @@ export default {
         const autonWrapper = await this.$invoke("auton:getByID", {
             id: this.autonId,
         });
-    
+
         const auton = autonWrapper.result;
 
-        this.qrvalue = "http://localhost:8080/auton/" + auton.autonProfile.name + "/checkin?uuid=" + auton.lesson.uuid;
+        this.qrvalue = "http://localhost:3000/auton/" + auton.autonProfile.name + "/checkin?uuid=" + auton.lesson.uuid;
     }
   }
 

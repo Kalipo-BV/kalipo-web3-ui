@@ -36,7 +36,7 @@
               </div>
             </v-card-text>
             <v-card-text>
-              <v-form v-model="isPassphraseFormValid">
+              <v-form v-model="isPassphraseFormValid" @submit.prevent>
                 <v-row>
                   <v-col
                     cols="4"
@@ -194,7 +194,6 @@ export default {
       // ],
       words: [],
       frontAccToAdd: {},
-      show: false,
       rules: {
         required: (value) => !!value || "Required",
         min: (v) => v.length >= 12 || "Min 12 characters",
