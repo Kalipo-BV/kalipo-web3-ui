@@ -1,0 +1,44 @@
+<template>
+  <div>
+    <v-card>
+        <v-card-title class="text-h5 justify-center grey lighten-2">
+          Scan this QR code to check in!
+        </v-card-title>
+
+        <qrcode-vue class="d-flex justify-center align-center pa-12" :value="qrvalue" size="250" level="H"/>
+
+    </v-card>
+  </div>
+</template>
+<script>
+import QrcodeVue from 'qrcode.vue'
+export default {
+ components: {
+      QrcodeVue,
+    },
+
+  props: ["autonId"],
+  data() {
+    return {
+      uri: "",
+      qrvalue: "http://www.google.com"
+    };
+  },
+  created() {
+    this.createCheckInLink();
+  },
+  methods: {
+    async createCheckInLink() {
+        const autonWrapper = await this.$invoke("auton:getByID", {
+            id: this.autonId,
+        });
+    
+        const auton = autonWrapper.result;
+
+        this.qrvalue = "http://localhost:8080/auton/" + auton.autonProfile.name + "/checkin?uuid=" + auton.lesson.uuid;
+    }
+  }
+
+};
+</script>
+<style lang=""></style>
