@@ -16,9 +16,7 @@
 -->
 
 <template>
-
   <v-container style="height: 100%" :class="getStyle()">
-
     <div class="d-flex align-center justify-center" style="height: 100%">
       <AccountSelection
         class="mt-4"
@@ -42,7 +40,7 @@
         </div>
 
         <div class="d-flex align-center justify-center">
-          <div>
+          <div @click="setScreen('AccountLogin')">
             <OptionCard
               icon="mdi-card-account-details-star"
               title="Add existing account"
@@ -60,6 +58,8 @@
           </div>
         </div>
       </div>
+
+      <AccountLogin class="mt-4" v-if="screen == 'AccountLogin'"></AccountLogin>
 
       <AccountSign class="mt-4" v-if="screen == 'AccountSign'"></AccountSign>
 
@@ -111,7 +111,7 @@ import * as cryptography from "@liskhq/lisk-cryptography";
 export default {
   layout: "wallet",
   components: {
-    Keypress: () => import('vue-keypress')
+    Keypress: () => import("vue-keypress"),
   },
   data: () => ({
     screen: "AccountSelection",
@@ -174,6 +174,9 @@ export default {
     this.accounts = localData;
   },
   methods: {
+    setScreen(string) {
+      this.screen = string;
+    },
     getStyle() {
       return this.$vuetify.breakpoint.smAndDown
         ? ""

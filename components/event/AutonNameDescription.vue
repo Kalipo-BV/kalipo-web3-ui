@@ -51,7 +51,18 @@ export default {
       },
     },
   },
+  watch: {
+    valid: {
+      handler: function (newValid) {
+        this.$emit("update:disabledNext", !newValid);
+      },
+      deep: true,
+    },
+  },
   data: () => ({
+    valid: false,
+    autonName: "",
+    autonErrorMessage: "",
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v?.length >= 2 || "Min 2 characters",
@@ -59,6 +70,12 @@ export default {
       maxName: (v) => v?.length <= 16 || "Max 16 characters",
     },
   }),
+  mounted() {
+    this.$emit("update:disabledNext", true);
+  },
+  destroyed() {
+    this.$emit("update:disabledNext", false);
+  },
   methods: {
     async nameAvailable() {
       const existingAutonIdWrapper = await this.$invoke(

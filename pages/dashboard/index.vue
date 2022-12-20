@@ -234,10 +234,8 @@ export default {
     const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
       id: this.account.accountId,
     });
-    
 
     const account = accountWrapper.result;
-    
 
     for (let index = 0; index < account.memberships.length; index++) {
       const membershipId = account.memberships[index];
@@ -251,6 +249,8 @@ export default {
         id: membership.autonId,
       });
       const auton = autonWrapper.result;
+
+      console.log(auton);
 
       const now = new Date();
       const nowInSec = BigInt(Math.floor(now / 1000));
@@ -323,8 +323,6 @@ export default {
         this.membershipInvitations.push(membership);
       }
     }
-
-    
   },
 };
 </script>

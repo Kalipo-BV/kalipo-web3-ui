@@ -116,7 +116,7 @@
         <v-list-item two-line dark class="primary">
           <v-list-item-avatar>
             <v-img
-              src="/Kalipo_logo_512x512.png"
+              src="/Kalipo_Logo_512x512.png"
               max-width="40"
               max-height="40"
             ></v-img>

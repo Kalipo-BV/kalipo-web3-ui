@@ -55,7 +55,10 @@ export default {
   methods: {
     beforeValidation() {
       if (this.startDate && this.endDate) {
-        if (new Date(this.startDate + ":" + this.startTime).getTime() > new Date(this.endDate + ":" + this.endTime).getTime()) {
+        if (
+          new Date(this.startDate + ":" + this.startTime).getTime() >
+          new Date(this.endDate + ":" + this.endTime).getTime()
+        ) {
           return "Start date must be before end date";
         }
       }
@@ -63,9 +66,6 @@ export default {
     },
   },
   computed: {
-    // TODO:
-    // 1. validate start < end
-    // 2. can't press next when not filled in
     startDateValue: {
       get: function () {
         return this.startDate;
@@ -106,7 +106,7 @@ export default {
         this.$emit("update:disabledNext", !newValid);
       },
       deep: true,
-    }
-  }
+    },
+  },
 };
 </script>
