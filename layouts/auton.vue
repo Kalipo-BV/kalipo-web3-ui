@@ -87,7 +87,7 @@
                     color="accent"
                     @click="dialog = !dialog"
                   >
-                    Add attendee
+                    Check in
                   </v-btn>
                 </v-col>
               </v-row>
