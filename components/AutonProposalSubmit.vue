@@ -67,9 +67,9 @@
 <!--        :invitationMessage.sync="invitationMessage"-->
 <!--        class="mt-4"-->
 <!--        :autonId="autonId"-->
-        <ProposalChoicesOverview
+        <QuestionnaireOptionField
 
-        ></ProposalChoicesOverview>
+        ></QuestionnaireOptionField>
       </v-card-text>
 
       <v-card-text v-if="step == 'multi-choice'">
