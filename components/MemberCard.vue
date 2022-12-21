@@ -59,22 +59,26 @@
         <div class="d-flex justify-center">
           <div v-for="(social, z) in member.account.socials" :key="z">
             <v-btn color="accent" fab x-small class="mr-1"
-              ><v-icon small>{{ getIcon(social.social) }}</v-icon></v-btn
-            >
+              ><Icon
+                :icon="getIcon(social.social)"
+                width="18"
+                height="18"
+              ></Icon
+            ></v-btn>
           </div>
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
           </div>
         </div>
-            <div class="mt-2">
-              <v-btn
-                v-if="attendeeCard"
-                :disabled="authorizedIssuePoa"
-                @click="dialog = !dialog"
-                :style="{left: '50%', transform:'translateX(-50%)'}"
-                >Issue poa</v-btn
-              >
-            </div>  
+        <div class="mt-2">
+          <v-btn
+            v-if="attendeeCard"
+            :disabled="authorizedIssuePoa"
+            @click="dialog = !dialog"
+            :style="{ left: '50%', transform: 'translateX(-50%)' }"
+            >Issue poa</v-btn
+          >
+        </div>
       </v-card-text>
     </v-card>
 
@@ -87,8 +91,13 @@
   </div>
 </template>
 <script>
+import { Icon } from "@iconify/vue2";
+
 export default {
   props: ["member", "attendeeCard", "autonId"],
+  components: {
+    Icon,
+  },
   computed: {
     account() {
       return this.$store.state.wallet.account;
@@ -131,7 +140,7 @@ export default {
         for (let index = 0; index < nameList.length; index++) {
           if (index < 3) {
             const element = nameList[index];
-            if(element[0] == undefined) {
+            if (element[0] == undefined) {
               continue;
             }
             result += element[0].toUpperCase();
@@ -145,26 +154,26 @@ export default {
     getIcon(socialName) {
       socialName = socialName.toLowerCase();
       if (socialName == "twitter") {
-        return "mdi-twitter";
+        return "mdi:twitter";
       }
       if (socialName == "facebook") {
-        return "mdi-facebook";
+        return "mdi:facebook";
       }
 
       if (socialName == "linkedin") {
-        return "mdi-linkedin";
+        return "mdi:linkedin";
       }
 
       if (socialName == "discord") {
-        return "mdi-discord";
+        return "mdi:discord";
       }
 
       if (socialName == "youtube") {
-        return "mdi-youtube";
+        return "mdi:youtube";
       }
 
       if (socialName == "google") {
-        return "mdi-google";
+        return "mdi:google";
       }
     },
   },
