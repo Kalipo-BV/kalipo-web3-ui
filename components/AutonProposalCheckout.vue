@@ -3,8 +3,10 @@
         <v-row justify="center">
             <v-expansion-panels accordion>
                 <v-expansion-panel v-for="(item, i) in textFields" :key="i">
-                    <v-expansion-panel-header>Item</v-expansion-panel-header>
-                    <v-expansion-panel-content>
+                    <v-expansion-panel-header
+                    :question="question" >Item</v-expansion-panel-header>
+                    <v-expansion-panel-content
+                    :option="option">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                         labore
                         et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -34,6 +36,8 @@ export default {
         textFieldsAmount: 2,
         isUpdating: true,
         users: [{ header: "Most recent users" }],
+        question: "",
+        option: "",
     }),
     methods: {
         edit(index) {
