@@ -55,6 +55,20 @@
 
       <v-divider></v-divider>
 
+      <v-container class="d-flex justify-center">
+        <v-chip v-if="member.checkedIn && studentCard" class="ma-2" color="green" text-color="white">
+          <v-icon left>mdi-account-check</v-icon>
+          Checked in 
+        </v-chip>
+
+        <v-chip v-if="!member.checkedIn && studentCard" class="ma-2" align="center" color="red" text-color="white">
+          <v-icon left>mdi-account-remove</v-icon>
+          Not checked in
+        </v-chip>
+      </v-container>
+
+      <v-divider></v-divider>
+
       <v-card-text>
         <div class="d-flex justify-center">
           <div v-for="(social, z) in member.account.socials" :key="z">
@@ -94,7 +108,7 @@
 import { Icon } from "@iconify/vue2";
 
 export default {
-  props: ["member", "attendeeCard", "autonId"],
+  props: ["member", "attendeeCard", "studentCard", "autonId"],
   components: {
     Icon,
   },
@@ -111,6 +125,7 @@ export default {
     role: "",
     dialog: false,
     authorizedIssuePoa: true,
+    auton: null,
   }),
   methods: {
     async authorized() {
@@ -180,6 +195,13 @@ export default {
   async mounted() {
     this.userLang = navigator.language || navigator.userLanguage;
 
+    const autonWrapper = await this.$invoke("auton:getByID", {
+        id: this.autonId,
+    });
+
+    this.auton = autonWrapper.result;
+    console.log(this.auton);
+
     if (this.member.role == "AFFILIATE_MEMBER") {
       this.role = "Affiliate member";
     }
@@ -192,3 +214,4 @@ export default {
   },
 };
 </script>
+
