@@ -2,6 +2,9 @@
   <div>
     <v-form v-model="valid">
       <v-card-text>
+        <v-row justify="center">
+          <v-card-subtitle class="text--primary text-h4">{{Question}}</v-card-subtitle>
+        </v-row>
         <v-row justify="center" dense>
           <v-col cols="1">
             <v-label>{{ textFieldsAmount }}/4</v-label>
@@ -30,12 +33,13 @@
         </v-row>
       </v-card-text>
     </v-form>
+    <v-divider></v-divider>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["disabledNext", "autonId"],
+  props: ["disabledNext", "autonId", "question"],
   computed: {
   },
   watch: {
@@ -52,9 +56,9 @@ export default {
     dialog: false,
     offsetTop: 0,
     textFields: [{ label: "Option", value: "" }, { label: "Option", value: "" }],
+    Question: "kleine aapjes zijn hele leuke husidieren!!",
     textFieldsAmount: 2,
     isUpdating: true,
-    users: [{ header: "Most recent users" }],
   }),
 
   methods: {
