@@ -35,7 +35,7 @@ export default {
 
         const auton = autonWrapper.result;
 
-        this.qrvalue = "http://localhost:3000/auton/" + auton.autonProfile.name + "/checkin?uuid=" + auton.lesson.uuid;
+        this.qrvalue = "http://localhost:3000/auton/" + auton.autonProfile.name + "?uuid=" + auton.lesson.uuid;
     }
   }
 

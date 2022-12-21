@@ -4,16 +4,6 @@
       v-model="dialog"
       max-width="400"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Open Dialog
-        </v-btn>
-      </template>
       <v-card v-if="!signing">
         <v-card-title class="text-h5">
           You are about to check in for lesson:
@@ -62,12 +52,11 @@
 export default {
   name: "CheckInDialog",
   components: {},
-  props: ["auton"],
+  props: ["auton", "validAuton", "uuid"],
   data: () => ({
-    dialog: false,
+    dialog: true,
     isFetching: false,
     signing: false,
-    validAuton: true,
     transaction: {
       moduleId: 1002,
       assetId: 3,
@@ -78,6 +67,13 @@ export default {
   mounted() {
     if (!this.auton) {
       this.validAuton = false;
+    }
+    console.log(this.uuid)
+    console.log(this.auton)
+    console.log(this.validAuton)
+
+    if (this.UUID) {
+      this.dialog = true;
     }
   },
   computed: {
@@ -112,8 +108,7 @@ export default {
 
       console.log(attendee);
 
-      // const membership = attendee.memberships.find(m => m.autonId === this.auton.autonId)
-      const membership = attendee.memberships[2]
+      const membership = attendee.memberships.find(m => m.autonId === this.auton.autonId)
 
       if (!membership) {
         alert("You are not a member of this lesson. You can't check in.")
