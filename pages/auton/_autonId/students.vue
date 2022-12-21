@@ -32,7 +32,7 @@
       <v-col cols="12" md="3" v-for="(member, i) in filtered" :key="i">
         <MemberCard
           :autonId="autonId"
-          :attendeeCard="true"
+          :studentCard="true"
           :member="member"
         ></MemberCard>
       </v-col>
