@@ -27,6 +27,17 @@
         v-model="search"
         v-if="auton != null"
       ></v-text-field>
+
+        <v-col class="d-flex justify-start">
+            <v-btn
+            class="mt-2"
+            color="accent"
+            :disabled="authorizedAddAttendee"
+            @click="dialog = !dialog"
+            >
+            Add student
+            </v-btn>
+        </v-col>
     </v-row>
     <v-row align="stretch" class="mt-2">
       <v-col cols="12" md="3" v-for="(member, i) in filtered" :key="i">
@@ -37,13 +48,25 @@
         ></MemberCard>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" max-width="500">
+    <AutonAddAttendee
+        :autonId="autonId"
+        callbackFinish="Auton-ProposalModalClose"
+    ></AutonAddAttendee>
+    </v-dialog>
   </v-container>
 </template>
 <script>
+import AutonAddAttendee from "~/components/event/AutonAddAttendee.vue";
+
 export default {
+    components: {
+    AutonAddAttendee,
+},
   layout: "auton",
   data: () => ({
-    dialog: true,
+    authorizedAddAttendee: true,
+    dialog: false,
     members: [],
     auton: null,
     autonId: "",
@@ -54,6 +77,29 @@ export default {
       return this.members.filter((member) =>
         member.account.name.toLowerCase().includes(this.search.toLowerCase())
       );
+    },
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
+  },
+  methods: {
+    async authorized() {
+      if (this.unlocked) {
+        const memberships = this.$store.state.wallet.account.memberships;
+        memberships.forEach(async (element) => {
+          const mship = await this.$invoke("membership:getByID", {
+            id: element,
+          });
+          if (
+            mship.result.autonId == this.autonId &&
+            mship.result.role == "FULL_MEMBER"
+          ) {
+            this.authorizedAddAttendee = false;
+          }
+        });
+      } else {
+        return true;
+      }
     },
   },
   async mounted() {
@@ -69,7 +115,8 @@ export default {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
     } else {
-      this.autondId = autonIdWrapper.result.id;
+      this.autonId = autonIdWrapper.result.id;
+      
       const autonWrapper = await this.$invoke("auton:getByID", {
         id: autonIdWrapper.result.id,
       });
@@ -96,6 +143,9 @@ export default {
         }
       }
     }
+
+    this.authorized();
   },
+
 };
 </script>
