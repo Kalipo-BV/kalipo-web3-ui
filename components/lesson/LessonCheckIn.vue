@@ -7,6 +7,10 @@
 
         <qrcode-vue class="d-flex justify-center align-center pa-12" :value="qrvalue" size="250" level="H"/>
 
+        <v-card-actions>
+          <v-card-text class="text-subtitle-2 d-flex justify-center mt-n7 text-decoration-underline ">Your attendance will only be counted if you scan this code! {{ this.qrvalue }}</v-card-text>
+        </v-card-actions>
+
     </v-card>
   </div>
 </template>
@@ -35,7 +39,7 @@ export default {
     
         const auton = autonWrapper.result;
 
-        this.qrvalue = "http://localhost:8080/auton/" + auton.autonProfile.name + "/checkin?uuid=" + auton.lesson.uuid;
+        this.qrvalue = "http://localhost:3000/auton/" + auton.autonProfile.name + "/checkin?uuid=" + auton.lesson.uuid;
     }
   }
 

@@ -174,6 +174,111 @@
               </v-row>
             </v-card-text>
           </v-card>
+          <!-- LESSON -->
+          <v-card
+            class="mt-2"
+            flat
+            v-if="auton != null && auton.type == 'LESSON'"
+          >
+            <v-card-text>
+              <div class="text-h6 primary--text">Lesson details</div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                    <v-icon>mdi-clipboard-text-outline</v-icon>
+
+                    {{ "&nbsp; Description: " }}
+                  </v-col>
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                    {{ auton.lesson.description }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                    <v-icon>mdi-human-male-board</v-icon>
+
+                    {{ "&nbsp; Subject: " }}
+                  </v-col>
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                    {{ auton.lesson.subject }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                    <v-icon>mdi-map-marker</v-icon>
+
+                    {{ "&nbsp; Location: " }}
+                  </v-col>
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                    {{ auton.lesson.location }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4" v-if="start != null">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                    <v-icon>mdi-calendar-check</v-icon>
+
+                    {{ "&nbsp; Start: " }}
+                  </v-col>
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                    {{
+                      start.getDate() +
+                      "/" +
+                      start.getMonth() +
+                      "/" +
+                      start.getFullYear() +
+                      " at " +
+                      start.getHours() +
+                      ":" +
+                      (start.getMinutes() === 0 ? "00" : start.getMinutes())
+                    }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-row class="text-body-1 pa-4" v-if="end != null">
+                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                    <v-icon>mdi-calendar-remove</v-icon>
+
+                    {{ "&nbsp; End: " }}
+                  </v-col>
+                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                    {{
+                      end.getDate() +
+                      "/" +
+                      end.getMonth() +
+                      "/" +
+                      end.getFullYear() +
+                      " at " +
+                      end.getHours() +
+                      ":" +
+                      (end.getMinutes() === 0 ? "00" : end.getMinutes())
+                    }}
+                  </v-col>
+                </v-row>
+              </v-row>
+            </v-card-text>
+          </v-card>
         </v-col>
         <v-col cols="12" md="6">
           <div class="d-flex align-center justify-space-between">
@@ -293,6 +398,7 @@ export default {
     }
 
     if (this.auton.type == "DEFAULT") {
+      console.log("TEST")
       this.news.push({
         message: `Auton was created`,
       });
@@ -301,6 +407,12 @@ export default {
     if (this.auton.type == "EVENT") {
       this.news.push({
         message: `Event was created`,
+      });
+    }
+
+    if (this.auton.type == "LESSON") {
+      this.news.push({
+        message: `Lesson was created`,
       });
     }
 
@@ -331,6 +443,12 @@ export default {
         if (this.auton.type == "EVENT") {
           this.news.push({
             message: `@${memberAccountWrapper.result.username} joined the event`,
+          });
+        }
+
+        if (this.auton.type == "LESSON") {
+          this.news.push({
+            message: `@${memberAccountWrapper.result.username} joined the lesson`,
           });
         }
       }

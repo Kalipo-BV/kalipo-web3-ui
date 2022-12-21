@@ -117,6 +117,16 @@
                   <v-icon small class="mr-2">{{ item.icon }}</v-icon>
                   {{ item.title }}
                 </v-tab>
+
+                <v-tab
+                  v-if="auton.type == 'LESSON'"
+                  v-for="(item, idx) in tabItemsLesson"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
               </v-tabs>
             </v-container>
           </template>
@@ -224,6 +234,23 @@ export default {
           to: "attendees",
         },
       ],
+      tabItemsLesson: [
+        {
+          icon: "mdi-monitor-dashboard",
+          title: "Dashboard",
+          to: "/",
+        },
+        {
+          icon: "mdi-trophy",
+          title: "Poas",
+          to: "poas",
+        },
+        {
+          icon: "mdi-account-group",
+          title: "Students",
+          to: "students",
+        },
+      ]
     };
   },
   created() {
