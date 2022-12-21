@@ -33,7 +33,7 @@
 
           <p class="mb-n1 ml-n4">
           text
-            {{ auton.lessonProfile.description.length > 50 ? auton.lessonProfile.description.slice(0, 50) + '...' : auton.lessonProfile.description }}
+            {{ auton.lesson.description.length > 50 ? auton.lesson.description.slice(0, 50) + '...' : auton.lesson.description }}
           </p>
         </v-col>
 

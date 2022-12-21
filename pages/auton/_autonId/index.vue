@@ -340,6 +340,9 @@
         </v-col> -->
       </v-row>
     </v-container>
+
+<!--    <CheckInDialog :auton="this.auton" :validAuton.sync="validUUID" :uuid="UUID"></CheckInDialog>-->
+
   </v-row>
 </template>
 <script>
@@ -355,7 +358,18 @@ export default {
     auton: null,
     start: null,
     end: null,
+    UUID: true,
+    validUUID: false,
   }),
+  methods: {
+    checkUUID() {
+      // get the UUID from the URL
+      const UUID = this.$route.query.uuid;
+
+      return this.auton.lesson.uuid === UUID;
+    },
+  },
+
   async beforeCreate() {
     this.$nuxt.$emit("Auton-setPage", "autons");
 
@@ -370,6 +384,11 @@ export default {
     });
 
     this.auton = autonWrapper.result;
+
+    this.validUUID = this.checkUUID()
+
+    this.UUID = this.$route.query.uuid.length > 0;
+
 
     for (let index = 0; index < autonWrapper.result.proposals.length; index++) {
       const proposalId = autonWrapper.result.proposals[index];
