@@ -15,6 +15,7 @@
       <AccountSign
         :transaction="transaction"
         :uri="uri"
+        callback="autonAddStudentBack"
         v-if="step == 'sign'"
         title="Adding members"
       ></AccountSign>
@@ -44,6 +45,11 @@ export default {
         assets: {},
       },
     };
+  },
+  mounted() {
+    this.$nuxt.$on("autonAddStudentBack", () => {
+      this.step = "invite-attendees";
+    })
   },
   methods: {
     prevStep() {

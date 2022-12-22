@@ -50,8 +50,12 @@ export default {
       let autonName = auton.autonProfile.name;
       autonName = autonName.replaceAll(/ /g, "_");
 
+      // get the host of the current page via nuxt
+      const host = window.location.host;
+
+
       this.qrvalue =
-        "http://localhost:3000/auton/" +
+        `http://${host}/auton/` +
         autonName +
         "?uuid=" +
         auton.lesson.uuid;
