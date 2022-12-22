@@ -532,8 +532,9 @@ export default {
 
 
     if (this.auton != null) {
-      this.start = new Date(parseInt(this.auton.event.start));
-      this.end = new Date(parseInt(this.auton.event.end));
+      console.log(this.auton)
+      this.start = new Date(parseInt(this.auton.lesson.start));
+      this.end = new Date(parseInt(this.auton.lesson.end));
     }
 
     this.news.reverse();
