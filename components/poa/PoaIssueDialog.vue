@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <v-card>
       <v-card-text v-if="step == 0">
@@ -19,7 +19,7 @@
         :transaction="transaction"
         v-if="step == 1"
         :uri="uri"
-        title="Issueing a poa"
+        title="Issuing a poa"
       ></AccountSign>
 
       <v-divider v-if="step !== 1"></v-divider>

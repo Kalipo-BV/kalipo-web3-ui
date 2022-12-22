@@ -6,7 +6,7 @@
       <v-card-text>
         <v-row class="mx-0 mb-2" v-if="!isFetching">
           <div class="d-flex align-start">
-            This POA was created during the {{ auton.autonProfile.name }} event!
+            This POA was created during {{ auton.autonProfile.name }}!
             <v-icon small class="mr-2 pl-5">{{ "mdi-trophy" }}</v-icon>
           </div>
         </v-row>
