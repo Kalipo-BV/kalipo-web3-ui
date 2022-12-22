@@ -341,16 +341,23 @@
       </v-row>
     </v-container>
 
-<!--    <CheckInDialog :auton="this.auton" :validAuton.sync="validUUID" :uuid="UUID"></CheckInDialog>-->
+    <CheckInDialog v-if="this.uuid" :auton="this.auton" :validAuton.sync="validUUID" :uuid="uuid"></CheckInDialog>
 
   </v-row>
 </template>
 <script>
 export default {
   layout: "auton",
+  components: {
+    CheckInDialog: () => import("~/components/lesson/CheckInDialog.vue")
+  },
+  computed: {
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
+  },
   data: () => ({
     error: null,
-    dialog: true,
     proposalsRunning: [],
     proposalsEnded: [],
     carousel: 0,
@@ -358,14 +365,14 @@ export default {
     auton: null,
     start: null,
     end: null,
-    UUID: true,
+    uuid: false,
     validUUID: false,
   }),
   methods: {
     checkUUID() {
       // get the UUID from the URL
       const UUID = this.$route.query.uuid;
-
+      console.log(this.auton)
       return this.auton.lesson.uuid === UUID;
     },
   },
@@ -385,10 +392,30 @@ export default {
 
     this.auton = autonWrapper.result;
 
-    this.validUUID = this.checkUUID()
+    // if there is an uuid present in the URL, check if it is valid
+    if (this.$route.query.uuid) {
+      if (!this.unlocked) {
+        console.log("Wallet is locked");
+        console.log(!this.unlocked)
+        const url = `${this.auton.autonProfile.name.replaceAll(" ", "_")}?uuid=${this.$route.query.uuid}`;
+        window.sessionStorage.setItem("isCheckingInUrl", url);
+        console.log("hierben ik")
+        await this.$router.push("/wallet");
+        console.log("HIER KOM IK WEL")
 
-    this.UUID = this.$route.query.uuid.length > 0;
+        setTimeout(() => {
+          window.sessionStorage.removeItem("isCheckingInUrl")
+        }, 120000);
 
+
+      }
+
+      this.validUUID = this.checkUUID();
+      this.uuid = this.$route.query.uuid
+
+      console.log(this.auton)
+      console.log(this.uuid)
+    }
 
     for (let index = 0; index < autonWrapper.result.proposals.length; index++) {
       const proposalId = autonWrapper.result.proposals[index];
@@ -480,6 +507,7 @@ export default {
 
     this.news.reverse();
   },
+
 };
 </script>
 <style>

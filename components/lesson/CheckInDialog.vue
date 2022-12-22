@@ -5,7 +5,7 @@
       max-width="400"
     >
       <v-card v-if="!signing">
-        <v-card-title class="text-h5">
+        <v-card-title class="text-h5 mb-2 ml-1">
           You are about to check in for lesson:
         </v-card-title>
 
@@ -18,6 +18,7 @@
 
         <v-card-actions>
           <v-btn
+            class="ml-1 mb-2"
             color="red white--text"
             @click="dialog = false"
           >
@@ -26,6 +27,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
+            class="mr-2 mb-2"
             color="blue darken-1 white--text"
             @click="checkIn"
             :disabled="!validAuton"
@@ -40,6 +42,7 @@
       <AccountSign
         :transaction="transaction"
         :uri="uri"
+        callback="previousCheckInStep"
         v-if="signing"
         title="Check-in"
       ></AccountSign>
@@ -50,7 +53,6 @@
 
 <script>
 export default {
-  name: "CheckInDialog",
   components: {},
   props: ["auton", "validAuton", "uuid"],
   data: () => ({
@@ -65,6 +67,10 @@ export default {
     uri: "",
   }),
   mounted() {
+    this.$nuxt.$on("previousCheckInStep", () => {
+      this.signing = false;
+    });
+
     if (!this.auton) {
       this.validAuton = false;
     }
@@ -72,7 +78,7 @@ export default {
     console.log(this.auton)
     console.log(this.validAuton)
 
-    if (this.UUID) {
+    if (this.uuid) {
       this.dialog = true;
     }
   },
@@ -82,13 +88,20 @@ export default {
     },
   },
   methods: {
+    prevStep() {
+      this.signing = false;
+    },
+
     async checkIn() {
       this.signing = true
 
       const membershipId = await this.findMembershipId();
+      if (!membershipId) return
 
-      // backend call to check in with membershipId
-      this.uri = this.uri = `auton/${this.auton.autonProfile.name.replace(" ", "_")}`;
+      // this is where the router pushes the user to, but it already gets pushed to /auton so you only have to add the auton name
+      // if you are not on the attendees page, it pushes you to the /attendees, this is because the front-end wouldn't update otherwise
+      // because an push to the same page doesn't trigger a reload of the data in the store
+      this.uri = `${this.auton.autonProfile.name.replaceAll(" ", "_")}`;
 
       this.transaction.assets = {
         membershipId: membershipId,
@@ -103,15 +116,98 @@ export default {
         id: unlockedAccount,
       });
 
-      console.log(attendeeWrapper);
       const attendee = attendeeWrapper.result
 
-      console.log(attendee);
+      if (!attendee) {
+        alert("You are not a member of this Auton. Please join first.")
+        return
+      }
+
+      const autonsWrapper = await this.$invoke("auton:getAll");
+      const autons = autonsWrapper.result.ids
+
+      console.log(autons);
+      console.log(this.auton.lesson.uuid)
+
+      let foundAuton = null
+      let foundAutonId = null
+
+      console.log(autons.length)
+
+
+      for (let i = 0; i < autons.length; i++) {
+        let autonId = autons[i]
+
+        console.log(autonId)
+        const autonWrapper = await this.$invoke("auton:getByID", {
+          id: autonId,
+        });
+
+        const auton = autonWrapper.result
+        console.log(auton)
+
+        console.log()
+
+        if (!auton.lesson) continue
+
+        if (auton.lesson.uuid == this.uuid) {
+          foundAuton = auton
+          foundAutonId = autonId
+        }
+      }
+
+      const auton = foundAuton
+      console.log(auton)
+      console.log(foundAutonId)
+
+
+      let foundMembership = null
+      let foundMembershipId = null
+
+      for (let i = 0; i < attendee.memberships.length; i++) {
+        const m = attendee.memberships[i]
+
+        const membershipWrapper = await this.$invoke("membership:getByID", {
+          id: m,
+        });
+
+        const membership = membershipWrapper.result
+        console.log(membership)
+
+
+        if (membership.autonId == foundAutonId) {
+          console.log("found membership")
+          foundMembership = membership
+          foundMembershipId = m
+        }
+
+      }
+
+      console.log(foundMembership)
+      return foundMembershipId
+
+
+      console.log(attendee.memberships)
 
       const membership = attendee.memberships.find(m => m.autonId === this.auton.autonId)
 
+      console.log(membership);
+
+      const membershipWrapper = await this.$invoke("membership:getByID", {
+        id: membership,
+      });
+      console.log(membershipWrapper.result)
+
+      const autonMembershipWrapper = await this.$invoke("auton:getByID", {
+        id: membershipWrapper.result.autonId,
+      });
+      console.log(autonMembershipWrapper.result)
+      console.log(this.auton)
+
+
       if (!membership) {
         alert("You are not a member of this lesson. You can't check in.")
+        return
       }
 
       return membership

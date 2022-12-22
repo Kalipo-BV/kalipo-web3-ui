@@ -142,6 +142,7 @@ export default {
             this.$nuxt.$emit(this.callbackFinish, true);
           }
 
+
           if (this.$route.path.endsWith("attendees/")) {
             this.$nuxt.$emit("Auton-ProposalModalClose", 0);
             await this.$router.push(this.uri);
