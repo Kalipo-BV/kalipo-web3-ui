@@ -180,19 +180,6 @@ export default {
       validLiskPassphrase: true,
       words: [
         //insert each word as an array item
-        // barely actual much quick decrease brave health ritual lens equal supply treat
-        "barely",
-        "actual",
-        "much",
-        "quick",
-        "decrease",
-        "brave",
-        "health",
-        "ritual",
-        "lens",
-        "equal",
-        "supply",
-        "treat",
 
       ],
       // words: [],
