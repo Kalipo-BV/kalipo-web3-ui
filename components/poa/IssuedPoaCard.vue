@@ -54,7 +54,7 @@
         <div class="ml-5 mr-12">
           <v-card-text>
             <v-icon>mdi-calendar</v-icon>
-            <span class="ml-2">Event:</span>
+            <span class="ml-2">Origin:</span>
             <a
               class="float-right"
               style="text-decoration: underline"

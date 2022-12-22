@@ -37,12 +37,21 @@
           {{ auton.autonProfile.name }}
         </div>
 
-        <div class="d-flex justify-center text-caption text--primary mt-2">
+        <div
+          v-if="auton.type != 'LESSON'"
+          class="d-flex justify-center text-caption text--primary mt-2"
+        >
           {{
             auton.autonProfile.subtitle != ""
               ? auton.autonProfile.subtitle
               : "This is an event"
           }}
+        </div>
+        <div
+          v-if="auton.type == 'LESSON'"
+          class="d-flex justify-center text-caption text--primary mt-2"
+        >
+          {{ "This is a lesson" }}
         </div>
       </v-card-text>
       <v-divider></v-divider>
