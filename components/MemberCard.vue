@@ -53,9 +53,9 @@
         </div>
       </v-card-text>
 
-      <v-divider></v-divider>
+      <v-divider v-if="studentCard"></v-divider>
 
-      <v-container class="d-flex justify-center">
+      <v-container v-if="studentCard" class="d-flex justify-center">
         <v-chip v-if="member.checkedIn && studentCard" class="ma-2" color="green" text-color="white">
           <v-icon left>mdi-account-check</v-icon>
           Checked in 
@@ -209,6 +209,9 @@ export default {
     if (this.member.role == "FULL_MEMBER") {
       this.role = "Full member";
     }
+
+    console.log(this.studentCard)
+    console.log(this.attendeeCard)
 
     this.authorized();
   },
