@@ -74,9 +74,6 @@ export default {
     if (!this.auton) {
       this.validAuton = false;
     }
-    console.log(this.uuid)
-    console.log(this.auton)
-    console.log(this.validAuton)
 
     if (this.uuid) {
       this.dialog = true;
@@ -126,27 +123,21 @@ export default {
       const autonsWrapper = await this.$invoke("auton:getAll");
       const autons = autonsWrapper.result.ids
 
-      console.log(autons);
-      console.log(this.auton.lesson.uuid)
 
       let foundAuton = null
       let foundAutonId = null
 
-      console.log(autons.length)
 
 
       for (let i = 0; i < autons.length; i++) {
         let autonId = autons[i]
 
-        console.log(autonId)
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: autonId,
         });
 
         const auton = autonWrapper.result
-        console.log(auton)
 
-        console.log()
 
         if (!auton.lesson) continue
 
@@ -157,8 +148,6 @@ export default {
       }
 
       const auton = foundAuton
-      console.log(auton)
-      console.log(foundAutonId)
 
 
       let foundMembership = null
@@ -172,37 +161,29 @@ export default {
         });
 
         const membership = membershipWrapper.result
-        console.log(membership)
 
 
         if (membership.autonId == foundAutonId) {
-          console.log("found membership")
           foundMembership = membership
           foundMembershipId = m
         }
 
       }
 
-      console.log(foundMembership)
       return foundMembershipId
 
 
-      console.log(attendee.memberships)
 
       const membership = attendee.memberships.find(m => m.autonId === this.auton.autonId)
 
-      console.log(membership);
 
       const membershipWrapper = await this.$invoke("membership:getByID", {
         id: membership,
       });
-      console.log(membershipWrapper.result)
 
       const autonMembershipWrapper = await this.$invoke("auton:getByID", {
         id: membershipWrapper.result.autonId,
       });
-      console.log(autonMembershipWrapper.result)
-      console.log(this.auton)
 
 
       if (!membership) {

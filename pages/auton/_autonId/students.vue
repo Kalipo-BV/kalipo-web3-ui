@@ -143,7 +143,6 @@ export default {
         }
       }
     }
-    console.log(this.members);
 
     this.authorized();
   },

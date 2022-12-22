@@ -395,13 +395,9 @@ export default {
     // if there is an uuid present in the URL, check if it is valid
     if (this.$route.query.uuid) {
       if (!this.unlocked) {
-        console.log("Wallet is locked");
-        console.log(!this.unlocked)
         const url = `${this.auton.autonProfile.name.replaceAll(" ", "_")}?uuid=${this.$route.query.uuid}`;
         window.sessionStorage.setItem("isCheckingInUrl", url);
-        console.log("hierben ik")
         await this.$router.push("/wallet");
-        console.log("HIER KOM IK WEL")
 
         setTimeout(() => {
           window.sessionStorage.removeItem("isCheckingInUrl")
@@ -413,8 +409,6 @@ export default {
       this.validUUID = this.checkUUID();
       this.uuid = this.$route.query.uuid
 
-      console.log(this.auton)
-      console.log(this.uuid)
     }
 
     for (let index = 0; index < autonWrapper.result.proposals.length; index++) {
@@ -444,7 +438,6 @@ export default {
     }
 
     if (this.auton.type == "DEFAULT") {
-      console.log("TEST")
       this.news.push({
         message: `Auton was created`,
       });

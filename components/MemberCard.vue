@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -58,7 +58,7 @@
       <v-container class="d-flex justify-center">
         <v-chip v-if="member.checkedIn && studentCard" class="ma-2" color="green" text-color="white">
           <v-icon left>mdi-account-check</v-icon>
-          Checked in 
+          Checked in
         </v-chip>
 
         <v-chip v-if="!member.checkedIn && studentCard" class="ma-2" align="center" color="red" text-color="white">
@@ -200,7 +200,6 @@ export default {
     });
 
     this.auton = autonWrapper.result;
-    console.log(this.auton);
 
     if (this.member.role == "AFFILIATE_MEMBER") {
       this.role = "Affiliate member";
