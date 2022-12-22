@@ -32,7 +32,6 @@
         <v-col class="mt-n2">
 
           <p class="mb-n1 ml-n4">
-          text
             {{ auton.lesson.description.length > 50 ? auton.lesson.description.slice(0, 50) + '...' : auton.lesson.description }}
           </p>
         </v-col>
