@@ -54,7 +54,7 @@ export default {
 
     const autons = await this.$invoke("auton:getAll", {});
     if (autons != null) {
-      for (let index = 0; index < autons.result.ids.length; index++) {
+      for (let index = 10; index < autons.result.ids.length; index++) {
         const autonId = autons.result.ids[index];
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: autonId,
