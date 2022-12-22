@@ -28,16 +28,16 @@
         v-if="auton != null"
       ></v-text-field>
 
-        <v-col class="d-flex justify-start">
-            <v-btn
-            class="mt-2"
-            color="accent"
-            :disabled="authorizedAddAttendee"
-            @click="dialog = !dialog"
-            >
-            Add student
-            </v-btn>
-        </v-col>
+      <v-col class="d-flex justify-start">
+        <v-btn
+          class="mt-2"
+          color="accent"
+          :disabled="authorizedAddAttendee"
+          @click="dialog = !dialog"
+        >
+          Add student
+        </v-btn>
+      </v-col>
     </v-row>
     <v-row align="stretch" class="mt-2">
       <v-col cols="12" md="3" v-for="(member, i) in filtered" :key="i">
@@ -49,10 +49,11 @@
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" max-width="500">
-    <AutonAddAttendee
+      <AutonAddAttendee
+        title="Inviting students"
         :autonId="autonId"
         callbackFinish="Auton-ProposalModalClose"
-    ></AutonAddAttendee>
+      ></AutonAddAttendee>
     </v-dialog>
   </v-container>
 </template>
@@ -60,9 +61,9 @@
 import AutonAddAttendee from "~/components/event/AutonAddAttendee.vue";
 
 export default {
-    components: {
+  components: {
     AutonAddAttendee,
-},
+  },
   layout: "auton",
   data: () => ({
     authorizedAddAttendee: true,
@@ -146,6 +147,5 @@ export default {
 
     this.authorized();
   },
-
 };
 </script>

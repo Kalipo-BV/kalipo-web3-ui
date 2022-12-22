@@ -147,6 +147,7 @@
 
       <AutonAddAttendee
         v-if="auton.type == 'EVENT'"
+        title="Inviting attendees"
         :autonId="autondId"
         callbackFinish="Auton-ProposalModalClose"
       ></AutonAddAttendee>
@@ -251,19 +252,15 @@ export default {
           title: "Students",
           to: "students",
         },
-      ]
+      ],
     };
   },
   created() {
     this.$nuxt.$on("Auton-setPage", (page) => this.setMenu(page));
-    this.$nuxt.$on(
-      "Auton-ProposalModalClose",
-      (newSelectedItem) => {
-        this.dialog = false
-        this.selectedItem = newSelectedItem
-      }
-    );
-
+    this.$nuxt.$on("Auton-ProposalModalClose", (newSelectedItem) => {
+      this.dialog = false;
+      this.selectedItem = newSelectedItem;
+    });
   },
   methods: {
     async authorized() {

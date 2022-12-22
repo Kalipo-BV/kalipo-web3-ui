@@ -3,7 +3,7 @@
     <v-card>
       <v-card-text v-if="step == 'invite-attendees'">
         <AutonStepperHeader
-          title="Inviting attendees"
+          :title="title"
           subtitle="Select profiles you want to invite"
         ></AutonStepperHeader>
         <AutonUserSelect
@@ -33,7 +33,7 @@
 </template>
 <script>
 export default {
-  props: ["autonId"],
+  props: ["autonId", "title"],
   data() {
     return {
       step: "invite-attendees",
@@ -49,7 +49,7 @@ export default {
   mounted() {
     this.$nuxt.$on("autonAddStudentBack", () => {
       this.step = "invite-attendees";
-    })
+    });
   },
   methods: {
     prevStep() {

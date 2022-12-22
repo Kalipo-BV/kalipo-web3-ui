@@ -208,14 +208,13 @@
         title="Creating lesson"
       ></AccountSign>
 
-      <!-- FIX DEZE IF's -->
-      <v-divider
-        v-if="(step < 6 && template == 'EVENT') || template == 'DEFAULT'"
-      ></v-divider>
-      <v-divider v-if="step < 4 && template == 'LESSON'"></v-divider>
+      <v-divider></v-divider>
 
       <v-card-text
-        v-if="(step < 6 && template == 'EVENT') || template == 'DEFAULT'"
+        v-if="
+          (template == 'DEFAULT' && step < 6) ||
+          (template == 'EVENT' && step < 6)
+        "
       >
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="step--">
@@ -234,8 +233,8 @@
           </v-btn>
         </div>
       </v-card-text>
-      <!-- VERDWIJN WANNEER STEP 4 IS && template == 'LESSON' -->
-      <v-card-text v-if="step < 4 && template == 'LESSON'">
+
+      <v-card-text v-if="template == 'LESSON' && step < 4">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="step--">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
@@ -320,7 +319,7 @@ export default {
       this.step++;
 
       if (this.step == 4 && this.template == "LESSON") {
-        this.uri =  `auton/${this.lessonName.replace(" ", "_")}`;
+        this.uri = `auton/${this.lessonName.replace(" ", "_")}`;
 
         if (this.date != "") {
           this.start = BigInt(
