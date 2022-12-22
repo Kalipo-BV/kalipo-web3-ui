@@ -149,7 +149,6 @@ export default {
 
       const auton = foundAuton
 
-
       let foundMembership = null
       let foundMembershipId = null
 
@@ -167,31 +166,9 @@ export default {
           foundMembership = membership
           foundMembershipId = m
         }
-
       }
 
       return foundMembershipId
-
-
-
-      const membership = attendee.memberships.find(m => m.autonId === this.auton.autonId)
-
-
-      const membershipWrapper = await this.$invoke("membership:getByID", {
-        id: membership,
-      });
-
-      const autonMembershipWrapper = await this.$invoke("auton:getByID", {
-        id: membershipWrapper.result.autonId,
-      });
-
-
-      if (!membership) {
-        alert("You are not a member of this lesson. You can't check in.")
-        return
-      }
-
-      return membership
     },
   },
 }
