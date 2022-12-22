@@ -48,7 +48,7 @@ export default {
       const auton = autonWrapper.result;
 
       let autonName = auton.autonProfile.name;
-      autonName = autonName.replace(/ /g, "_");
+      autonName = autonName.replaceAll(/ /g, "_");
 
       this.qrvalue =
         "http://localhost:3000/auton/" +
