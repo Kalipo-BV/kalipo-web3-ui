@@ -38,7 +38,6 @@
 
       </v-card>
 
-<!--      TODO: Moet hier een callback?-->
       <AccountSign
         :transaction="transaction"
         :uri="uri"
@@ -98,7 +97,7 @@ export default {
       // this is where the router pushes the user to, but it already gets pushed to /auton so you only have to add the auton name
       // if you are not on the attendees page, it pushes you to the /attendees, this is because the front-end wouldn't update otherwise
       // because an push to the same page doesn't trigger a reload of the data in the store
-      this.uri = `${this.auton.autonProfile.name.replaceAll(" ", "_")}`;
+      this.uri = `${this.auton.autonProfile.name.replaceAll(" ", "_")}/students`;
 
       this.transaction.assets = {
         membershipId: membershipId,
