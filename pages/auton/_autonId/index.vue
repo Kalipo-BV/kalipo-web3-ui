@@ -454,6 +454,40 @@ export default {
       }
     }
 
+    if (this.auton.type == "LESSON") {
+      let members = [];
+
+      for (let membershipId of autonWrapper.result.memberships) {
+          const membershipWrapper = await this.$invoke("membership:getByID", {
+            id: membershipId,
+          });
+
+          const member = membershipWrapper.result;
+
+          console.log(membershipWrapper);
+          members.push(member);
+      }
+
+      let checkedInMembers = members.filter((member) => {
+        return !member.checkIn;
+      });
+
+      for (let i=0; i<checkedInMembers.length; i++) {
+        const member = checkedInMembers[i];
+
+        const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
+          id: member.accountId,
+        });
+
+        member.username = accountWrapper.result.username;
+        
+        this.news.push({
+          message: `@${member.username} checked in`,
+        });
+      }
+    }
+
+
     if (this.auton != null) {
       this.start = new Date(parseInt(this.auton.event.start));
       this.end = new Date(parseInt(this.auton.event.end));
