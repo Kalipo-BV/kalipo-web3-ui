@@ -150,7 +150,7 @@
         :autonId="autondId"
         callbackFinish="Auton-ProposalModalClose"
       ></AutonAddAttendee>
-      
+
       <LessonCheckIn
         v-if="auton.type == 'LESSON'"
         :autonId="autondId"
@@ -320,7 +320,7 @@ export default {
       this.error = "Auton not found: " + urlParam;
     } else {
       this.autondId = autonIdWrapper.result.id;
-      
+
       this.id = autonIdWrapper.result.id;
       const autonWrapper = await this.$invoke("auton:getByID", {
         id: autonIdWrapper.result.id,

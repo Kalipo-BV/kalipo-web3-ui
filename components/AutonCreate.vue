@@ -320,7 +320,7 @@ export default {
       this.step++;
 
       if (this.step == 4 && this.template == "LESSON") {
-        this.uri = this.uri = `auton/${this.lessonName.replace(" ", "_")}`;
+        this.uri =  `auton/${this.lessonName.replace(" ", "_")}`;
 
         if (this.date != "") {
           this.start = BigInt(

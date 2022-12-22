@@ -28,7 +28,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {
+  async mounted() {
     setTimeout(() => {
       this.$router.push("/dashboard");
     }, 6000);

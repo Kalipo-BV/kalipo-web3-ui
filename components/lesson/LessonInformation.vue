@@ -16,7 +16,7 @@
         label="Lesson name"
         counter
         style="max-width: 500px"
-        maxlength="50"
+        maxlength="20"
         v-model="lessonNameValue"
         :rules="[rules.required]"
       ></v-text-field>
@@ -70,7 +70,6 @@
 </template>
 <script>
 export default {
-  props: ["disabledNext"],
   data: () => ({
     valid: false,
     rules: {
@@ -91,6 +90,7 @@ export default {
     "date",
     "startTime",
     "endTime",
+    "disabledNext"
   ],
   watch: {
     valid: {

@@ -143,7 +143,18 @@ export default {
         this.$setAuthAccount(liskAuthAccount);
 
         this.$store.commit("wallet/unlock", frontAccount);
-        this.$router.push("/dashboard");
+
+        // if there is an uuid in the sessionstorage that means an user is trying to check in
+        // and should be redirected to the checkin page
+        const uuidUrl = window.sessionStorage.getItem("isCheckingInUrl")
+
+        if (uuidUrl) {
+          await this.$router.push(`/auton/${uuidUrl}`)
+          window.sessionStorage.removeItem("isCheckingInUrl")
+          return
+        }
+
+        await this.$router.push("/dashboard");
 
         // const decrypted = cryptography.decryptPassphraseWithPassword(
         //   JSON.parse(decryptToLayerOneStr),

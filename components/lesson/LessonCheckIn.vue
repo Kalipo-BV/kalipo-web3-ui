@@ -53,7 +53,7 @@ export default {
       this.qrvalue =
         "http://localhost:3000/auton/" +
         autonName +
-        "/checkin?uuid=" +
+        "?uuid=" +
         auton.lesson.uuid;
     },
   },

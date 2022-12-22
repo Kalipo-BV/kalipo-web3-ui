@@ -250,7 +250,6 @@ export default {
       });
       const auton = autonWrapper.result;
 
-      console.log(auton);
 
       const now = new Date();
       const nowInSec = BigInt(Math.floor(now / 1000));

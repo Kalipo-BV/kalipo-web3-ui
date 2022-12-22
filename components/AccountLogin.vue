@@ -36,7 +36,7 @@
               </div>
             </v-card-text>
             <v-card-text>
-              <v-form v-model="isPassphraseFormValid">
+              <v-form v-model="isPassphraseFormValid" @submit.prevent>
                 <v-row>
                   <v-col
                     cols="4"
@@ -178,23 +178,25 @@ export default {
       password: "",
       pinInput: "",
       validLiskPassphrase: true,
-      // words: [
-      //   "design",
-      //   "top",
-      //   "hello",
-      //   "neutral",
-      //   "frequent",
-      //   "quit",
-      //   "jazz",
-      //   "woman",
-      //   "conduct",
-      //   "search",
-      //   "tragic",
-      //   "live",
-      // ],
-      words: [],
+      words: [
+        //insert each word as an array item
+        // barely actual much quick decrease brave health ritual lens equal supply treat
+        "barely",
+        "actual",
+        "much",
+        "quick",
+        "decrease",
+        "brave",
+        "health",
+        "ritual",
+        "lens",
+        "equal",
+        "supply",
+        "treat",
+
+      ],
+      // words: [],
       frontAccToAdd: {},
-      show: false,
       rules: {
         required: (value) => !!value || "Required",
         min: (v) => v.length >= 12 || "Min 12 characters",

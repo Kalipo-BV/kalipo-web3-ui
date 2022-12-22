@@ -16,338 +16,351 @@
 -->
 
 <template>
-  <v-row>
-    <v-container>
-      <v-row class="mt-1">
-        <v-col cols="12" md="6">
-          <div v-if="auton != null && auton.type == 'DEFAULT'">
-            <div class="d-flex align-center justify-space-between">
-              <div class="text-h2 primary--text">
-                {{ proposalsRunning.length }} running proposal{{
-                  proposalsRunning.length != 1 ? "s" : ""
-                }}
+  <v-container>
+    <v-row>
+      <v-container>
+        <v-row class="mt-1">
+          <v-col cols="12" md="6">
+            <div v-if="auton != null && auton.type == 'DEFAULT'">
+              <div class="d-flex align-center justify-space-between">
+                <div class="text-h2 primary--text">
+                  {{ proposalsRunning.length }} running proposal{{
+                    proposalsRunning.length != 1 ? "s" : ""
+                  }}
+                </div>
+                <v-btn
+                  color="primary"
+                  text
+                  outlined
+                  @click="
+                    $router.push(`/auton/${$route.params.autonId}/proposals/`)
+                  "
+                  >Show all</v-btn
+                >
               </div>
-              <v-btn
-                color="primary"
-                text
-                outlined
-                @click="
-                  $router.push(`/auton/${$route.params.autonId}/proposals/`)
-                "
-                >Show all</v-btn
+              <v-carousel
+                v-model="carousel"
+                :cycle="true"
+                show-arrows-on-hover
+                delimiter-icon="mdi-circle-small"
+                height="220"
+                class="proposals"
+                hide-delimiter-background
               >
+                <v-carousel-item
+                  v-for="(proposal, i) in proposalsRunning"
+                  :key="i"
+                >
+                  <ProposalCard :proposal="proposal"></ProposalCard>
+                </v-carousel-item>
+              </v-carousel>
+              <div class="secondary--text"></div>
             </div>
-            <v-carousel
-              v-model="carousel"
-              :cycle="true"
-              show-arrows-on-hover
-              delimiter-icon="mdi-circle-small"
-              height="220"
-              class="proposals"
-              hide-delimiter-background
+            <!-- EVENT -->
+            <v-card
+              class="mt-2"
+              flat
+              v-if="auton != null && auton.type == 'EVENT'"
             >
-              <v-carousel-item
-                v-for="(proposal, i) in proposalsRunning"
-                :key="i"
-              >
-                <ProposalCard :proposal="proposal"></ProposalCard>
-              </v-carousel-item>
-            </v-carousel>
-            <div class="secondary--text"></div>
-          </div>
-          <!-- EVENT -->
-          <v-card
-            class="mt-2"
-            flat
-            v-if="auton != null && auton.type == 'EVENT'"
-          >
-            <v-card-text>
-              <div class="text-h6 primary--text">Event details</div>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-clipboard-text-outline</v-icon>
-
-                    {{ "&nbsp; Description: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.event.description }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-map-marker</v-icon>
-
-                    {{ "&nbsp; Location: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.event.location }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-account-group</v-icon>
-                    {{ "&nbsp; Capacity: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.event.capacity != 0 ? auton.event.capacity + " people" : "Everyone is welcome!" }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-currency-eur</v-icon>
-
-                    {{ "&nbsp; Price: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.event.price != 0 ? auton.event.price + " euro" : "Free" }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4" v-if="start != null">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-calendar-check</v-icon>
-
-                    {{ "&nbsp; Start: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{
-                      start.getDate() +
-                      "/" +
-                      start.getMonth() +
-                      "/" +
-                      start.getFullYear() +
-                      " at " +
-                      start.getHours() +
-                      ":" +
-                      (start.getMinutes() === 0 ? "00" : start.getMinutes())
-                    }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4" v-if="end != null">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-calendar-remove</v-icon>
-
-                    {{ "&nbsp; End: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{
-                      end.getDate() +
-                      "/" +
-                      end.getMonth() +
-                      "/" +
-                      end.getFullYear() +
-                      " at " +
-                      end.getHours() +
-                      ":" +
-                      (end.getMinutes() === 0 ? "00" : end.getMinutes())
-                    }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-          </v-card>
-          <!-- LESSON -->
-          <v-card
-            class="mt-2"
-            flat
-            v-if="auton != null && auton.type == 'LESSON'"
-          >
-            <v-card-text>
-              <div class="text-h6 primary--text">Lesson details</div>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-clipboard-text-outline</v-icon>
-
-                    {{ "&nbsp; Description: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.lesson.description }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-human-male-board</v-icon>
-
-                    {{ "&nbsp; Subject: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.lesson.subject }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-map-marker</v-icon>
-
-                    {{ "&nbsp; Location: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{ auton.lesson.location }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4" v-if="start != null">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-calendar-check</v-icon>
-
-                    {{ "&nbsp; Start: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{
-                      start.getDate() +
-                      "/" +
-                      start.getMonth() +
-                      "/" +
-                      start.getFullYear() +
-                      " at " +
-                      start.getHours() +
-                      ":" +
-                      (start.getMinutes() === 0 ? "00" : start.getMinutes())
-                    }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-row class="text-body-1 pa-4" v-if="end != null">
-                  <v-col cols="12" md="4" class="pr-12 pr-md-0">
-                    <v-icon>mdi-calendar-remove</v-icon>
-
-                    {{ "&nbsp; End: " }}
-                  </v-col>
-                  <v-col cols="12" md="8" class="pl-12 pl-md-0">
-                    {{
-                      end.getDate() +
-                      "/" +
-                      end.getMonth() +
-                      "/" +
-                      end.getFullYear() +
-                      " at " +
-                      end.getHours() +
-                      ":" +
-                      (end.getMinutes() === 0 ? "00" : end.getMinutes())
-                    }}
-                  </v-col>
-                </v-row>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="12" md="6">
-          <div class="d-flex align-center justify-space-between">
-            <div class="text-h2 primary--text">Latest news</div>
-          </div>
-
-          <div class="mt-4">
-            <v-card v-for="(news, i) in news" :key="i" class="mb-2">
               <v-card-text>
-                <div class="text-body-1">{{ news.message }}</div>
+                <div class="text-h6 primary--text">Event details</div>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-clipboard-text-outline</v-icon>
+
+                      {{ "&nbsp; Description: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{ auton.event.description }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-map-marker</v-icon>
+
+                      {{ "&nbsp; Location: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{ auton.event.location }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-account-group</v-icon>
+                      {{ "&nbsp; Capacity: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{ auton.event.capacity != 0 ? auton.event.capacity + " people" : "Everyone is welcome!" }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-currency-eur</v-icon>
+
+                      {{ "&nbsp; Price: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{ auton.event.price != 0 ? auton.event.price + " euro" : "Free" }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4" v-if="start != null">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-calendar-check</v-icon>
+
+                      {{ "&nbsp; Start: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{
+                        start.getDate() +
+                        "/" +
+                        start.getMonth() +
+                        "/" +
+                        start.getFullYear() +
+                        " at " +
+                        start.getHours() +
+                        ":" +
+                        (start.getMinutes() === 0 ? "00" : start.getMinutes())
+                      }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4" v-if="end != null">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-calendar-remove</v-icon>
+
+                      {{ "&nbsp; End: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{
+                        end.getDate() +
+                        "/" +
+                        end.getMonth() +
+                        "/" +
+                        end.getFullYear() +
+                        " at " +
+                        end.getHours() +
+                        ":" +
+                        (end.getMinutes() === 0 ? "00" : end.getMinutes())
+                      }}
+                    </v-col>
+                  </v-row>
+                </v-row>
               </v-card-text>
             </v-card>
-          </div>
-        </v-col>
-        <!-- <v-col>
-          <div class="d-flex align-center justify-space-between">
-            <div class="text-h2 primary--text">8 upcoming proposals</div>
-            <v-btn color="primary" text outlined>Show more</v-btn>
-          </div>
+            <!-- LESSON -->
+            <v-card
+              class="mt-2"
+              flat
+              v-if="auton != null && auton.type == 'LESSON'"
+            >
+              <v-card-text>
+                <div class="text-h6 primary--text">Lesson details</div>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-clipboard-text-outline</v-icon>
 
-          <v-row dense>
-            <v-col cols="3">
-              <v-card class="mt-4 rounded-lg" flat link>
+                      {{ "&nbsp; Description: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{ auton.lesson.description }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-human-male-board</v-icon>
+
+                      {{ "&nbsp; Subject: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{ auton.lesson.subject }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-map-marker</v-icon>
+
+                      {{ "&nbsp; Location: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{ auton.lesson.location }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4" v-if="start != null">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-calendar-check</v-icon>
+
+                      {{ "&nbsp; Start: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{
+                        start.getDate() +
+                        "/" +
+                        start.getMonth() +
+                        "/" +
+                        start.getFullYear() +
+                        " at " +
+                        start.getHours() +
+                        ":" +
+                        (start.getMinutes() === 0 ? "00" : start.getMinutes())
+                      }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-row>
+                  <v-row class="text-body-1 pa-4" v-if="end != null">
+                    <v-col cols="12" md="4" class="pr-12 pr-md-0">
+                      <v-icon>mdi-calendar-remove</v-icon>
+
+                      {{ "&nbsp; End: " }}
+                    </v-col>
+                    <v-col cols="12" md="8" class="pl-12 pl-md-0">
+                      {{
+                        end.getDate() +
+                        "/" +
+                        end.getMonth() +
+                        "/" +
+                        end.getFullYear() +
+                        " at " +
+                        end.getHours() +
+                        ":" +
+                        (end.getMinutes() === 0 ? "00" : end.getMinutes())
+                      }}
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div class="d-flex align-center justify-space-between">
+              <div class="text-h2 primary--text">Latest news</div>
+            </div>
+
+            <div class="mt-4">
+              <v-card v-for="(news, i) in news" :key="i" class="mb-2">
                 <v-card-text>
-                  <div class="d-flex justify-center">
-                    <div class="text-h4 primary--text">2</div>
-                  </div>
-                  <div class="d-flex justify-center">
-                    <div class="text-body-1 secondary--text">April 14th</div>
-                  </div>
+                  <div class="text-body-1">{{ news.message }}</div>
                 </v-card-text>
               </v-card>
-            </v-col>
-            <v-col cols="3">
-              <v-card class="mt-4 rounded-lg" flat link>
-                <v-card-text>
-                  <div class="d-flex justify-center">
-                    <div class="text-h4 primary--text">1</div>
-                  </div>
-                  <div class="d-flex justify-center">
-                    <div class="text-body-1 secondary--text">April 16th</div>
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col cols="3">
-              <v-card class="mt-4 rounded-lg" flat link>
-                <v-card-text>
-                  <div class="d-flex justify-center">
-                    <div class="text-h4 primary--text">5</div>
-                  </div>
-                  <div class="d-flex justify-center">
-                    <div class="text-body-1 secondary--text">May 1st</div>
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col> -->
-      </v-row>
-    </v-container>
-  </v-row>
+            </div>
+          </v-col>
+          <!-- <v-col>
+            <div class="d-flex align-center justify-space-between">
+              <div class="text-h2 primary--text">8 upcoming proposals</div>
+              <v-btn color="primary" text outlined>Show more</v-btn>
+            </div>
+
+            <v-row dense>
+              <v-col cols="3">
+                <v-card class="mt-4 rounded-lg" flat link>
+                  <v-card-text>
+                    <div class="d-flex justify-center">
+                      <div class="text-h4 primary--text">2</div>
+                    </div>
+                    <div class="d-flex justify-center">
+                      <div class="text-body-1 secondary--text">April 14th</div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="3">
+                <v-card class="mt-4 rounded-lg" flat link>
+                  <v-card-text>
+                    <div class="d-flex justify-center">
+                      <div class="text-h4 primary--text">1</div>
+                    </div>
+                    <div class="d-flex justify-center">
+                      <div class="text-body-1 secondary--text">April 16th</div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="3">
+                <v-card class="mt-4 rounded-lg" flat link>
+                  <v-card-text>
+                    <div class="d-flex justify-center">
+                      <div class="text-h4 primary--text">5</div>
+                    </div>
+                    <div class="d-flex justify-center">
+                      <div class="text-body-1 secondary--text">May 1st</div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col> -->
+        </v-row>
+      </v-container>
+    </v-row>
+
+    <CheckInDialog v-if="this.uuid" :auton="this.auton" :validAuton.sync="validUUID" :uuid="uuid"></CheckInDialog>
+
+  </v-container>
+
 </template>
 <script>
 export default {
   layout: "auton",
+  components: {
+    CheckInDialog: () => import("~/components/lesson/CheckInDialog.vue")
+  },
+  computed: {
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
+  },
   data: () => ({
     error: null,
-    dialog: true,
     proposalsRunning: [],
     proposalsEnded: [],
     carousel: 0,
@@ -355,7 +368,18 @@ export default {
     auton: null,
     start: null,
     end: null,
+    uuid: false,
+    validUUID: false,
   }),
+  methods: {
+    checkUUID() {
+      // get the UUID from the URL
+      const UUID = this.$route.query.uuid;
+      console.log(this.auton)
+      return this.auton.lesson.uuid === UUID;
+    },
+  },
+
   async beforeCreate() {
     this.$nuxt.$emit("Auton-setPage", "autons");
 
@@ -370,6 +394,25 @@ export default {
     });
 
     this.auton = autonWrapper.result;
+
+    // if there is an uuid present in the URL, check if it is valid
+    if (this.$route.query.uuid) {
+      if (!this.unlocked) {
+        const url = `${this.auton.autonProfile.name.replaceAll(" ", "_")}?uuid=${this.$route.query.uuid}`;
+        window.sessionStorage.setItem("isCheckingInUrl", url);
+        await this.$router.push("/wallet");
+
+        setTimeout(() => {
+          window.sessionStorage.removeItem("isCheckingInUrl")
+        }, 120000);
+
+
+      }
+
+      this.validUUID = this.checkUUID();
+      this.uuid = this.$route.query.uuid
+
+    }
 
     for (let index = 0; index < autonWrapper.result.proposals.length; index++) {
       const proposalId = autonWrapper.result.proposals[index];
@@ -398,7 +441,6 @@ export default {
     }
 
     if (this.auton.type == "DEFAULT") {
-      console.log("TEST")
       this.news.push({
         message: `Auton was created`,
       });
@@ -495,6 +537,7 @@ export default {
 
     this.news.reverse();
   },
+
 };
 </script>
 <style>
