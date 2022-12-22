@@ -90,6 +90,7 @@ export default {
     pin: "",
     error: null,
     disabled: false,
+    lessonPoaTransactionWrapper: null,
   }),
   computed: {
     account() {
@@ -107,11 +108,6 @@ export default {
     },
     async sign() {
       this.isSigning = true;
-
-      console.log("sign function");
-
-      console.log(this.transaction);
-
       const moduleId = this.transaction.moduleId;
       const assetId = this.transaction.assetId;
       const asset = this.transaction.assets;
@@ -126,8 +122,6 @@ export default {
         displayNotificationOnError
       );
 
-      console.log(transactionWrapper);
-
       if (!transactionWrapper.error && transactionWrapper.result.success) {
         const transactionId = Buffer.from(
           transactionWrapper.result.message.transactionId,
@@ -137,6 +131,41 @@ export default {
           "app:getTransactionByID",
           { id: transactionId }
         );
+
+        // first poa for lesson
+        if (this.transaction.assets.type == "LESSON") {
+          const existingAutonIdWrapper = await this.$invoke(
+            "auton:getAutonIdByName",
+            {
+              name: this.transaction.assets.name,
+            }
+          );
+
+          const assetFirstPoa = {
+            autonId: existingAutonIdWrapper.result.id,
+            name: "Attendance",
+            staticImageId: "2",
+          };
+
+          const transactionWrapperAttendancePoa = await this.$createTransaction(
+            1008,
+            0,
+            assetFirstPoa,
+            this.pin,
+            displayNotificationOnError
+          );
+
+          const transactionIdAttendancePoa = Buffer.from(
+            transactionWrapperAttendancePoa.result.message.transactionId,
+            "hex"
+          );
+
+          const transactionAttendancePoa = await this.$invokeWithRetry(
+            "app:getTransactionByID",
+            { id: transactionIdAttendancePoa }
+          );
+        }
+
         if (transaction != null && !transaction.error) {
           if (this.callbackFinish != null) {
             this.$nuxt.$emit(this.callbackFinish, true);
@@ -147,7 +176,7 @@ export default {
             await this.$router.push(this.uri);
           } else {
             this.$nuxt.$emit("Auton-ProposalModalClose", 2);
-            await this.$router.push(`${this.uri}/attendees/`);
+            await this.$router.push(`${this.uri}/`);
           }
         }
       } else {
