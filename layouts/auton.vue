@@ -85,6 +85,7 @@
                     v-if="auton.type == 'LESSON'"
                     class="mr-12"
                     color="accent"
+                    :disabled="authorizedAddAttendee"
                     @click="dialog = !dialog"
                   >
                     Check in
