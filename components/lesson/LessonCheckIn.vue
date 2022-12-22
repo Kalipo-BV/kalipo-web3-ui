@@ -15,8 +15,8 @@
       <v-card-actions>
         <v-card-text
           class="text-subtitle-2 d-flex justify-center mt-n7 text-decoration-underline"
-          >Your attendance will only be counted if you scan this code!
-          {{ qrvalue }}</v-card-text
+          >Your attendance will only be counted if you scan this
+          code!</v-card-text
         >
       </v-card-actions>
     </v-card>
@@ -47,9 +47,12 @@ export default {
 
       const auton = autonWrapper.result;
 
+      let autonName = auton.autonProfile.name;
+      autonName = autonName.replace(/ /g, "_");
+
       this.qrvalue =
         "http://localhost:3000/auton/" +
-        auton.autonProfile.name +
+        autonName +
         "/checkin?uuid=" +
         auton.lesson.uuid;
     },
