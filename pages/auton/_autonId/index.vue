@@ -469,7 +469,7 @@ export default {
       }
 
       let checkedInMembers = members.filter((member) => {
-        return !member.checkIn;
+        return member.checkIn;
       });
 
       for (let i=0; i<checkedInMembers.length; i++) {
