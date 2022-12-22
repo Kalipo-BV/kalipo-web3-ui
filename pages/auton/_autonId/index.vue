@@ -511,8 +511,9 @@ export default {
       }
 
       let checkedInMembers = members.filter((member) => {
-        return member.checkIn;
+        return member.checkedIn;
       });
+
 
       for (let i=0; i<checkedInMembers.length; i++) {
         const member = checkedInMembers[i];
