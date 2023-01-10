@@ -41,14 +41,18 @@
         v-model="locationValue"
         :rules="[rules.required]"
       ></v-text-field>
-      <v-text-field
-        type="date"
-        style="max-width: 500px"
-        v-model="dateValue"
-        label="Date"
-        :min="new Date().toISOString().substr(0, 10)"
-        :rules="[rules.required]"
-      ></v-text-field>
+      <v-row>
+         <v-col cols="12">
+           <v-text-field
+             type="date"
+             style="max-width: 500px"
+             v-model="dateValue"
+             label="Date"
+             :min="new Date().toISOString().substr(0, 10)"
+             :rules="[rules.required]"
+           ></v-text-field>
+         </v-col>
+      </v-row>
       <v-row>
         <v-col cols="6"
           ><v-text-field
@@ -65,6 +69,12 @@
           ></v-text-field
         ></v-col>
       </v-row>
+      <v-checkbox
+        v-model="checkoutRequiredValue"
+        label="Checkout required"
+        ripple
+      >
+      </v-checkbox>
     </v-form>
   </div>
 </template>
@@ -90,7 +100,8 @@ export default {
     "date",
     "startTime",
     "endTime",
-    "disabledNext"
+    "disabledNext",
+    "checkoutRequired"
   ],
   watch: {
     valid: {
@@ -155,6 +166,14 @@ export default {
       },
       set: function (newValue) {
         this.$emit("update:endTime", newValue);
+      },
+    },
+    checkoutRequiredValue: {
+      get: function () {
+        return this.checkoutRequired;
+      },
+      set: function (newValue) {
+        this.$emit("update:checkoutRequired", newValue);
       },
     },
   },

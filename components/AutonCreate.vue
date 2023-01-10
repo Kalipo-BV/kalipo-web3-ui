@@ -97,6 +97,7 @@
           :startTime.sync="startTime"
           :endTime.sync="endTime"
           :disabledNext.sync="disabledNext"
+          :checkoutRequired.sync="checkoutRequired"
         ></LessonInformation>
       </v-card-text>
 
@@ -304,6 +305,7 @@ export default {
     lessonName: "",
     date: "",
     studentIds: [],
+    checkoutRequired: false,
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
@@ -345,6 +347,8 @@ export default {
           start: this.start,
           end: this.end,
           subject: this.subject,
+          // het is geen fout dat dit een string is, voor een of ander manier accepteert lisk het niet als boolean
+          checkoutRequired: (this.checkoutRequired ? "true" : "false"),
         };
 
         this.transaction.assets = asset;
@@ -392,6 +396,7 @@ export default {
           start: this.start,
           end: this.end,
           subject: "",
+          checkoutRequired: null,
         };
 
         this.transaction.assets = asset;

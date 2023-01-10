@@ -56,12 +56,17 @@
       <v-divider v-if="studentCard"></v-divider>
 
       <v-container v-if="studentCard" class="d-flex justify-center">
-        <v-chip v-if="member.checkedIn && studentCard" class="ma-2" color="green" text-color="white">
-          <v-icon left>mdi-account-check</v-icon>
+        <v-chip v-if="member.checkedStatus === 'CHECKEDIN' && studentCard" class="ma-2" color="blue" text-color="white">
+          <v-icon left>mdi-account-school</v-icon>
           Checked in
         </v-chip>
 
-        <v-chip v-if="!member.checkedIn && studentCard" class="ma-2" align="center" color="red" text-color="white">
+        <v-chip v-else-if="member.checkedStatus === 'CHECKEDOUT'  && studentCard" class="ma-2" align="center" color="green" text-color="white">
+          <v-icon left>mdi-account-check</v-icon>
+          Checked out
+        </v-chip>
+
+        <v-chip v-else-if="studentCard" class="ma-2" align="center" color="red" text-color="white">
           <v-icon left>mdi-account-remove</v-icon>
           Not checked in
         </v-chip>
@@ -194,6 +199,7 @@ export default {
   },
   async mounted() {
     this.userLang = navigator.language || navigator.userLanguage;
+    console.log(this.member.checkedStatus);
 
     const autonWrapper = await this.$invoke("auton:getByID", {
         id: this.autonId,
@@ -209,8 +215,6 @@ export default {
       this.role = "Full member";
     }
 
-    console.log(this.studentCard)
-    console.log(this.attendeeCard)
 
     this.authorized();
   },

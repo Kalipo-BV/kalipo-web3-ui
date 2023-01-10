@@ -53,7 +53,7 @@ export default {
     this.$nuxt.$emit("MainMenu-setPage", "autons");
 
     const autons = await this.$invoke("auton:getAll", {});
-    if (autons != null) {
+    if (autons.result != null) {
       for (let index = 0; index < autons.result.ids.length; index++) {
         const autonId = autons.result.ids[index];
         const autonWrapper = await this.$invoke("auton:getByID", {

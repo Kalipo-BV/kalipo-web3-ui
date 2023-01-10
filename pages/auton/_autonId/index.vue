@@ -511,7 +511,12 @@ export default {
       }
 
       let checkedInMembers = members.filter((member) => {
-        return member.checkedIn;
+        // an checked out member has also checked in at some point
+        return member.checkedStatus === "CHECKEDIN" || member.checkedStatus === "CHECKEDOUT";
+      });
+
+      let checkedoutMembers = members.filter((member) => {
+        return member.checkedStatus === "CHECKEDOUT";
       });
 
 
@@ -523,9 +528,23 @@ export default {
         });
 
         member.username = accountWrapper.result.username;
-        
+
         this.news.push({
           message: `@${member.username} checked in`,
+        });
+      }
+
+      for (let i=0; i<checkedoutMembers.length; i++) {
+        const member = checkedoutMembers[i];
+
+        const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
+          id: member.accountId,
+        });
+
+        member.username = accountWrapper.result.username;
+
+        this.news.push({
+          message: `@${member.username} checked out`,
         });
       }
     }

@@ -6,7 +6,7 @@
     >
       <v-card v-if="!signing">
         <v-card-title class="text-h5 mb-2 ml-1">
-          You are about to check in for lesson:
+          You are about to check {{!checkingOut ? "in" : "out"}} for lesson:
         </v-card-title>
 
         <v-card-text>
@@ -32,7 +32,7 @@
             @click="checkIn"
             :disabled="!validAuton"
           >
-            Check-in
+            Check-{{!checkingOut ? "in" : "out"}}
           </v-btn>
         </v-card-actions>
 
@@ -43,7 +43,7 @@
         :uri="uri"
         callback="previousCheckInStep"
         v-if="signing"
-        title="Check-in"
+        :title="signingTitle"
       ></AccountSign>
 
     </v-dialog>
@@ -58,6 +58,8 @@ export default {
     dialog: true,
     isFetching: false,
     signing: false,
+    signingTitle: "Check-in",
+    checkingOut: false,
     transaction: {
       moduleId: 1002,
       assetId: 3,
@@ -65,7 +67,7 @@ export default {
     },
     uri: "",
   }),
-  mounted() {
+  async mounted() {
     this.$nuxt.$on("previousCheckInStep", () => {
       this.signing = false;
     });
@@ -76,6 +78,23 @@ export default {
 
     if (this.uuid) {
       this.dialog = true;
+    }
+
+    if (!this.account.accountId) return
+
+    const membershipId = await this.findMembershipId();
+    if (!membershipId) return
+
+
+    const membershipWrapper = await this.$invoke("membership:getByID", {
+      id: membershipId,
+    });
+
+    const membership = membershipWrapper.result
+
+    if (membership.checkedStatus === "CHECKEDIN") {
+      this.signingTitle = "Check-out"
+      this.checkingOut = true
     }
   },
   computed: {
@@ -93,6 +112,17 @@ export default {
 
       const membershipId = await this.findMembershipId();
       if (!membershipId) return
+
+
+      const membershipWrapper = await this.$invoke("membership:getByID", {
+        id: membershipId,
+      });
+
+      const membership = membershipWrapper.result
+
+      if (membership.checkedStatus === "CHECKEDIN") {
+        this.signingTitle = "Check-out"
+      }
 
       // this is where the router pushes the user to, but it already gets pushed to /auton so you only have to add the auton name
       // if you are not on the attendees page, it pushes you to the /attendees, this is because the front-end wouldn't update otherwise

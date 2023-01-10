@@ -88,7 +88,7 @@
                     :disabled="authorizedAddAttendee"
                     @click="dialog = !dialog"
                   >
-                    Check in
+                    Check in/out
                   </v-btn>
                 </v-col>
               </v-row>
