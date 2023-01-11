@@ -160,14 +160,40 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
+
+    <v-dialog v-model="dialog" width="600px"
+      ><v-card
+        ><v-card-text>
+          <AutonStepperHeader
+            class="pt-4"
+            title="No Kalipo account found!"
+            subtitle="We discovered you do not have a Kalipo account yet."
+          ></AutonStepperHeader>
+        </v-card-text>
+        <div class="text-body-1 text--primary px-6 pb-4">
+          Would you like to create a new Kalipo account?
+        </div>
+        <v-divider></v-divider
+        ><v-card-actions class="pb-6 pt-6"
+          ><v-btn class="ml-2" @click="dialog = !dialog">No</v-btn
+          ><v-spacer></v-spacer
+          ><v-btn @click="createNewKalipoAccount" color="accent" class="mr-2"
+            >Yes</v-btn
+          ></v-card-actions
+        ></v-card
+      ></v-dialog
+    >
   </v-container>
 </template>
 <script>
 import * as cryptography from "@liskhq/lisk-cryptography";
 
+import { Mnemonic } from "@liskhq/lisk-passphrase";
+
 export default {
   data() {
     return {
+      dialog: false,
       step: 1,
       show: false,
       showPassword: false,
@@ -178,11 +204,7 @@ export default {
       password: "",
       pinInput: "",
       validLiskPassphrase: true,
-      words: [
-        //insert each word as an array item
-
-      ],
-      // words: [],
+      words: [],
       frontAccToAdd: {},
       rules: {
         required: (value) => !!value || "Required",
@@ -230,6 +252,7 @@ export default {
         // set step to two
         this.step = 2;
       } catch (error) {
+        this.dialog = true;
         this.validLiskPassphrase = false;
       }
     },
@@ -269,6 +292,15 @@ export default {
 
       // Push user to account selection
       this.$nuxt.$emit("IAH-showSelection");
+    },
+    createNewKalipoAccount() {
+      this.$nuxt.$emit("IAH-newKalipoAccount", this.words.join(" "));
+
+      // this.$nuxt.$emit("IAH-newKalipoAccount", Mnemonic.generateMnemonic());
+
+      // const passphrase = Mnemonic.generateMnemonic();
+
+      // console.log(passphrase);
     },
   },
 };

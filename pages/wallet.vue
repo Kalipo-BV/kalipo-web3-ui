@@ -162,6 +162,10 @@ export default {
     this.$nuxt.$on("IAH-setCreatedAccountAsUnlocked", ($event) =>
       this.setCreatedAccountAsUnlocked($event)
     );
+    this.$nuxt.$on("IAH-newKalipoAccount", (passphrase) => {
+      this.accountToBeCreated.passphrase = passphrase;
+      this.showPassphrase();
+    });
   },
   mounted: function () {
     this.$nuxt.$emit("MainMenu-setPage", "wallet");
@@ -216,6 +220,23 @@ export default {
       this.screen = "ChooseOperation";
     },
     showPassphrase(regenerate) {
+      console.log("SHOW PASSPHRASE");
+      console.log(regenerate);
+      // voor nieuw account aanmaken met bestaande Lisk passphrase, niet helemaal netjes idd
+      if (regenerate == undefined) {
+        const { address, publicKey } =
+          cryptography.getAddressAndPublicKeyFromPassphrase(
+            this.accountToBeCreated.passphrase
+          );
+        this.accountToBeCreated.address = address;
+        this.accountToBeCreated.publicKey = publicKey;
+
+        this.accountToBeCreated.password = "";
+        this.accountToBeCreated.username = "";
+        this.accountToBeCreated.name = "";
+        this.accountToBeCreated.pin = "";
+      }
+
       if (regenerate) {
         this.accountToBeCreated.passphrase = Mnemonic.generateMnemonic();
 
