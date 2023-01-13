@@ -13,13 +13,13 @@
                         nisi
                         ut
                         aliquip ex ea commodo consequat.
+                        <v-btn outlined color="primary" elevation="1" @click="edit(i)" icon small>
+                            <v-icon color="primary">{{ "mdi-pencil-outline" }}</v-icon>
+                        </v-btn>
+                        <v-btn outlined color="error" elevation="1" @click="removed(i)" icon small>
+                            <v-icon color="error">{{ "mdi-trash-can-outline" }}</v-icon>
+                        </v-btn>
                     </v-expansion-panel-content>
-                    <v-btn outlined color="primary" elevation="1" @click="edit(i)" icon small>
-                        <v-icon color="primary">{{ "mdi-pencil-outline" }}</v-icon>
-                    </v-btn>
-                    <v-btn outlined color="error" elevation="1" @click="removed(i)" icon small>
-                        <v-icon color="error">{{ "mdi-trash-can-outline" }}</v-icon>
-                    </v-btn>
                 </v-expansion-panel>
             </v-expansion-panels>
         </v-row>

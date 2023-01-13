@@ -122,7 +122,21 @@
         ></AutonProposalQuestions>
       </v-card-text>
 
-      <!-- <v-card-text v-if="step == 'check-out'">
+      <v-card-text v-if="step == 'question-choices'">
+        <AutonStepperHeader
+        title="question" 
+        subtitle=""
+        ></AutonStepperHeader>
+
+        <AutonProposalQuestionOptionField
+        class="mt-4" 
+        :autonId="autonId" 
+        :selectedProposalType="selectedProposalType"
+        @data:choices="getChoicesMessage"
+        ></AutonProposalQuestionOptionField>
+      </v-card-text>
+
+      <v-card-text v-if="step == 'check-out'">
         <AutonStepperHeader 
         :title="title" 
         :subtitle="subTitle"
@@ -130,8 +144,10 @@
 
         <AutonProposalCheckout 
         class="mt-4"
+        :autonId="autonId"
+        :selectedProposalType="selectedProposalType"
         ></AutonProposalCheckout>
-      </v-card-text> -->
+      </v-card-text>
 
       <AccountSign 
       :transaction="transaction" 
@@ -144,9 +160,9 @@
 
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
-          <v-btn :disabled="step == 0" @click="prevStep">
-            previous
+          <v-btn :disabled="step == 'select-proposal-type'" @click="prevStep">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> 
+            previous
           </v-btn>
           <v-btn color="accent" @click="nextStep" :disabled="disabledNext || selectedProposalType == null">
             next 
@@ -246,8 +262,14 @@ export default {
       else if (this.step == "questions" && this.selectedProposalType == "questionnaire") {
         this.step = "title-description";
       }
+      else if (this.step == "question-answer" && this.selectedProposalType == "questionnaire") {
+        this.step = "questions"
+      }
+      else if (this.step == "check-out" && this.selectedProposalType == "questionnaire") {
+        this.step = "question-answer"
+      }
       else if (this.step == "sign" && this.selectedProposalType == "questionnaire") {
-        this.step = "questions";
+        this.step = "check-out";
       }
     },
     async nextStep() {
@@ -283,6 +305,9 @@ export default {
         this.step = "questions";
       }
       else if (this.step == "questions" && this.selectedProposalType == "questionnaire") {
+        this.step = "question-answer"
+      }
+      else if (this.step == "question-answer" && this.selectedProposalType == "questionnaire") {
         this.step = "check-out";
         this.title = "Are you sure?";
         this.subTitle = "";
@@ -293,7 +318,7 @@ export default {
       // else if (this.step == "membership-invitation" || this.step == "yes-no" || this.step == "choices") {
       //   this.step = "sign";
       // }
-      else if (this.step == "membership-invitation" || this.step == "choices" || this.step == "questions") {
+      else if (this.step == "membership-invitation" || this.step == "choices" || this.step == "check-out") {
         this.step = "sign";
       }
       // the membership-invitation data that gets send when chosen:

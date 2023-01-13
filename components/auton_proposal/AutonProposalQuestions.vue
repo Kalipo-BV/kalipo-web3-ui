@@ -3,7 +3,7 @@
         <v-form v-model="valid">
             <v-card-text>
                 <v-row justify="center" dense>
-                    <v-col cols="1">
+                    <v-col cols="1" md="2">
                         <v-label>{{ textFieldsAmount }}/50</v-label>
                     </v-col>
                 </v-row>
