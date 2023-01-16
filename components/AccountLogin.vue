@@ -187,7 +187,7 @@
 </template>
 <script>
 import * as cryptography from "@liskhq/lisk-cryptography";
-
+import * as passphrase from "@liskhq/lisk-passphrase";
 import { Mnemonic } from "@liskhq/lisk-passphrase";
 
 export default {
@@ -233,8 +233,6 @@ export default {
           id: kalipoAccountIdByLiskIdFromPassphrase.result.id,
         });
 
-        // TODO: if Lisk account exists but Kalipo account does not exist -> create new Kalipo account
-
         // set all front end Kalipo acc information
         this.frontAccToAdd = {
           accountId: kalipoAccountIdByLiskIdFromPassphrase.result.id,
@@ -252,8 +250,24 @@ export default {
         // set step to two
         this.step = 2;
       } catch (error) {
-        this.dialog = true;
-        this.validLiskPassphrase = false;
+        // 1. this catch block means there is no Kalipo account found
+        // 2. next we want to check if passphrase has 0 errors using getPassphraseValidationErrors
+        // 2a. if 0 zero errors, its a valid passphrase
+        // 2b. if errors, user needs to re-enter
+
+        const errors = passphrase.validation.getPassphraseValidationErrors(
+          this.words.join(" "),
+          Mnemonic.wordlist,
+          12
+        );
+
+        if (errors.length == 0) {
+          console.log("Valid passphrase");
+          this.validLiskPassphrase = true;
+          this.dialog = true;
+        } else {
+          this.validLiskPassphrase = false;
+        }
       }
     },
     async addNewAccount() {
