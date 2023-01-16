@@ -255,6 +255,9 @@ export default {
         // 2a. if 0 zero errors, its a valid passphrase
         // 2b. if errors, user needs to re-enter
 
+        // remove after review moment
+        console.log(Mnemonic.generateMnemonic());
+
         const errors = passphrase.validation.getPassphraseValidationErrors(
           this.words.join(" "),
           Mnemonic.wordlist,
