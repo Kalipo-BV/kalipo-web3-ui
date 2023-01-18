@@ -306,6 +306,8 @@ export default {
       }
       else if (this.step == "questions" && this.selectedProposalType == "questionnaire") {
         this.step = "question-answer"
+        console.log(this.titleMessage, this.descriptionMessage)
+        console.log("questions", this.choicesMessage)
       }
       else if (this.step == "question-answer" && this.selectedProposalType == "questionnaire") {
         this.step = "check-out";
@@ -353,7 +355,7 @@ export default {
         this.transaction.assetId = 1;
         this.transaction.assets = asset;
       }
-      //questionnaire data that gets send when chosen:
+      // questionnaire data that gets send when chosen:
       else if (this.step == "sign" && this.selectedProposalType == "questionnaire") {
         const autonWrapper = await this.$invoke("auton:getByID", { id: this.autonId });
         this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;

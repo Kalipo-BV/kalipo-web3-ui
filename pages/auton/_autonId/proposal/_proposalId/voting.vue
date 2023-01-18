@@ -410,7 +410,7 @@ export default {
   methods: {
 
     getAnswerValue(value){
-      this.transaction.assets.answer = value
+      this.transaction.assets.answer = [[value]];
       this.chipText = value
       this.dialog = true;
     },
@@ -432,12 +432,12 @@ export default {
     },
     accept() {
       this.chipText = "In favor";
-      this.transaction.assets.answer = "ACCEPT";
+      this.transaction.assets.answer = [[ACCEPT]];
       this.dialog = true;
     },
     refuse() {
       this.chipText = "Against";
-      this.transaction.assets.answer = "REFUSE";
+      this.transaction.assets.answer = [[REFUSE]];
       this.dialog = true;
     }
   }
