@@ -3,7 +3,7 @@
     <v-form v-model="valid">
       <v-card-text>
         <v-row justify="center">
-          <v-card-subtitle class="text--primary text-h4">{{Question}}</v-card-subtitle>
+          <v-card-subtitle class="text--primary text-h4">{{question}}</v-card-subtitle>
         </v-row>
         <v-row justify="center" dense>
           <v-col cols="1">
@@ -15,7 +15,7 @@
             <v-col cols="12" v-for="(textField, i) in textFields" :key="i" class="text-fields-row">
               <v-row>
                 <v-col cols="12" class="py-0">
-                  <v-text-field v-model="textField.value" required counter maxlength="100">
+                  <v-text-field v-on:input="getAnswerMessage" v-model="textField.value" required counter maxlength="100">
                     <v-icon slot="prepend-inner" v-text="'mdi-numeric-' + (i + 1)"></v-icon>
                     <v-icon slot="append" color="error" :disabled="textFieldsAmount == 2" @click="removed(i)">{{ "mdi-trash-can-outline" }}</v-icon>
                   </v-text-field>
@@ -56,17 +56,22 @@ export default {
     dialog: false,
     offsetTop: 0,
     textFields: [{ label: "Option", value: "" }, { label: "Option", value: "" }],
-    Question: "kleine aapjes zijn hele leuke husidieren!!",
     textFieldsAmount: 2,
     isUpdating: true,
   }),
 
   methods: {
+    getAnswerMessage() {
+      const answers = this.textFields.map(function (answers) {
+        return answers.value;
+      });
+      this.$emit('data:answers', answers)
+    },
+
     remove(item) {
       const index = this.selectedValue.indexOf(item.name);
       if (index >= 0) this.selectedValue.splice(index, 1);
     },
-
     onScroll(e) {
       this.offsetTop = e.target.scrollTop
     },

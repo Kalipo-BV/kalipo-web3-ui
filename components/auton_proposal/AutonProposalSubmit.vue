@@ -19,39 +19,39 @@
   <div class="">
     <v-card>
       <v-card-text v-if="step == 'select-proposal-type'">
-        <AutonStepperHeader 
+        <AutonStepperHeader
         title="Submitting a new proposal"
         subtitle="First choose the desired type that suits your proposal"
         ></AutonStepperHeader>
 
-        <AutonSelectProposalType 
+        <AutonSelectProposalType
         :selectedProposalType.sync="selectedProposalType"
         ></AutonSelectProposalType>
       </v-card-text>
 
       <v-card-text v-if="step == 'proposal-profile'">
-        <AutonStepperHeader 
+        <AutonStepperHeader
         title="Submitting a new proposal"
         subtitle="Describe your proposal by providing a title and description"
         ></AutonStepperHeader>
 
-        <AutonProposalProfile 
-        :disabledNext.sync="disabledNext" 
+        <AutonProposalProfile
+        :disabledNext.sync="disabledNext"
         :title.sync="proposalTitle"
         :description.sync="proposalDescription"
         ></AutonProposalProfile>
       </v-card-text>
 
       <v-card-text v-if="step == 'membership-invitation'">
-        <AutonStepperHeader 
+        <AutonStepperHeader
         title="Submitting a new proposal"
         subtitle="Please select the user you'd like to invite and supply an invitation message"
         ></AutonStepperHeader>
 
-        <AutonProposalMembershipInvitation 
+        <AutonProposalMembershipInvitation
         :selectedAccountId.sync="selectedAccountId"
-        :invitationMessage.sync="invitationMessage" 
-        class="mt-4" 
+        :invitationMessage.sync="invitationMessage"
+        class="mt-4"
         :autonId="autonId"
         ></AutonProposalMembershipInvitation>
       </v-card-text>
@@ -68,104 +68,105 @@
       </v-card-text> -->
 
       <v-card-text v-if="step == 'title-description'">
-        <AutonStepperHeader 
-        :title="title" 
+        <AutonStepperHeader
+        :title="title"
         :subtitle="subTitle"
         ></AutonStepperHeader>
 
-        <AutonProposalTitleDescription 
-        :titleMessage.sync="titleMessage" 
+        <AutonProposalTitleDescription
+        :titleMessage.sync="titleMessage"
         :descriptionMessage.sync="descriptionMessage"
-        class="mt-4" 
+        class="mt-4"
         :autonId="autonId"
         ></AutonProposalTitleDescription>
       </v-card-text>
 
       <v-card-text v-if="step == 'parameter'">
-        <AutonStepperHeader 
-        title="Parameters" 
+        <AutonStepperHeader
+        title="Parameters"
         subtitle="These are the parameters for your poll"
         ></AutonStepperHeader>
 
-        <AutonProposalParameter 
-        class="mt-4" 
-        :autonId="autonId" 
+        <AutonProposalParameter
+        class="mt-4"
+        :autonId="autonId"
         :selectedProposalType="selectedProposalType"
         ></AutonProposalParameter>
       </v-card-text>
 
       <v-card-text v-if="step == 'choices'">
-        <AutonStepperHeader 
-        title="Multiple choice" 
+        <AutonStepperHeader
+        title="Multiple choice"
         subtitle="Give a clear description of your choices"
         ></AutonStepperHeader>
 
-        <AutonProposalChoices 
-        class="mt-4" 
-        :autonId="autonId" 
+        <AutonProposalChoices
+        class="mt-4"
+        :autonId="autonId"
         :selectedProposalType="selectedProposalType"
         @data:choices="getChoicesMessage"
         ></AutonProposalChoices>
       </v-card-text>
 
       <v-card-text v-if="step == 'questions'">
-        <AutonStepperHeader 
-        title="Questions" 
+        <AutonStepperHeader
+        title="Questions"
         subtitle="Give a clear description of your choices"
         ></AutonStepperHeader>
 
-        <AutonProposalQuestions 
-        class="mt-4" 
-        :autonId="autonId" 
+        <AutonProposalQuestions
+        class="mt-4"
+        :autonId="autonId"
         :selectedProposalType="selectedProposalType"
         @data:choices="getChoicesMessage"
         ></AutonProposalQuestions>
       </v-card-text>
 
-      <v-card-text v-if="step == 'question-choices'">
+      <v-card-text v-if="step == 'question-answer'">
         <AutonStepperHeader
-        title="question" 
+        title="question"
         subtitle=""
         ></AutonStepperHeader>
 
         <AutonProposalQuestionOptionField
-        class="mt-4" 
-        :autonId="autonId" 
+        class="mt-4"
+        :autonId="autonId"
         :selectedProposalType="selectedProposalType"
-        @data:choices="getChoicesMessage"
+        :question="currentChoiceMessage"
+        @data:answers="getAnswerMessage"
         ></AutonProposalQuestionOptionField>
       </v-card-text>
 
       <v-card-text v-if="step == 'check-out'">
-        <AutonStepperHeader 
-        :title="title" 
+        <AutonStepperHeader
+        :title="title"
         :subtitle="subTitle"
         ></AutonStepperHeader>
 
-        <AutonProposalCheckout 
+        <AutonProposalCheckout
         class="mt-4"
         :autonId="autonId"
         :selectedProposalType="selectedProposalType"
         ></AutonProposalCheckout>
       </v-card-text>
 
-      <AccountSign 
-      :transaction="transaction" 
-      :uri="uri" 
+      <AccountSign
+      :transaction="transaction"
+      :uri="uri"
       callback="AutonProposalSubmit-PrevStep"
-      callbackFinish="AutonProposalSubmit-Finish" 
-      v-if="step == 'sign'" 
+      callbackFinish="AutonProposalSubmit-Finish"
+      v-if="step == 'sign'"
       title="Submitting proposal"
       ></AccountSign>
 
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 'select-proposal-type'" @click="prevStep">
-            <v-icon class="mr-2" small>mdi-arrow-left</v-icon> 
+            <v-icon class="mr-2" small>mdi-arrow-left</v-icon>
             previous
           </v-btn>
           <v-btn color="accent" @click="nextStep" :disabled="disabledNext || selectedProposalType == null">
-            next 
+            next
             <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
         </div>
@@ -190,7 +191,13 @@ export default {
     descriptionMessage: "",
     proposalTitle: "",
     proposalDescription: "",
+
+    answersMessage: "",
     choicesMessage: "",
+    currentChoiceMessage: "",
+    questionStep: 0,
+    choicesAnswer: [],
+
     uri: "",
     transaction: {
       moduleId: -1,
@@ -206,7 +213,21 @@ export default {
   methods: {
     getChoicesMessage(value) {
       this.choicesMessage = value;
+      this.currentChoiceMessage = this.choicesMessage[0]
     },
+    getAnswerMessage(value) {
+      this.answersMessage = value;
+    },
+
+    buildNextQuestion() {
+      this.choicesAnswer.push({"question": this.currentChoiceMessage, "options": this.answersMessage});
+      this.questionStep ++;
+      this.currentChoiceMessage = this.choicesMessage[this.questionStep];
+    },
+    buildPreviousQuestion() {
+      //should be used to go back to previous questions to change them.
+    },
+
     finish() {
       if (this.callbackFinish) {
         this.$nuxt.$emit(this.callbackFinish, true);
@@ -306,6 +327,10 @@ export default {
       }
       else if (this.step == "questions" && this.selectedProposalType == "questionnaire") {
         this.step = "question-answer"
+      }
+      else if (this.step == "question-answer" && this.selectedProposalType == "questionnaire" &&  this.currentChoiceMessage != null) {
+        this.buildNextQuestion()
+        if (this.questionStep == this.choicesMessage.length) { this.step = "check-out" } else { this.step = "question-answer" }
       }
       else if (this.step == "question-answer" && this.selectedProposalType == "questionnaire") {
         this.step = "check-out";
