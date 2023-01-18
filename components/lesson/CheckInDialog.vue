@@ -1,6 +1,31 @@
 <template>
   <v-row justify="center">
-    <v-dialog
+    <v-dialog v-if="!memberInLesson" v-model="dialog2" max-width="400">
+      <v-card>
+          <v-card-title class="text-h5 mb-2">
+          Error
+        </v-card-title>
+
+        <v-card-text>
+        You are not a member of this lesson and can therefore not check in. Please contact the lesson owner to join the lesson.
+        </v-card-text>
+
+        <v-card-actions>
+        <v-spacer></v-spacer>
+          <v-btn
+            class="ml-1 mb-2"
+            color="red white--text"
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-if="memberInLesson"
+      persistent
       v-model="dialog"
       max-width="400"
     >
@@ -56,9 +81,11 @@ export default {
   props: ["auton", "validAuton", "uuid"],
   data: () => ({
     dialog: true,
+    dialog2: true,
     isFetching: false,
     signing: false,
     signingTitle: "Check-in",
+    memberInLesson: false,
     checkingOut: false,
     transaction: {
       moduleId: 1002,
@@ -78,6 +105,7 @@ export default {
 
     if (this.uuid) {
       this.dialog = true;
+      this.dialog2 = true;
     }
 
     if (!this.account.accountId) return
@@ -144,11 +172,6 @@ export default {
 
       const attendee = attendeeWrapper.result
 
-      if (!attendee) {
-        alert("You are not a member of this Auton. Please join first.")
-        return
-      }
-
       const autonsWrapper = await this.$invoke("auton:getAll");
       const autons = autonsWrapper.result.ids
 
@@ -178,6 +201,12 @@ export default {
 
       const auton = foundAuton
 
+      for (let membership of auton.memberships) {
+        if (attendee.memberships.includes(membership)) {
+          this.memberInLesson = true;
+          break;
+        }
+      }
       let foundMembership = null
       let foundMembershipId = null
 
