@@ -242,7 +242,7 @@
                       {{
                         start.getDate() +
                         "/" +
-                        start.getMonth() +
+                        (start.getMonth() + 1) +
                         "/" +
                         start.getFullYear() +
                         " at " +
@@ -267,7 +267,7 @@
                       {{
                         end.getDate() +
                         "/" +
-                        end.getMonth() +
+                        (end.getMonth() + 1) +
                         "/" +
                         end.getFullYear() +
                         " at " +
