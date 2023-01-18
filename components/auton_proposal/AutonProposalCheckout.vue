@@ -2,23 +2,19 @@
     <v-container>
         <v-row justify="center">
             <v-expansion-panels accordion>
-                <v-expansion-panel v-for="(item, i) in textFields" :key="i">
-                    <v-expansion-panel-header
-                    :question="question" >Item</v-expansion-panel-header>
-                    <v-expansion-panel-content
-                    :option="option">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore
-                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                        nisi
-                        ut
-                        aliquip ex ea commodo consequat.
-                        <v-btn outlined color="primary" elevation="1" @click="edit(i)" icon small>
-                            <v-icon color="primary">{{ "mdi-pencil-outline" }}</v-icon>
-                        </v-btn>
-                        <v-btn outlined color="error" elevation="1" @click="removed(i)" icon small>
-                            <v-icon color="error">{{ "mdi-trash-can-outline" }}</v-icon>
-                        </v-btn>
+                <v-expansion-panel v-for="(item, i) in questions" :key="i">
+                    <v-expansion-panel-header class="text--primary text-h6">{{item.question}}</v-expansion-panel-header>
+                    <v-expansion-panel-content v-for="(items, is) in item.options" :key="is">
+                      <v-text-field v-on:input="edit(items)" dense :value="items">
+                        <v-icon slot="prepend-inner" v-text="'mdi-numeric-' + (is + 1)"></v-icon>
+                      </v-text-field>
+
+<!--                        <v-btn outlined color="primary" elevation="1" @click="edit(item)" icon small>-->
+<!--                            <v-icon color="primary">{{ "mdi-pencil-outline" }}</v-icon>-->
+<!--                        </v-btn>-->
+<!--                        <v-btn outlined color="error" elevation="1" @click="removed(item)" icon small>-->
+<!--                            <v-icon color="error">{{ "mdi-trash-can-outline" }}</v-icon>-->
+<!--                        </v-btn>-->
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -28,6 +24,7 @@
 
 <script>
 export default {
+  props: ["disabledNext", "questions"],
     data: () => ({
         valid: false,
         dialog: false,
@@ -36,11 +33,11 @@ export default {
         textFieldsAmount: 2,
         isUpdating: true,
         users: [{ header: "Most recent users" }],
-        question: "",
         option: "",
     }),
     methods: {
-        edit(index) {
+        edit(value) {
+          console.log(value)
 
         },
         removed(index) {

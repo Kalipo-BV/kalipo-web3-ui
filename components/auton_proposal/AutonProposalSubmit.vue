@@ -124,7 +124,7 @@
 
       <v-card-text v-if="step == 'question-answer'">
         <AutonStepperHeader
-        title="question"
+        title="Questions"
         subtitle=""
         ></AutonStepperHeader>
 
@@ -146,6 +146,7 @@
         <AutonProposalCheckout
         class="mt-4"
         :autonId="autonId"
+        :questions="choicesAnswer"
         :selectedProposalType="selectedProposalType"
         ></AutonProposalCheckout>
       </v-card-text>

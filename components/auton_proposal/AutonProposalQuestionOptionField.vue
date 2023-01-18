@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  props: ["disabledNext", "autonId", "question"],
+  props: ["disabledNext", "autonId", "question", "textfields"],
   computed: {
   },
   watch: {
