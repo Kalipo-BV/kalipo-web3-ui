@@ -7,7 +7,6 @@
                     <v-expansion-panel-content v-for="(items, is) in item.options" :key="is">
                       <v-text-field v-on:input="edit(items)" dense :value="items">
                         <v-icon slot="prepend-inner" v-text="'mdi-numeric-' + (is + 1)"></v-icon>
-
                       </v-text-field>
 
 <!--                        <v-btn outlined color="primary" elevation="1" @click="edit(item)" icon small>-->
