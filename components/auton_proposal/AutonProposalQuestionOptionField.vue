@@ -6,9 +6,7 @@
           <v-card-subtitle class="text--primary text-h4">{{question}}</v-card-subtitle>
         </v-row>
         <v-row justify="center" dense>
-          <v-col cols="1">
             <v-label>{{ textFieldsAmount }}/4</v-label>
-          </v-col>
         </v-row>
         <v-container id="scroll-target" style=" max-height: 280px" class="overflow-y-auto">
           <v-row v-scroll:#scroll-target="onScroll">
@@ -26,7 +24,7 @@
         </v-container>
         <v-row justify="center">
           <v-col cols="1" class="pl-1">
-            <v-btn class="accent" color="white" :disabled="textFieldsAmount > 3" @click="add" icon>
+            <v-btn class="secondary" color="white" :disabled="textFieldsAmount > 3" @click="add" icon small>
               <v-icon>{{ "mdi-plus" }}</v-icon>
             </v-btn>
           </v-col>
@@ -78,6 +76,7 @@ export default {
     add() {
       this.textFields.push({ label: "Option", value: "" })
       this.textFieldsAmount++
+
     },
     removed(index) {
       this.textFields.splice(index, 1)

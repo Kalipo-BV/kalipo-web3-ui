@@ -2,19 +2,12 @@
     <v-container>
         <v-row justify="center">
             <v-expansion-panels accordion>
-                <v-expansion-panel v-for="(item, i) in questions" :key="i">
+                <v-expansion-panel v-for="(item, i) in this.questions" :key="i">
                     <v-expansion-panel-header class="text--primary text-h6">{{item.question}}</v-expansion-panel-header>
                     <v-expansion-panel-content v-for="(items, is) in item.options" :key="is">
-                      <v-text-field v-on:input="edit(items)" dense :value="items">
-                        <v-icon slot="prepend-inner" v-text="'mdi-numeric-' + (is + 1)"></v-icon>
-                      </v-text-field>
-
-<!--                        <v-btn outlined color="primary" elevation="1" @click="edit(item)" icon small>-->
-<!--                            <v-icon color="primary">{{ "mdi-pencil-outline" }}</v-icon>-->
-<!--                        </v-btn>-->
-<!--                        <v-btn outlined color="error" elevation="1" @click="removed(item)" icon small>-->
-<!--                            <v-icon color="error">{{ "mdi-trash-can-outline" }}</v-icon>-->
-<!--                        </v-btn>-->
+                      {{items}}
+                        <v-icon class="float-end" @click="edit(item.question, items)" small v-text="'mdi-pencil-outline'"></v-icon>
+                      <v-divider></v-divider>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -26,25 +19,33 @@
 export default {
   props: ["disabledNext", "questions"],
     data: () => ({
+        text: "this field was updated",
         valid: false,
-        dialog: false,
+        snackbar: false,
         offsetTop: 0,
         textFields: [{ label: "Option", value: "" }, { label: "Option", value: "" }],
         textFieldsAmount: 2,
         isUpdating: true,
         users: [{ header: "Most recent users" }],
-        option: "",
+        questions: [],
     }),
     methods: {
-        edit(value) {
-          console.log(value)
-
+        edit(question, option) {
+          // updates do  work but needs to be frontend implemented.
+          // (this.text will replace old values in this.questions)
+          let objIndex = this.questions.findIndex((obj => obj.question == question));
+          if (this.questions[objIndex].options.includes(option)){
+            var index = this.questions[objIndex].options.indexOf(option)
+            this.questions[objIndex].options[index] = this.text;
+            console.log(this.questions)
+            this.dialog = false;
+            }
+          }
         },
         removed(index) {
             this.textFields.splice(index, 1)
             this.textFieldsAmount--
             this.getChoicesMessage();
         },
-    }
 }
 </script>

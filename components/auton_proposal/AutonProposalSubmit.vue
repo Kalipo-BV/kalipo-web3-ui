@@ -125,7 +125,7 @@
       <v-card-text v-if="step == 'question-answer'">
         <AutonStepperHeader
         title="Questions"
-        subtitle=""
+        subtitle="Answer the previously established questions to the best of your ability"
         ></AutonStepperHeader>
 
         <AutonProposalQuestionOptionField
@@ -139,8 +139,8 @@
 
       <v-card-text v-if="step == 'check-out'">
         <AutonStepperHeader
-        :title="title"
-        :subtitle="subTitle"
+        title="Are you sure?"
+        subtitle="Make sure all the questions are entered correctly"
         ></AutonStepperHeader>
 
         <AutonProposalCheckout
@@ -285,6 +285,7 @@ export default {
         this.step = "title-description";
       }
       else if (this.step == "question-answer" && this.selectedProposalType == "questionnaire") {
+        // here buildPreviousQuestion should get implemented.
         this.step = "questions"
       }
       else if (this.step == "check-out" && this.selectedProposalType == "questionnaire") {
