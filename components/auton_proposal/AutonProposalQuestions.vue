@@ -2,25 +2,19 @@
     <div>
         <v-form v-model="valid">
             <v-card-text>
-                <v-row justify="center" dense>
-                    <v-col cols="1" md="2">
-                        <v-label>{{ textFieldsAmount }}/50</v-label>
-                    </v-col>
+                <v-row class="justify-center" dense>
+                  <v-label>{{ textFieldsAmount }}/50</v-label>
                 </v-row>
                 <v-container id="scroll-target" style="max-height: 280px" class="overflow-y-auto">
                     <v-row v-scroll:#scroll-target="onScroll">
                         <v-col cols="12" v-for="(textField, i) in textFields" :key="i" class="text-fields-row">
                             <v-row>
-                                <v-col cols="11" class="py-0">
-                                    <v-text-field v-on:input="getChoicesMessage" v-model="textField.value" :label="i + 1 + ') Question *'" required
-                                        counter maxlength="100"></v-text-field>
-                                </v-col>
-                                <v-col cols="1" class="px-1">
-                                    <v-btn outlined color="error" :disabled="textFieldsAmount == 2" @click="removed(i)"
-                                        elevation="1" icon small>
-                                        <v-icon color="error">{{ "mdi-trash-can-outline" }}</v-icon>
-                                    </v-btn>
-                                </v-col>
+                                  <v-col cols="12" class="py-0">
+                                    <v-text-field v-on:input="getChoicesMessage" v-model="textField.value" required counter maxlength="100">
+                                      <v-icon slot="prepend-inner" v-text="'mdi-numeric-' + (i + 1)"></v-icon>
+                                      <v-icon slot="append" color="error" :disabled="textFieldsAmount == 2" @click="removed(i)">{{ "mdi-trash-can-outline" }}</v-icon>
+                                    </v-text-field>
+                                  </v-col>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -35,6 +29,7 @@
                 <small>*required field</small>
             </v-card-text>
         </v-form>
+      <v-divider></v-divider>
     </div>
 </template>
 
