@@ -391,8 +391,7 @@ export default {
           campaignComment: this.descriptionMessage,
           proposalType: "questionnaire",
           autonId: this.autonId,
-          question: this.titleMessage,
-          answers: this.choicesMessage,
+          content: this.choicesAnswer,
         };
         this.transaction.moduleId = 1004;
         this.transaction.assetId = 2;
