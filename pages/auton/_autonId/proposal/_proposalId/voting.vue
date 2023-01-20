@@ -146,7 +146,9 @@
         :countPerAnswer="countPerAnswer" 
         :choices="answers"></PollVoteChart>
         <ProposalQuestionnaireOverview 
-        v-if="!membership && !voted && !questionnaire" ></ProposalQuestionnaireOverview>
+        v-if="!membership && !voted && !questionnaire"
+        :statement="statement"
+        :choices="answers" ></ProposalQuestionnaireOverview>
         <PollVoteChart 
         v-if="!membership && !voted && questionnaire"></PollVoteChart>
       </v-col>
@@ -281,6 +283,22 @@ export default {
 
         this.description = commentWrapper.result.comment;
 
+        for ( let i = 0; i < this.proposal.questionnaireArguments.question.length; i++) {
+          this.statement.push(this.proposal.questionnaireArguments.question[i]);
+          for (let i = 0; i < this.proposal.questionnaireArguments.answers.length; i++) {
+            this.answers.push(this.proposal.questionnaireArguments.answers[i].answer);
+            this.countPerAnswer.push(parseInt(this.proposal.questionnaireArguments.answers[i].count));
+            this.totalCounts += parseInt(this.proposal.questionnaireArguments.answers[i].count);
+          }
+        }
+        if (localStorage.getItem("votedProposals") != null) {
+          const votedProposals = JSON.parse(localStorage.getItem("votedProposals"))
+          for (let i = 0; i < votedProposals.length; i++) {
+            if (this.proposalId == votedProposals[i]) {
+              this.questionnaire = true;
+            }
+          }
+        }
       }
 
       if (this.proposalType == "multi-choice-poll") {
