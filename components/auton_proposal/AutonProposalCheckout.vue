@@ -38,7 +38,6 @@ export default {
             var index = this.questions[objIndex].options.indexOf(option)
             this.questions[objIndex].options[index] = this.text;
             console.log(this.questions)
-            this.dialog = false;
             }
           }
         },
