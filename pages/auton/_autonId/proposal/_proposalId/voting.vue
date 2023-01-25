@@ -282,15 +282,19 @@ export default {
         });
 
         this.description = commentWrapper.result.comment;
+        console.log("hi", this.proposal)
 
-        for ( let i = 0; i < this.proposal.questionnaireArguments.question.length; i++) {
-          this.statement.push(this.proposal.questionnaireArguments.question[i]);
-          for (let i = 0; i < this.proposal.questionnaireArguments.answers.length; i++) {
-            this.answers.push(this.proposal.questionnaireArguments.answers[i].answer);
-            this.countPerAnswer.push(parseInt(this.proposal.questionnaireArguments.answers[i].count));
-            this.totalCounts += parseInt(this.proposal.questionnaireArguments.answers[i].count);
+        for ( let i = 0; i < this.proposal.questionnaireArguments.content.length; i++) {
+          console.log("hi", this.proposal.questionnaireArguments)
+          this.statement.push(this.proposal.questionnaireArguments.content[i].question);
+          for (let j = 0; j < this.proposal.questionnaireArguments.content[i].options.length; j++) {
+            this.answers.push(this.proposal.questionnaireArguments.content[i].options[j].option);
+            this.countPerAnswer.push(parseInt(this.proposal.questionnaireArguments.content[i].options[j].count));
+            this.totalCounts += parseInt(this.proposal.questionnaireArguments.content[i].options[j].count);
           }
         }
+        console.log("a",this.statement);
+        console.log("b",this.answers);
         if (localStorage.getItem("votedProposals") != null) {
           const votedProposals = JSON.parse(localStorage.getItem("votedProposals"))
           for (let i = 0; i < votedProposals.length; i++) {
