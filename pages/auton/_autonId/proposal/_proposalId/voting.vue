@@ -148,7 +148,7 @@
         <ProposalQuestionnaireOverview 
         v-if="!membership && !voted && !questionnaire"
         :statement="statement"
-        :choices="answers" ></ProposalQuestionnaireOverview>
+        :choices="answers"></ProposalQuestionnaireOverview>
         <PollVoteChart 
         v-if="!membership && !voted && questionnaire"></PollVoteChart>
       </v-col>
@@ -182,7 +182,7 @@ export default {
     questionnaire: false,
     quorum: 0,
     refuseCount: 0,
-    statement: null,
+    statement: [],
     submitter: null,
     transaction: {
       moduleId: 1005,
@@ -293,8 +293,7 @@ export default {
             this.totalCounts += parseInt(this.proposal.questionnaireArguments.content[i].options[j].count);
           }
         }
-        console.log("a",this.statement);
-        console.log("b",this.answers);
+     
         if (localStorage.getItem("votedProposals") != null) {
           const votedProposals = JSON.parse(localStorage.getItem("votedProposals"))
           for (let i = 0; i < votedProposals.length; i++) {
