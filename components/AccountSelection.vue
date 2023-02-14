@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -119,6 +119,8 @@ export default {
         for (let index = 0; index < nameList.length; index++) {
           if (index < 3) {
             const element = nameList[index];
+            if (!element) break // if value is empty it gets skipped
+
             result += element[0].toUpperCase();
           } else {
             break;

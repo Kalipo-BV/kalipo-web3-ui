@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 -->
 
 <template>
-  <v-container style="height: 100%">
+  <v-container style="height: 100%" :class="getStyle()">
     <div class="d-flex align-center justify-center" style="height: 100%">
       <AccountSelection
         class="mt-4"
@@ -40,7 +40,7 @@
         </div>
 
         <div class="d-flex align-center justify-center">
-          <div>
+          <div @click="setScreen('AccountLogin')">
             <OptionCard
               icon="mdi-card-account-details-star"
               title="Add existing account"
@@ -58,6 +58,8 @@
           </div>
         </div>
       </div>
+
+      <AccountLogin class="mt-4" v-if="screen == 'AccountLogin'"></AccountLogin>
 
       <AccountSign class="mt-4" v-if="screen == 'AccountSign'"></AccountSign>
 
@@ -108,6 +110,9 @@ import * as cryptography from "@liskhq/lisk-cryptography";
 
 export default {
   layout: "wallet",
+  components: {
+    Keypress: () => import("vue-keypress"),
+  },
   data: () => ({
     screen: "AccountSelection",
     selectedId: "",
@@ -157,6 +162,10 @@ export default {
     this.$nuxt.$on("IAH-setCreatedAccountAsUnlocked", ($event) =>
       this.setCreatedAccountAsUnlocked($event)
     );
+    this.$nuxt.$on("IAH-newKalipoAccount", (passphrase) => {
+      this.accountToBeCreated.passphrase = passphrase;
+      this.showPassphrase("newKalipoAccount");
+    });
   },
   mounted: function () {
     this.$nuxt.$emit("MainMenu-setPage", "wallet");
@@ -167,15 +176,16 @@ export default {
       localData = {};
     }
     this.accounts = localData;
-    console.log(
-      cryptography
-        .getAddressFromPassphrase(
-          "inquiry reward link apart knife time cable foam alpha town invest illegal"
-        )
-        .toString("hex")
-    );
   },
   methods: {
+    setScreen(string) {
+      this.screen = string;
+    },
+    getStyle() {
+      return this.$vuetify.breakpoint.smAndDown
+        ? ""
+        : "d-flex align-center justify-center";
+    },
     getAccount() {
       return this.accounts[this.selectedId];
     },
@@ -210,8 +220,27 @@ export default {
       this.screen = "ChooseOperation";
     },
     showPassphrase(regenerate) {
+      // voor nieuw account aanmaken met bestaande Lisk passphrase, niet helemaal netjes idd
+      if (regenerate == "newKalipoAccount") {
+        const { address, publicKey } =
+          cryptography.getAddressAndPublicKeyFromPassphrase(
+            this.accountToBeCreated.passphrase
+          );
+        this.accountToBeCreated.address = address;
+        this.accountToBeCreated.publicKey = publicKey;
+
+        this.accountToBeCreated.password = "";
+        this.accountToBeCreated.username = "";
+        this.accountToBeCreated.name = "";
+        this.accountToBeCreated.pin = "";
+        this.screen = "AccountPassphrase";
+        return;
+      }
+
       if (regenerate) {
         this.accountToBeCreated.passphrase = Mnemonic.generateMnemonic();
+
+        console.log(this.accountToBeCreated.passphrase);
 
         const { address, publicKey } =
           cryptography.getAddressAndPublicKeyFromPassphrase(
@@ -232,7 +261,6 @@ export default {
     },
     addExistingAccount() {},
     showProfile() {
-      console.log(this.accountToBeCreated);
       this.screen = "AccountProfile";
     },
     showEncryptionPin() {
@@ -254,12 +282,9 @@ export default {
           }
         );
 
-        console.log(accountIdWrapper);
-
         const account = await that.$invoke("kalipoAccount:getByID", {
           id: accountIdWrapper.result.id,
         });
-        console.log(account);
 
         const frontAccount = {
           accountId: accountIdWrapper.result.id,
@@ -271,15 +296,12 @@ export default {
           socials: account.result.socials,
         };
 
-        console.log(frontAccount);
-
         that.$store.commit("wallet/add", frontAccount);
         that.$store.commit("wallet/unlock", frontAccount);
         that.showCreationSuccess();
       }, 10000);
     },
     deleteFromLocalStorage(publicKey) {
-      console.log(publicKey);
       const kalipoAccouunts = localStorage.getItem("kalipo-accounts");
       let localData = JSON.parse(kalipoAccouunts);
       if (localData == null) {
@@ -288,14 +310,11 @@ export default {
 
       delete localData[publicKey];
       delete this.accounts[publicKey];
-      console.log("OUI");
-      console.log(this.accounts);
 
       const localDataStr = JSON.stringify(localData);
       localStorage.setItem("kalipo-accounts", localDataStr);
 
       let test = localStorage.getItem("kalipo-accounts");
-      console.log(JSON.parse(test));
     },
     toLocalStorage(account) {
       const kalipoAccouunts = localStorage.getItem("kalipo-accounts");
@@ -308,12 +327,9 @@ export default {
       const localDataStr = JSON.stringify(localData);
       localStorage.setItem("kalipo-accounts", localDataStr);
 
-      let test = localStorage.getItem("kalipo-accounts");
-      console.log(JSON.parse(test));
+      // let test = localStorage.getItem("kalipo-accounts");
     },
     async createNewAccount(accountToBeCreated, toLocalStorage) {
-      console.log("encryption triggered");
-
       // Pin(Passphrase)
       const encryptedLayerOne = cryptography.encryptPassphraseWithPassword(
         accountToBeCreated.passphrase,
@@ -324,8 +340,6 @@ export default {
       const encryptedLayerOneStr = JSON.stringify(encryptedLayerOne);
       this.accountToBeCreated.crypt = encryptedLayerOneStr;
 
-      console.log(encryptedLayerOne);
-
       // Password(Pin(Passphrase))
       const encryptedLayerTwo = cryptography.encryptPassphraseWithPassword(
         encryptedLayerOneStr,
@@ -334,13 +348,10 @@ export default {
       );
       encryptedLayerTwo.layer = 2;
 
-      console.log(encryptedLayerTwo);
-
       const decryptToLayerOneStr = cryptography.decryptPassphraseWithPassword(
         encryptedLayerTwo,
         accountToBeCreated.password
       );
-      console.log(decryptToLayerOneStr);
       const decryptToLayerOneObj = JSON.parse(decryptToLayerOneStr);
       const decryptToPassphrase = cryptography.decryptPassphraseWithPassword(
         decryptToLayerOneObj,

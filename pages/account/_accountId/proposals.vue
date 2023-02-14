@@ -26,11 +26,12 @@
                 <v-row>
                   <v-col cols="12" md="4">
                     <v-text-field
-                      prepend-inner-icon="mdi-magnify"
-                      label="Search"
+                      append-icon="mdi-magnify"
+                      label="Search a proposal"
                       solo
                       hide-details
                       v-model="search"
+                      style="max-width: 250px"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -152,8 +153,6 @@ export default {
         });
         const membership = membershipWrapper.result;
 
-        console.log(membership);
-
         for (let z = 0; z < membership.proposals.length; z++) {
           const proposalId = membership.proposals[z];
 
@@ -194,7 +193,6 @@ export default {
             author: "@" + this.account.username,
             result: proposalWrapper.result.binaryVoteResult.result,
           });
-          console.log(this.proposals);
         }
       }
     }
@@ -218,7 +216,6 @@ export default {
       return "accent";
     },
     navigate(index) {
-      console.log(this.autons[index].autonProfile.name);
       this.$router.push(
         "/auton/" +
           this.autons[index].autonProfile.name
@@ -230,5 +227,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

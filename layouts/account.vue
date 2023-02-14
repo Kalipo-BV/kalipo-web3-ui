@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -34,10 +34,13 @@
                       </div></v-avatar
                     >
                     <div class="ml-2">
-                      <div class="text-h3 primary--text">
+                      <div class="text-h3 primary--text mb-n1">
                         {{ this.account.name }}
                       </div>
-                      <div class="d-flex align-center text-caption">
+                      <div class="text-caption secondary--text">
+                        @{{ this.account.username }}
+                      </div>
+                      <div class="d-flex align-center text-caption mt-1">
                         <v-avatar
                           size="12"
                           color="success"
@@ -53,22 +56,20 @@
             </v-container>
           </v-row>
           <template v-slot:extension>
-            <v-row>
-              <v-container
-                ><v-tabs v-model="selectedItem">
-                  <v-tabs-slider color="primary"></v-tabs-slider>
+            <v-container>
+              <v-tabs show-arrows v-model="selectedItem">
+                <v-tabs-slider color="primary"></v-tabs-slider>
 
-                  <v-tab
-                    v-for="(item, idx) in tabItems"
-                    :key="idx"
-                    @click="navigate(item.to)"
-                  >
-                    <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                    {{ item.title }}
-                  </v-tab>
-                </v-tabs></v-container
-              ></v-row
-            >
+                <v-tab
+                  v-for="(item, idx) in tabItems"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
+              </v-tabs>
+            </v-container>
           </template>
         </v-app-bar>
         <Nuxt class="mt-n2" />
@@ -127,11 +128,17 @@ export default {
           title: "Personal votes",
           to: "votes",
         },
+        {
+          icon: "mdi-trophy",
+          title: "Personal poas",
+          to: "poas",
+        },
       ],
     };
   },
   created() {
     this.$nuxt.$on("Account-setPage", (page) => this.setMenu(page));
+    this.$nuxt.$on("Account-setAccount", (account) => (this.account = account));
   },
   methods: {
     navigate(to) {
@@ -150,7 +157,7 @@ export default {
         this.selectedItem = 2;
       } else if (page === "votes") {
         this.selectedItem = 3;
-      } else if (page === "comments") {
+      } else if (page === "poas") {
         this.selectedItem = 4;
       }
     },
@@ -169,9 +176,21 @@ export default {
         return result;
       }
     },
+    accountId() {
+      return this.$route.params.accountId;
+    },
+    getAccount() {
+      return this.$store.state.wallet.account;
+    },
   },
   async mounted() {
-    this.$nuxt.$emit("MainMenu-setPage", "users");
+    if (this.accountId() === this.getAccount().username) {
+      this.$nuxt.$emit("MainMenu-setPage", "my profile");
+      this.account = this.getAccount();
+      return;
+    } else {
+      this.$nuxt.$emit("MainMenu-setPage", "users");
+    }
 
     let accountIdParam = this.$route.params.accountId;
     if (accountIdParam.indexOf("@") == 0) {
@@ -196,5 +215,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>

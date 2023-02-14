@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,21 +16,15 @@
 -->
 
 <template>
-  <div>
+  <v-container>
+    <Keypress key-event="keyup" :key-code="13" @success="next" v-if="valid" />
     <v-card width="700">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
           Encrypt your passphrase
         </div>
         <div
-          class="
-            text-body-1
-            primary--text
-            d-flex
-            justify-center
-            mt-2
-            text-center
-          "
+          class="text-body-1 primary--text d-flex justify-center mt-2 text-center"
         >
           <div style="max-width: 300px">
             Your passphrase is going to be saved in this browser. It needs a
@@ -42,7 +36,7 @@
       <v-divider></v-divider>
 
       <v-card-text>
-        <v-form v-model="valid">
+        <v-form v-model="valid" @submit.prevent>
           <v-text-field
             v-model="passwordInput"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -71,10 +65,13 @@
         </v-row>
       </v-card-text>
     </v-card>
-  </div>
+  </v-container>
 </template>
 <script>
 export default {
+  components: {
+    Keypress: () => import("vue-keypress"),
+  },
   props: ["password"],
   computed: {
     passwordInput: {
@@ -90,7 +87,7 @@ export default {
     valid: false,
     show1: false,
     rules: {
-      required: (value) => !!value || "Required.",
+      required: (value) => !!value || "Required",
       min: (v) => v.length >= 12 || "Min 12 characters",
       max: (v) => v.length <= 256 || "Max 256 characters",
     },

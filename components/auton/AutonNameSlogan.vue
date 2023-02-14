@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-form v-model="valid">
+    <v-form v-model="valid" @submit.prevent>
       <v-text-field
         solo
         label="Name"
@@ -100,7 +100,6 @@ export default {
           name: this.nameValue,
         }
       );
-      console.log(existingAutonIdWrapper);
       if (existingAutonIdWrapper.result !== null) {
         this.autonErrorMessage = "Auton name is already taken";
         setTimeout(() => {

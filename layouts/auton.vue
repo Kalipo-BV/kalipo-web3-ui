@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
   <v-app id="auton-layout">
     <v-main class="primary">
       <div style="height: 100%; background: #eef1f6">
-        <v-app-bar height="108px" color="white" flat>
+        <v-app-bar height="148px" color="white" flat>
           <v-row>
             <v-container>
               <v-row no-gutters class="d-flex align-center">
@@ -64,30 +64,72 @@
                   </div>
                 </v-col>
                 <v-col class="d-flex justify-end">
-                  <v-btn color="accent" @click="dialog = !dialog">
+                  <v-btn
+                    v-if="auton.type == 'DEFAULT'"
+                    class="mr-12"
+                    color="accent"
+                    @click="dialog = !dialog"
+                  >
                     New proposal
+                  </v-btn>
+                  <v-btn
+                    v-if="auton.type == 'EVENT'"
+                    class="mr-12"
+                    color="accent"
+                    @click="dialog = !dialog"
+                    :disabled="authorizedAddAttendee"
+                  >
+                    Add attendee
+                  </v-btn>
+                  <v-btn
+                    v-if="auton.type == 'LESSON'"
+                    class="mr-12"
+                    color="accent"
+                    :disabled="authorizedAddAttendee"
+                    @click="dialog = !dialog"
+                  >
+                    Check in/out
                   </v-btn>
                 </v-col>
               </v-row>
             </v-container>
           </v-row>
           <template v-slot:extension class="mt-2">
-            <v-row>
-              <v-container
-                ><v-tabs v-model="selectedItem">
-                  <v-tabs-slider color="primary"></v-tabs-slider>
+            <v-container
+              ><v-tabs show-arrows v-model="selectedItem">
+                <v-tabs-slider color="primary"></v-tabs-slider>
 
-                  <v-tab
-                    v-for="(item, idx) in tabItems"
-                    :key="idx"
-                    @click="navigate(item.to)"
-                  >
-                    <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                    {{ item.title }}
-                  </v-tab>
-                </v-tabs>
-              </v-container>
-            </v-row>
+                <v-tab
+                  v-if="auton.type == 'DEFAULT'"
+                  v-for="(item, idx) in tabItemsDefault"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
+
+                <v-tab
+                  v-if="auton.type == 'EVENT'"
+                  v-for="(item, idx) in tabItemsEvent"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
+
+                <v-tab
+                  v-if="auton.type == 'LESSON'"
+                  v-for="(item, idx) in tabItemsLesson"
+                  :key="idx"
+                  @click="navigate(item.to)"
+                >
+                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                  {{ item.title }}
+                </v-tab>
+              </v-tabs>
+            </v-container>
           </template>
         </v-app-bar>
         <Nuxt class="mt-n2 px-8 px-lg-3" :auton="auton" />
@@ -97,16 +139,33 @@
 
     <v-dialog v-model="dialog" max-width="500">
       <AutonProposalSubmit
+        v-if="auton.type == 'DEFAULT'"
         :autonId="autondId"
         :autonName="autonName"
         callbackFinish="Auton-ProposalModalClose"
       ></AutonProposalSubmit>
+
+      <AutonAddAttendee
+        v-if="auton.type == 'EVENT'"
+        title="Inviting attendees"
+        :autonId="autondId"
+        callbackFinish="Auton-ProposalModalClose"
+      ></AutonAddAttendee>
+
+      <LessonCheckIn
+        v-if="auton.type == 'LESSON'"
+        :autonId="autondId"
+        callbackFinish="Auton-ProposalModalClose"
+      ></LessonCheckIn>
     </v-dialog>
   </v-app>
 </template>
 
 <script>
+import AutonAddAttendee from "~/components/event/AutonAddAttendee.vue";
+
 export default {
+  components: { AutonAddAttendee },
   computed: {
     xs() {
       return this.$vuetify.breakpoint.xs;
@@ -117,10 +176,18 @@ export default {
     md() {
       return this.$vuetify.breakpoint.md;
     },
+    account() {
+      return this.$store.state.wallet.account;
+    },
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
   },
   data() {
     return {
+      authorizedAddAttendee: true,
       autondId: null,
+      id: "",
       autonName: null,
       auton: {
         autonProfile: {},
@@ -130,7 +197,7 @@ export default {
       miniVariant: false,
       selectedItem: 0,
       userLang: null,
-      tabItems: [
+      tabItemsDefault: [
         {
           icon: "mdi-monitor-dashboard",
           title: "Dashboard",
@@ -152,16 +219,68 @@ export default {
           to: "constitution",
         },
       ],
+      tabItemsEvent: [
+        {
+          icon: "mdi-monitor-dashboard",
+          title: "Dashboard",
+          to: "/",
+        },
+        {
+          icon: "mdi-trophy",
+          title: "Poas",
+          to: "poas",
+        },
+        {
+          icon: "mdi-account-group",
+          title: "Attendees",
+          to: "attendees",
+        },
+      ],
+      tabItemsLesson: [
+        {
+          icon: "mdi-monitor-dashboard",
+          title: "Dashboard",
+          to: "/",
+        },
+        {
+          icon: "mdi-trophy",
+          title: "Poas",
+          to: "poas",
+        },
+        {
+          icon: "mdi-account-group",
+          title: "Students",
+          to: "students",
+        },
+      ],
     };
   },
   created() {
     this.$nuxt.$on("Auton-setPage", (page) => this.setMenu(page));
-    this.$nuxt.$on(
-      "Auton-ProposalModalClose",
-      ($event) => (this.dialog = false)
-    );
+    this.$nuxt.$on("Auton-ProposalModalClose", (newSelectedItem) => {
+      this.dialog = false;
+      this.selectedItem = newSelectedItem;
+    });
   },
   methods: {
+    async authorized() {
+      if (this.unlocked) {
+        const memberships = this.$store.state.wallet.account.memberships;
+        memberships.forEach(async (element) => {
+          const mship = await this.$invoke("membership:getByID", {
+            id: element,
+          });
+          if (
+            mship.result.autonId == this.id &&
+            mship.result.role == "FULL_MEMBER"
+          ) {
+            this.authorizedAddAttendee = false;
+          }
+        });
+      } else {
+        return true;
+      }
+    },
     setMenu(page) {
       if (page === "dashboard") {
         this.selectedItem = 0;
@@ -171,6 +290,10 @@ export default {
         this.selectedItem = 2;
       } else if (page === "constitution") {
         this.selectedItem = 3;
+      } else if (page === "poas") {
+        this.selectedItem = 2;
+      } else if (page === "attendees") {
+        this.selectedItem = 2;
       }
     },
     navigate(to) {
@@ -189,21 +312,22 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: urlParam,
     });
-    console.log(autonIdWrapper);
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + urlParam;
     } else {
       this.autondId = autonIdWrapper.result.id;
+
+      this.id = autonIdWrapper.result.id;
       const autonWrapper = await this.$invoke("auton:getByID", {
         id: autonIdWrapper.result.id,
       });
       this.auton = autonWrapper.result;
       this.autonName = autonWrapper.result.autonProfile.name;
-      console.log(this.auton);
     }
+
+    this.authorized();
   },
 };
 </script>
-<style>
-</style>
+<style></style>

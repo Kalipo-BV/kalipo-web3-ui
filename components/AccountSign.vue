@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-
 <template>
   <div>
+    <Keypress
+      key-event="keyup"
+      :key-code="13"
+      @success="sign"
+      v-if="pin.length === 6 && !disabled"
+    />
+
     <v-card v-if="unlocked && (!isSigning || error)">
       <v-card-text>
         <div class="d-flex justify-center">
@@ -59,7 +65,7 @@
     </v-card>
     <v-card v-if="isSigning && error == null" class="py-6">
       <WaitingAnimation
-        subtitle="Wating for next block"
+        subtitle="Waiting for next block"
         :title="title"
       ></WaitingAnimation>
     </v-card>
@@ -75,12 +81,16 @@
 </template>
 <script>
 export default {
+  components: {
+    Keypress: () => import("vue-keypress"),
+  },
   props: ["transaction", "uri", "title", "callback", "callbackFinish"],
   data: () => ({
     isSigning: false,
     pin: "",
     error: null,
     disabled: false,
+    lessonPoaTransactionWrapper: null,
   }),
   computed: {
     account() {
@@ -98,8 +108,6 @@ export default {
     },
     async sign() {
       this.isSigning = true;
-      console.log("SIGNING");
-      console.log(this.transaction);
       const moduleId = this.transaction.moduleId;
       const assetId = this.transaction.assetId;
       const asset = this.transaction.assets;
@@ -114,7 +122,6 @@ export default {
         displayNotificationOnError
       );
 
-      console.log(transactionWrapper);
       if (!transactionWrapper.error && transactionWrapper.result.success) {
         const transactionId = Buffer.from(
           transactionWrapper.result.message.transactionId,
@@ -125,12 +132,53 @@ export default {
           { id: transactionId }
         );
 
+        // first poa for lesson
+        if (this.transaction.assets.type == "LESSON") {
+          const existingAutonIdWrapper = await this.$invoke(
+            "auton:getAutonIdByName",
+            {
+              name: this.transaction.assets.name,
+            }
+          );
+
+          const assetFirstPoa = {
+            autonId: existingAutonIdWrapper.result.id,
+            name: "Attendance",
+            staticImageId: "2",
+          };
+
+          const transactionWrapperAttendancePoa = await this.$createTransaction(
+            1008,
+            0,
+            assetFirstPoa,
+            this.pin,
+            displayNotificationOnError
+          );
+
+          const transactionIdAttendancePoa = Buffer.from(
+            transactionWrapperAttendancePoa.result.message.transactionId,
+            "hex"
+          );
+
+          const transactionAttendancePoa = await this.$invokeWithRetry(
+            "app:getTransactionByID",
+            { id: transactionIdAttendancePoa }
+          );
+        }
+
         if (transaction != null && !transaction.error) {
-          console.log("OUI");
           if (this.callbackFinish != null) {
             this.$nuxt.$emit(this.callbackFinish, true);
           }
-          this.$router.push(this.uri);
+
+
+          if (this.$route.path.endsWith("attendees/")) {
+            this.$nuxt.$emit("Auton-ProposalModalClose", 0);
+            await this.$router.push(this.uri);
+          } else {
+            this.$nuxt.$emit("Auton-ProposalModalClose", 2);
+            await this.$router.push(`${this.uri}/`);
+          }
         }
       } else {
         if (transactionWrapper.error) {
@@ -140,6 +188,16 @@ export default {
           this.disabled = true;
         }
       }
+
+      // refresh account in store
+      const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
+        id: this.account.accountId,
+      });
+
+      this.$store.commit(
+        "wallet/refreshMemberships",
+        accountWrapper.result.memberships
+      );
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {

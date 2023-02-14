@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,13 @@
 -->
 
 <template>
-  <div>
+  <v-container>
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="next"
+              v-if="valid"
+    />
+
     <v-card width="700">
       <v-card-text>
         <div class="text-h4 primary--text d-flex justify-center mt-2">
@@ -41,7 +47,7 @@
       <v-divider></v-divider>
 
       <v-card-text>
-        <v-form v-model="valid">
+        <v-form v-model="valid" @submit.prevent>
           <v-row class="register-personal-profile">
             <v-col cols="12" md="6">
               <v-text-field
@@ -87,11 +93,14 @@
         </v-row>
       </v-card-text>
     </v-card>
-  </div>
+  </v-container>
 </template>
 <script>
 import { cryptography, passphrase } from "@liskhq/lisk-client";
 export default {
+  components: {
+    Keypress: () => import('vue-keypress')
+  },
   props: ["name", "username", "passphrase", "publicKey", "address"],
   computed: {
     nameInput: {
@@ -130,7 +139,7 @@ export default {
           username: this.usernameInput,
         }
       );
-      console.log(existingAccoundIdWrapper);
+      
       if (existingAccoundIdWrapper.result !== null) {
         this.usernameErrorMessage = "Username is already taken";
         setTimeout(() => {

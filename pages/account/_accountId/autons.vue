@@ -99,7 +99,6 @@ export default {
   },
   methods: {
     navigate(index) {
-      console.log(this.autons[index].autonProfile.name);
       this.$router.push(
         "/auton/" +
           this.autons[index].autonProfile.name
@@ -111,5 +110,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

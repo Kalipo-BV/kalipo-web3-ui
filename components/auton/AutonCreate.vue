@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,10 +17,18 @@
 
 <template>
   <div class="">
+    <!--    Key code 13 is Enter key-->
+    <Keypress
+      key-event="keyup"
+      :key-code="13"
+      @success="nextStep"
+      v-if="!(disabledNext || disabledNextStep4) && step !== 6"
+    />
+
     <v-card>
       <v-card-text v-if="step == 0">
         <AutonStepperHeader
-          title="Founding a new Auton"
+          title="Founding a new auton"
           subtitle="First choose your template"
         ></AutonStepperHeader>
 
@@ -29,51 +37,150 @@
 
       <v-card-text v-if="step == 1">
         <AutonStepperHeader
-          title="Founding a new Auton"
+          v-if="template == 'DEFAULT'"
+          title="Founding a new auton"
           subtitle="Select an icon that suits your auton"
+        ></AutonStepperHeader>
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new event"
+          subtitle="Select an icon that suits your event"
+        ></AutonStepperHeader>
+        <AutonStepperHeader
+          v-if="template == 'LESSON'"
+          title="Founding a new lesson"
+          subtitle="Select an icon that suits your lesson"
         ></AutonStepperHeader>
         <AutonRandomIcons :icon.sync="icon"></AutonRandomIcons>
       </v-card-text>
 
       <v-card-text v-if="step == 2">
+        <!-- default template -->
         <AutonStepperHeader
-          title="Founding a new Auton"
+          v-if="template == 'DEFAULT'"
+          title="Founding a new auton"
           subtitle="Specify the name and slogan"
         ></AutonStepperHeader>
         <AutonNameSlogan
+          v-if="template == 'DEFAULT'"
           :name.sync="name"
           :slogan.sync="slogan"
           :disabledNext.sync="disabledNext"
         ></AutonNameSlogan>
+
+        <!-- event template -->
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new event"
+          subtitle="Specify the name and description"
+        ></AutonStepperHeader>
+        <AutonNameDescription
+          v-if="template == 'EVENT'"
+          :name.sync="name"
+          :description.sync="description"
+          :disabledNext.sync="disabledNext"
+        ></AutonNameDescription>
+
+        <!-- lesson template -->
+        <AutonStepperHeader
+          v-if="template == 'LESSON'"
+          title="Founding a new lesson"
+          subtitle="Specify all information about this lesson"
+        ></AutonStepperHeader>
+        <LessonInformation
+          v-if="template == 'LESSON'"
+          :subject.sync="subject"
+          :lessonName.sync="lessonName"
+          :description.sync="description"
+          :location.sync="location"
+          :date.sync="date"
+          :startTime.sync="startTime"
+          :endTime.sync="endTime"
+          :disabledNext.sync="disabledNext"
+          :checkoutRequired.sync="checkoutRequired"
+        ></LessonInformation>
       </v-card-text>
 
       <v-card-text v-if="step == 3">
+        <!-- default template -->
         <AutonStepperHeader
-          title="Founding a new Auton"
+          v-if="template == 'DEFAULT'"
+          title="Founding a new auton"
           subtitle="Supply a brief mission and vision statement"
         ></AutonStepperHeader>
         <AutonMissionVision
+          v-if="template == 'DEFAULT'"
           :mission.sync="mission"
           :vision.sync="vision"
           class="mt-4"
         ></AutonMissionVision>
-      </v-card-text>
 
-      <v-card-text v-if="step == 4">
+        <!-- event template -->
         <AutonStepperHeader
-          title="Founding a new Auton"
-          subtitle="Bulk invite members into your new auton"
+          v-if="template == 'EVENT'"
+          title="Founding a new event"
+          subtitle="Supply the date and time"
+        ></AutonStepperHeader>
+        <AutonStartEnd
+          v-if="template == 'EVENT'"
+          :startDate.sync="startDate"
+          :startTime.sync="startTime"
+          :endDate.sync="endDate"
+          :endTime.sync="endTime"
+          :disabledNext.sync="disabledNext"
+        ></AutonStartEnd>
+
+        <!-- lesson template -->
+        <AutonStepperHeader
+          v-if="template == 'LESSON'"
+          title="Founding a new lesson"
+          subtitle="Bulk invite students into your new lesson"
         ></AutonStepperHeader>
         <AutonUserSelect
-          :selectedFounderIds.sync="selectedFounderIds"
+          v-if="template == 'LESSON'"
+          :selectedFounderIds.sync="studentIds"
           class="mt-4"
         ></AutonUserSelect>
       </v-card-text>
 
+      <v-card-text v-if="step == 4">
+        <!-- default template -->
+        <AutonStepperHeader
+          v-if="template == 'DEFAULT'"
+          title="Founding a new auton"
+          subtitle="Bulk invite members into your new auton"
+        ></AutonStepperHeader>
+        <AutonUserSelect
+          v-if="template == 'DEFAULT'"
+          :selectedFounderIds.sync="selectedFounderIds"
+          class="mt-4"
+        ></AutonUserSelect>
+
+        <!-- event template -->
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new event"
+          subtitle="Supply some required data"
+        ></AutonStepperHeader>
+        <AutonReqData
+          v-if="template == 'EVENT'"
+          :location.sync="location"
+          :capacity.sync="capacity"
+          :price.sync="price"
+          :disabledNext.sync="disabledNext"
+        ></AutonReqData>
+      </v-card-text>
+
       <v-card-text v-if="step == 5">
         <AutonStepperHeader
-          title="Founding a new Auton"
+          v-if="template == 'DEFAULT'"
+          title="Founding a new auton"
           subtitle="Specify tags so users can find your auton"
+        ></AutonStepperHeader>
+        <AutonStepperHeader
+          v-if="template == 'EVENT'"
+          title="Founding a new event"
+          subtitle="Specify tags so users can find your event"
         ></AutonStepperHeader>
         <AutonTagSelect :tags.sync="tags" class="mt-4"></AutonTagSelect>
       </v-card-text>
@@ -81,14 +188,35 @@
       <AccountSign
         :transaction="transaction"
         :uri="uri"
-        v-if="step == 6"
+        v-if="step == 6 && template == 'DEFAULT'"
         callback="AutonCreate-PrevStep"
         title="Creating auton"
       ></AccountSign>
 
-      <v-divider v-if="step !== 6"></v-divider>
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        v-if="step == 6 && template == 'EVENT'"
+        callback="AutonCreate-PrevStep"
+        title="Creating event"
+      ></AccountSign>
 
-      <v-card-text v-if="step !== 6">
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        v-if="step == 4 && template == 'LESSON'"
+        callback="AutonCreate-PrevStep"
+        title="Creating lesson"
+      ></AccountSign>
+
+      <v-divider></v-divider>
+
+      <v-card-text
+        v-if="
+          (template == 'DEFAULT' && step < 6) ||
+          (template == 'EVENT' && step < 6)
+        "
+      >
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="step--">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
@@ -97,7 +225,26 @@
             color="accent"
             v-if="step != 6"
             @click="nextStep"
-            :disabled="disabledNext"
+            :disabled="disabledNext || disabledNextStep4"
+          >
+            next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
+          </v-btn>
+          <v-btn color="accent" v-if="step == 6" @click="step++">
+            sign <v-icon class="ml-2" small>mdi-draw-pen</v-icon>
+          </v-btn>
+        </div>
+      </v-card-text>
+
+      <v-card-text v-if="template == 'LESSON' && step < 4">
+        <div class="d-flex align-center justify-space-between">
+          <v-btn :disabled="step == 0" @click="step--">
+            <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
+          </v-btn>
+          <v-btn
+            color="accent"
+            v-if="step != 6"
+            @click="nextStep"
+            :disabled="disabledNext || disabledNextStep4"
           >
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
@@ -111,38 +258,96 @@
 </template>
 <script>
 export default {
+  components: {
+    Keypress: () => import("vue-keypress"),
+  },
   data: () => ({
     step: 0,
     uri: "",
+    template: "DEFAULT",
     transaction: {
       moduleId: 1003,
       assetId: 0,
       assets: {},
     },
-    icon: null,
-    name: null,
-    slogan: null,
-    mission: null,
-    vision: null,
+    icon: "",
+    name: "",
+    slogan: "",
+    mission: "",
+    vision: "",
     selectedFounderIds: null,
     tags: null,
     disabledNext: false,
+    disabledNextStep4: false,
+
+    // event and lesson
+    startTime: "",
+    endTime: "",
+    description: "",
+    location: "",
+    start: BigInt(1),
+    end: BigInt(1),
+
+    // event
+    startDate: "",
+    endDate: "",
+    capacity: 0,
+    price: 0,
+
+    // lesson
+    subject: "",
+    lessonName: "",
+    date: "",
+    studentIds: [],
+    checkoutRequired: false,
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
     this.$nuxt.$on("AutonCreate-PrevStep", ($event) => this.step--);
+    this.$nuxt.$on(
+      "OptionCard-SelectTemplate",
+      ($event) => (this.template = $event)
+    );
   },
   methods: {
     makeTransaction() {},
     nextStep() {
       this.step++;
 
-      // The transaction prop interface:
-      // {
-      //   moduleId: 0,
-      //   assetId: 0,
-      //   assets: {};
-      // }
+      if (this.step == 4 && this.template == "LESSON") {
+        this.uri = `auton/${this.lessonName.replace(" ", "_")}`;
+
+        if (this.date != "") {
+          this.start = BigInt(
+            new Date(this.date + ":" + this.startTime).getTime()
+          );
+          this.end = BigInt(new Date(this.date + ":" + this.endTime).getTime());
+        }
+
+        // auton lesson asset
+        const asset = {
+          icon: this.icon,
+          name: this.lessonName,
+          subtitle: "",
+          mission: "",
+          vision: "",
+          bulkInviteAccountIds: this.studentIds,
+          tags: [],
+          type: this.template,
+          location: this.location,
+          price: BigInt(0),
+          capacity: BigInt(0),
+          description: this.description,
+          start: this.start,
+          end: this.end,
+          subject: this.subject,
+          // het is geen fout dat dit een string is, voor een of ander manier accepteert lisk het niet als boolean
+          checkoutRequired: this.checkoutRequired ? "true" : "false",
+        };
+
+        this.transaction.assets = asset;
+      }
+
       if (this.step == 6) {
         this.uri = `auton/${this.name.replace(" ", "_")}`;
 
@@ -158,6 +363,17 @@ export default {
         if (this.selectedFounderIds == null) {
           this.selectedFounderIds = [];
         }
+        if (this.startDate != "") {
+          this.start = BigInt(
+            new Date(this.startDate + ":" + this.startTime).getTime()
+          );
+        }
+        if (this.endDate != "") {
+          this.end = BigInt(
+            new Date(this.endDate + ":" + this.endTime).getTime()
+          );
+        }
+
         const asset = {
           icon: this.icon,
           name: this.name,
@@ -166,17 +382,19 @@ export default {
           vision: this.vision,
           bulkInviteAccountIds: this.selectedFounderIds,
           tags: this.tags,
+          type: this.template,
+          location: this.location,
+          price: BigInt(this.price),
+          capacity: BigInt(this.capacity.toString()),
+          description: this.description,
+          start: this.start,
+          end: this.end,
+          subject: "",
+          checkoutRequired: null,
         };
+
         this.transaction.assets = asset;
       }
-
-      console.log(this.icon);
-      console.log(this.name);
-      console.log(this.slogan);
-      console.log(this.mission);
-      console.log(this.vision);
-      console.log(this.selectedFounderIds);
-      console.log(this.tags);
     },
   },
 };

@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 -->
 
 <template>
-  <div class="text-center master">
+  <v-container class="text-center master">
     <div v-if="!error">
       <div class="d-flex justify-center align-center">
         <div class="" v-if="encrypting">
@@ -51,7 +51,7 @@
     <div v-if="error">
       <div class="text-h4 error--text">{{ errorMessage }}</div>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -81,7 +81,7 @@ export default {
     });
   },
   async mounted() {
-    console.log(Buffer.from(this.address).toString("hex"));
+    
     const create = await this.$invoke("kalipoAccount:registerNewAccount", {
       accountAddress: Buffer.from(this.address).toString("hex"),
     });
@@ -127,8 +127,7 @@ export default {
           }
         }
       } catch (error) {
-        console.log("ERRROR");
-        console.log(error);
+        
         this.retriesLeft--;
         if (this.retriesLeft === 0) {
           this.error = true;

@@ -246,7 +246,7 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    console.log(autonIdWrapper);
+    
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
@@ -327,8 +327,8 @@ export default {
 
       const client = await this.$client();
       client.subscribe("vote:newVote", async (data) => {
-        console.log("NEW  VOTE");
-        console.log(data);
+        
+        
         if (
           !this.voteIds.includes(data.id) &&
           data.vote.proposalId == this.proposalId
@@ -345,13 +345,13 @@ export default {
       });
 
       client.subscribe("proposal:gotDecided", async (data) => {
-        console.log("GOT DECIDED");
-        console.log(data);
+        
+        
         if (data.id == this.proposalId) {
           this.proposal = data.proposal;
         }
       });
-      console.log(this.proposal);
+      
     }
   },
   methods: {

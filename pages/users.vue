@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,17 @@
 
 <template>
   <v-container style="height: 100%">
-    <v-row dense>
-      <v-col cols="3" v-for="(account, index) in accounts" :key="index">
+    <v-text-field
+      v-if="accounts.length != null"
+      solo
+      label="Search a user"
+      append-icon="mdi-magnify"
+      class="mt-4"
+      style="max-width: 250px"
+      v-model="search"
+    ></v-text-field>
+    <v-row align="stretch" dense>
+      <v-col cols="12" md="3" v-for="(account, index) in filtered" :key="index">
         <MemberCard :member="account"></MemberCard>
         <!-- {{ account }} -->
       </v-col>
@@ -26,18 +35,24 @@
   </v-container>
 </template>
 <script>
-import { Mnemonic } from "@liskhq/lisk-passphrase";
-import * as cryptography from "@liskhq/lisk-cryptography";
-
 export default {
   layout: "wallet",
-  data: () => ({ accounts: [] }),
+  data: () => ({ accounts: [], search: "" }),
   created() {},
+  computed: {
+    filtered() {
+      return this.accounts.filter((acc) =>
+        acc.account.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
+  },
   mounted: async function () {
     this.$nuxt.$emit("MainMenu-setPage", "users");
 
     const kalipoAccounts = await this.$invoke("kalipoAccount:getAll", {});
-    console.log(kalipoAccounts);
+
+    if (kalipoAccounts.result == null) return
+
     for (let index = 0; index < kalipoAccounts.result.ids.length; index++) {
       const kalipoAccountId = kalipoAccounts.result.ids[index];
       const kalipoAccount = await this.$invoke("kalipoAccount:getByID", {

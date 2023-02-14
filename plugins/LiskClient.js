@@ -1,4 +1,4 @@
-/* Kalipo B.V. - the DAO platform for business & societal impact 
+/* Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// TODO: refactor to LiskClient2 current version has a lot of expiremental snippets, 
+// TODO: refactor to LiskClient2 current version has a lot of expiremental snippets,
 // rewrite wallet logic to make more sense and have a decent structure
 // make the connection and error handling easy to catch in child components
 
@@ -96,7 +96,7 @@ const createTransaction = async (
 }
 
 export default ({ app }, inject) => {
-    const server = 'ws://localhost:8080/ws'
+    const server = 'wss://poa.kalipo.io/ws'
 
     let client;
 
@@ -201,6 +201,7 @@ export default ({ app }, inject) => {
     // });
 
     inject('createTransaction', async (moduleId, assetId, assets, pin, displayNotificationOnError) => {
+        console.log("createTransaction - LiskClient")
         const account = {
             publicKey: null,
             passphrase: null

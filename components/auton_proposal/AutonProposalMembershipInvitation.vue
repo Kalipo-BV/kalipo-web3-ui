@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-form v-model="valid">
+    <v-form v-model="valid" @submit.prevent>
       <v-autocomplete
         v-model="selectedValue"
         :disabled="isUpdating"
@@ -159,7 +159,6 @@ export default {
   mounted: async function () {
     this.isUpdating = true;
     const accountIdsWrapper = await this.$invoke("kalipoAccount:getAll");
-    console.log(accountIdsWrapper);
 
     const autonWrapper = await this.$invoke("auton:getByID", {
       id: this.autonId,
@@ -199,5 +198,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

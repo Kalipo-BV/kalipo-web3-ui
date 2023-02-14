@@ -114,7 +114,7 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    console.log(autonIdWrapper);
+    
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
@@ -150,7 +150,7 @@ export default {
           id: commentId,
         });
 
-        console.log(commentWrapper);
+        
 
         const commentMembershipId = commentWrapper.result.membershipId;
         const commentMembershipWrapper = await this.$invoke(
@@ -172,8 +172,8 @@ export default {
         this.comments.push(commentWrapper.result);
       }
 
-      console.log(this.proposal);
-      console.log(this.submitter);
+      
+      
     }
   },
   methods: {

@@ -17,6 +17,16 @@
 
 <template>
   <v-container>
+    <v-row class="mt-2 ml-1">
+      <v-text-field
+        solo
+        label="Search a member"
+        append-icon="mdi-magnify"
+        class="mt-4"
+        style="max-width: 250px"
+        disabled
+      ></v-text-field>
+    </v-row>
     <v-row class="mt-2">
       <v-col cols="4" v-for="(member, i) in members" :key="i">
         <MemberCard :member="member"></MemberCard>
@@ -40,7 +50,7 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    console.log(autonIdWrapper);
+    
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;

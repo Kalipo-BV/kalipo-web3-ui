@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,11 @@
 
 <template>
   <div>
+    <Keypress key-event="keyup"
+              :key-code="13"
+              @success="unlock"
+              v-if="passwordErrorMessage === ''"
+    />
     <v-card width="400">
       <v-card-text>
         <div class="d-flex justify-center">
@@ -74,6 +79,9 @@
 import * as cryptography from "@liskhq/lisk-cryptography";
 
 export default {
+  components: {
+    Keypress: () => import('vue-keypress')
+  },
   props: ["account"],
   data: () => ({
     show1: false,
@@ -95,15 +103,14 @@ export default {
       return result;
     },
     async unlock() {
-      console.log(this.account.crypt);
-      console.log(cryptography.parseEncryptedPassphrase(this.account.crypt));
+      //
+      //
       try {
         const decryptToLayerOneStr = cryptography.decryptPassphraseWithPassword(
           cryptography.parseEncryptedPassphrase(this.account.crypt),
           this.password
         );
-        console.log("WUT");
-        console.log(decryptToLayerOneStr);
+        //
 
         const accountIdWrapper = await this.$invoke(
           "kalipoAccount:getAccountIdByLiskId",
@@ -136,15 +143,26 @@ export default {
         this.$setAuthAccount(liskAuthAccount);
 
         this.$store.commit("wallet/unlock", frontAccount);
-        this.$router.push("/dashboard");
+
+        // if there is an uuid in the sessionstorage that means an user is trying to check in
+        // and should be redirected to the checkin page
+        const uuidUrl = window.sessionStorage.getItem("isCheckingInUrl")
+
+        if (uuidUrl) {
+          await this.$router.push(`/auton/${uuidUrl}`)
+          window.sessionStorage.removeItem("isCheckingInUrl")
+          return
+        }
+
+        await this.$router.push("/dashboard");
 
         // const decrypted = cryptography.decryptPassphraseWithPassword(
         //   JSON.parse(decryptToLayerOneStr),
         //   "123456"
         // );
-        // console.log(decrypted);
+        //
       } catch (error) {
-        console.log(error);
+
         this.passwordErrorMessage = "Entered password is not correct!";
         setTimeout(() => {
           this.passwordErrorMessage = "";

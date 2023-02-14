@@ -165,7 +165,7 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    console.log(autonIdWrapper);
+    
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
@@ -219,8 +219,8 @@ export default {
       this.commentCount = this.proposal.comments.length;
       this.commentUniqueMembershipCount = uniqueMemberList.length;
 
-      console.log(this.proposal);
-      console.log(this.submitter);
+      
+      
     }
   },
   methods: {

@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,17 @@
 
 <template>
   <v-container style="height: 100%">
+    <v-text-field
+      v-if="autons.length != null"
+      solo
+      label="Search an auton"
+      append-icon="mdi-magnify"
+      class="mt-4"
+      style="max-width: 250px"
+      v-model="search"
+    ></v-text-field>
     <v-row dense>
-      <v-col cols="12" md="3" v-for="(auton, i) in autons" :key="i">
+      <v-col cols="12" md="3" v-for="(auton, i) in filtered" :key="i">
         <div @click="navigate(i)">
           <AutonCard :auton="auton"></AutonCard>
         </div>
@@ -27,20 +36,24 @@
   </v-container>
 </template>
 <script>
-import { Mnemonic } from "@liskhq/lisk-passphrase";
-import * as cryptography from "@liskhq/lisk-cryptography";
-
 export default {
   layout: "wallet",
-  data: () => ({ autons: [] }),
+  data: () => ({ autons: [], search: "" }),
+  computed: {
+    filtered() {
+      return this.autons.filter((auton) =>
+        auton.autonProfile.name
+          .toLowerCase()
+          .includes(this.search.toLowerCase())
+      );
+    },
+  },
   created() {},
   mounted: async function () {
     this.$nuxt.$emit("MainMenu-setPage", "autons");
 
     const autons = await this.$invoke("auton:getAll", {});
-    console.log(autons);
-    console.log("success2");
-    if (autons != null) {
+    if (autons.result != null) {
       for (let index = 0; index < autons.result.ids.length; index++) {
         const autonId = autons.result.ids[index];
         const autonWrapper = await this.$invoke("auton:getByID", {
@@ -75,7 +88,6 @@ export default {
   },
   methods: {
     navigate(index) {
-      console.log(this.autons[index].autonProfile.name);
       this.$router.push(
         "/auton/" +
           this.autons[index].autonProfile.name
