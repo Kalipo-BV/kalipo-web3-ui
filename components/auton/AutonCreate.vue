@@ -257,14 +257,8 @@
   </div>
 </template>
 <script>
-import AutonNameDescription from "./event/AutonNameDescription.vue";
-import AutonStartEnd from "./event/AutonStartEnd.vue";
-import AutonReqData from "./event/AutonReqData.vue";
 export default {
   components: {
-    AutonNameDescription,
-    AutonStartEnd,
-    AutonReqData,
     Keypress: () => import("vue-keypress"),
   },
   data: () => ({
@@ -348,7 +342,7 @@ export default {
           end: this.end,
           subject: this.subject,
           // het is geen fout dat dit een string is, voor een of ander manier accepteert lisk het niet als boolean
-          checkoutRequired: (this.checkoutRequired ? "true" : "false"),
+          checkoutRequired: this.checkoutRequired ? "true" : "false",
         };
 
         this.transaction.assets = asset;
