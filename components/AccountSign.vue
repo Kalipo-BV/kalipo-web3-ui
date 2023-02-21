@@ -42,7 +42,14 @@
       <v-divider></v-divider>
       <v-card-text>
         <v-otp-input type="password" v-model="pin"></v-otp-input>
-        <div class="text-caption error--text">{{ error }}</div>
+        <div class="text-caption error--text">
+          {{ error }}
+          <a v-if="error" @click="showStack = !showStack"
+            ><span v-if="!showStack">Show</span
+            ><span v-if="showStack">Close</span> stack</a
+          >
+        </div>
+        <div v-if="showStack" class="text-caption error--text">{{ stack }}</div>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-text>
@@ -91,6 +98,8 @@ export default {
     error: null,
     disabled: false,
     lessonPoaTransactionWrapper: null,
+    showStack: false,
+    stack: null,
   }),
   computed: {
     account() {
@@ -114,6 +123,9 @@ export default {
       const pin = this.pin;
       const displayNotificationOnError = false;
 
+      console.log("Sending transaction, asset:");
+      console.log(asset);
+
       const transactionWrapper = await this.$createTransaction(
         moduleId,
         assetId,
@@ -121,6 +133,9 @@ export default {
         pin,
         displayNotificationOnError
       );
+
+      console.log("Transaction response: ");
+      console.log(transactionWrapper);
 
       if (!transactionWrapper.error && transactionWrapper.result.success) {
         const transactionId = Buffer.from(
@@ -171,7 +186,6 @@ export default {
             this.$nuxt.$emit(this.callbackFinish, true);
           }
 
-
           if (this.$route.path.endsWith("attendees/")) {
             this.$nuxt.$emit("Auton-ProposalModalClose", 0);
             await this.$router.push(this.uri);
@@ -182,7 +196,9 @@ export default {
         }
       } else {
         if (transactionWrapper.error) {
-          this.error = "This PIN seems not to work";
+          // this.error = "This PIN seems not to work";
+          this.error = transactionWrapper.stack.message;
+          this.stack = transactionWrapper.stack.stack;
         } else {
           this.error = transactionWrapper.result.message;
           this.disabled = true;
