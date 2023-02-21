@@ -313,6 +313,7 @@ export default {
     makeTransaction() {},
     nextStep() {
       this.step++;
+      console.log("TEMPLATE: " + this.template);
 
       if (this.step == 4 && this.template == "LESSON") {
         this.uri = `auton/${this.lessonName.replace(" ", "_")}`;
@@ -384,13 +385,13 @@ export default {
           tags: this.tags,
           type: this.template,
           location: this.location,
-          price: BigInt(this.price),
-          capacity: BigInt(this.capacity.toString()),
+          price: BigInt(0),
+          capacity: BigInt(0),
           description: this.description,
-          start: this.start,
-          end: this.end,
+          start: BigInt(0),
+          end: BigInt(0),
           subject: "",
-          checkoutRequired: null,
+          checkoutRequired: "false",
         };
 
         this.transaction.assets = asset;

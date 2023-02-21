@@ -33,7 +33,6 @@ const createTransaction = async (
     account,
     client,
 ) => {
-    console.log(account)
     const { publicKey } = account
     const transactionObject = {
         moduleID: moduleId,
@@ -50,14 +49,11 @@ const createTransaction = async (
     const assetSchema = client.schemas.transactionsAssets
         .find(s => s.moduleID === moduleId && s.assetID === assetId)
     const schema = assetSchema.schema;
-    console.log(schema)
-    console.log(transactionObject)
     const fee = transactions.computeMinFee(schema, transactionObject)
     // if (getFee) {
     //     return transactions.convertBeddowsToLSK(fee.toString())
     // }
     let signedTransaction, tx;
-    console.log(account)
     if (moduleId !== 6666) {
         tx = await client.transaction.create({
             moduleID: moduleId,
@@ -96,7 +92,7 @@ const createTransaction = async (
 }
 
 export default ({ app }, inject) => {
-    const server = 'wss://poa.kalipo.io/ws'
+    const server = 'ws://localhost:8080/ws'
 
     let client;
 
@@ -152,9 +148,6 @@ export default ({ app }, inject) => {
 
         const client = clientWrapper.client;
 
-        console.log("me")
-        console.log(transactionWrapper)
-
         const decodedTx = client.transaction.decode(transactionWrapper.result);
         const txJSON = client.transaction.toJSON(decodedTx);
         return client.transaction.fromJSON(txJSON);
@@ -173,7 +166,6 @@ export default ({ app }, inject) => {
         try {
             return await fn(arg1, arg2, arg3);
         } catch (error) {
-            console.log(error)
             await wait(interval);
             if (retriesLeft === 0) {
                 throw new Error(error);
@@ -201,14 +193,11 @@ export default ({ app }, inject) => {
     // });
 
     inject('createTransaction', async (moduleId, assetId, assets, pin, displayNotificationOnError) => {
-        console.log("createTransaction - LiskClient")
         const account = {
             publicKey: null,
             passphrase: null
         }
         try {
-            console.log(authAccount)
-
             const decrypted = cryptography.decryptPassphraseWithPassword(
                 JSON.parse(authAccount.crypt),
                 "" + pin
