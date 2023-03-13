@@ -17,17 +17,12 @@
 
 <template>
   <v-row align="center" justify="center" style="height: 100%">
-    <!-- <div class="text-h1">je moeder is een plopkoek</div> -->
-    
+    <EditGrantContractForm />
   </v-row>
 </template>
 <script>
-export default {
-  data() {
-    return {};
-  },
-  mounted() {
-    this.$nuxt.$emit("MainMenu-setPage", "home");
-  },
-};
+  import EditGrantContractForm from "~/components/contract/grant_contract/edit_form/EditGrantContractForm.vue";
+  export default {
+    components: {EditGrantContractForm},
+  };
 </script>
