@@ -189,15 +189,33 @@
         />
       </v-container>
 
-      <!-- //do some shit -->
+      <v-container
+        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
+        label="Milestones"
+      >
+        <MilestonesProvision/>
+      </v-container>  
+
+      <v-container
+        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
+        label="Milestones"
+      >
+        <CustomProvision/>
+      </v-container>  
 
       <v-checkbox
         v-model="checkbox"
+        :rules="[v => !!v || 'You must agree with the terms and conditions to continue!']"
+        label="I agree to the terms and conditions?"
+        required
+      ></v-checkbox>
+
+      <v-checkbox
+        v-model="checkbox2"
         :rules="[v => !!v || 'You must sign the contract to continue!']"
         label="I hereby agree to the aforementioned contract?"
         required
       ></v-checkbox>
-      <!-- prepend-icon="mdi-signature"  -->
 
       <div class="d-flex flex-column">
         <v-btn
@@ -232,9 +250,11 @@
 </template>
 <script>
 import DateTimeProvision from "~/components/contract/grant_contract/provisions/DateTimeProvision.vue";
+import MilestonesProvision from "~/components/contract/grant_contract/provisions/MilestonesProvision.vue";
+import CustomProvision from "~/components/contract/grant_contract/provisions/CustomProvision.vue";
 
 export default {
-  components: {DateTimeProvision},
+  components: {DateTimeProvision, MilestonesProvision, CustomProvision},
   computed: {
     account() {
       return this.$store.state.wallet.account;
@@ -270,6 +290,7 @@ export default {
     name: "",
     select: null,
     checkbox: false,
+    checkbox2: false,
     selectedValue: [],
   }),
   methods: {
