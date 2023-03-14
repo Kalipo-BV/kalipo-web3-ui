@@ -19,7 +19,6 @@
                             required
                             hide-details="auto"
                             :rules="[v => !!v || 'This field can\'t be left open!']"
-                            v-on:change="test1(provision)"
                         ></v-autocomplete>
                     </v-col>
             
@@ -108,37 +107,6 @@
             removeProvision(index) {
                 this.provisions.splice(index, 1)
             },
-            test1(provision){
-                console.log(provision.type)
-            }
-            // test(provision) {
-            //     switch(provision.type) {
-            //         case "String":
-            //             return 
-            //             {
-            //                 <v-text-field
-            //                     solo
-            //                     label="Provision"
-            //                     type="text"
-            //                     clearable
-            //                     required
-            //                     :rules="[v => !!v || 'This field can\'t be left open!']"
-            //                     v-bind="provision.data"
-            //                     prepend-icon="mdi-format-list-bulleted" 
-            //                 />
-            //             }
-            //         case "Number":
-            //             return Number
-            //         case "Boolean":
-            //             return Boolean
-            //         case "Array":
-            //             return Array
-            //         case "Object":
-            //             return Object
-            //         case "Null":
-            //             return null
-            //     }
-            // }
         },
     }
   </script>
