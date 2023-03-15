@@ -20,7 +20,7 @@ export const state = () => ({
 	preample: "",
 	purpose: "",
 	payment: {amount: 0, note:""},
-	dateTime: {start: null, end: null},
+	dates: {start: null, end: null},
 	ipRights: "",
 	termination: "",
 	law: "",
@@ -71,6 +71,22 @@ export const mutations = {
 		} else {
 			console.error("invalid paymentNote given", payload);
 		}
+	},
+
+	changeStartDate(state, payload) {
+		if (payload instanceof DATE) {
+			state.dates.start = payload;
+		} else {
+			console.error("invalid startdate given", payload);
+		}
+	},
+
+	changeEndDate(state, payload) {
+		if (payload instanceof DATE) {
+			state.dates.end = payload;
+		} else {
+			console.error("invalid enddate given", payload);
+		}
 	}
 }
 
@@ -93,5 +109,13 @@ export const getters = {
 
 	paymentNote(state) {
 		return state.payment.note;
+	},
+
+	startDate(state) {
+		return state.dates.start;
+	},
+
+	endDate(state) {
+		return state.dates.end;
 	}
 }
