@@ -123,13 +123,13 @@
           Reset Form
         </v-btn>
 
-        <v-btn
+        <!-- <v-btn
           class="mt-4"
           block
           @click="test"
         >
           Test
-        </v-btn>
+        </v-btn> -->
       </div>
     </v-form>
   </v-sheet>
@@ -165,6 +165,7 @@
         const { valid } = await this.$refs.form.validate();
         if (valid)
           alert("Form is valid");
+          this.test();
       },
       
       reset() {
