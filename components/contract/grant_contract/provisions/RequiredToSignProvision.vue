@@ -17,7 +17,7 @@
 
 <template>
   <v-checkbox
-    v-model="checkbox"
+    v-model="requiredToSignValue"
     :rules="[v => !!v || 'You must agree with the terms and conditions & Privacy Policy to continue!']"
     required
   >
@@ -56,8 +56,17 @@
 </template> 
 <script>
   export default {
-    data: () => ({
-        checkbox: false,
-    }),
+    props: ["requiredToSign"],
+
+    computed: {
+      requiredToSignValue: {
+            get: function () {
+                return this.requiredToSign;
+            },
+            set: function (newValue) {
+                this.$emit("update:requiredToSign", newValue);
+            },
+        },
+    },
   }
 </script> 

@@ -17,6 +17,7 @@
 
 <template>
     <v-textarea
+        v-model="governingLawAndJurisdictionValue"
         rows="2"
         solo
         clearable
@@ -27,3 +28,18 @@
         prepend-icon="mdi-gavel" 
     />
 </template>
+<script>
+    export default {
+        props: ["governingLawAndJurisdiction"],
+        computed: {
+            governingLawAndJurisdictionValue: {
+                get: function () {
+                    return this.governingLawAndJurisdiction;
+                },
+                set: function (newValue) {
+                    this.$emit("update:governingLawAndJurisdiction", newValue);
+                },
+            },
+        },
+    }
+</script>

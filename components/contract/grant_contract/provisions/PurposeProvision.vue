@@ -17,6 +17,7 @@
 
 <template>
     <v-textarea
+        v-model="purposeInput"
         rows="2"
         solo
         clearable
@@ -29,19 +30,29 @@
         :value="purpose"
     />
 </template>
-
 <script>
-export default {
-    methods: {
-        change(payload) {
-            this.$store.commit("contract/changePurpose", payload);
-        }
-    },
+    export default {
+        props: ["purpose"],
 
-    computed: {
-        purpose() {
-            return this.$store.getters["contract/purpose"];
-        }
-    }
-}
+        computed: {
+            purposeInput: {
+                get: function () {
+                    return this.purpose;
+                },
+                set: function (newValue) {
+                    this.$emit("update:purpose", newValue);
+                },
+            },
+            
+            purpose() {
+                return this.$store.getters["contract/purpose"];
+            }
+        },
+
+        methods: {
+            change(payload) {
+                this.$store.commit("contract/changePurpose", payload);
+            }
+        },
+    }    
 </script>

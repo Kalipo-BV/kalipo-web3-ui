@@ -17,7 +17,7 @@
 
 <template>
     <div>
-        <div v-for="(milestone, index) in milestones">
+        <div v-for="(milestone, index) in milestonesValue">
             <v-container>
                 <v-row>
                     <v-col
@@ -25,6 +25,7 @@
                         lg="6"
                     >
                         <v-textarea
+                            v-model="milestone.info"
                             rows="1"
                             solo
                             clearable
@@ -32,8 +33,8 @@
                             auto-grow
                             hide-details="auto"
                             prepend-icon="mdi-flag-triangle" 
-                            v-bind="milestone.info"
                         />
+                        <!-- v-bind="milestone.info" -->
                     </v-col>
             
                     <v-col
@@ -49,7 +50,7 @@
                             required
                             hide-details="auto"
                             :rules="[v => !!v || 'This field can\'t be left open!']"
-                            v-bind="milestone.amount"
+                            v-model="milestone.amount"
                         />
                     </v-col>
 
@@ -89,13 +90,23 @@
   </template>
   <script>
     export default {
-        data: () => ({
-            milestones: [],
-        }),
+        props: ["milestones"],
+
+        computed: {
+            milestonesValue: {
+                get: function () {
+                    return this.milestones;
+                },
+                set: function (newValue) {
+                    this.$emit("update:milestones", newValue);
+                },
+            },
+        },
+
         methods: {
             addMilestone() {
-                this.milestones.push({
-                    info: "", amount: 0
+                this.milestonesValue.push({
+                    info: null, amount: null
                 })
             },
             removeMilestone(index) {

@@ -17,6 +17,7 @@
 
 <template>
     <v-textarea
+        v-model="propertyRightsValue"
         rows="2"
         solo
         clearable
@@ -27,3 +28,18 @@
         prepend-icon="mdi-file-certificate-outline" 
     />
 </template>
+<script>
+    export default {
+        props: ["propertyRights"],
+        computed: {
+            propertyRightsValue: {
+                get: function () {
+                    return this.propertyRights;
+                },
+                set: function (newValue) {
+                    this.$emit("update:propertyRights", newValue);
+                },
+            },
+        },
+    }
+</script>

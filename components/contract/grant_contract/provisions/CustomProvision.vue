@@ -17,7 +17,7 @@
 
 <template>
     <div>
-        <div v-for="(provision, index) in provisions">
+        <div v-for="(provision, index) in customValue">
             <v-container>
                 <v-row>
                     <v-col
@@ -63,7 +63,7 @@
                                 required
                                 hide-details="auto"
                                 :rules="[v => !!v || 'This field can\'t be left open!']"
-                                v-bind="provision.data"
+                                v-model="provision.data"
                                 prepend-icon="mdi-format-list-bulleted" 
                             />
                         </div>
@@ -119,22 +119,35 @@
   </template>
   <script>
     export default {
+        props: ["custom"],
+
+        computed: {
+            customValue: {
+                get: function () {
+                    return this.custom;
+                },
+                set: function (newValue) {
+                    this.$emit("update:custom", newValue);
+                },
+            },
+        },
+
         data: () => ({
-            provisions: [],
             items: [
                 "Text",
                 "Number",
                 "Boolean",
             ]	
         }),
+
         methods: {
             addProvision() {
-                this.provisions.push({
+                this.customValue.push({
                     type: "Text", data: null
                 })
             },
             removeProvision(index) {
-                this.provisions.splice(index, 1)
+                this.customValue.splice(index, 1)
             },
         },
     }

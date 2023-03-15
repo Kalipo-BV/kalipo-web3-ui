@@ -18,6 +18,7 @@
 <template>
     <div>
         <v-text-field
+            v-model="paymentValue.amount"
             style="padding: 1px"
             label="Payment amount"
             prepend-icon="mdi-cash-multiple" 
@@ -30,6 +31,7 @@
         />
 
         <v-textarea
+            v-model="paymentValue.note"
             rows="1"
             solo
             clearable
@@ -43,29 +45,37 @@
         />
     </div>
 </template>
-
 <script>
-export default {
-    methods: {
-        changeAmount(payload) {
-            this.$store.commit("contract/changePaymentAmount", payload);
+    export default {
+        props: ["payment"],
+
+        computed: {
+            paymentValue: {
+                get: function () {
+                    return this.payment;
+                },
+                set: function (newValue) {
+                    this.$emit("update:payment", newValue);
+                },
+            },
+
+            paymentAmount() {
+                return this.$store.getters["contract/paymentAmount"];
+            },
+
+            paymentNote() {
+                return this.$store.getters["contract/paymentNote"];
+            },
         },
 
-        changeNote(payload) {
-            this.$store.commit("contract/changePaymentNote", payload);
-        }
-    },
+        methods: {
+            changeAmount(payload) {
+                this.$store.commit("contract/changePaymentAmount", payload);
+            },
 
-    computed: {
-        paymentAmount() {
-            return this.$store.getters["contract/paymentAmount"];
+            changeNote(payload) {
+                this.$store.commit("contract/changePaymentNote", payload);
+            }
         },
-
-        paymentNote() {
-            return this.$store.getters["contract/paymentNote"];
-        },
-
-
     }
-}
 </script>

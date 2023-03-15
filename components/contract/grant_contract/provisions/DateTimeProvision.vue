@@ -33,19 +33,18 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="dateFormatted"
+              v-model="dateValues.beginDate"
               label="Begin date"
-              hint="DD/MM/YYYY format"
+              hint="YYYY/MM/DD format"
               persistent-hint
               prepend-icon="mdi-calendar"
               v-bind="attrs"
-              @blur="date = parseDate(dateFormatted)"
               v-on="on"
-              :rules="[v => !!v || 'A start-date must be selected!', date >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The start-date must be in the future or today', date < date2 || 'The start-date must come before the end-date!'].flat()"
+              :rules="[v => !!v || 'A start-date must be selected!', dateValues.beginDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The start-date must be in the future or today', dateValues.beginDate < dateValues.endDate || 'The start-date must come before the end-date!'].flat()"
             ></v-text-field>
           </template>
           <v-date-picker
-              v-model="date"
+              v-model="dateValues.beginDate"
               no-title
               @input="menu1 = false"
           ></v-date-picker>
@@ -66,18 +65,18 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="computedDateFormatted2"
+              v-model="dateValues.endDate"
               label="End date"
-              hint="DD/MM/YYYY format"
+              hint="YYYY/MM/DD format"
               persistent-hint
               prepend-icon="mdi-calendar"
               v-bind="attrs"
               v-on="on"
-              :rules="[v => !!v || 'An end-date must be selected!', date2 >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The end-date must be in the future', date2 > date || 'The end-date must come after the begin-date!'].flat()"
+              :rules="[v => !!v || 'An end-date must be selected!', dateValues.endDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The end-date must be in the future', dateValues.endDate > dateValues.beginDate || 'The end-date must come after the begin-date!'].flat()"
             ></v-text-field>
           </template>
           <v-date-picker
-              v-model="date2"
+              v-model="dateValues.endDate"
               no-title
               @input="menu2 = false"
           ></v-date-picker>
@@ -88,11 +87,25 @@
 </template>
 <script>
   export default {
+    props: ["dates"],
+
+    computed: {
+      dateValues: {
+        get: function () {
+          return this.dates;
+        },
+        set: function (newValue) {
+          this.$emit("update:dates", newValue);
+        },
+      },
+    },
+
+    mounted: function () {
+      this.onstartBeginDateFocus();
+      this.onstartEndDateFocus();
+    },
+
     data: vm => ({
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      date2: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      dateFormatted: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
-      dateFormatted2: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
       menu1: false,
       menu2: false,
     }),
@@ -122,11 +135,10 @@
     },
 
     methods: {
-      formatDate (date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${day}/${month}/${year}`
+      onstartBeginDateFocus() {
+        if (this.dateValues.beginDate == null) {
+          this.dateValues.beginDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+        }
       },
 
       parseDate (date) {
@@ -136,6 +148,14 @@
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       },
 
+      onstartEndDateFocus() {
+        if (this.dateValues.endDate == null) {
+          var date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
+          date = new Date(date.setDate(date.getDate() + 1));
+          this.dateValues.endDate = date.toISOString().substr(0, 10);
+        }
+      },
+
       changeStart(payload) {
         this.$store.commit("contract/changeStartDate", payload);
       },
@@ -143,6 +163,6 @@
       changeEnd(payload) {
         this.$store.commit("contract/changeEndDate", payload);
       }
-    },
+    }
   }
 </script>

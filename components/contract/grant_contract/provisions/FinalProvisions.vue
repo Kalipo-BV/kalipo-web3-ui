@@ -17,6 +17,7 @@
 
 <template>
     <v-textarea
+        v-model="finalProvisionsValue"
         rows="2"
         solo
         clearable
@@ -27,3 +28,18 @@
         prepend-icon="mdi-format-list-bulleted" 
     />
 </template>
+<script>
+    export default {
+        props: ["finalProvisions"],
+        computed: {
+            finalProvisionsValue: {
+                get: function () {
+                    return this.finalProvisions;
+                },
+                set: function (newValue) {
+                    this.$emit("update:finalProvisions", newValue);
+                },
+            },
+        },
+    }
+</script>

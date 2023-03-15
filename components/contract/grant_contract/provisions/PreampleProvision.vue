@@ -26,23 +26,35 @@
         :rules="[v => !!v || 'This field can\'t be left open!']"
         label="Preample"
         required
+        v-model="preampleValue"
         @change="change"
         :value="preample"
     />
 </template>
-
 <script>
     export default {
+        props: ["preample"],
+
+        computed: {
+            preampleValue: {
+                get: function () {
+                    return this.preample;
+                },
+                set: function (newValue) {
+                    this.$emit("update:preample", newValue);
+                },
+            },
+
+            preample() {
+                return this.$store.getters["contract/preample"];
+            }
+        }, 
+
         methods: {
             change(payload) {
                 this.$store.commit("contract/changePreample", payload);
             }
+            
         },
-
-        computed: {
-            preample() {
-                return this.$store.getters["contract/preample"];
-            }
-        }
     }
 </script>
