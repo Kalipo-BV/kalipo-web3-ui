@@ -74,11 +74,22 @@
 </template>
 <script>
     export default {
+        props: ["parties"],
+
         computed: {
+            selectedValue: {
+                get: function () {
+                    return this.parties;
+                },
+                set: function (newValue) {
+                    this.$emit("update:parties", newValue);
+                },
+            },
             account() {
                 return this.$store.state.wallet.account;
             },
         },
+
         mounted: async function () {
             this.isUpdating = true;
             const accountIdsWrapper = await this.$invoke("kalipoAccount:getAll");
@@ -99,17 +110,20 @@
             // this.users = this.users.filter((item) => item.id !== this.account.accountId);
             this.isUpdating = false;
         },
+
         data: () => ({
             isUpdating: true,
             users: [{ header: "Most recent users" }],
-            selectedValue: [],
+            // selectedValue: [],
         }),
+
         methods: {
             remove(item) {
                 const index = this.selectedValue.indexOf(item.id);
                 if (index >= 0)
                     this.selectedValue.splice(index, 1);
             },
+            
             getInitials(parseStr, max) {
                 if (parseStr != undefined) {
                     const nameList = parseStr.split(" ");

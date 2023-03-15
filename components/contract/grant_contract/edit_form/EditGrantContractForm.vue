@@ -19,61 +19,86 @@
   <v-sheet width="90%" class="mx-auto pa-10" style="margin-top: 10vh; margin-bottom: 12vh;">
     <h1 style="margin-bottom: 10px;">Edit Template (Grant Contract)</h1>
     <v-form ref="form">
-      <PartyMemberProvision/>
-      <PreampleProvision/>
+      <PartyMemberProvision 
+        :parties.sync="formData.partyMembers"
+      />
+
+      <PreampleProvision
+        :preample.sync="formData.preample"
+      />
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PurposeProvision/>
+        <PurposeProvision
+          :purpose.sync="formData.purpose"
+        />
       </v-container>
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
         label="Payment of the grant"
       >
-        <PaymentProvision/>
+        <PaymentProvision
+          :payment.sync="formData.payment"
+        />
       </v-container>
       
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
         label="Date (begin- & end date)"
       >
-        <DateTimeProvision/>
+        <DateTimeProvision
+          :dates.sync="formData.dates"
+        />
       </v-container>  
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PropertyRightsProvision/>
+        <PropertyRightsProvision
+          :propertyRights.sync="formData.propertyRights"
+        />
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <TerminationOfAgreement/>
+        <TerminationOfAgreement
+          :terminationOfAgreement.sync="formData.terminationOfAgreement"
+        />
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <GoverningLawAndJurisdictionProvision/>
+        <GoverningLawAndJurisdictionProvision
+          :governingLawAndJurisdiction.sync="formData.governingLawAndJurisdiction"
+        />
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <FinalProvisions/>
+        <FinalProvisions
+          :finalProvisions.sync="formData.finalProvisions"
+        />
       </v-container>
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
         label="Milestones"
       >
-        <MilestonesProvision/>
+        <MilestonesProvision
+          :milestones.sync="formData.milestones"
+        />
       </v-container>  
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
-        label="Milestones"
+        label="Custom provision"
       >
-        <CustomProvision/>
+        <CustomProvision
+          :custom.sync="formData.custom"
+        />
       </v-container>  
 
-      <RequiredToSignProvision/>
+      <RequiredToSignProvision
+        :requiredToSign.sync="formData.requiredToSign"
+      />
       
       <v-checkbox
-        v-model="checkbox"
+        v-model="formData.signed"
         :rules="[v => !!v || 'You must sign the contract to continue!']"
         label="I hereby agree to the aforementioned contract?"
         required
@@ -97,6 +122,14 @@
         >
           Reset Form
         </v-btn>
+
+        <v-btn
+          class="mt-4"
+          block
+          @click="test"
+        >
+          Test
+        </v-btn>
       </div>
     </v-form>
   </v-sheet>
@@ -104,17 +137,43 @@
 <script>
   export default {
     data: () => ({
-        checkbox: false,
+      formData: {
+        partyMembers: [],
+        preample: null,
+        purpose: null,
+        payment: {
+          amount: null,
+          note: null,
+        },
+        dates: {
+          beginDate: null,
+          endDate: null,
+        },
+        propertyRights: null,
+        terminationOfAgreement: null,
+        governingLawAndJurisdiction: null,
+        finalProvisions: null,
+        milestones: [],
+        custom: [],
+        requiredToSign: false,
+        signed: false,
+      },
     }),
+
     methods: {
-        async validate() {
-            const { valid } = await this.$refs.form.validate();
-            if (valid)
-                alert("Form is valid");
-        },
-        reset() {
-            this.$refs.form.reset();
-        },
+      async validate() {
+        const { valid } = await this.$refs.form.validate();
+        if (valid)
+          alert("Form is valid");
+      },
+      
+      reset() {
+        this.$refs.form.reset();
+      },
+      
+      test() {
+        console.log(this.formData);
+      }
     },
-}
+  }
 </script>

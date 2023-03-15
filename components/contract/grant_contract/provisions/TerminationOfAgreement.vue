@@ -17,6 +17,7 @@
 
 <template>
     <v-textarea
+        v-model="terminationOfAgreementValue"
         rows="2"
         solo
         clearable
@@ -27,3 +28,18 @@
         prepend-icon="mdi-calendar-remove-outline" 
     />
 </template>
+<script>
+    export default {
+        props: ["terminationOfAgreement"],
+        computed: {
+            terminationOfAgreementValue: {
+                get: function () {
+                    return this.terminationOfAgreement;
+                },
+                set: function (newValue) {
+                    this.$emit("update:terminationOfAgreement", newValue);
+                },
+            },
+        },
+    }
+</script>

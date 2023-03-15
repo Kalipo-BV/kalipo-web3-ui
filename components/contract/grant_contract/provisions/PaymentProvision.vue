@@ -18,6 +18,7 @@
 <template>
     <div>
         <v-text-field
+            v-model="paymentValue.amount"
             style="padding: 1px"
             label="Payment amount"
             prepend-icon="mdi-cash-multiple" 
@@ -28,6 +29,7 @@
         />
 
         <v-textarea
+            v-model="paymentValue.note"
             rows="1"
             solo
             clearable
@@ -39,3 +41,18 @@
         />
     </div>
 </template>
+<script>
+    export default {
+        props: ["payment"],
+        computed: {
+            paymentValue: {
+                get: function () {
+                    return this.payment;
+                },
+                set: function (newValue) {
+                    this.$emit("update:payment", newValue);
+                },
+            },
+        },
+    }
+</script>

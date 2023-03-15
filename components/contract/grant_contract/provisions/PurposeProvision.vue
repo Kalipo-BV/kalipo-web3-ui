@@ -17,6 +17,7 @@
 
 <template>
     <v-textarea
+        v-model="purposeInput"
         rows="2"
         solo
         clearable
@@ -27,3 +28,18 @@
         prepend-icon="mdi-card-text-outline" 
     />
 </template>
+<script>
+    export default {
+        props: ["purpose"],
+        computed: {
+            purposeInput: {
+                get: function () {
+                    return this.purpose;
+                },
+                set: function (newValue) {
+                    this.$emit("update:purpose", newValue);
+                },
+            },
+        },
+    }
+</script>

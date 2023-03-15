@@ -26,5 +26,22 @@
         :rules="[v => !!v || 'This field can\'t be left open!']"
         label="Preample"
         required
+        v-model="preampleValue"
     />
 </template>
+<script>
+    export default {
+        props: ["preample"],
+
+        computed: {
+            preampleValue: {
+                get: function () {
+                    return this.preample;
+                },
+                set: function (newValue) {
+                    this.$emit("update:preample", newValue);
+                },
+            },
+        },
+    }
+</script>
