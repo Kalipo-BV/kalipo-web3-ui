@@ -27,6 +27,8 @@
         label="Preample"
         required
         v-model="preampleValue"
+        @change="change"
+        :value="preample"
     />
 </template>
 <script>
@@ -42,6 +44,17 @@
                     this.$emit("update:preample", newValue);
                 },
             },
+
+            preample() {
+                return this.$store.getters["contract/preample"];
+            }
+        }, 
+
+        methods: {
+            change(payload) {
+                this.$store.commit("contract/changePreample", payload);
+            }
+            
         },
     }
 </script>
