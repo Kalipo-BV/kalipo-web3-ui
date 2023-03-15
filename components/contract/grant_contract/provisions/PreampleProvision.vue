@@ -26,5 +26,24 @@
         :rules="[v => !!v || 'This field can\'t be left open!']"
         label="Preample"
         required
+        @change="change"
+
+        :value="preample"
     />
 </template>
+
+<script>
+    export default {
+        methods: {
+            change(payload) {
+                this.$store.commit("contract/changePreample", payload);
+            }
+        },
+
+        computed: {
+            preample() {
+                return this.$store.getters["contract/preample"];
+            }
+        }
+    }
+</script>

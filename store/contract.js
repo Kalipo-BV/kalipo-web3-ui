@@ -40,9 +40,24 @@ export const mutations = {
 			state.parties.splice(index, 1); // 2nd parameter means remove one item only
 		}
 	},
+
+	changePreample(state, preample) {
+		if (typeof preample === 'string') {
+			state.preample = preample;
+		} else {
+			console.error("invalid preample given", preample);
+		}
+
+		console.log(state.preample);
+	}
 }
+
 export const getters = {
 	parties(state) {
 		return state.parties;
 	},
+
+	preample(state) {
+		return state.preample;
+	}
 }
