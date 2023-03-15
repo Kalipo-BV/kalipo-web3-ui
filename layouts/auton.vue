@@ -218,6 +218,11 @@ export default {
           title: "Constitution",
           to: "constitution",
         },
+        {
+          icon: "mdi-bank",
+          title: "Improvement Proposal",
+          to: "improvementproposal",
+        },
       ],
       tabItemsEvent: [
         {
@@ -294,7 +299,7 @@ export default {
         this.selectedItem = 2;
       } else if (page === "attendees") {
         this.selectedItem = 2;
-      }
+      } 
     },
     navigate(to) {
       if (to == "/") {

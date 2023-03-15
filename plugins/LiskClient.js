@@ -92,7 +92,7 @@ const createTransaction = async (
 }
 
 export default ({ app }, inject) => {
-    const server = 'wss:https://18.kalipo.dev'
+    const server = 'wss://18.kalipo.dev/ws'
 
     let client;
 

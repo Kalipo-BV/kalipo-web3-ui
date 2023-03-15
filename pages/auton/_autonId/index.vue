@@ -19,6 +19,7 @@
   <v-container>
     <v-row>
       <v-container>
+
         <v-row class="mt-1">
           <v-col cols="12" md="6">
             <div v-if="auton != null && auton.type == 'DEFAULT'">
