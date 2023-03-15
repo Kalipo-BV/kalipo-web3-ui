@@ -15,14 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
+<script>
+import EditGrantContractForm from "~/components/contract/grant_contract/edit_form/EditGrantContractForm.vue";
+export default {
+  components: { EditGrantContractForm },
+};
+
+const contractState = {
+  "parties": [],
+  "preample": [],
+  "purpose": [],
+  "payment": [],
+  "dateTime": {},
+  "ipRights": [],
+  "termination": [],
+  "law": {},
+  "final": [],
+  "milestones": [],
+  "custom": {},
+}
+</script>
+
 <template>
   <v-row align="center" justify="center" style="height: 100%">
     <EditGrantContractForm />
   </v-row>
 </template>
-<script>
-  import EditGrantContractForm from "~/components/contract/grant_contract/edit_form/EditGrantContractForm.vue";
-  export default {
-    components: {EditGrantContractForm},
-  };
-</script>
