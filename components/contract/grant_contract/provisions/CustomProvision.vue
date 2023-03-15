@@ -1,11 +1,30 @@
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
 <template>
-    <tbody>
-        <tr v-for="(provision, index) in provisions">
+    <div>
+        <div v-for="(provision, index) in provisions">
             <v-container>
                 <v-row>
                     <v-col
                         cols="12"
                         lg="3"
+                        hide-details="auto"
+                        class="d-flex align-center justify-center"
                     >
                         <v-autocomplete
                             v-model="provision.type"
@@ -15,7 +34,6 @@
                             label="Provision type"
                             prepend-icon="mdi-help" 
                             solo
-                            clearable
                             required
                             hide-details="auto"
                             :rules="[v => !!v || 'This field can\'t be left open!']"
@@ -28,9 +46,11 @@
                     >
                         <div v-if="provision.type === 'Boolean'">
                             <v-switch
+                                style="margin-top: 0;"
+                                v-model="provision.data"
                                 required
-                                label="True or False"
-                                v-bind="provision.data"
+                                hide-details="auto"
+                                :label="`${provision.data?.toString() || 'false'}`"
                                 prepend-icon="mdi-format-list-bulleted" 
                             ></v-switch>
                         </div>
@@ -48,7 +68,9 @@
                             />
                         </div>
                         <div v-else>
-                            <v-text-field
+                            <v-textarea
+                                rows="1"
+                                auto-grow
                                 solo
                                 label="Provision"
                                 type="text"
@@ -56,7 +78,7 @@
                                 required
                                 hide-details="auto"
                                 :rules="[v => !!v || 'This field can\'t be left open!']"
-                                v-bind="provision.data"
+                                v-model="provision.data"
                                 prepend-icon="mdi-format-list-bulleted" 
                             />
                         </div>
@@ -66,27 +88,34 @@
                         cols="12"
                         lg="1"
                     >
-                        <v-btn
-                            style="height: 100%;"
-                            color="remove"
-                            block
-                            @click="removeProvision"
-                        >
-                            Remove provision
-                        </v-btn>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    style="height: 100%; max-width: 100%;"
+                                    color="remove"
+                                    block
+                                    @click="removeProvision"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                -
+                                </v-btn>
+                            </template>
+                            <span>Remove provision</span>
+                        </v-tooltip>
                     </v-col>
                 </v-row>
             </v-container>
-        </tr>
+        </div>
         <v-btn
-            color="add"
             block
             width="100%"
+            color="light-green lighten-2"
             @click="addProvision"
         >
             Add provision
         </v-btn>
-    </tbody>
+    </div>
   </template>
   <script>
     export default {
