@@ -98,26 +98,6 @@
           this.$emit("update:dates", newValue);
         },
       },
-    },
-
-    mounted: function () {
-      this.onstartBeginDateFocus();
-      this.onstartEndDateFocus();
-    },
-
-    data: vm => ({
-      menu1: false,
-      menu2: false,
-    }),
-
-    computed: {
-      computedDateFormatted () {
-        return this.formatDate(this.date1)
-      },
-
-      computedDateFormatted2 () {
-        return this.formatDate(this.date2)
-      },
 
       startDate() {
         return this.$store.getters["contract/startDate"];
@@ -134,20 +114,23 @@
       },
     },
 
+    mounted: function () {
+      this.onstartBeginDateFocus();
+      this.onstartEndDateFocus();
+    },
+
+    data: vm => ({
+      menu1: false,
+      menu2: false,
+    }),
+
     methods: {
       onstartBeginDateFocus() {
         if (this.dateValues.beginDate == null) {
           this.dateValues.beginDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
         }
       },
-
-      parseDate (date) {
-        if (!date) return null
-
-        const [day, month, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      },
-
+      
       onstartEndDateFocus() {
         if (this.dateValues.endDate == null) {
           var date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
@@ -163,6 +146,6 @@
       changeEnd(payload) {
         this.$store.commit("contract/changeEndDate", payload);
       }
-    }
+    },
   }
 </script>
