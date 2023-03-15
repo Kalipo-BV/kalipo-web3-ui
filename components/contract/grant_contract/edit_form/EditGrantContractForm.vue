@@ -19,14 +19,19 @@
   <v-sheet width="90%" class="mx-auto pa-10" style="margin-top: 10vh; margin-bottom: 12vh;">
     <h1 style="margin-bottom: 10px;">Edit Template (Grant Contract)</h1>
     <v-form ref="form">
-      <PartyMemberProvision 
-        :parties.sync="formData.partyMembers"
-      />
 
-      <PreampleProvision
-        :preample.sync="formData.preample"
-      />
-
+      <v-container fluid style="padding: 1px; margin: 5px;">
+        <PartyMemberProvision 
+          :parties.sync="formData.partyMembers"
+        />
+      </v-container>
+      
+      <v-container fluid style="padding: 1px; margin: 5px;">
+        <PreampleProvision
+          :preample.sync="formData.preample"
+        />
+      </v-container>
+      
       <v-container fluid style="padding: 1px; margin: 5px;">
         <PurposeProvision
           :purpose.sync="formData.purpose"
@@ -34,7 +39,7 @@
       </v-container>
 
       <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
+        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Payment of the grant"
       >
         <PaymentProvision
@@ -43,7 +48,7 @@
       </v-container>
       
       <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
+        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Date (begin- & end date)"
       >
         <DateTimeProvision
@@ -76,7 +81,7 @@
       </v-container>
 
       <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
+        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Milestones"
       >
         <MilestonesProvision
@@ -85,7 +90,7 @@
       </v-container>  
 
       <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray;"
+        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Custom provision"
       >
         <CustomProvision

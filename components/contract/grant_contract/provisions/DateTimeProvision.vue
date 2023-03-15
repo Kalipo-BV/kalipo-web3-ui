@@ -16,7 +16,7 @@
 -->
 
 <template>
-  <v-container>
+  <v-container style="min-width: 100%;">
     <v-row>
       <v-col
         cols="12"
