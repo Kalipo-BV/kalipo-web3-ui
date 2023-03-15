@@ -27,7 +27,7 @@
         :rules="[v => !!v || 'The purpose of the grand can\'t be left open!']"
         prepend-icon="mdi-card-text-outline" 
         @change="change"
-        :value="purpose"
+        :value="purpose2"
     />
 </template>
 <script>
@@ -44,7 +44,7 @@
                 },
             },
             
-            purpose() {
+            purpose2() {
                 return this.$store.getters["contract/purpose"];
             }
         },

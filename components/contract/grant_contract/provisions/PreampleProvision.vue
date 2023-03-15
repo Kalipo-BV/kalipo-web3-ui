@@ -28,7 +28,7 @@
         required
         v-model="preampleValue"
         @change="change"
-        :value="preample"
+        :value="preample2"
     />
 </template>
 <script>
@@ -45,7 +45,7 @@
                 },
             },
 
-            preample() {
+            preample2() {
                 return this.$store.getters["contract/preample"];
             }
         }, 
