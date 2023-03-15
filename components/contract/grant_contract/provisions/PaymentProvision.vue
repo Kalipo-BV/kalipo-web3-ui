@@ -25,6 +25,8 @@
             clearable
             required
             :rules="[v => v > 0 || 'This field can\'t be left open (>0)!']"
+            @change="changeAmount"
+            :value="paymentAmount"
         />
 
         <v-textarea
@@ -36,6 +38,34 @@
             hide-details="auto"
             prepend-icon="mdi-receipt-text-plus-outline" 
             style="padding-bottom: 5px;"
+            @change="changeNote"
+            :value="paymentNote"
         />
     </div>
 </template>
+
+<script>
+export default {
+    methods: {
+        changeAmount(payload) {
+            this.$store.commit("contract/changePaymentAmount", payload);
+        },
+
+        changeNote(payload) {
+            this.$store.commit("contract/changePaymentNote", payload);
+        }
+    },
+
+    computed: {
+        paymentAmount() {
+            return this.$store.getters["contract/paymentAmount"];
+        },
+
+        paymentNote() {
+            return this.$store.getters["contract/paymentNote"];
+        },
+
+
+    }
+}
+</script>

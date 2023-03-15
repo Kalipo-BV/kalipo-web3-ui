@@ -19,7 +19,7 @@ export const state = () => ({
 	parties: [],
 	preample: "",
 	purpose: "",
-	payment: {payment: 0, paymentNote:""},
+	payment: {amount: 0, note:""},
 	dateTime: {start: null, end: null},
 	ipRights: "",
 	termination: "",
@@ -41,19 +41,35 @@ export const mutations = {
 		}
 	},
 
-	changePreample(state, preample) {
-		if (typeof preample === 'string') {
-			state.preample = preample;
+	changePreample(state, payload) {
+		if (typeof payload === 'string') {
+			state.preample = payload;
 		} else {
-			console.error("invalid preample given", preample);
+			console.error("invalid preample given", payload);
 		}
 	},
 
-	changePurpose(state, purpose) {
-		if (typeof purpose === 'string') {
-			state.purpose = purpose;
+	changePurpose(state, payload) {
+		if (typeof payload === 'string') {
+			state.purpose = payload;
 		} else {
-			console.error("invalid purpose given", purpose);
+			console.error("invalid purpose given", payload);
+		}
+	},
+
+	changePaymentAmount(state, payload) {
+		if (typeof Number.parseFloat(payload) === 'number') {
+			state.payment.amount = payload;
+		} else {
+			console.error("invalid payment amount given", payload);
+		}
+	},
+
+	changePaymentNote(state, payload) {
+		if (typeof payload === 'string') {
+			state.payment.note = payload;
+		} else {
+			console.error("invalid paymentNote given", payload);
 		}
 	}
 }
@@ -69,5 +85,13 @@ export const getters = {
 
 	purpose(state) {
 		return state.purpose;
+	},
+
+	paymentAmount(state) {
+		return state.payment.amount;
+	},
+
+	paymentNote(state) {
+		return state.payment.note;
 	}
 }
