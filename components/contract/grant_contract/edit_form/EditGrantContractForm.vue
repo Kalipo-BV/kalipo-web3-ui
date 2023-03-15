@@ -45,7 +45,7 @@
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <TerminationOFAgreement/>
+        <TerminationOfAgreement/>
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
