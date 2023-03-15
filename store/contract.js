@@ -47,8 +47,14 @@ export const mutations = {
 		} else {
 			console.error("invalid preample given", preample);
 		}
+	},
 
-		console.log(state.preample);
+	changePurpose(state, purpose) {
+		if (typeof purpose === 'string') {
+			state.purpose = purpose;
+		} else {
+			console.error("invalid purpose given", purpose);
+		}
 	}
 }
 
@@ -59,5 +65,9 @@ export const getters = {
 
 	preample(state) {
 		return state.preample;
+	},
+
+	purpose(state) {
+		return state.purpose;
 	}
 }

@@ -25,5 +25,23 @@
         model-value="fill me in"
         :rules="[v => !!v || 'The purpose of the grand can\'t be left open!']"
         prepend-icon="mdi-card-text-outline" 
+        @change="change"
+        :value="purpose"
     />
 </template>
+
+<script>
+export default {
+    methods: {
+        change(payload) {
+            this.$store.commit("contract/changePurpose", payload);
+        }
+    },
+
+    computed: {
+        purpose() {
+            return this.$store.getters["contract/purpose"];
+        }
+    }
+}
+</script>
