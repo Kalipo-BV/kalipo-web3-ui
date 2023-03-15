@@ -105,6 +105,14 @@
       computedDateFormatted2 () {
         return this.formatDate(this.date2)
       },
+
+      startDate() {
+        return this.$store.getters["contract/startDate"];
+      },
+
+      endDate() {
+        return this.$store.getters["contract/endDate"];
+      },
     },
 
     watch: {
@@ -120,12 +128,21 @@
         const [year, month, day] = date.split('-')
         return `${day}/${month}/${year}`
       },
+
       parseDate (date) {
         if (!date) return null
 
         const [day, month, year] = date.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       },
+
+      changeStart(payload) {
+        this.$store.commit("contract/changeStartDate", payload);
+      },
+
+      changeEnd(payload) {
+        this.$store.commit("contract/changeEndDate", payload);
+      }
     },
   }
 </script>
