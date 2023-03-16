@@ -22,7 +22,7 @@
                 <v-row>
                     <v-col
                         cols="12"
-                        lg="3"
+                        lg="2"
                         hide-details="auto"
                         class="d-flex align-center justify-center"
                     >
@@ -42,7 +42,26 @@
             
                     <v-col
                         cols="12"
-                        lg="8"
+                        lg="4"
+                    >
+                        <v-textarea
+                            rows="1"
+                            auto-grow
+                            solo
+                            label="Provision info"
+                            type="text"
+                            clearable
+                            required
+                            hide-details="auto"
+                            :rules="[v => !!v || 'This field can\'t be left open!']"
+                            v-model="provision.info"
+                            prepend-icon="mdi-card-text-outline" 
+                        />
+                    </v-col>
+
+                    <v-col
+                        cols="12"
+                        lg="5"
                     >
                         <div v-if="provision.type === 'Boolean'">
                             <v-switch
@@ -143,7 +162,7 @@
         methods: {
             addProvision() {
                 this.customValue.push({
-                    type: "Text", data: null
+                    type: "Text", info: null, data: null
                 })
             },
             removeProvision(index) {
