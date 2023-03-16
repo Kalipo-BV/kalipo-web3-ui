@@ -15,6 +15,7 @@
         </v-col>
       </v-row>
     <v-item-group v-model="selected" mandatory>
+      <div v-if="s_templates.length === 0" class="text-h4">No templates found</div>
       <div v-for="(template, index) in this.s_templates">
         <v-col cols="12">
           <v-item v-slot="{ active, toggle }">
@@ -29,8 +30,6 @@
           </v-item>
         </v-col>
       </div>
-      <v-row>
-      </v-row>
     </v-item-group>
     <v-row class="ma-5">
       <v-col cols="6">

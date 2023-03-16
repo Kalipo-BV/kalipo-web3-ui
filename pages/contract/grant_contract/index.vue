@@ -16,14 +16,7 @@
 -->
 
 <script>
-import PartyMemberProvision from "~/components/contract/grant_contract/provisions/PartyMemberProvision.vue";
-import PreampleProvision from "~/components/contract/grant_contract/provisions/PreampleProvision.vue";
-import PurposeProvision from "~/components/contract/grant_contract/provisions/PurposeProvision.vue";
-import GrantContractEditForm from "~/components/contract/grant_contract/views/GrantContractEditForm.vue";
-import StageBuilder from "~/components/contract/grant_contract/views/StageBuilder.vue";
 export default {
-  components: { GrantContractEditForm, StageBuilder, PreampleProvision, PartyMemberProvision, PurposeProvision },   
-
   data: () => {return {
     editFase: 3
   }},
