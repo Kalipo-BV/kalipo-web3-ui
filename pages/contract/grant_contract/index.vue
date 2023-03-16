@@ -16,28 +16,47 @@
 -->
 
 <script>
-import EditGrantContractForm from "~/components/contract/grant_contract/edit_form/EditGrantContractForm.vue";
+import PartyMemberProvision from "~/components/contract/grant_contract/provisions/PartyMemberProvision.vue";
+import PreampleProvision from "~/components/contract/grant_contract/provisions/PreampleProvision.vue";
+import PurposeProvision from "~/components/contract/grant_contract/provisions/PurposeProvision.vue";
+import GrantContractEditForm from "~/components/contract/grant_contract/views/GrantContractEditForm.vue";
+import StageBuilder from "~/components/contract/grant_contract/views/StageBuilder.vue";
 export default {
-  components: { EditGrantContractForm },
+  components: { GrantContractEditForm, StageBuilder, PreampleProvision, PartyMemberProvision, PurposeProvision },   
+
+  data: () => {return {
+    editFase: 3
+  }},
+
+  methods: {
+    previous: function() {
+      this.editFase++;
+    },
+
+    next: function() {
+      this.editFase--;
+    }
+  }
 };
 
-const contractState = {
-  "parties": [],
-  "preample": [],
-  "purpose": [],
-  "payment": [],
-  "dateTime": {},
-  "ipRights": [],
-  "termination": [],
-  "law": {},
-  "final": [],
-  "milestones": [],
-  "custom": {},
-}
+
 </script>
 
 <template>
   <v-row align="center" justify="center" style="height: 100%">
-    <EditGrantContractForm />
+    
+    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Party-Provision">
+      <PartyMemberProvision/>
+    </StageBuilder>
+    <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample-Provision">
+      <PreampleProvision/>
+    </StageBuilder>
+
+    <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose-Provision">
+      <PurposeProvision/>
+    </StageBuilder>
+    
+    <GrantContractEditForm v-if="editFase === 0" />
+    
   </v-row>
 </template>
