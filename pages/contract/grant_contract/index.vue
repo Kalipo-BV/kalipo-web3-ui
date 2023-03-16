@@ -15,40 +15,68 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<script>
-export default {
-  data: () => {return {
-    editFase: 3
-  }},
-
-  methods: {
-    previous: function() {
-      this.editFase++;
-    },
-
-    next: function() {
-      this.editFase--;
-    }
-  }
-};
-
-</script>
-
 <template>
   <v-row align="center" justify="center" style="height: 100%">
     <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Party-Provision">
-      <PartyMemberProvision/>
+      <PartyMemberProvision
+        :parties.sync="formData.partyMembers"
+      />
     </StageBuilder>
 
     <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample-Provision">
-      <PreampleProvision/>
+      <PreampleProvision
+        :preample.sync="formData.preample"
+      />
     </StageBuilder>
 
     <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose-Provision">
-      <PurposeProvision/>
+      <PurposeProvision
+        :purpose.sync="formData.purpose"
+      />
     </StageBuilder>
+
+    <GrantContractEditForm v-if="editFase === 0" 
+      :data.sync="formData"
+    />
     
-    <GrantContractEditForm v-if="editFase === 0" />
     
   </v-row>
 </template>
+<script>
+  export default {
+    data: () => ({
+      editFase: 3,
+      formData: {
+        partyMembers: [],
+        preample: null,
+        purpose: null,
+        payment: {
+          amount: null,
+          note: null,
+        },
+        dates: {
+          beginDate: null,
+          endDate: null,
+        },
+        propertyRights: null,
+        terminationOfAgreement: null,
+        governingLawAndJurisdiction: null,
+        finalProvisions: null,
+        milestones: [],
+        custom: [],
+        requiredToSign: false,
+        signed: false,
+      },
+    }),
+
+    methods: {
+      previous: function() {
+        this.editFase++;
+      },
+
+      next: function() {
+        this.editFase--;
+      }
+    }
+  };
+</script>

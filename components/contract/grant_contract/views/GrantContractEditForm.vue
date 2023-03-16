@@ -141,29 +141,18 @@
 </template>
 <script>
   export default {
-    data: () => ({
+    props: ["data"],
+
+    computed: {
       formData: {
-        partyMembers: [],
-        preample: null,
-        purpose: null,
-        payment: {
-          amount: null,
-          note: null,
+        get: function () {
+          return this.data;
         },
-        dates: {
-          beginDate: null,
-          endDate: null,
+        set: function (newValue) {
+          this.$emit("update:data", newValue);
         },
-        propertyRights: null,
-        terminationOfAgreement: null,
-        governingLawAndJurisdiction: null,
-        finalProvisions: null,
-        milestones: [],
-        custom: [],
-        requiredToSign: false,
-        signed: false,
       },
-    }),
+    },
 
     methods: {
       async validate() {
