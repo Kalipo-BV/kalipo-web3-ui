@@ -17,7 +17,7 @@
 
 <template>
   <v-sheet width="90%" class="mx-auto pa-10" style="margin-top: 10vh; margin-bottom: 12vh;">
-    <h1 style="margin-bottom: 10px;">Edit Template (Grant Contract)</h1>
+    <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
     <v-form ref="form">
 
       <v-container fluid style="padding: 1px; margin: 5px;">

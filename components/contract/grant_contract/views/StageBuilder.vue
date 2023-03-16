@@ -17,28 +17,28 @@
 
 <template>
 	<v-sheet width="90%" class="mx-auto pa-10" style="margin-top: 10vh; margin-bottom: 12vh;">
-	    <h1 style="margin-bottom: 10px;">{{ title }}</h1>
-				<v-row>
-					<v-col cols="2">
-						<v-btn  
-							v-if="!isFirst"
-		          color="info"
-		          block
-		          @click="previous"
-		        >previous</v-btn>
-					</v-col>
-					<v-col cols="8">
-						<slot></slot>
-					</v-col>
-					<v-col cols="2">
-						<v-btn
-	          color="info"
-	          block
-	           @click="next"
-	        >next</v-btn>
-						<!-- <button></button> -->
-					</v-col>
-				</v-row>
+	    <h1 style="margin-bottom: 10px; text-align: center;">{{ title }}</h1>
+			<v-row>
+				<v-col cols="2">
+					<v-btn  
+						v-if="!isFirst"
+						color="info"
+						block
+						@click="previous"
+					>previous</v-btn>
+				</v-col>
+				<v-col cols="8">
+					<slot></slot>
+				</v-col>
+				<v-col cols="2">
+					<v-btn
+						color="info"
+						block
+						@click="next"
+					>next</v-btn>
+					<!-- <button></button> -->
+				</v-col>
+			</v-row>
 	  </v-sheet>
 </template>
 <script>

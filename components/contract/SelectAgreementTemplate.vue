@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="text-h1">Select Agreement Propasal Template</div>
+    <div class="text-h1" style="text-align: center;">Select Agreement Propasal Template</div>
     <v-row>
         <v-col cols="12" md="4" style="min-width: 100%;">
           <v-text-field 
