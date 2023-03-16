@@ -39,15 +39,14 @@ export default {
   }
 };
 
-
 </script>
 
 <template>
   <v-row align="center" justify="center" style="height: 100%">
-    
     <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Party-Provision">
       <PartyMemberProvision/>
     </StageBuilder>
+
     <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample-Provision">
       <PreampleProvision/>
     </StageBuilder>

@@ -20,13 +20,23 @@
 	    <h1 style="margin-bottom: 10px;">{{ title }}</h1>
 				<v-row>
 					<v-col cols="2">
-						<button v-if="!isFirst" @click="previous">previous</button>
+						<v-btn  
+							v-if="!isFirst"
+		          color="info"
+		          block
+		          @click="previous"
+		        >previous</v-btn>
 					</v-col>
 					<v-col cols="8">
-							<slot></slot>
+						<slot></slot>
 					</v-col>
 					<v-col cols="2">
-						<button @click="next">next</button>
+						<v-btn
+	          color="info"
+	          block
+	           @click="next"
+	        >next</v-btn>
+						<!-- <button></button> -->
 					</v-col>
 				</v-row>
 	  </v-sheet>
