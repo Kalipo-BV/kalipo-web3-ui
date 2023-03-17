@@ -42,50 +42,38 @@ export const mutations = {
 	},
 
 	changePreample(state, payload) {
-		if (typeof payload === 'string') {
+		if (isString(payload, 'preample')) {
 			state.preample = payload;
-		} else {
-			console.error("invalid preample given", payload);
 		}
 	},
 
 	changePurpose(state, payload) {
-		if (typeof payload === 'string') {
+		if (isString(payload, 'purpose')) {
 			state.purpose = payload;
-		} else {
-			console.error("invalid purpose given", payload);
 		}
 	},
 
 	changePaymentAmount(state, payload) {
-		if (typeof Number.parseFloat(payload) === 'number') {
+		if (isNumber(payload, 'payment amount')) {
 			state.payment.amount = payload;
-		} else {
-			console.error("invalid payment amount given", payload);
 		}
 	},
 
 	changePaymentNote(state, payload) {
-		if (typeof payload === 'string') {
+		if (isString(payload, 'paymentNote')) {
 			state.payment.note = payload;
-		} else {
-			console.error("invalid paymentNote given", payload);
 		}
 	},
 
 	changeStartDate(state, payload) {
-		if (payload instanceof DATE) {
+		if (isDate(payload, 'startDate')) {
 			state.dates.start = payload;
-		} else {
-			console.error("invalid startdate given", payload);
 		}
 	},
 
 	changeEndDate(state, payload) {
-		if (payload instanceof DATE) {
+		if (isDate(payload, 'endDate')) {
 			state.dates.end = payload;
-		} else {
-			console.error("invalid enddate given", payload);
 		}
 	}
 }
@@ -117,5 +105,33 @@ export const getters = {
 
 	endDate(state) {
 		return state.dates.end;
+	}
+}
+
+
+const isString = (payload, errorName) => {
+	const result = (typeof payload === 'string');
+	logError(result, errorName);
+
+	return result;
+}
+
+const isNumber = (payload, errorName) => {
+	const result = (typeof Number.parseFloat(payload) === 'number');
+	logError(result, errorName);
+
+	return result;
+}
+
+const isDate = (payload, errorName) => {
+	const result = (payload instanceof DATE);
+	logError(result, errorName);
+
+	return result;
+}
+
+const logError = (bool, errorName) => {
+	if (!bool) {
+		console.error(`invalid ${errorName} given`, payload);
 	}
 }
