@@ -91,7 +91,7 @@
           >
             <v-card-text class="py-2">
               <div class="text-caption d-flex align-center">
-                <v-icon small class="mr-1">mdi-account-plus</v-icon>
+                <v-icon small class="mr-1"><mdi-account-plus></mdi-account-plus></v-icon>
                 <span class="text-caption">{{ membership.proposal.type }}</span>
               </div>
             </v-card-text>
@@ -131,6 +131,7 @@
                     <span class="text-caption font-weight-bold">{{
                       membership.auton.autonProfile.name
                     }}</span>
+                    <p>hahahha</p>
                   </div>
                 </v-card-text>
               </v-card>
@@ -170,7 +171,7 @@
       <GenericTransaction
         title="Membership invitation"
         subtitle="Consensus was reached to invite you"
-        :actionText="actionText"
+        :actionText="actionTexto"
         :chipText="chipText"
         :uri="uri"
         :transaction="transaction"
