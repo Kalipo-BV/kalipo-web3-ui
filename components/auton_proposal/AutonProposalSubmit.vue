@@ -29,6 +29,46 @@
         ></AutonSelectProposalType>
       </v-card-text>
 
+
+      <v-card-text v-if="step == 'proposal-info'">
+        <AutonStepperHeader
+          title="Information about Stakeholder proposal"
+          subtitle="for this proposal stakeholder voting will be implemented, you can specify the stakeholders below"
+        ></AutonStepperHeader>
+        
+        <AutonProposalMembershipInvitation
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalMembershipInvitation>
+
+        <v-radio-group       
+        v-model="column" 
+        column>       
+      <v-radio          
+      label="stakeholder voting"         
+      value="radio-1"
+      color="blue">
+      </v-radio>       
+      <v-radio 
+      label="cardinal voting"
+      value="radio-2"
+      color="blue">
+        </v-radio>
+      </v-radio-group>
+    <p>---------------</p>
+    <input type="radio" id="stakeholder_option" name="voting">
+    <Label for="stakeholder_option">Stakeholder voting</Label><br>
+    <input type="radio" id="cardinal_option" name="voting">
+    <Label for="cardinal_option">Cardinal voting</Label><br>
+    <input type="radio" id="binary_option" name="voting">
+    <Label for="binary_option">Binary voting</Label>
+
+
+      </v-card-text>
+
+
       <v-card-text v-if="step == 'proposal-profile'">
         <AutonStepperHeader
           title="Submitting a new proposal"
@@ -41,6 +81,8 @@
           :description.sync="proposalDescription"
         ></AutonProposalProfile>
       </v-card-text>
+
+      
 
       <v-card-text v-if="step == 'membership-invitation'">
         <AutonStepperHeader
@@ -110,8 +152,10 @@ export default {
   },
   methods: {
     prevStep() {
-      if (this.step == "proposal-profile") {
+      if (this.step == "proposal-info") {
         this.step = "select-proposal-type";
+      } else if (this.step == "proposal-profile") {
+        this.step = "proposal-info";
       } else if (this.step == "membership-invitation") {
         this.step = "proposal-profile";
       } else if (this.step == "sign") {
@@ -139,6 +183,8 @@ export default {
     },
     async nextStep() {
       if (this.step == "select-proposal-type") {
+        this.step = "proposal-info";
+      }else if (this.step == "proposal-info") {
         this.step = "proposal-profile";
       } else if (this.step == "proposal-profile") {
         this.step = "membership-invitation";
