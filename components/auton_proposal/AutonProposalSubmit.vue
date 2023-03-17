@@ -56,6 +56,7 @@
         ></AutonProposalMembershipInvitation>
       </v-card-text>
 
+
       <AccountSign
         :transaction="transaction"
         :uri="uri"

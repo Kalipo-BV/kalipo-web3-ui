@@ -16,15 +16,24 @@
 -->
 
 <template>
-  <div>
-    <div class="text-h4 text--primary">{{ title }}</div>
-    <div class="text-body-1 text--primary">{{ subtitle }}</div>
-
-  </div>
-</template>
-<script>
-export default {
-  props: ["title", "subtitle"],
-  data: () => ({}),
-};
-</script>
+    <div>
+      <div>
+        <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
+          Memberships & roles
+        </div>
+        <v-row justify="start">
+          <v-col cols="12" md="6">
+            <div>
+              <ProposalTypeCard>
+                <p>Stakeholder voting</p>
+                <btn>Stakeholder</btn>
+              </ProposalTypeCard>
+              
+            </div>
+          </v-col>
+          
+        </v-row>
+        <v-divider class="mt-8"></v-divider>
+      </div>
+    </div>
+  </template>

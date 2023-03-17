@@ -44,7 +44,7 @@
               left
               >{{ getInitials(data.item.name, 2) }}</v-avatar
             >
-            {{ data.item.name }}
+            {{ data.item.name}}
           </v-chip>
         </template>
         <template v-slot:item="data">

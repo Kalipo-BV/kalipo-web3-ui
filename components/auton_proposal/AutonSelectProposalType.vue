@@ -31,6 +31,7 @@
             ></ProposalTypeCard>
           </div>
         </v-col>
+        
       </v-row>
       <v-divider class="mt-8"></v-divider>
     </div>
