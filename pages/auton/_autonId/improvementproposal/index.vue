@@ -1,3 +1,20 @@
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
 <template>
   <v-container>
     <div class="d-flex mt-3 ml-1">
@@ -5,20 +22,130 @@
       <improvementproposal></improvementproposal>
       <improvementproposal></improvementproposal>
     </div>
-  </v-container>
-    
-  </template>
-  <script>
-import improvementproposal from '~/components/improvement_proposal/improvementProposalCard.vue';
 
-  export default {
-    layout: "auton",
-    data() {
-        return {};
-    },
-    mounted() {
-        this.$nuxt.$emit("Auton-setPage", "improvementproposal");
-    },
-    components: { improvementproposal }
+    <v-data-table
+      :headers="headers"
+      :items="proposals"
+      class="elevation-0 mt-4"
+    >
+      <template v-slot:item.submission="{ item }">
+        {{
+          new Date(parseInt(item.submission) * 1000).toLocaleDateString(
+            userLang,
+            {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            }
+          )
+        }}
+      </template>
+      
+    </v-data-table>
+
+
+  <v-list>
+    <v-list-item
+        v-for="(proposal, i) in proposals"
+        :key="i"
+        :value="proposal"
+        active-color="primary"
+      >
+
+        <improvementproposal :message="proposal.title"></improvementproposal>
+    </v-list-item>
+  </v-list>
+  </v-container>
+</template>
+<script>
+import improvementproposal from '~/components/improvement_proposal/improvementProposalCard.vue';
+export default {
+  layout: "auton",
+  components: {improvementproposal},
+  data: () => ({
+    dialog: true,
+    userLang: null,
+    filterStatus: [],
+    filterResult: [],
+    resultEnum: ["UNDECIDED", "ACCEPTED", "REJECTED"],
+    search: "",
+    headers: [
+      {
+        text: "Title",
+        align: "start",
+        sortable: false,
+        value: "title",
+      },
+      { text: "Type", value: "type" },
+
+      { text: "Author(s)", value: "author" },
+      { text: "Status", value: "status" },
+      { text: "Result", value: "result" },
+      { text: "Submission date", value: "submission" },
+    ],
+    proposals: [],
+  }),
+  async mounted() {
+    this.$nuxt.$emit("Auton-setPage", "proposals");
+    this.userLang = navigator.language || navigator.userLanguage;
+
+    const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
+
+    const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
+      name: autonIdParam,
+    });
+
+    const autonWrapper = await this.$invoke("auton:getByID", {
+      id: autonIdWrapper.result.id,
+    });
+
+    for (let index = 0; index < autonWrapper.result.proposals.length; index++) {
+      const proposalId = autonWrapper.result.proposals[index];
+      const proposalWrapper = await this.$invoke("proposal:getByID", {
+        id: proposalId,
+      });
+      const submitterMembershipWrapper = await this.$invoke(
+        "membership:getByID",
+        {
+          id: proposalWrapper.result.membershipId,
+        }
+      );
+      const submitterAccountWrapper = await this.$invoke(
+        "kalipoAccount:getByID",
+        {
+          id: submitterMembershipWrapper.result.accountId,
+        }
+      );
+      let linkStatus = "";
+      if (proposalWrapper.result.status == "CAMPAIGNING") {
+        linkStatus = "campaigning";
+      }
+      if (proposalWrapper.result.status == "VOTING") {
+        linkStatus = "voting";
+      }
+      if (proposalWrapper.result.status == "DECIDED") {
+        linkStatus = "voting";
+      }
+
+      if (proposalWrapper.result.status == "ENDED") {
+        linkStatus = "results";
+      }
+
+      this.proposals.push({
+        link: `/auton/${this.$route.params.autonId}/proposal/${
+          index + 1
+        }/${linkStatus}`,
+        status: proposalWrapper.result.status,
+        type: proposalWrapper.result.type,
+        title: proposalWrapper.result.title,
+        submission: proposalWrapper.result.created,
+        author: submitterAccountWrapper.result.username,
+        result: proposalWrapper.result.binaryVoteResult.result,
+      });
+      
+    }
+  },
 };
-  </script>
+</script>
