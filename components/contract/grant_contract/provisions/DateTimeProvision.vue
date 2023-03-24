@@ -33,20 +33,19 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="dateValues.beginDate"
-              label="Begin date"
+              v-model="startDate"
+              label="Start date"
               hint="YYYY/MM/DD format"
               persistent-hint
               prepend-icon="mdi-calendar"
               v-bind="attrs"
               v-on="on"
-              :rules="[v => !!v || 'A start-date must be selected!', dateValues.beginDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The start-date must be in the future or today', dateValues.beginDate < dateValues.endDate || 'The start-date must come before the end-date!'].flat()"
+              :rules="[v => !!v || 'A start-date must be selected!', startDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The start-date must be in the future or today', startDate < endDate || 'The start-date must come before the end-date!'].flat()"
             ></v-text-field>
           </template>
           <v-date-picker
-              v-model="dateValues.beginDate"
+              v-model="startDate"
               no-title
-              @input="menu1 = false"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -65,20 +64,19 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="dateValues.endDate"
+              v-model="endDate"
               label="End date"
               hint="YYYY/MM/DD format"
               persistent-hint
               prepend-icon="mdi-calendar"
               v-bind="attrs"
               v-on="on"
-              :rules="[v => !!v || 'An end-date must be selected!', dateValues.endDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The end-date must be in the future', dateValues.endDate > dateValues.beginDate || 'The end-date must come after the begin-date!'].flat()"
+              :rules="[v => !!v || 'An end-date must be selected!', endDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The end-date must be in the future', endDate > startDate || 'The end-date must come after the start-date!'].flat()"
             ></v-text-field>
           </template>
           <v-date-picker
-              v-model="dateValues.endDate"
+              v-model="endDate"
               no-title
-              @input="menu2 = false"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -87,25 +85,40 @@
 </template>
 <script>
   export default {
-    props: ["dates"],
 
     computed: {
-      dateValues: {
+      startDate: {
         get: function () {
-          return this.dates;
+          return this.$store.state.contract.formData.dates.startDate;
         },
-        set: function (newValue) {
-          this.$emit("update:dates", newValue);
+        set: function (payload) {
+          this.$store.commit("contract/changeStartDate", payload);
         },
       },
 
-      startDate() {
-        return this.$store.getters["contract/startDate"];
-      },
+      endDate: {
+        get: function () {
+          return this.$store.state.contract.formData.dates.endDate;
+        },
+        set: function (payload) {
+          this.$store.commit("contract/changeEndDate", payload);
+        },
+      }
 
-      endDate() {
-        return this.$store.getters["contract/endDate"];
-      },
+      // get: function () {
+      //   return this.dates;
+      // },
+      // set: function (newValue) {
+      //   this.$emit("update:dates", newValue);
+      // },
+
+      // startDate() {
+      //   return this.$store.getters["contract/startDate"];
+      // },
+
+      // endDate() {
+      //   return this.$store.getters["contract/endDate"];
+      // },
     },
 
     watch: {
@@ -115,8 +128,8 @@
     },
 
     mounted: function () {
-      this.onstartBeginDateFocus();
-      this.onstartEndDateFocus();
+      // this.onstartBeginDateFocus();
+      // this.onstartEndDateFocus();
     },
 
     data: vm => ({
@@ -125,27 +138,27 @@
     }),
 
     methods: {
-      onstartBeginDateFocus() {
-        if (this.dateValues.beginDate == null) {
-          this.dateValues.beginDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-        }
-      },
+      // onstartBeginDateFocus() {
+      //   if (this.dateValues.beginDate == null) {
+      //     this.dateValues.beginDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+      //   }
+      // },
       
-      onstartEndDateFocus() {
-        if (this.dateValues.endDate == null) {
-          var date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
-          date = new Date(date.setDate(date.getDate() + 1));
-          this.dateValues.endDate = date.toISOString().substr(0, 10);
-        }
-      },
+      // onstartEndDateFocus() {
+      //   if (this.dateValues.endDate == null) {
+      //     var date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
+      //     date = new Date(date.setDate(date.getDate() + 1));
+      //     this.dateValues.endDate = date.toISOString().substr(0, 10);
+      //   }
+      // },
 
-      changeStart(payload) {
-        this.$store.commit("contract/changeStartDate", payload);
-      },
+      // changeStart(payload) {
+      //   this.$store.commit("contract/changeStartDate", payload);
+      // },
 
-      changeEnd(payload) {
-        this.$store.commit("contract/changeEndDate", payload);
-      }
+      // changeEnd(payload) {
+      //   this.$store.commit("contract/changeEndDate", payload);
+      // }
     },
   }
 </script>
