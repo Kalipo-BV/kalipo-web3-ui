@@ -17,7 +17,7 @@
 
 <template>
     <v-textarea
-        v-model="terminationOfAgreementValue"
+        v-model="terminationOfAgreement"
         rows="2"
         solo
         clearable
@@ -30,14 +30,13 @@
 </template>
 <script>
     export default {
-        props: ["terminationOfAgreement"],
         computed: {
-            terminationOfAgreementValue: {
+            terminationOfAgreement: {
                 get: function () {
-                    return this.terminationOfAgreement;
+                    return this.$store.state.contract.formData.terminationOfAgreement;
                 },
-                set: function (newValue) {
-                    this.$emit("update:terminationOfAgreement", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/terminationOfAgreement", payload);
                 },
             },
         },
