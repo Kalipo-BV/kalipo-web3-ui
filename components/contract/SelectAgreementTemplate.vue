@@ -50,7 +50,7 @@
       selected: 0,
       searchString: "",
       templates: [
-        {title: "Template1", subTitle: "Grant Contract", icon: "mdi-account-school", template: "test1", url: "./grant_contract"},
+        {title: "Grant Contract", subTitle: "Template1", icon: "mdi-account-school", template: "test1", url: "./grant_contract"},
         {title: "Template2", subTitle: "Template2", icon: "mdi-blanco", template: "test2", url: ""}, 
         {title: "Template3", subTitle: "Template3", icon: "mdi-blanco", template: "test3", url: ""}, 
         {title: "Template4", subTitle: "Template4", icon: "mdi-blanco", template: "test4", url: ""}, 

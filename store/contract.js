@@ -16,98 +16,122 @@
  */
 
 export const state = () => ({
-	parties: [],
-	preample: "",
-	purpose: "",
-	payment: {amount: 0, note:""},
-	dates: {start: null, end: null},
-	ipRights: "",
-	termination: "",
-	law: "",
-	final: "",
-	milestones: [],
-	custom: {},
+	editFase: 3,
+	status: "",
+	type: "Grant Contract",
+	fullySigned: false,
+	date: new Date().toISOString(),
+	formData: {
+	//   partyMembers: [],
+		parties: [],
+		preample: null,
+		purpose: null,
+		payment: {
+			amount: null,
+			note: null,
+		},
+		dates: {
+			beginDate: null,
+			endDate: null,
+		},
+		propertyRights: null,
+		terminationOfAgreement: null,
+		governingLawAndJurisdiction: null,
+		finalProvisions: null,
+		milestones: [],
+		custom: [],
+		signingWindow: 0,
+		requiredToSign: false,
+		signed: false,
+	},
 })
 
 export const mutations = {
 	addParty(state, party) {
-		state.parties.push(party);
+		state.formData.parties.push(party);
 	},
 
 	removeParty(state, party) {
-		const index = state.parties.indexOf(party);
+		const index = state.formData.parties.indexOf(party);
 		if (index > -1) { // only splice array when item is found
-			state.parties.splice(index, 1); // 2nd parameter means remove one item only
+			state.formData.parties.splice(index, 1); // 2nd parameter means remove one item only
 		}
 	},
 
 	changePreample(state, payload) {
 		if (isString(payload, 'preample')) {
-			state.preample = payload;
+			state.formData.preample = payload;
 		}
 	},
 
 	changePurpose(state, payload) {
 		if (isString(payload, 'purpose')) {
-			state.purpose = payload;
+			state.formData.purpose = payload;
 		}
 	},
 
 	changePaymentAmount(state, payload) {
 		if (isNumber(payload, 'payment amount')) {
-			state.payment.amount = payload;
+			state.formData.payment.amount = payload;
 		}
 	},
 
 	changePaymentNote(state, payload) {
 		if (isString(payload, 'paymentNote')) {
-			state.payment.note = payload;
+			state.formData.payment.note = payload;
 		}
 	},
 
 	changeStartDate(state, payload) {
 		if (isDate(payload, 'startDate')) {
-			state.dates.start = payload;
+			state.formData.dates.start = payload;
 		}
 	},
 
 	changeEndDate(state, payload) {
 		if (isDate(payload, 'endDate')) {
-			state.dates.end = payload;
+			state.formData.dates.end = payload;
 		}
+	},
+
+	saveContract() {
+		console.log(state);
 	}
 }
 
 export const getters = {
 	parties(state) {
-		return state.parties;
+		return state.formData.parties;
 	},
 
 	preample(state) {
-		return state.preample;
+		return state.formData.preample;
 	},
 
 	purpose(state) {
-		return state.purpose;
+		return state.formData.purpose;
 	},
 
 	paymentAmount(state) {
-		return state.payment.amount;
+		return state.formData.payment.amount;
 	},
 
 	paymentNote(state) {
-		return state.payment.note;
+		return state.formData.payment.note;
 	},
 
 	startDate(state) {
-		return state.dates.start;
+		return state.formData.dates.start;
 	},
 
 	endDate(state) {
-		return state.dates.end;
+		return state.formData.dates.end;
+	},
+
+	getContract() {
+		return state;
 	}
 }
-
 
 const isString = (payload, errorName) => {
 	const result = (typeof payload === 'string');
