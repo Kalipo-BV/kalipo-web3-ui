@@ -17,7 +17,7 @@
 
 <template>
     <v-textarea
-        v-model="finalProvisionsValue"
+        v-model="finalProvisions"
         rows="2"
         solo
         clearable
@@ -30,14 +30,13 @@
 </template>
 <script>
     export default {
-        props: ["finalProvisions"],
         computed: {
-            finalProvisionsValue: {
+            finalProvisions: {
                 get: function () {
-                    return this.finalProvisions;
+                    return this.$store.state.contract.formData.finalProvisions;
                 },
-                set: function (newValue) {
-                    this.$emit("update:finalProvisions", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/changeFinalProvisions", payload);
                 },
             },
         },

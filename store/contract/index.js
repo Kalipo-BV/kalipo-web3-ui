@@ -15,44 +15,48 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {isArray, isDate, isNumber, isString} from "./validation.js"
+
+const initFormData = {
+	parties: [],
+	preample: null,
+	purpose: null,
+	payment: {
+		amount: null,
+		note: null,
+	},
+	dates: {
+		beginDate: null,
+		endDate: null,
+	},
+	propertyRights: null,
+	terminationOfAgreement: null,
+	governingLawAndJurisdiction: null,
+	finalProvisions: null,
+	milestones: [],
+	custom: [],
+	signingWindow: 0,
+	requiredToSign: false,
+	signed: false,
+}
+
+
 export const state = () => ({
 	editFase: 3,
 	status: "",
 	type: "Grant Contract",
 	fullySigned: false,
 	date: new Date().toISOString(),
-	formData: {
-	//   partyMembers: [], in parties
-		parties: [],
-		preample: null,
-		purpose: null,
-		payment: {
-			amount: null,
-			note: null,
-		},
-		dates: {
-			beginDate: null,
-			endDate: null,
-		},
-		propertyRights: null,
-		terminationOfAgreement: null,
-		governingLawAndJurisdiction: null,
-		finalProvisions: null,
-		milestones: [],
-		custom: [],
-		signingWindow: 0,
-		requiredToSign: false,
-		signed: false,
-	},
+	formData: initFormData,
 })
 
 export const mutations = {
-	addParty(state, party) {
-		state.formData.parties.push(party);
+	addPartyArray(state, payload) {
+		state.formData.parties.push(payload);
 	},
 
-	removeParty(state, party) {
-		const index = state.formData.parties.indexOf(party);
+	removePartyArray(state, payload) {
+		const index = state.formData.parties.indexOf(payload);
 		if (index > -1) { // only splice array when item is found
 			state.formData.parties.splice(index, 1); // 2nd parameter means remove one item only
 		}
@@ -100,62 +104,7 @@ export const mutations = {
 }
 
 export const getters = {
-	parties(state) {
-		return state.formData.parties;
-	},
-
-	preample(state) {
-		return state.formData.preample;
-	},
-
-	purpose(state) {
-		return state.formData.purpose;
-	},
-
-	paymentAmount(state) {
-		return state.formData.payment.amount;
-	},
-
-	paymentNote(state) {
-		return state.formData.payment.note;
-	},
-
-	startDate(state) {
-		return state.formData.dates.start;
-	},
-
-	endDate(state) {
-		return state.formData.dates.end;
-	},
-
 	getContract() {
 		return state;
-	}
-}
-
-const isString = (payload, errorName) => {
-	const result = (typeof payload === 'string');
-	logError(result, errorName);
-
-	return result;
-}
-
-const isNumber = (payload, errorName) => {
-	const result = (typeof Number.parseFloat(payload) === 'number');
-	logError(result, errorName);
-
-	return result;
-}
-
-const isDate = (payload, errorName) => {
-	const result = (payload instanceof DATE);
-	logError(result, errorName);
-
-	return result;
-}
-
-const logError = (bool, errorName) => {
-	if (!bool) {
-		console.error(`invalid ${errorName} given`, payload);
 	}
 }

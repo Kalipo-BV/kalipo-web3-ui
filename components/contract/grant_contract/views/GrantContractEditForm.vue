@@ -21,93 +21,69 @@
     <v-form ref="form">
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PartyMemberProvision 
-          :parties.sync="formData.partyMembers"
-        />
+        <PartyMemberProvision />
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PreampleProvision
-          :preample.sync="formData.preample"
-        />
+        <PreampleProvision/>
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PurposeProvision
-          :purpose.sync="formData.purpose"
-        />
+        <PurposeProvision/>
       </v-container>
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Payment of the grant"
       >
-        <PaymentProvision
-          :payment.sync="formData.payment"
-        />
+        <PaymentProvision/>
       </v-container>
       
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Date (begin- & end date)"
       >
-        <DateTimeProvision
-          :dates.sync="formData.dates"
-        />
+        <DateTimeProvision/>
       </v-container>  
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PropertyRightsProvision
-          :propertyRights.sync="formData.propertyRights"
-        />
+        <PropertyRightsProvision/>
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <TerminationOfAgreement
-          :terminationOfAgreement.sync="formData.terminationOfAgreement"
-        />
+        <TerminationOfAgreement/>
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <GoverningLawAndJurisdictionProvision
-          :governingLawAndJurisdiction.sync="formData.governingLawAndJurisdiction"
-        />
+        <GoverningLawAndJurisdictionProvision />
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <FinalProvisions
-          :finalProvisions.sync="formData.finalProvisions"
-        />
+        <FinalProvisions />
       </v-container>
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Milestones"
       >
-        <MilestonesProvision
-          :milestones.sync="formData.milestones"
-        />
+        <MilestonesProvision />
       </v-container>  
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Custom provision"
       >
-        <CustomProvision
-          :custom.sync="formData.custom"
-        />
+        <CustomProvision />
       </v-container>  
 
-      <RequiredToSignProvision
-        :requiredToSign.sync="formData.requiredToSign"
-      />
+      <!-- <RequiredToSignProvision/> -->
       
-      <v-checkbox
+      <!-- <v-checkbox
         v-model="formData.signed"
         :rules="[v => !!v || 'You must sign the contract to continue!']"
         label="I hereby agree to the aforementioned contract?"
         required
-      />
+      /> -->
 
       <div class="d-flex flex-column">
         <v-btn
@@ -165,10 +141,6 @@
       reset() {
         this.$refs.form.reset();
       },
-      
-      test() {
-        console.log(this.formData);
-      }
     },
   }
 

@@ -17,7 +17,7 @@
 
 <template>
     <v-textarea
-        v-model="propertyRightsValue"
+        v-model="propertyRights"
         rows="2"
         solo
         clearable
@@ -30,14 +30,13 @@
 </template>
 <script>
     export default {
-        props: ["propertyRights"],
         computed: {
-            propertyRightsValue: {
+            propertyRights: {
                 get: function () {
-                    return this.propertyRights;
+                    return this.$store.state.contract.formData.propertyRights;
                 },
-                set: function (newValue) {
-                    this.$emit("update:propertyRights", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/changePropertyRights", payload);
                 },
             },
         },
