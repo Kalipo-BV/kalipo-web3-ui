@@ -36,14 +36,27 @@
           subtitle="for this proposal stakeholder voting will be implemented, you can specify the stakeholders below"
         ></AutonStepperHeader>
         
-        <AutonProposalMembershipInvitation
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
+        <AutonProposalStakeholderInvitation
           class="mt-4"
           :autonId="autonId"
-        ></AutonProposalMembershipInvitation>
+        ></AutonProposalStakeholderInvitation>
 
-        <v-radio-group       
+        <AutonProposalStakeholderInvitation
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalStakeholderInvitation>
+        
+        <AutonProposalStakeholderInvitation
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalStakeholderInvitation>
+
+
+
+        <!-- <AutonProposalStakeholderInvitation>
+        </AutonProposalStakeholderInvitation> -->
+
+        <!-- <v-radio-group       
         v-model="column" 
         column>       
       <v-radio          
@@ -63,7 +76,7 @@
     <input type="radio" id="cardinal_option" name="voting">
     <Label for="cardinal_option">Cardinal voting</Label><br>
     <input type="radio" id="binary_option" name="voting">
-    <Label for="binary_option">Binary voting</Label>
+    <Label for="binary_option">Binary voting</Label> -->
 
 
       </v-card-text>
@@ -126,101 +139,103 @@
   </div>
 </template>
 <script>
-export default {
-  props: ["autonId", "autonName", "callbackFinish"],
-  data: () => ({
-    step: "select-proposal-type",
-    disabledNext: false,
-    selectedProposalType: null,
-    selectedAccountId: null,
-    invitationMessage: "",
-    proposalTitle: "",
-    proposalDescription: "",
-    uri: "",
-    transaction: {
-      moduleId: -1,
-      assetId: 0,
-      assets: {},
-    },
-  }),
-  created() {
-    this.$nuxt.$on(
-      "AutonProposalSubmit-NextDisabled",
-      ($event) => (this.disabledNext = $event)
-    );
-    this.$nuxt.$on("AutonProposalSubmit-PrevStep", ($event) => this.prevStep());
-    this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
-  },
-  methods: {
-    prevStep() {
-      if (this.step == "proposal-info") {
-        this.step = "select-proposal-type";
-      } else if (this.step == "proposal-profile") {
-        this.step = "proposal-info";
-      } else if (this.step == "membership-invitation") {
-        this.step = "proposal-profile";
-      } else if (this.step == "sign") {
-        this.step = "membership-invitation";
-      }
-    },
-    finish() {
-      if (this.callbackFinish) {
-        this.$nuxt.$emit(this.callbackFinish, true);
+import AutonProposalMembershipInvitation from './AutonProposalMembershipInvitation.vue';
+import AutonProposalStakeholderInvitation from './AutonProposalStakeholderInvitation.vue';
 
-        this.step = "select-proposal-type";
-        this.disabledNext = false;
-        this.selectedProposalType = null;
-        this.selectedAccountId = null;
-        this.invitationMessage = "";
-        this.proposalTitle = "";
-        this.proposalDescription = "";
-        (this.uri = ""),
-          (this.transaction = {
+export default {
+    props: ["autonId", "autonName", "callbackFinish"],
+    data: () => ({
+        step: "select-proposal-type",
+        disabledNext: false,
+        selectedProposalType: null,
+        selectedAccountId: null,
+        invitationMessage: "",
+        proposalTitle: "",
+        proposalDescription: "",
+        uri: "",
+        transaction: {
             moduleId: -1,
             assetId: 0,
             assets: {},
-          });
-      }
+        },
+    }),
+    created() {
+        this.$nuxt.$on("AutonProposalSubmit-NextDisabled", ($event) => (this.disabledNext = $event));
+        this.$nuxt.$on("AutonProposalSubmit-PrevStep", ($event) => this.prevStep());
+        this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
     },
-    async nextStep() {
-      if (this.step == "select-proposal-type") {
-        this.step = "proposal-info";
-      }else if (this.step == "proposal-info") {
-        this.step = "proposal-profile";
-      } else if (this.step == "proposal-profile") {
-        this.step = "membership-invitation";
-      } else if (this.step == "membership-invitation") {
-        this.step = "sign";
-      }
-
-      // The transaction prop interface:
-      // {
-      //   moduleId: 0,
-      //   assetId: 0,
-      //   assets: {};
-      // }
-      if (this.step == "sign") {
-        const autonWrapper = await this.$invoke("auton:getByID", {
-          id: this.autonId,
-        });
-        this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${
-          autonWrapper.result.proposals.length + 1
-        }/campaigning`;
-
-        const asset = {
-          title: this.proposalTitle,
-          campaignComment: this.proposalDescription,
-          proposalType: this.selectedProposalType,
-          autonId: this.autonId,
-          accountIdToInvite: this.selectedAccountId,
-          invitationMessage: this.invitationMessage,
-        };
-        this.transaction.moduleId = 1004;
-        this.transaction.assetId = 0;
-        this.transaction.assets = asset;
-      }
+    methods: {
+        prevStep() {
+            if (this.step == "proposal-info") {
+                this.step = "select-proposal-type";
+            }
+            else if (this.step == "proposal-profile") {
+                this.step = "proposal-info";
+            }
+            else if (this.step == "membership-invitation") {
+                this.step = "proposal-profile";
+            }
+            else if (this.step == "sign") {
+                this.step = "membership-invitation";
+            }
+        },
+        finish() {
+            if (this.callbackFinish) {
+                this.$nuxt.$emit(this.callbackFinish, true);
+                this.step = "select-proposal-type";
+                this.disabledNext = false;
+                this.selectedProposalType = null;
+                this.selectedAccountId = null;
+                this.invitationMessage = "";
+                this.proposalTitle = "";
+                this.proposalDescription = "";
+                (this.uri = ""),
+                    (this.transaction = {
+                        moduleId: -1,
+                        assetId: 0,
+                        assets: {},
+                    });
+            }
+        },
+        async nextStep() {
+            if (this.step == "select-proposal-type") {
+                this.step = "proposal-info";
+            }
+            else if (this.step == "proposal-info") {
+                this.step = "proposal-profile";
+            }
+            else if (this.step == "proposal-profile") {
+                this.step = "membership-invitation";
+            }
+            else if (this.step == "membership-invitation") {
+                this.step = "sign";
+            }
+            // The transaction prop interface:
+            // {
+            //   moduleId: 0,
+            //   assetId: 0,
+            //   assets: {};
+            // }
+            if (this.step == "sign") {
+                const autonWrapper = await this.$invoke("auton:getByID", {
+                    id: this.autonId,
+                });
+                this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
+                const asset = {
+                    title: this.proposalTitle,
+                    campaignComment: this.proposalDescription,
+                    proposalType: this.selectedProposalType,
+                    autonId: this.autonId,
+                    accountIdToInvite: this.selectedAccountId,
+                    invitationMessage: this.invitationMessage,
+                };
+                this.transaction.moduleId = 1004;
+                this.transaction.assetId = 0;
+                this.transaction.assets = asset;
+            }
+        },
     },
-  },
+    components: { AutonProposalStakeholderInvitation, AutonProposalMembershipInvitation }
 };
 </script>
 <style></style>

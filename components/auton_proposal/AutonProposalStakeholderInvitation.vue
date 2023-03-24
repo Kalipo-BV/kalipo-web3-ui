@@ -17,14 +17,14 @@
 
 <template>
   <div>
-    <v-form v-model="valid" @submit.prevent>
+    <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent>
       <v-autocomplete
         v-model="selectedValue"
         :disabled="isUpdating"
         :items="users"
         chips
         color="blue-grey lighten-2"
-        label="Member to invite"
+        label="add Stakeholder"
         item-text="name"
         item-value="id"
         :rules="[rules.required]"
@@ -34,19 +34,20 @@
             v-bind="data.attrs"
             :input-value="data.selectedValue"
             close
-            @click="data.select"
+            @click=" cycleStep(data)"
             @click:close="remove()"
           >
             <v-avatar
               color="accent"
               class="white--text text-caption"
-              v-if="data.item.name"
+              v-if="data.item.name"              
               left
               >{{ getInitials(data.item.name, 2) }}</v-avatar
             >
             {{ data.item.name}}
           </v-chip>
         </template>
+
         <template v-slot:item="data">
           <template v-if="typeof data.item !== 'object'">
             <v-list-item-content v-text="data.item"></v-list-item-content>
@@ -69,39 +70,27 @@
           </template>
         </template>
       </v-autocomplete>
-
-      <v-textarea
-        filled
-        auto-grow
-        label="Invitation message"
-        rows="2"
-        row-height="20"
-        maxlength="128"
-        counter
-        v-model="invitationMessageValue"
-      ></v-textarea>
     </v-form>
+
+    <v-container style="height: 100%" v-if="step == 'info-stakeholder'">
+      <p>naam: {{ selectedValue.name }} <br> username: {{ selectedValue.username }}</p>
+      <v-btn @click="cycleStep" class="button">Change Stakeholder</v-btn>
+  </v-container>
+    
   </div>
 </template>
 
 <script>
 export default {
-  props: ["selectedAccountId", "invitationMessage", "disabledNext", "autonId"],
+  props: ["selectedAccountId", "disabledNext", "autonId"],
   computed: {
     selectedValue: {
       get: function () {
         return this.selectedAccountId;
       },
       set: function (newValue) {
-        this.$emit("update:selectedAccountId", newValue);
-      },
-    },
-    invitationMessageValue: {
-      get: function () {
-        return this.invitationMessage;
-      },
-      set: function (newValue) {
-        this.$emit("update:invitationMessage", newValue);
+        this.selectedAccountId = newValue;
+//        this.$emit("update:selectedAccountId", newValue);
       },
     },
   },
@@ -116,6 +105,7 @@ export default {
   },
   data: () => ({
     valid: false,
+    step: "voeg-stakeholder-toe",
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v?.length >= 2 || "Min 2 characters",
@@ -131,6 +121,16 @@ export default {
     this.$emit("update:disabledNext", false);
   },
   methods: {
+    cycleStep(data) {
+      
+            if (this.step == "voeg-stakeholder-toe") {
+                this.selectedValue = data.item
+                this.step = "info-stakeholder";
+            }
+            else if (this.step == "info-stakeholder") {
+                this.step = "voeg-stakeholder-toe";
+            }
+          },
     remove() {
       this.selectedValue = "";
     },
@@ -150,7 +150,7 @@ export default {
         }
         return result;
       } else {
-        return "";
+        return "geen initals?";
       }
     },
   },
@@ -181,6 +181,7 @@ export default {
 
     if (!accountIdsWrapper.error) {
       const ids = accountIdsWrapper.result.ids.reverse();
+      // waarom worden de id's gereversed? ff weghalen en kijken hoe de members worden weergeven
       for (let index = 0; index < ids.length; index++) {
         const id = ids[index];
         const accountWrapper = await this.$invoke("kalipoAccount:getByID", {
