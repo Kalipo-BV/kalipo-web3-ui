@@ -46,6 +46,10 @@
   export default {
     data: () => ({
       editFase: 3,
+      status: "",
+      fullySigned: false,
+      signingWindow: 0,
+      date: new Date().toISOString(),
       formData: {
         partyMembers: [],
         preample: null,
