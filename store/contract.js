@@ -22,7 +22,7 @@ export const state = () => ({
 	fullySigned: false,
 	date: new Date().toISOString(),
 	formData: {
-	//   partyMembers: [],
+	//   partyMembers: [], in parties
 		parties: [],
 		preample: null,
 		purpose: null,
