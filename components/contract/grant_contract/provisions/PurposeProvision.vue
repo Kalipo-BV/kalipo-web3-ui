@@ -17,7 +17,7 @@
 
 <template>
     <v-textarea
-        v-model="purposeInput"
+        v-model="purpose"
         rows="2"
         solo
         clearable
@@ -26,33 +26,20 @@
         model-value="fill me in"
         :rules="[v => !!v || 'The purpose of the grand can\'t be left open!']"
         prepend-icon="mdi-card-text-outline" 
-        @change="change"
-        :value="purpose2"
+        
     />
 </template>
 <script>
     export default {
-        props: ["purpose"],
-
         computed: {
-            purposeInput: {
+            purpose: {
                 get: function () {
-                    return this.purpose;
+                    return this.$store.state.contract.formData.purpose;
                 },
-                set: function (newValue) {
-                    this.$emit("update:purpose", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/changePurpose", payload);
                 },
-            },
-            
-            purpose2() {
-                return this.$store.getters["contract/purpose"];
-            }
-        },
-
-        methods: {
-            change(payload) {
-                this.$store.commit("contract/changePurpose", payload);
-            }
+            },  
         },
     }    
 </script>
