@@ -17,17 +17,17 @@
 
 <template>
   <v-row align="center" justify="center" style="height: 100%">
-    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Party-Provision">
+    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Parties">
       <PartyMemberProvision/>
 
       <PartyMemberProvision/>
     </StageBuilder>
 
-    <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample-Provision">
+    <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample">
       <PreampleProvision/>
     </StageBuilder>
 
-    <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose-Provision">
+    <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose">
       <PurposeProvision/>
     </StageBuilder>
 

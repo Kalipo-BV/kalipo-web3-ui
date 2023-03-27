@@ -85,14 +85,14 @@
 </template>
 <script>
   export default {
-
     computed: {
       startDate: {
         get: function () {
           return this.$store.state.contract.formData.dates.startDate;
         },
         set: function (payload) {
-          this.$store.commit("contract/changeStartDate", payload);
+          console.log(typeof(payload));
+          this.$store.commit("contract/changeStartDate", new Date.parse(payload));
         },
       },
 
@@ -101,7 +101,7 @@
           return this.$store.state.contract.formData.dates.endDate;
         },
         set: function (payload) {
-          this.$store.commit("contract/changeEndDate", payload);
+          this.$store.commit("contract/changeEndDate", new Date.parse(payload));
         },
       }
 
@@ -121,44 +121,17 @@
       // },
     },
 
-    watch: {
-      date (val) {
-        this.dateFormatted = this.formatDate(val)
-      },
-    },
-
-    mounted: function () {
-      // this.onstartBeginDateFocus();
-      // this.onstartEndDateFocus();
-    },
-
     data: vm => ({
       menu1: false,
       menu2: false,
     }),
 
-    methods: {
-      // onstartBeginDateFocus() {
-      //   if (this.dateValues.beginDate == null) {
-      //     this.dateValues.beginDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-      //   }
-      // },
-      
-      // onstartEndDateFocus() {
-      //   if (this.dateValues.endDate == null) {
-      //     var date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
-      //     date = new Date(date.setDate(date.getDate() + 1));
-      //     this.dateValues.endDate = date.toISOString().substr(0, 10);
-      //   }
-      // },
+    // changeStart(payload) {
+    //   this.$store.commit("contract/changeStartDate", payload);
+    // },
 
-      // changeStart(payload) {
-      //   this.$store.commit("contract/changeStartDate", payload);
-      // },
-
-      // changeEnd(payload) {
-      //   this.$store.commit("contract/changeEndDate", payload);
-      // }
-    },
+    // changeEnd(payload) {
+    //   this.$store.commit("contract/changeEndDate", payload);
+    // }
   }
 </script>

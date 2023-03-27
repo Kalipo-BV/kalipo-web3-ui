@@ -22,6 +22,7 @@
 
       <v-container fluid style="padding: 1px; margin: 5px;">
         <PartyMemberProvision />
+        <PartyMemberProvision />
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">

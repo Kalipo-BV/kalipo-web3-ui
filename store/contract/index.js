@@ -26,8 +26,8 @@ const initFormData = {
 		note: null,
 	},
 	dates: {
-		beginDate: null,
-		endDate: null,
+		startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+		endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
 	},
 	propertyRights: null,
 	terminationOfAgreement: null,
@@ -50,6 +50,12 @@ export const state = () => ({
 })
 
 export const mutations = {
+	changeCustom(state, payload) {
+		if (isArray(payload, 'custom')) {
+			state.formData.custom = payload;
+		}
+	},
+
 	addPartyArray(state, payload) {
 		state.formData.parties.push(payload);
 	},
@@ -115,13 +121,13 @@ export const mutations = {
 
 	changeStartDate(state, payload) {
 		if (isDate(payload, 'startDate')) {
-			state.formData.dates.start = payload;
+			state.formData.dates.startDate = payload;
 		}
 	},
 
 	changeEndDate(state, payload) {
 		if (isDate(payload, 'endDate')) {
-			state.formData.dates.end = payload;
+			state.formData.dates.endDate = payload;
 		}
 	},
 
