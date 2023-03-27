@@ -14,16 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-
 <template>
-  <v-container>
-    <div class="d-flex mt-3 ml-1">
+    <!-- <div class="d-flex mt-3 ml-1"> -->
+      <!-- <improvementproposal></improvementproposal>
       <improvementproposal></improvementproposal>
-      <improvementproposal></improvementproposal>
-      <improvementproposal></improvementproposal>
-    </div>
+      <improvementproposal></improvementproposal> -->
+    <!-- </div> -->
 
-    <v-data-table
+    <!-- <v-data-table
       :headers="headers"
       :items="proposals"
       class="elevation-0 mt-4"
@@ -43,27 +41,29 @@
         }}
       </template>
       
-    </v-data-table>
+    </v-data-table> -->
 
 
   <v-list>
     <v-list-item
-        v-for="(proposal, i) in proposals"
+        v-for="(item, i) in proposals"
         :key="i"
-        :value="proposal"
+        :value="item"
         active-color="primary"
       >
-
-        <improvementproposal :message="proposal.title"></improvementproposal>
+      <!-- <v-row>
+          <v-col cols="4"><v-list-item></v-list-item></v-col>
+      </v-row> -->
+<!-- <div><p>TESTttttttttttttttttytyttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt</p></div> -->
+        <ImprovementProposalCard :proposal="item"></improvementproposalCard>
     </v-list-item>
   </v-list>
-  </v-container>
 </template>
 <script>
-import improvementproposal from '~/components/improvement_proposal/improvementProposalCard.vue';
+import improvementproposalCard from '~/components/improvement_proposal/improvementProposalCard.vue';
 export default {
   layout: "auton",
-  components: {improvementproposal},
+  components: {improvementproposalCard},
   data: () => ({
     dialog: true,
     userLang: null,

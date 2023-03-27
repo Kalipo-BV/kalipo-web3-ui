@@ -1,26 +1,41 @@
 <template>
   <div>
-
+    
    
     <div  class="white" style="width: 300px; margin-right: 30px; padding-left: 20px; padding-top: 10px; border-radius: 7px; padding-bottom: 10px; display: flex;">
        <div style="width: 90%;">
-          <p style="color: #0F6AF1;" class="text-h1 mb-2">{{ message }}</p>
+         
+          
 
     <p></p>
     <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"  :style="{ width: '300px', marginRight: '30px', paddingLeft: '20px', paddingTop: '10px', borderRadius: '7px', paddingBottom: '10px', display: 'flex' }"  
     link @click="toProposal">
        <div :style="{width: '90%'}">
-          <p :style="{color: '#0F6AF1'}" class="text-h1 mb-2">
-            Title
-          </p>
+        <a :href=proposal.link style="color: #0F6AF1;" class="text-h1 mb-2">{{ proposal.title }}</a>
 
           <div>
             <p class="mb-0">
-              Priority: 2
+              Type: {{ proposal.type }}
             </p>
-            <p class="mb-0">
-              Votes: 8
-            </p>
+            <v-btn outlined small @click="$router.push('/account/' + proposal.author)"
+          >@{{ proposal.author }}</v-btn>
+          <v-chip :color="getResultColor(proposal.result)" dark outlined small>
+          {{ proposal.result }}
+        </v-chip>
+        
+        {{
+          new Date(parseInt(proposal.submission) * 1000).toLocaleDateString(
+            userLang,
+            {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            }
+          )
+        }}
+      
           </div>
        </div>
        <div class="d-flex align-center" :style="{width: '10%'}">
@@ -38,19 +53,28 @@
 <script>
 export default {
   props: {
-    message: String
+    proposal: String,
   },
 
   data: () => ({}),
   methods: {
+    getResultColor(result) {
+      if (result == "UNDECIDED") {
+        return "accent";
+      }
+      if (result == "ACCEPTED") {
+        return "success";
+      }
+      if (result == "REJECTED") {
+        return "error";
+      }
+      return "accent";
+    },
     toProposal() {
       const uri = `/auton/${this.$route.params.autonId}/improvementproposal/detail`;
       console.log(uri);
       this.$router.push(uri);
     }
   },
-  props: {
-    improvementproposal: String
-  }
   }
 </script>

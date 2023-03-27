@@ -1,5 +1,5 @@
 <template>
-<improvement-proposal-card :improvementproposal="parentMessage"></improvement-proposal-card>
+<improvement-proposal-card :parrentmessage="parentMessage"></improvement-proposal-card>
 </template>
   
   <script>
