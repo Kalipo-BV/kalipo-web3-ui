@@ -15,9 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <template>
-
-  <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; align-content: start">
     <div
         v-for="(item, i) in proposals"
         :key="i">
