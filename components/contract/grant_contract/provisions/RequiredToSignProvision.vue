@@ -60,12 +60,12 @@
 
     computed: {
       requiredToSignValue: {
-            get: function () {
-                return this.requiredToSign;
-            },
-            set: function (newValue) {
-                this.$emit("update:requiredToSign", newValue);
-            },
+        get: function () {
+            this.$store.state.contract.signed
+        },
+        set: function (payload) {
+          this.$store.commit("contract/changeRequiredSign", payload);
+        },
         },
     },
   }

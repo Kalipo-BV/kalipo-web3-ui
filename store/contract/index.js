@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isArray, isDate, isNumber, isString} from "./validation.js"
+import {isArray, isBoolean, isDate, isNumber, isString} from "./validation.js"
 
 const initFormData = {
 	parties: [],
@@ -40,7 +40,6 @@ const initFormData = {
 	signed: false,
 }
 
-
 export const state = () => ({
 	editFase: 3,
 	status: "",
@@ -55,11 +54,15 @@ export const mutations = {
 		state.formData.parties.push(payload);
 	},
 
-	removePartyArray(state, payload) {
-		const index = state.formData.parties.indexOf(payload);
+	removeFromParties(state, payload) {
+		const index = state.formData.parties.indexOf(payload.id);
 		if (index > -1) { // only splice array when item is found
 			state.formData.parties.splice(index, 1); // 2nd parameter means remove one item only
 		}
+	},
+
+	changeParties(state, payload) {
+		state.formData.parties = payload;
 	},
 
 	changePreample(state, payload) {
@@ -68,9 +71,33 @@ export const mutations = {
 		}
 	},
 
+	changePropertyRights(state, payload) {
+		if (isString(payload, 'propertyRights')) {
+			state.formData.propertyRights = payload;
+		}
+	},
+
+	changeGoverningLawAndJurisdiction(state, payload) {
+		if (isString(payload, 'governingLawAndJurisdiction')) {
+			state.formData.governingLawAndJurisdiction = payload;
+		}
+	},
+
+	changeRequiredSign(state, payload) {
+		if (isBoolean(payload, 'required to sign')) {
+			state.formData.purpose = payload;
+		}
+	},
+
 	changePurpose(state, payload) {
 		if (isString(payload, 'purpose')) {
 			state.formData.purpose = payload;
+		}
+	},
+
+	changeFinalProvisions(state, payload) {
+		if (isString(payload, 'finalProvision')) {
+			state.formData.finalProvisions = payload;
 		}
 	},
 
@@ -96,6 +123,32 @@ export const mutations = {
 		if (isDate(payload, 'endDate')) {
 			state.formData.dates.end = payload;
 		}
+	},
+
+	changeCustom(state, payload) {
+		if (isArray(payload, 'customProvision')) {
+			state.formData.custom = payload;
+		}
+	},
+	
+	customAddProvision(state, item) {
+		state.formData.custom.push(item);
+	},
+
+	customRemoveProvision(state, index) {
+		state.formData.custom.splice(index, 1)
+	},
+
+	customChangeType(state, payload) {
+		state.formData.custom[payload.index].type = payload.data;
+	},
+
+	customChangeInfo(state, payload) {
+		state.formData.custom[payload.index].info = payload.data;
+	},
+
+	customChangeData(state, payload) {
+		state.formData.custom[payload.index].data = payload.data;
 	},
 
 	saveContract() {
