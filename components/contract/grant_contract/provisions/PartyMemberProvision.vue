@@ -56,16 +56,16 @@
             </template>
             <template v-else>
                 <v-list-item-avatar class="d-flex align-center justify-center">
-                <v-avatar
-                    color="accent"
-                    class="white--text text-caption"
-                    v-if="data.item.name"
-                >
-                    {{ getInitials(data.item.name, 3) }}
-                </v-avatar>
+                    <v-avatar
+                        color="accent"
+                        class="white--text text-caption"
+                        v-if="data.item.name"
+                    >
+                        {{ getInitials(data.item.name, 3) }}
+                    </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                <v-list-item-title>{{data.item.name}}</v-list-item-title>
                 <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
                 </v-list-item-content>
             </template>
@@ -74,15 +74,16 @@
 </template>
 <script>
     export default {
-        props: ["parties"],
+        props: ["party"],
 
         computed: {
             selectedValue: {
                 get: function () {
-                    return this.parties;
+                    return this.$store.state.contract.formData.parties[this.party];
                 },
-                set: function (newValue) {
-                    this.$emit("update:parties", newValue);
+                set: function (payload) {
+                    payload.push(this.party);
+                    this.$store.commit(`contract/changeParties`, payload);
                 },
             },
             account() {
@@ -106,22 +107,17 @@
                     }
                 }
             }
-            // filter so you cant add yourself
-            // this.users = this.users.filter((item) => item.id !== this.account.accountId);
             this.isUpdating = false;
         },
 
         data: () => ({
             isUpdating: true,
             users: [{ header: "Most recent users" }],
-            // selectedValue: [],
         }),
 
         methods: {
             remove(item) {
-                const index = this.selectedValue.indexOf(item.id);
-                if (index >= 0)
-                    this.selectedValue.splice(index, 1);
+                this.$store.commit(`contract/removeFromParties`, {"item": item, "party": this.party});
             },
             
             getInitials(parseStr, max) {
@@ -130,12 +126,12 @@
                     let result = "";
                     for (let index = 0; index < nameList.length; index++) {
                         if (index < max) {
-                        const element = nameList[index];
-                        if (element.length > 0) {
-                            result += element[0].toUpperCase();
-                        }
+                            const element = nameList[index];
+                            if (element.length > 0) {
+                                result += element[0].toUpperCase();
+                            }
                         } else {
-                        break;
+                            break;
                         }
                     }
                     return result;

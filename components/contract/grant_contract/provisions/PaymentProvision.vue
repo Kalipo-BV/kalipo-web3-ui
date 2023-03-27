@@ -18,7 +18,7 @@
 <template>
     <div>
         <v-text-field
-            v-model="paymentValue.amount"
+            v-model="amount"
             style="padding: 1px"
             label="Payment amount"
             prepend-icon="mdi-cash-multiple" 
@@ -26,12 +26,10 @@
             clearable
             required
             :rules="[v => v > 0 || 'This field can\'t be left open (>0)!']"
-            @change="changeAmount"
-            :value="paymentAmount"
         />
 
         <v-textarea
-            v-model="paymentValue.note"
+            v-model="note"
             rows="1"
             solo
             clearable
@@ -40,42 +38,30 @@
             hide-details="auto"
             prepend-icon="mdi-receipt-text-plus-outline" 
             style="padding-bottom: 5px;"
-            @change="changeNote"
-            :value="paymentNote"
         />
     </div>
 </template>
 <script>
     export default {
-        props: ["payment"],
-
         computed: {
-            paymentValue: {
+            
+            note: {
                 get: function () {
-                    return this.payment;
+                    return this.$store.state.contract.formData.payment.amount;
                 },
-                set: function (newValue) {
-                    this.$emit("update:payment", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/changePaymentAmount", payload);
                 },
             },
-
-            paymentAmount() {
-                return this.$store.getters["contract/paymentAmount"];
-            },
-
-            paymentNote() {
-                return this.$store.getters["contract/paymentNote"];
-            },
-        },
-
-        methods: {
-            changeAmount(payload) {
-                this.$store.commit("contract/changePaymentAmount", payload);
-            },
-
-            changeNote(payload) {
-                this.$store.commit("contract/changePaymentNote", payload);
+            amount: {
+                get: function () {
+                    return this.$store.state.contract.formData.payment.note;
+                },
+                set: function (payload) {
+                    this.$store.commit("contract/changePaymentNote", payload);
+                },
             }
+            
         },
     }
 </script>

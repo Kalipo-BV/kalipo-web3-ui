@@ -21,100 +21,114 @@
     <v-form ref="form">
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PartyMemberProvision 
-          :parties.sync="formData.partyMembers"
-        />
+        <PartyMemberProvision :party="0"/>
+        <PartyMemberProvision :party="1"/>
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PreampleProvision
-          :preample.sync="formData.preample"
-        />
+        <PreampleProvision/>
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PurposeProvision
-          :purpose.sync="formData.purpose"
-        />
+        <PurposeProvision/>
       </v-container>
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Payment of the grant"
       >
-        <PaymentProvision
-          :payment.sync="formData.payment"
-        />
+        <PaymentProvision/>
       </v-container>
       
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Date (begin- & end date)"
       >
-        <DateTimeProvision
-          :dates.sync="formData.dates"
-        />
+        <DateTimeProvision/>
       </v-container>  
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PropertyRightsProvision
-          :propertyRights.sync="formData.propertyRights"
-        />
+        <PropertyRightsProvision/>
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <TerminationOfAgreement
-          :terminationOfAgreement.sync="formData.terminationOfAgreement"
-        />
+        <TerminationOfAgreement/>
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <GoverningLawAndJurisdictionProvision
-          :governingLawAndJurisdiction.sync="formData.governingLawAndJurisdiction"
-        />
+        <GoverningLawAndJurisdictionProvision/>
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <FinalProvisions
-          :finalProvisions.sync="formData.finalProvisions"
-        />
+        <FinalProvisions/>
       </v-container>
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Milestones"
       >
-        <MilestonesProvision
-          :milestones.sync="formData.milestones"
-        />
+        <MilestonesProvision/>
       </v-container>  
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Custom provision"
       >
-        <CustomProvision
-          :custom.sync="formData.custom"
-        />
+        <CustomProvision/>
       </v-container>  
 
-      <RequiredToSignProvision
-        :requiredToSign.sync="formData.requiredToSign"
-      />
+      <!-- <RequiredToSignProvision/> -->
       
-      <v-checkbox
+      <!-- <v-checkbox
         v-model="formData.signed"
         :rules="[v => !!v || 'You must sign the contract to continue!']"
         label="I hereby agree to the aforementioned contract?"
         required
-      />
+      /> -->
+
+
+      <v-row>
+        <v-alert
+          v-if="saving"
+          v-model="saving"
+          width="100%"
+          dense
+          dismissible
+          elevation="5"
+          outlined
+          prominent
+          type="success"
+        >The contract has corectly been saved!</v-alert>
+      </v-row>
+      <v-row>
+				<v-alert
+          v-if="signed"
+          v-model="signed"
+					width="100%"
+					dense
+					dismissible
+					elevation="5"
+					outlined
+					prominent
+					type="success"
+				>The contract has corectly been signed by you, and is now waiting for the other party(-ies) to sign it/accept it!</v-alert>
+      </v-row>
 
       <div class="d-flex flex-column">
+        <v-btn
+          color="info"
+          class="mt-4"
+          block
+          @click="save"
+        >
+          Save
+        </v-btn>
+
         <v-btn
           color="success"
           class="mt-4"
           block
-          @click="validate"
+          @click="sign"
         >
           Sign
         </v-btn>
@@ -141,8 +155,8 @@
 </template>
 <script>
   export default {
-    props: ["data"],
-
+    props: ["transaction", "uri", "title"],
+    
     computed: {
       formData: {
         get: function () {
@@ -154,21 +168,29 @@
       },
     },
 
+    data: () => ({
+      saving: false,
+      signed: false,
+    }),
+    
     methods: {
-      async validate() {
+      async sign() {
         const { valid } = await this.$refs.form.validate();
         if (valid)
-          alert("Form is valid");
-          this.test();
+          //call to backend
+          this.signed = true;
       },
       
       reset() {
         this.$refs.form.reset();
       },
-      
-      test() {
-        console.log(this.formData);
-      }
+
+      save: function() {
+        localStorage.setItem("Grant-Contract", this.$store.state.contract);
+        if(localStorage.getItem("Grant-Contract") != null) {
+          this.saving = true;
+        }
+      },
     },
   }
 

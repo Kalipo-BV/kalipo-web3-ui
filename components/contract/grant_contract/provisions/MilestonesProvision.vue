@@ -79,7 +79,7 @@
             </v-container>
         </div>
         <v-btn
-            color="light-blue lighten-3"
+            color="info"
             block
             width="100%"
             @click="addMilestone"
