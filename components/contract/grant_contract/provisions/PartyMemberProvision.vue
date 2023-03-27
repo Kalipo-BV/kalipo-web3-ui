@@ -65,7 +65,7 @@
                     </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                <v-list-item-title>{{data.item.name}}</v-list-item-title>
                 <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
                 </v-list-item-content>
             </template>
@@ -74,15 +74,16 @@
 </template>
 <script>
     export default {
-        // props: ["parties"],
+        props: ["party"],
 
         computed: {
             selectedValue: {
                 get: function () {
-                    return this.$store.state.contract.formData.parties;
+                    return this.$store.state.contract.formData.parties[this.party];
                 },
                 set: function (payload) {
-                    this.$store.commit("contract/changeParties", payload);
+                    payload.push(this.party);
+                    this.$store.commit(`contract/changeParties`, payload);
                 },
             },
             account() {
@@ -106,8 +107,6 @@
                     }
                 }
             }
-            // filter so you cant add yourself
-            // this.users = this.users.filter((item) => item.id !== this.account.accountId);
             this.isUpdating = false;
         },
 
@@ -118,12 +117,7 @@
 
         methods: {
             remove(item) {
-                // const newArray =  this.selectedValue;
-                // const index = newArray.indexOf(item.id);
-                // if (index >= 0) {
-                //     newArray.splice(index, 1);
-                // }
-                this.$store.commit("contract/removeFromParties", item);
+                this.$store.commit(`contract/removeFromParties`, {"item": item, "party": this.party});
             },
             
             getInitials(parseStr, max) {

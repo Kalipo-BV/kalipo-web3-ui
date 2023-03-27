@@ -46,6 +46,19 @@
 					>Next</v-btn>
 				</v-col>
 			</v-row>
+			<v-row>
+				<v-alert
+					v-if="saving"
+					v-model="saving"
+					width="100%"
+					dense
+					dismissible
+					elevation="5"
+					outlined
+					prominent
+					type="success"
+				>The contract has corectly been saved! ({{ this.saved }})</v-alert>
+			</v-row>
 	  </v-sheet>
 </template>
 <script>
@@ -55,15 +68,34 @@ export default {
 		title: String
 	},
 
+    data: () => ({
+      saving: false,
+	  saved: 0,
+    }),
+
 	methods: {
 		previous: function() {
+			this.resetSave();
 			this.$emit('previous', null);
 		},
+
 		next: function() {
+			this.resetSave();
 			this.$emit('next', null);
 		},
+
+		resetSave() {
+			this.saving = false;
+			this.saved = 0;
+		},
+
 		save: function() {
-			
+			// console.log(this.$store.state);
+			localStorage.setItem("Grant-Contract", this.$store.state.contract);
+			if(localStorage.getItem("Grant-Contract") != null) {
+				this.saving = true;
+				this.saved++;
+			}
 		},
 	},
 }

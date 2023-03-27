@@ -18,7 +18,7 @@
 import {isArray, isBoolean, isDate, isNumber, isString} from "./validation.js"
 
 const initFormData = {
-	parties: [],
+	parties: [[],[]],
 	preample: null,
 	purpose: null,
 	payment: {
@@ -61,14 +61,18 @@ export const mutations = {
 	},
 
 	removeFromParties(state, payload) {
-		const index = state.formData.parties.indexOf(payload.id);
-		if (index > -1) { // only splice array when item is found
-			state.formData.parties.splice(index, 1); // 2nd parameter means remove one item only
-		}
+		// console.log(payload["party"]);
+		// console.log(state.formData.parties[payload["party"]]);
+		// console.log(state.formData.parties[payload["party"]].indexOf(payload["item"].id));
+		// const index = state.formData.parties[payload["party"]].indexOf(payload["item"].id);
+		// if (index > -1) { // only splice array when item is found
+		// 	state.formData.parties[payload["party"]].splice(index, 1); // 2nd parameter means remove one item only
+		// }
+		state.formData.parties[payload["party"]].pop(state.formData.parties[payload["party"]]);
 	},
 
 	changeParties(state, payload) {
-		state.formData.parties = payload;
+		state.formData.parties[payload[-1]] = payload[1];
 	},
 
 	changePreample(state, payload) {
