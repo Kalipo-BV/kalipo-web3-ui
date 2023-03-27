@@ -219,7 +219,7 @@ export default {
           to: "constitution",
         },
         {
-          icon: "mdi-bank",
+          icon: "mdi-folder-wrench",
           title: "Improvement Proposal",
           to: "improvementproposal",
         },
