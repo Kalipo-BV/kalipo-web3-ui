@@ -66,7 +66,7 @@
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Milestones"
       >
-        <MilestonesProvision />
+        <!-- <MilestonesProvision /> -->
       </v-container>  
 
       <v-container
