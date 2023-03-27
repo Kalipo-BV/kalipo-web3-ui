@@ -55,11 +55,15 @@ export const mutations = {
 		state.formData.parties.push(payload);
 	},
 
-	removePartyArray(state, payload) {
-		const index = state.formData.parties.indexOf(payload);
+	removeFromParties(state, payload) {
+		const index = state.formData.parties.indexOf(payload.id);
 		if (index > -1) { // only splice array when item is found
 			state.formData.parties.splice(index, 1); // 2nd parameter means remove one item only
 		}
+	},
+
+	changeParties(state, payload) {
+		state.formData.parties = payload;
 	},
 
 	changePreample(state, payload) {

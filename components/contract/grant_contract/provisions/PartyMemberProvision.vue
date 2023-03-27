@@ -56,13 +56,13 @@
             </template>
             <template v-else>
                 <v-list-item-avatar class="d-flex align-center justify-center">
-                <v-avatar
-                    color="accent"
-                    class="white--text text-caption"
-                    v-if="data.item.name"
-                >
-                    {{ getInitials(data.item.name, 3) }}
-                </v-avatar>
+                    <v-avatar
+                        color="accent"
+                        class="white--text text-caption"
+                        v-if="data.item.name"
+                    >
+                        {{ getInitials(data.item.name, 3) }}
+                    </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
                 <v-list-item-title>{{ data.item.name }}</v-list-item-title>
@@ -74,15 +74,15 @@
 </template>
 <script>
     export default {
-        props: ["parties"],
+        // props: ["parties"],
 
         computed: {
             selectedValue: {
                 get: function () {
-                    return this.parties;
+                    return this.$store.state.contract.formData.parties;
                 },
-                set: function (newValue) {
-                    this.$emit("update:parties", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/changeParties", payload);
                 },
             },
             account() {
@@ -114,14 +114,16 @@
         data: () => ({
             isUpdating: true,
             users: [{ header: "Most recent users" }],
-            // selectedValue: [],
         }),
 
         methods: {
             remove(item) {
-                const index = this.selectedValue.indexOf(item.id);
-                if (index >= 0)
-                    this.selectedValue.splice(index, 1);
+                // const newArray =  this.selectedValue;
+                // const index = newArray.indexOf(item.id);
+                // if (index >= 0) {
+                //     newArray.splice(index, 1);
+                // }
+                this.$store.commit("contract/removeFromParties", item);
             },
             
             getInitials(parseStr, max) {
@@ -130,12 +132,12 @@
                     let result = "";
                     for (let index = 0; index < nameList.length; index++) {
                         if (index < max) {
-                        const element = nameList[index];
-                        if (element.length > 0) {
-                            result += element[0].toUpperCase();
-                        }
+                            const element = nameList[index];
+                            if (element.length > 0) {
+                                result += element[0].toUpperCase();
+                            }
                         } else {
-                        break;
+                            break;
                         }
                     }
                     return result;
