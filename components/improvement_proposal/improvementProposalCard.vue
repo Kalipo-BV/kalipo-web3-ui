@@ -1,11 +1,11 @@
 <template>
-  <div id="test" @click="toProposal(proposal.link)">
+  <div @click="toProposal(proposal.link)">
 
     <!--  min-width: 30%; min-height: 20vh; border-radius: 7px; padding: 10px 3% 10px 20px;-->
     <div class="white"
-         :style="{display: 'flex', margin: '0 10px 0 10px'}">
+         :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px'}">
       <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"
-           :style="{ width: '300px', padding: '20px 30px 20px 30px', borderRadius: '7px', display: 'inline-block' }">
+           :style="{ minWidth: '300px', padding: '20px 30px 20px 30px', display: 'flex' }">
         <div>
           <p style="color: #0F6AF1;" class="text-h1 mb-2">{{ proposal.title }}</p>
 
