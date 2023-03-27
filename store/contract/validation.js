@@ -35,6 +35,6 @@ export const isDate = (payload, errorName) => {
 
 export const logError = (bool, errorName, payload) => {
 	if (!bool) {
-		console.error(`invalid ${errorName} given`, payload);
+		console.error(`invalid ${errorName} given\n\n`, `payload = ${payload}\n\n`, `typeof payload = ${typeof payload}`);
 	}
 }
