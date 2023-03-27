@@ -17,7 +17,7 @@
 
 <template>
     <div>
-        <div v-for="(provision, index) in customValue">
+        <div v-for="(provision, index) in custom">
             <v-container style="min-width: 100%;">
                 <v-row>
                     <v-col
@@ -27,7 +27,8 @@
                         class="d-flex align-center justify-center"
                     >
                         <v-autocomplete
-                            v-model="provision.type"
+                            :value="provision.type"
+                            @input="(event) => {changeType(index, event)}"
                             :items="items"
                             outlined
                             dense
@@ -54,7 +55,8 @@
                             required
                             hide-details="auto"
                             :rules="[v => !!v || 'This field can\'t be left open!']"
-                            v-model="provision.info"
+                            :value="provision.info"
+                            @input="(event) => { changeInfo(index, event) }"
                             prepend-icon="mdi-card-text-outline" 
                         />
                     </v-col>
@@ -66,7 +68,8 @@
                         <div v-if="provision.type === 'Boolean'">
                             <v-switch
                                 style="margin-top: 0;"
-                                v-model="provision.data"
+                                :value="provision.data"
+                                @change="(event) => { changeData(index, event) }"
                                 required
                                 hide-details="auto"
                                 :label="`${provision.data?.toString() || 'false'}`"
@@ -82,7 +85,8 @@
                                 required
                                 hide-details="auto"
                                 :rules="[v => !!v || 'This field can\'t be left open!']"
-                                v-model="provision.data"
+                                :value="provision.data"
+                                @input="(event) => { changeData(index, event) }"
                                 prepend-icon="mdi-format-list-bulleted" 
                             />
                         </div>
@@ -97,7 +101,8 @@
                                 required
                                 hide-details="auto"
                                 :rules="[v => !!v || 'This field can\'t be left open!']"
-                                v-model="provision.data"
+                                :value="provision.data"
+                                @input="(event) => { changeData(index, event) }"
                                 prepend-icon="mdi-format-list-bulleted" 
                             />
                         </div>
@@ -138,15 +143,14 @@
   </template>
   <script>
     export default {
-        props: ["custom"],
-
         computed: {
-            customValue: {
+            custom: {
                 get: function () {
-                    return this.custom;
+                    return this.$store.state.contract.formData.custom;
                 },
-                set: function (newValue) {
-                    this.$emit("update:custom", newValue);
+
+                set: function (payload) {
+                    this.$store.commit("contract/changeCustom", payload);
                 },
             },
         },
@@ -161,12 +165,27 @@
 
         methods: {
             addProvision() {
-                this.customValue.push({
-                    type: "Text", info: null, data: null
-                })
+                const item = {type: "Text", info: null, data: null}
+                this.$store.commit("contract/customAddProvision", item);
             },
+            
             removeProvision(index) {
-                this.customValue.splice(index, 1)
+                this.$store.commit("contract/customRemoveProvision", index);
+            },
+
+            changeInfo(index, data) {
+                const payload = { index, data }
+                this.$store.commit("contract/customChangeInfo", payload);
+            },
+
+            changeType(index, data) {
+                const payload = {index, data }
+                this.$store.commit("contract/customChangeType", payload);
+            },
+
+            changeData(index, data) {
+                const payload = { index, data }
+                this.$store.commit("contract/customChangeData", payload);
             },
         },
     }

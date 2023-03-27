@@ -40,7 +40,6 @@ const initFormData = {
 	signed: false,
 }
 
-
 export const state = () => ({
 	editFase: 3,
 	status: "",
@@ -124,6 +123,32 @@ export const mutations = {
 		if (isDate(payload, 'endDate')) {
 			state.formData.dates.end = payload;
 		}
+	},
+
+	changeCustom(state, payload) {
+		if (isArray(payload, 'customProvision')) {
+			state.formData.custom = payload;
+		}
+	},
+	
+	customAddProvision(state, item) {
+		state.formData.custom.push(item);
+	},
+
+	customRemoveProvision(state, index) {
+		state.formData.custom.splice(index, 1)
+	},
+
+	customChangeType(state, payload) {
+		state.formData.custom[payload.index].type = payload.data;
+	},
+
+	customChangeInfo(state, payload) {
+		state.formData.custom[payload.index].info = payload.data;
+	},
+
+	customChangeData(state, payload) {
+		state.formData.custom[payload.index].data = payload.data;
 	},
 
 	saveContract() {
