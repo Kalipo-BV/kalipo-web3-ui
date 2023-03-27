@@ -1,14 +1,14 @@
 <template>
   <div>
-    
-   
-    <div  class="white" style="width: 300px; margin-right: 30px; padding-left: 20px; padding-top: 10px; border-radius: 7px; padding-bottom: 10px; display: flex;">
+
+
+    <div  class="white" style="width: 300px; margin-right: 30px; margin-top: 20px; min-height: 220px; padding-left: 20px; padding-top: 10px; border-radius: 7px; padding-bottom: 10px; display: flex;">
        <div style="width: 90%;">
-         
-          
+
+
 
     <p></p>
-    <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"  :style="{ width: '300px', marginRight: '30px', paddingLeft: '20px', paddingTop: '10px', borderRadius: '7px', paddingBottom: '10px', display: 'flex' }"  
+    <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"  :style="{ width: '300px', marginRight: '30px', paddingLeft: '20px', paddingTop: '10px', borderRadius: '7px', paddingBottom: '10px', display: 'flex' }"
     link @click="toProposal">
        <div :style="{width: '90%'}">
         <a :href=proposal.link style="color: #0F6AF1;" class="text-h1 mb-2">{{ proposal.title }}</a>
@@ -22,7 +22,7 @@
           <v-chip :color="getResultColor(proposal.result)" dark outlined small>
           {{ proposal.result }}
         </v-chip>
-        
+
         {{
           new Date(parseInt(proposal.submission) * 1000).toLocaleDateString(
             userLang,
@@ -35,7 +35,7 @@
             }
           )
         }}
-      
+
           </div>
        </div>
        <div class="d-flex align-center" :style="{width: '10%'}">
@@ -47,7 +47,7 @@
        </div>
     </div>
   </div>
-  
+
 </template>
 
 <script>
@@ -59,13 +59,13 @@ export default {
   data: () => ({}),
   methods: {
     getResultColor(result) {
-      if (result == "UNDECIDED") {
+      if (result === "UNDECIDED") {
         return "accent";
       }
-      if (result == "ACCEPTED") {
+      if (result === "ACCEPTED") {
         return "success";
       }
-      if (result == "REJECTED") {
+      if (result === "REJECTED") {
         return "error";
       }
       return "accent";

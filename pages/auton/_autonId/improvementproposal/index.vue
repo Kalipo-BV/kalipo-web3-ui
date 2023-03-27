@@ -44,20 +44,14 @@
     </v-data-table> -->
 
 
-  <v-list style="display: flex; flex-wrap: wrap">
-    <v-list-item
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+
+    <div
         v-for="(item, i) in proposals"
-        :key="i"
-        :value="item"
-        active-color="primary"
-      >
-      <!-- <v-row>
-          <v-col cols="4"><v-list-item></v-list-item></v-col>
-      </v-row> -->
-<!-- <div><p>TESTttttttttttttttttytyttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt</p></div> -->
-        <ImprovementProposalCard :proposal="item"></improvementproposalCard>
-    </v-list-item>
-  </v-list>
+        :key="i">
+      <ImprovementProposalCard :proposal="item"></improvementproposalCard>
+    </div>
+  </div>
 </template>
 <script>
 import ImprovementProposalCard from "~/components/improvement_proposal/improvementProposalCard.vue";
