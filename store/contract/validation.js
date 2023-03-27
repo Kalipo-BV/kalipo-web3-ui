@@ -27,7 +27,9 @@ export const isNumber = (payload, errorName) => {
 }
 
 export const isDate = (payload, errorName) => {
-	const result = (payload instanceof Date);
+	const regex = "/[0-9]{1,4}[-/]{1}[0-9]{1,4}[-/]{1}[0-9]$/";
+	const result = (payload.match(regex));
+	
 	logError(result, errorName, payload);
 
 	return result;
