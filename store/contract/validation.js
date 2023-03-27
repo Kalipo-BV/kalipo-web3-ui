@@ -12,6 +12,13 @@ export const isString = (payload, errorName) => {
 	return result;
 }
 
+export const isBoolean = (payload, errorName) => {
+	const result = (typeof payload === 'boolean');
+	logError(result, errorName);
+
+	return result;
+}
+
 export const isNumber = (payload, errorName) => {
 	const result = (typeof Number.parseFloat(payload) === 'number');
 	logError(result, errorName);

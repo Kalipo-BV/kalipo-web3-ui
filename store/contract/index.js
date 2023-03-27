@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isArray, isDate, isNumber, isString} from "./validation.js"
+import {isArray, isBoolean, isDate, isNumber, isString} from "./validation.js"
 
 const initFormData = {
 	parties: [],
@@ -77,6 +77,12 @@ export const mutations = {
 	changeGoverningLawAndJurisdiction(state, payload) {
 		if (isString(payload, 'governingLawAndJurisdiction')) {
 			state.formData.governingLawAndJurisdiction = payload;
+		}
+	},
+
+	changeRequiredSign(state, payload) {
+		if (isBoolean(payload, 'required to sign')) {
+			state.formData.purpose = payload;
 		}
 	},
 
