@@ -68,9 +68,27 @@ export const mutations = {
 		}
 	},
 
+	changePropertyRights(state, payload) {
+		if (isString(payload, 'propertyRights')) {
+			state.formData.propertyRights = payload;
+		}
+	},
+
+	changeGoverningLawAndJurisdiction(state, payload) {
+		if (isString(payload, 'governingLawAndJurisdiction')) {
+			state.formData.governingLawAndJurisdiction = payload;
+		}
+	},
+
 	changePurpose(state, payload) {
 		if (isString(payload, 'purpose')) {
 			state.formData.purpose = payload;
+		}
+	},
+
+	changeFinalProvisions(state, payload) {
+		if (isString(payload, 'finalProvision')) {
+			state.formData.finalProvisions = payload;
 		}
 	},
 
