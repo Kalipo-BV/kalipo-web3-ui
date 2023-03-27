@@ -15,34 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <template>
-    <!-- <div class="d-flex mt-3 ml-1"> -->
-      <!-- <improvementproposal></improvementproposal>
-      <improvementproposal></improvementproposal>
-      <improvementproposal></improvementproposal> -->
-    <!-- </div> -->
-
-    <!-- <v-data-table
-      :headers="headers"
-      :items="proposals"
-      class="elevation-0 mt-4"
-    >
-      <template v-slot:item.submission="{ item }">
-        {{
-          new Date(parseInt(item.submission) * 1000).toLocaleDateString(
-            userLang,
-            {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-            }
-          )
-        }}
-      </template>
-
-    </v-data-table> -->
-
 
   <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
 
