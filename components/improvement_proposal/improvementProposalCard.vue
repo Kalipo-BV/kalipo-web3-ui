@@ -3,11 +3,8 @@
 
 
     <div class="white"
-         style="min-width: 25vw; margin-right: 30px; margin-top: 20px; min-height: 20vh; padding-left: 20px; padding-top: 10px; border-radius: 7px; padding-bottom: 10px; display: flex;">
-      <div style="width: 90%;">
-
-
-        <p></p>
+         style="min-width: 30%; margin-right: 3%; margin-top: 20px; min-height: 20vh; padding-left: 20px; padding-top: 10px; border-radius: 7px; padding-bottom: 10px; display: flex;">
+      <div style="width: 90%; display: grid;">
         <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"
              :style="{ width: '300px', marginRight: '30px', paddingLeft: '20px', paddingTop: '10px', borderRadius: '7px', paddingBottom: '10px', display: 'flex' }"
              link @click="toProposal">
@@ -25,7 +22,7 @@
                 {{ proposal.result }}
               </v-chip>
 
-              {{
+              <p>{{
                 new Date(parseInt(proposal.submission) * 1000).toLocaleDateString(
                   userLang,
                   {
@@ -36,7 +33,7 @@
                     minute: "numeric",
                   }
                 )
-              }}
+              }}</p>
 
             </div>
           </div>
