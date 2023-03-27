@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,11 +40,11 @@
           )
         }}
       </template>
-      
+
     </v-data-table> -->
 
 
-  <v-list>
+  <v-list style="display: flex; flex-wrap: wrap">
     <v-list-item
         v-for="(item, i) in proposals"
         :key="i"
@@ -60,10 +60,10 @@
   </v-list>
 </template>
 <script>
-import improvementproposalCard from '~/components/improvement_proposal/improvementProposalCard.vue';
+import ImprovementProposalCard from "~/components/improvement_proposal/improvementProposalCard.vue";
 export default {
   layout: "auton",
-  components: {improvementproposalCard},
+  components: {ImprovementProposalCard},
   data: () => ({
     dialog: true,
     userLang: null,
@@ -119,17 +119,17 @@ export default {
         }
       );
       let linkStatus = "";
-      if (proposalWrapper.result.status == "CAMPAIGNING") {
+      if (proposalWrapper.result.status === "CAMPAIGNING") {
         linkStatus = "campaigning";
       }
-      if (proposalWrapper.result.status == "VOTING") {
+      if (proposalWrapper.result.status === "VOTING") {
         linkStatus = "voting";
       }
-      if (proposalWrapper.result.status == "DECIDED") {
+      if (proposalWrapper.result.status === "DECIDED") {
         linkStatus = "voting";
       }
 
-      if (proposalWrapper.result.status == "ENDED") {
+      if (proposalWrapper.result.status === "ENDED") {
         linkStatus = "results";
       }
 
@@ -144,7 +144,7 @@ export default {
         author: submitterAccountWrapper.result.username,
         result: proposalWrapper.result.binaryVoteResult.result,
       });
-      
+
     }
   },
 };
