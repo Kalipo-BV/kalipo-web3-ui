@@ -134,7 +134,7 @@
         <v-btn
             block
             width="100%"
-            color="light-green lighten-2"
+            color="info"
             @click="addProvision"
         >
             Add provision
@@ -152,7 +152,7 @@
                 set: function (payload) {
                     this.$store.commit("contract/changeCustom", payload);
                 },
-            },
+            }
         },
 
         data: () => ({
