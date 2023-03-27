@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div id="test" @click="toProposal(proposal.link)">
 
 
     <div class="white"
-         style="min-width: 30%; margin-right: 3%; margin-top: 20px; min-height: 20vh; padding-left: 20px; padding-top: 10px; border-radius: 7px; padding-bottom: 10px; display: flex;">
+         style="min-width: 30%; min-height: 20vh; border-radius: 7px; padding: 10px 3% 10px 20px;display: flex;">
       <div style="width: 90%; display: grid;">
         <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"
              :style="{ width: '300px', marginRight: '30px', paddingLeft: '20px', paddingTop: '10px', borderRadius: '7px', paddingBottom: '10px', display: 'flex' }"
-             link @click="toProposal">
+             link >
           <div :style="{width: '90%'}">
-            <a :href=proposal.link style="color: #0F6AF1;" class="text-h1 mb-2">{{ proposal.title }}</a>
+            <p style="color: #0F6AF1;" class="text-h1 mb-2">{{ proposal.title }}</p>
 
             <div>
               <p class="mb-0">
@@ -69,8 +69,7 @@ export default {
       }
       return "accent";
     },
-    toProposal() {
-      const uri = `/auton/${this.$route.params.autonId}/improvementproposal/detail`;
+    toProposal(uri) {
       console.log(uri);
       this.$router.push(uri);
     }

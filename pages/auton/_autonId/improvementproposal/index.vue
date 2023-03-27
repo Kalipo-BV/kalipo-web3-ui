@@ -16,7 +16,7 @@
 -->
 <template>
   <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; align-content: start">
-    <div
+    <div style="margin-top: 20px"
         v-for="(item, i) in proposals"
         :key="i">
       <ImprovementProposalCard :proposal="item"></improvementproposalCard>
