@@ -27,7 +27,7 @@ export const isNumber = (payload, errorName) => {
 }
 
 export const isDate = (payload, errorName) => {
-	const result = (payload instanceof Date);
+	const result = (typeof payload === 'string' || payload === null);
 	logError(result, errorName, payload);
 
 	return result;
