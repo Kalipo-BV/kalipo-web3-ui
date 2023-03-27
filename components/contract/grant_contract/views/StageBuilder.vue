@@ -23,22 +23,22 @@
 					<slot></slot>
 				</v-col>
 			</v-row>
-			<br/>
-			<v-row justify="center">
-				<v-col v-if="!isFirst">
+			
+			<v-row justify="end">
+				<v-col sm="4" cols="12" v-if="!isFirst">
 					<v-btn  
 						block
 						@click="previous"
 					>Previous</v-btn>
 				</v-col>
-				<v-col>
+				<v-col sm="4" cols="12">
 					<v-btn
 						color="info"
 						block
 						@click="save"
 					>Save</v-btn>
 				</v-col>
-				<v-col>
+				<v-col sm="4" cols="12">
 					<v-btn
 						color="info"
 						block
