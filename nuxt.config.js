@@ -49,7 +49,9 @@ export default {
   plugins: [{ src: '~/plugins/LiskClient.js', ssr: false }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: [
+    { path: '~/components', pathPrefix: false },
+  ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [

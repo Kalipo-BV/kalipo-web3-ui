@@ -164,7 +164,7 @@
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" max-width="500">
-      <AutonCreate></AutonCreate>
+      <DaoCreate></DaoCreate>
     </v-dialog>
     <v-dialog v-model="genericDialog" max-width="500">
       <GenericTransaction

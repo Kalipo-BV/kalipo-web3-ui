@@ -1,0 +1,303 @@
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<template>
+  <div class="">
+    <!--    Key code 13 is Enter key-->
+    <Keypress key-event="keyup" :key-code="13" @success="nextStep"
+      v-if="!(disabledNext || disabledNextStep4) && step !== 6" />
+
+    <v-card>
+      <v-card-text v-if="step == 0">
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Informing about DAOs and Autons"></AutonStepperHeader>
+
+        <div class="text-body-1 mt-3">
+          A DAO (Decentralized Autonomous Organization) is an organization that operates on Kalipo's platform, supporting
+          members in their self-management in a transparent manner.
+        </div>
+        <v-row class="mt-3">
+          <v-col cols="12" md="6">
+            <v-img src="/kalipo-dao-auton-constellation-example.png" />
+
+          </v-col>
+          <v-col cols="12" md="6">
+            <div class="text-caption mt-8">
+              By creating a new DAO you will establish a <b>DAO</b> with one <b>Governing Auton</b> (Autonomous
+              Organizational Unit).
+              This Auton is the team that governs the leading constitution of the DAO. <b>Sub Autons</b> can be used to
+              define an
+              organizational structure.
+            </div>
+          </v-col>
+        </v-row>
+
+      </v-card-text>
+
+      <v-card-text v-if="step == 1">
+        <!-- default template -->
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Naming your DAO and Governing Auton">
+        </AutonStepperHeader>
+        <div class="text-body-1 mt-3">
+          When creating a name, it's important to choose something unique and memorable that reflects the organization's
+          purpose and values. Consider using a combination of descriptive and creative words, and make sure the name is
+          easy to spell and pronounce.
+        </div>
+        <DaoNamingFields :name.sync="name" :governingName.sync="governingName" :disabledNext.sync="disabledNext">
+        </DaoNamingFields>
+
+      </v-card-text>
+
+      <v-card-text v-if="step == 2">
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Select an icon that suits your auton">
+        </AutonStepperHeader>
+        <AutonRandomIcons :icon.sync="icon"></AutonRandomIcons>
+      </v-card-text>
+
+      <v-card-text v-if="step == 3">
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Creating a mission and vision">
+        </AutonStepperHeader>
+        <div class="text-body-1 mt-3">
+          Create a clear and concise mission and vision statement for your DAO by defining its purpose, values, and goals.
+          The mission statement should describe what your DAO does and who it serves, and the vision statement should
+          outline where you want the organization to be in the future.
+        </div>
+        <DaoMissionVisionFields :mission.sync="mission" :vision.sync="vision" class="mt-4">
+        </DaoMissionVisionFields>
+      </v-card-text>
+
+      <v-card-text v-if="step == 4">
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Legal entity">
+        </AutonStepperHeader>
+        <div class="text-body-1 mt-3">
+          If your DAO has a jurisdiction and a Chamber of Commerce identification number, you can add this information to
+          your organization's profile. This helps to provide legitimacy and transparency to your DAO, and may be required
+          for legal or regulatory purposes.
+        </div>
+        <v-checkbox v-model="hasLegalEntity" label="Has legal entity"></v-checkbox>
+        <DaoLegalFields v-if="hasLegalEntity" :jurisdiction.sync="jurisdiction" :cocId.sync="cocId"
+          :businessAddress.sync="businessAddress" :disabledNext.sync="disabledNext" class="mt-4">
+        </DaoLegalFields>
+      </v-card-text>
+
+      <v-card-text v-if="step == 6">
+        <!-- default template -->
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Bulk invite members into your new auton">
+        </AutonStepperHeader>
+        <AutonUserSelect :selectedFounderIds.sync="selectedFounderIds" class="mt-4">
+        </AutonUserSelect>
+      </v-card-text>
+
+      <v-card-text v-if="step == 5">
+        <AutonStepperHeader v-if="template == 'DEFAULT'" title="Creating a new DAO"
+          subtitle="Specify tags so users can find your auton"></AutonStepperHeader>
+        <AutonStepperHeader v-if="template == 'EVENT'" title="Founding a new event"
+          subtitle="Specify tags so users can find your event"></AutonStepperHeader>
+        <AutonTagSelect :tags.sync="tags" class="mt-4"></AutonTagSelect>
+      </v-card-text>
+
+      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 6 && template == 'DEFAULT'"
+        callback="AutonCreate-PrevStep" title="Creating auton"></AccountSign>
+
+      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 6 && template == 'EVENT'"
+        callback="AutonCreate-PrevStep" title="Creating event"></AccountSign>
+
+      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 4 && template == 'LESSON'"
+        callback="AutonCreate-PrevStep" title="Creating lesson"></AccountSign>
+
+      <v-divider></v-divider>
+
+      <v-card-text v-if="
+        (template == 'DEFAULT' && step < 6) ||
+        (template == 'EVENT' && step < 6)
+      ">
+        <div class="d-flex align-center justify-space-between">
+          <v-btn :disabled="step == 0" @click="step--">
+            <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
+          </v-btn>
+          <v-btn color="accent" v-if="step != 6" @click="nextStep" :disabled="disabledNext || disabledNextStep4">
+            next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
+          </v-btn>
+          <v-btn color="accent" v-if="step == 6" @click="step++">
+            sign <v-icon class="ml-2" small>mdi-draw-pen</v-icon>
+          </v-btn>
+        </div>
+      </v-card-text>
+
+      <v-card-text v-if="template == 'LESSON' && step < 4">
+        <div class="d-flex align-center justify-space-between">
+          <v-btn :disabled="step == 0" @click="step--">
+            <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
+          </v-btn>
+          <v-btn color="accent" v-if="step != 6" @click="nextStep" :disabled="disabledNext || disabledNextStep4">
+            next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
+          </v-btn>
+          <v-btn color="accent" v-if="step == 6" @click="step++">
+            sign <v-icon class="ml-2" small>mdi-draw-pen</v-icon>
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+  </div>
+</template>
+<script>
+export default {
+  components: {
+    Keypress: () => import("vue-keypress"),
+  },
+  data: () => ({
+    step: 0,
+    uri: "",
+    template: "DEFAULT",
+    transaction: {
+      moduleId: 1003,
+      assetId: 0,
+      assets: {},
+    },
+    icon: "mdi-web",
+    name: "",
+    governingName: "",
+    mission: "",
+    vision: "",
+    hasLegalEntity: false,
+    jurisdiction: "",
+    cocId: "",
+    businessAddress: "",
+    selectedFounderIds: null,
+    tags: null,
+    disabledNext: false,
+    disabledNextStep4: false,
+
+    // event and lesson
+    startTime: "",
+    endTime: "",
+    description: "",
+    location: "",
+    start: BigInt(1),
+    end: BigInt(1),
+
+    // event
+    startDate: "",
+    endDate: "",
+    capacity: 0,
+    price: 0,
+
+    // lesson
+    subject: "",
+    lessonName: "",
+    date: "",
+    studentIds: [],
+    checkoutRequired: false,
+  }),
+  created() {
+    this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
+    this.$nuxt.$on("AutonCreate-PrevStep", ($event) => this.step--);
+    this.$nuxt.$on(
+      "OptionCard-SelectTemplate",
+      ($event) => (this.template = $event)
+    );
+  },
+  methods: {
+    makeTransaction() { },
+    nextStep() {
+      this.step++;
+      console.log("TEMPLATE: " + this.template);
+
+      if (this.step == 4 && this.template == "LESSON") {
+        this.uri = `auton/${this.lessonName.replace(" ", "_")}`;
+
+        if (this.date != "") {
+          this.start = BigInt(
+            new Date(this.date + ":" + this.startTime).getTime()
+          );
+          this.end = BigInt(new Date(this.date + ":" + this.endTime).getTime());
+        }
+
+        // auton lesson asset
+        const asset = {
+          icon: this.icon,
+          name: this.lessonName,
+          subtitle: "",
+          mission: "",
+          vision: "",
+          bulkInviteAccountIds: this.studentIds,
+          tags: [],
+          type: this.template,
+          location: this.location,
+          price: BigInt(0),
+          capacity: BigInt(0),
+          description: this.description,
+          start: this.start,
+          end: this.end,
+          subject: this.subject,
+          // het is geen fout dat dit een string is, voor een of ander manier accepteert lisk het niet als boolean
+          checkoutRequired: this.checkoutRequired ? "true" : "false",
+        };
+
+        this.transaction.assets = asset;
+      }
+
+      if (this.step == 6) {
+        this.uri = `auton/${this.name.replace(" ", "_")}`;
+
+        if (this.tags == null) {
+          this.tags = [];
+        }
+        if (this.mission == null) {
+          this.mission = "";
+        }
+        if (this.vision == null) {
+          this.vision = "";
+        }
+        if (this.selectedFounderIds == null) {
+          this.selectedFounderIds = [];
+        }
+        if (this.startDate != "") {
+          this.start = BigInt(
+            new Date(this.startDate + ":" + this.startTime).getTime()
+          );
+        }
+        if (this.endDate != "") {
+          this.end = BigInt(
+            new Date(this.endDate + ":" + this.endTime).getTime()
+          );
+        }
+
+        const asset = {
+          icon: this.icon,
+          name: this.name,
+          subtitle: this.slogan,
+          mission: this.mission,
+          vision: this.vision,
+          bulkInviteAccountIds: this.selectedFounderIds,
+          tags: this.tags,
+          type: this.template,
+          location: this.location,
+          price: BigInt(0),
+          capacity: BigInt(0),
+          description: this.description,
+          start: BigInt(0),
+          end: BigInt(0),
+          subject: "",
+          checkoutRequired: "false",
+        };
+
+        this.transaction.assets = asset;
+      }
+    },
+  },
+};
+</script>
