@@ -15,19 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <template>
-  <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; align-content: start">
-    <div style="margin-top: 20px"
-        v-for="(item, i) in proposals"
-        :key="i">
-      <ImprovementProposalCard :proposal="item"></improvementproposalCard>
-    </div>
+  <div>
+      <ImprovementProposalList :proposals="proposals"></improvementproposalList>
   </div>
 </template>
 <script>
-import ImprovementProposalCard from "~/components/improvement_proposal/improvementProposalCard.vue";
+import ImprovementProposalList from "~/components/improvement_proposal/improvementProposalList.vue";
 export default {
   layout: "auton",
-  components: {ImprovementProposalCard},
+  components: {ImprovementProposalList},
   data: () => ({
     dialog: true,
     userLang: null,
@@ -35,20 +31,6 @@ export default {
     filterResult: [],
     resultEnum: ["UNDECIDED", "ACCEPTED", "REJECTED"],
     search: "",
-    headers: [
-      {
-        text: "Title",
-        align: "start",
-        sortable: false,
-        value: "title",
-      },
-      { text: "Type", value: "type" },
-
-      { text: "Author(s)", value: "author" },
-      { text: "Status", value: "status" },
-      { text: "Result", value: "result" },
-      { text: "Submission date", value: "submission" },
-    ],
     proposals: [],
   }),
   async mounted() {

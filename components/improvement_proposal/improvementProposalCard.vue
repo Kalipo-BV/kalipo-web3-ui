@@ -1,13 +1,13 @@
 <template>
+<!--  <v-hover id="hover">-->
   <div @click="toProposal(proposal.link)">
 
     <!--  min-width: 30%; min-height: 20vh; border-radius: 7px; padding: 10px 3% 10px 20px;-->
-    <div class="white"
-         :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px'}">
+    <div :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px', minHeight: '160px', backgroundColor: 'white'}" >
       <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"
-           :style="{ minWidth: '300px', padding: '20px 30px 20px 30px', display: 'flex' }">
-        <div>
-          <p style="color: #0F6AF1;" class="text-h1 mb-2">{{ proposal.title }}</p>
+           :style="{ minWidth: '300px', padding: '15px', display: 'flex' }">
+        <div style="width: 90%!important;">
+          <p style="color: #0F6AF1; font-size: 29px!important;" class="text-h1 mb-2">{{ proposal.title }}</p>
 
           <div>
             <p class="mb-0">
@@ -34,15 +34,15 @@
               }}</p>
           </div>
         </div>
-        <div class="d-flex align-center" :style="{width: '10%'}">
-          <p class="font-weight-regular" :style="{color: '#0F6AF1', marginBottom:'0px', fontsize: 'xx-large'}">
+        <div class="d-flex align-center" :style="{width: '10%', marginLeft: '2%'}">
+          <p class="font-weight-regular" :style="{color: '#0F6AF1', marginBottom:'0px', fontSize: '45px'}">
             >
           </p>
         </div>
       </div>
     </div>
   </div>
-
+<!--  </v-hover>-->
 </template>
 
 <script>
