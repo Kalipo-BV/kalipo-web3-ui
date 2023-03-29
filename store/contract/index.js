@@ -67,7 +67,9 @@ export const mutations = {
 	},
 
 	changeParties(state, payload) {
-		state.formData.parties = payload;
+		if (isValidPartyData(payload) && isArray(payload.data, `parties[${payload.target}]_data`)) {
+			state.formData.parties[payload.target] = payload.data;
+		}
 	},
 
 	changePreample(state, payload) {
