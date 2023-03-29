@@ -178,6 +178,23 @@ export const getters = {
 	getContract: (state) => {
 		return retreiveData(state);
 	}
+}
+
+export const actions = {
+	loadPreviousState({commit}, previousState) {
+		commit("reset");
+
+		//load data here
+		console.log("test load", previousState);
+	},
+
+	saveState({getters}) {
+		//save date to localstore
+		const oldState = getters["getContract"];
+		console.log("test save", oldState);
+	}
+}
+
 function retreiveData(state) {
 	const result = {};
 
