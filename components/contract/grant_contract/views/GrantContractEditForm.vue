@@ -104,6 +104,7 @@
 				<v-alert
           v-if="signed"
           v-model="signed"
+          style="overflow-wrap: anywhere;"
 					width="100%"
 					dense
 					dismissible

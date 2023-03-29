@@ -16,22 +16,24 @@
 -->
 
 <template>
-    <v-autocomplete
-        prepend-icon="mdi-account-multiple-plus"
-        chips
-        clearable
-        deletable-chips
-        multiple
-        v-model="selected"
-        :disabled="isUpdating"
-        :items="users"
-        :rules="[this.selected?.length > 0 || 'There must be at least one party member!']"
-        color="blue-grey lighten-2"
-        label="Add (additional) party members"
-        item-text="name"
-        item-value="id"
-        style="padding: 1px; margin: 5px;"
-      >
+    <v-container>
+        <!-- <div class="text--primary pl-2"> {{ title }}</div> -->
+        <v-autocomplete
+            prepend-icon="mdi-account-multiple-plus"
+            chips
+            clearable
+            deletable-chips
+            multiple
+            v-model="selected"
+            :disabled="isUpdating"
+            :items="users"
+            :rules="[this.selected?.length > 0 || 'There must be at least one party member!']"
+            color="blue-grey lighten-2"
+            label="Add (additional) party members"
+            item-text="name"
+            item-value="id"
+            style="padding: 1px; margin: 5px;"
+        >
         <template v-slot:selection="data">
           <v-chip
             v-bind="data.attrs"
@@ -71,6 +73,8 @@
             </template>
         </template>
     </v-autocomplete>
+</v-container>
+
 </template>
 <script>
     export default {

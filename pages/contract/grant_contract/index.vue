@@ -19,7 +19,6 @@
   <v-row align="center" justify="center" style="height: 100%">
     <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Parties">
       <PartyMemberProvision is-contractor party-name="contractor"/>
-
       <PartyMemberProvision party-name="client"/>
     </StageBuilder>
 
