@@ -32,8 +32,6 @@
     </StageBuilder>
 
     <GrantContractEditForm v-if="editFase === 0" />
-    
-    
   </v-row>
 </template>
 <script>
@@ -49,7 +47,7 @@
 
       next: function() {
         this.editFase--;
-      }
+      },
     }
   };
 </script>

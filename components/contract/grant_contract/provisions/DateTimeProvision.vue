@@ -91,8 +91,7 @@
           return this.$store.state.contract.formData.dates.startDate;
         },
         set: function (payload) {
-          console.log(typeof(payload));
-          this.$store.commit("contract/changeStartDate", new Date.parse(payload));
+          this.$store.commit("contract/changeStartDate", payload);
         },
       },
 
@@ -101,7 +100,7 @@
           return this.$store.state.contract.formData.dates.endDate;
         },
         set: function (payload) {
-          this.$store.commit("contract/changeEndDate", new Date.parse(payload));
+          this.$store.commit("contract/changeEndDate", payload);
         },
       }
 
