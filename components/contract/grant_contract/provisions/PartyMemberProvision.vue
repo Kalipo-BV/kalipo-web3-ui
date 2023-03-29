@@ -16,7 +16,9 @@
 -->
 
 <template>
-    <v-autocomplete
+    <v-container>
+        <div class="text--primary pl-2"> {{ title }}</div>
+        <v-autocomplete
         prepend-icon="mdi-account-multiple-plus"
         chips
         clearable
@@ -71,11 +73,13 @@
             </template>
         </template>
     </v-autocomplete>
+</v-container>
+
 </template>
 <script>
     export default {
-        props: ["party"],
-
+        props: ["party", "title"],
+        
         computed: {
             selectedValue: {
                 get: function () {
