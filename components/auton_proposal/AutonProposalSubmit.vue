@@ -30,56 +30,7 @@
       </v-card-text>
 
 
-      <v-card-text v-if="step == 'proposal-info'">
-        <AutonStepperHeader
-          title="Information about Stakeholder proposal"
-          subtitle="for this proposal stakeholder voting will be implemented, you can specify the stakeholders below"
-        ></AutonStepperHeader>
-        
-        <AutonProposalStakeholderInvitation
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalStakeholderInvitation>
-
-        <AutonProposalStakeholderInvitation
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalStakeholderInvitation>
-        
-        <AutonProposalStakeholderInvitation
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalStakeholderInvitation>
-
-
-
-        <!-- <AutonProposalStakeholderInvitation>
-        </AutonProposalStakeholderInvitation> -->
-
-        <!-- <v-radio-group       
-        v-model="column" 
-        column>       
-      <v-radio          
-      label="stakeholder voting"         
-      value="radio-1"
-      color="blue">
-      </v-radio>       
-      <v-radio 
-      label="cardinal voting"
-      value="radio-2"
-      color="blue">
-        </v-radio>
-      </v-radio-group>
-    <p>---------------</p>
-    <input type="radio" id="stakeholder_option" name="voting">
-    <Label for="stakeholder_option">Stakeholder voting</Label><br>
-    <input type="radio" id="cardinal_option" name="voting">
-    <Label for="cardinal_option">Cardinal voting</Label><br>
-    <input type="radio" id="binary_option" name="voting">
-    <Label for="binary_option">Binary voting</Label> -->
-
-
-      </v-card-text>
+    
 
 
       <v-card-text v-if="step == 'proposal-profile'">
@@ -109,8 +60,60 @@
           class="mt-4"
           :autonId="autonId"
         ></AutonProposalMembershipInvitation>
+        
+        <input type="checkbox" @click="cycleApproval()" id="stakeholderapproval">
+        <label for="stakeholdervoting">stakeholder approval</label>
       </v-card-text>
 
+  <v-card-text v-if="step == 'proposal-stakeholder'">
+        <AutonStepperHeader
+          title="Information about Stakeholder proposal"
+          subtitle="for this proposal stakeholder voting will be implemented, you can specify the stakeholders below"
+        ></AutonStepperHeader>
+        
+        <AutonProposalStakeholderInvitation
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalStakeholderInvitation>
+
+        <AutonProposalStakeholderInvitation
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalStakeholderInvitation>
+        
+        <AutonProposalStakeholderInvitation
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalStakeholderInvitation>
+
+        <v-btn>send data to backend</v-btn>
+
+        <!-- <AutonProposalStakeholderInvitation>
+        </AutonProposalStakeholderInvitation> -->
+
+        <!-- <v-radio-group       
+        v-model="column" 
+        column>       
+      <v-radio          
+      label="stakeholder voting"         
+      value="radio-1"
+      color="blue">
+      </v-radio>       
+      <v-radio 
+      label="cardinal voting"
+      value="radio-2"
+      color="blue">
+        </v-radio>
+      </v-radio-group>
+    <p>---------------</p>
+    <input type="radio" id="stakeholder_option" name="voting">
+    <Label for="stakeholder_option">Stakeholder voting</Label><br>
+    <input type="radio" id="cardinal_option" name="voting">
+    <Label for="cardinal_option">Cardinal voting</Label><br>
+    <input type="radio" id="binary_option" name="voting">
+    <Label for="binary_option">Binary voting</Label> -->
+
+      </v-card-text>
 
       <AccountSign
         :transaction="transaction"
@@ -146,6 +149,7 @@ export default {
     props: ["autonId", "autonName", "callbackFinish"],
     data: () => ({
         step: "select-proposal-type",
+        stakeholdervoting: false,
         disabledNext: false,
         selectedProposalType: null,
         selectedAccountId: null,
@@ -165,19 +169,33 @@ export default {
         this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
     },
     methods: {
-        prevStep() {
-            if (this.step == "proposal-info") {
+        prevStep() {        
+          console.log("de checkbox bool: "+this.stakeholdervoting)
+          
+          if (this.step == "proposal-profile") {
                 this.step = "select-proposal-type";
             }
             else if (this.step == "proposal-profile") {
-                this.step = "proposal-info";
+                this.step = "membership invitation";
             }
             else if (this.step == "membership-invitation") {
                 this.step = "proposal-profile";
+            }else if(this.step == "proposal-stakeholder"){
+              this.step = "membership-invitation"
             }
-            else if (this.step == "sign") {
+            else if (this.step == "sign" && this.stakeholdervoting) {
+                this.step = "proposal-stakeholder";
+                this.stakeholdervoting = false;
+            }else if (this.step == "sign" ) {
                 this.step = "membership-invitation";
             }
+        },
+        cycleApproval(){
+          if(this.stakeholdervoting == false){
+            this.stakeholdervoting = true
+          }else{
+            this.stakeholdervoting = false
+          }
         },
         finish() {
             if (this.callbackFinish) {
@@ -198,16 +216,20 @@ export default {
             }
         },
         async nextStep() {
-            if (this.step == "select-proposal-type") {
-                this.step = "proposal-info";
-            }
-            else if (this.step == "proposal-info") {
+          
+          if (this.step == "select-proposal-type") {
                 this.step = "proposal-profile";
             }
             else if (this.step == "proposal-profile") {
                 this.step = "membership-invitation";
             }
+            else if (this.step == "membership-invitation" && this.stakeholdervoting) {
+                this.stakeholdervoting = false;
+                this.step = "proposal-stakeholder";
+            }
             else if (this.step == "membership-invitation") {
+                this.step = "sign";
+            }else if (this.step == "proposal-stakeholder") {
                 this.step = "sign";
             }
             // The transaction prop interface:
@@ -233,6 +255,9 @@ export default {
                 this.transaction.assetId = 0;
                 this.transaction.assets = asset;
             }
+        },
+        sendData(){
+          $nuxt.$emit
         },
     },
     components: { AutonProposalStakeholderInvitation, AutonProposalMembershipInvitation }
