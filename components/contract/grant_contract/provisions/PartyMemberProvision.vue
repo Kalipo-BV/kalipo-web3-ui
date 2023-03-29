@@ -22,10 +22,10 @@
         clearable
         deletable-chips
         multiple
-        v-model="selectedValue"
+        v-model="selected"
         :disabled="isUpdating"
         :items="users"
-        :rules="[this.selectedValue?.length > 0 || 'There must be at least one party member!']"
+        :rules="[this.selected?.length > 0 || 'There must be at least one party member!']"
         color="blue-grey lighten-2"
         label="Add (additional) party members"
         item-text="name"
@@ -35,7 +35,7 @@
         <template v-slot:selection="data">
           <v-chip
             v-bind="data.attrs"
-            :input-value="data.selectedValue"
+            :input-value="data.selected"
             close
             @click="data.select"
             @click:close="remove(data.item)"
@@ -56,17 +56,17 @@
             </template>
             <template v-else>
                 <v-list-item-avatar class="d-flex align-center justify-center">
-                <v-avatar
-                    color="accent"
-                    class="white--text text-caption"
-                    v-if="data.item.name"
-                >
-                    {{ getInitials(data.item.name, 3) }}
-                </v-avatar>
+                    <v-avatar
+                        color="accent"
+                        class="white--text text-caption"
+                        v-if="data.item.name"
+                    >
+                        {{ getInitials(data.item.name, 3) }}
+                    </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                <v-list-item-title>{{ data.item.name }}</v-list-item-title>
-                <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
+                    <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                    <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
                 </v-list-item-content>
             </template>
         </template>
@@ -74,15 +74,22 @@
 </template>
 <script>
     export default {
-        props: ["parties"],
+        props: {
+            partyName: {type: String, default: "" },
+            isContractor: {type: Boolean, default: false}
+        },
 
         computed: {
-            selectedValue: {
+            selected: {
                 get: function () {
-                    return this.parties;
+                    if (this.$props.isContractor) {
+                        return this.$store.state.contract.formData.parties.contractor;
+                    } else {
+                        return this.$store.state.contract.formData.parties.client;
+                    }
                 },
-                set: function (newValue) {
-                    this.$emit("update:parties", newValue);
+                set: function (partyArray) {
+                    this.$store.commit("contract/changeParties", this.makePayload(partyArray));
                 },
             },
             account() {
@@ -106,36 +113,41 @@
                     }
                 }
             }
-            // filter so you cant add yourself
-            // this.users = this.users.filter((item) => item.id !== this.account.accountId);
             this.isUpdating = false;
         },
 
         data: () => ({
             isUpdating: true,
             users: [{ header: "Most recent users" }],
-            // selectedValue: [],
         }),
 
         methods: {
             remove(item) {
-                const index = this.selectedValue.indexOf(item.id);
-                if (index >= 0)
-                    this.selectedValue.splice(index, 1);
+                this.$store.commit("contract/removeFromParties", this.makePayload(item));
             },
-            
+
+            makePayload(payloadData) {
+                const payload = { target: "", data: payloadData }
+                if (this.$props.isContractor) {
+                    payload.target = "contractor"
+                } else {
+                    payload.target = "client"
+                }
+                return payload
+            },
+
             getInitials(parseStr, max) {
                 if (parseStr != undefined) {
                     const nameList = parseStr.split(" ");
                     let result = "";
                     for (let index = 0; index < nameList.length; index++) {
                         if (index < max) {
-                        const element = nameList[index];
-                        if (element.length > 0) {
-                            result += element[0].toUpperCase();
-                        }
+                            const element = nameList[index];
+                            if (element.length > 0) {
+                                result += element[0].toUpperCase();
+                            }
                         } else {
-                        break;
+                            break;
                         }
                     }
                     return result;

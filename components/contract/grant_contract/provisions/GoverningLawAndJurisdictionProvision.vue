@@ -17,7 +17,7 @@
 
 <template>
     <v-textarea
-        v-model="governingLawAndJurisdictionValue"
+        v-model="governingLawAndJurisdiction"
         rows="2"
         solo
         clearable
@@ -30,11 +30,10 @@
 </template>
 <script>
     export default {
-        props: ["governingLawAndJurisdiction"],
         computed: {
-            governingLawAndJurisdictionValue: {
+            governingLawAndJurisdiction: {
                 get: function () {
-                    return this.governingLawAndJurisdiction;
+                    return this.$store.state.contract.formData.governingLawAndJurisdiction;
                 },
                 set: function (newValue) {
                     this.$emit("update:governingLawAndJurisdiction", newValue);

@@ -17,27 +17,21 @@
 
 <template>
   <v-row align="center" justify="center" style="height: 100%">
-    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Party-Provision">
-      <PartyMemberProvision
-        :parties.sync="formData.partyMembers"
-      />
+    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Parties">
+      <PartyMemberProvision is-contractor party-name="contractor"/>
+
+      <PartyMemberProvision party-name="client"/>
     </StageBuilder>
 
-    <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample-Provision">
-      <PreampleProvision
-        :preample.sync="formData.preample"
-      />
+    <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample">
+      <PreampleProvision/>
     </StageBuilder>
 
-    <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose-Provision">
-      <PurposeProvision
-        :purpose.sync="formData.purpose"
-      />
+    <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose">
+      <PurposeProvision/>
     </StageBuilder>
 
-    <GrantContractEditForm v-if="editFase === 0" 
-      :data.sync="formData"
-    />
+    <GrantContractEditForm v-if="editFase === 0" />
     
     
   </v-row>
@@ -46,31 +40,6 @@
   export default {
     data: () => ({
       editFase: 3,
-      status: "",
-      fullySigned: false,
-      signingWindow: 0,
-      date: new Date().toISOString(),
-      formData: {
-        partyMembers: [],
-        preample: null,
-        purpose: null,
-        payment: {
-          amount: null,
-          note: null,
-        },
-        dates: {
-          beginDate: null,
-          endDate: null,
-        },
-        propertyRights: null,
-        terminationOfAgreement: null,
-        governingLawAndJurisdiction: null,
-        finalProvisions: null,
-        milestones: [],
-        custom: [],
-        requiredToSign: false,
-        signed: false,
-      },
     }),
 
     methods: {
