@@ -50,6 +50,7 @@
 				<v-alert
 					v-if="saving"
 					v-model="saving"
+					style="margin-top: 7px;"
 					width="100%"
 					dense
 					dismissible

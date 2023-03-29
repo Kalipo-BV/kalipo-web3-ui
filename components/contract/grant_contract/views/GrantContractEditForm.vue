@@ -155,7 +155,7 @@
 </template>
 <script>
   export default {
-    props: ["transaction", "uri", "title"],
+    // props: ["transaction", "uri", "title"],
     
     computed: {
       formData: {
@@ -166,19 +166,52 @@
           this.$emit("update:data", newValue);
         },
       },
+      unlocked() {
+        return this.$store.state.wallet.unlocked;
+      },
     },
 
     data: () => ({
       saving: false,
       signed: false,
+      dialog: false,
+      transaction: {
+        moduleId: 1010,
+        assetId: 1,
+        assets: null,
+      },
+      uri: "",
     }),
+
+    created() {
+      this.$nuxt.$on("IAH-triggerSignComplete", function ($event) {
+        this.handleCreation();
+      });
+    },
     
     methods: {
       async sign() {
+        console.log(this.$store.state.contract);
+        // $router.push('/wallet');
         const { valid } = await this.$refs.form.validate();
-        if (valid)
-          //call to backend
-          this.signed = true;
+        // if (valid) {
+          // if(this.unlocked) {
+            // this.transaction.assets = asset;
+            this.transaction.assets = this.$store.state.contract;
+            this.transaction.uri = "contract/signGrantContract-asset";
+            await this.$invoke("contract:signGrantContract", {
+              formData: this.$store.state.contract,
+              // .toString("hex")
+            });
+            
+            // this.$nuxt.$emit("IAH-triggerCreateAccount");
+            // this.$emit("signGrantContract");
+            // this.$nuxt.$emit("signGrantContract");
+            this.signed = true;
+          // } else {
+
+          // }  
+        // }
       },
       
       reset() {
@@ -190,6 +223,10 @@
         if(localStorage.getItem("Grant-Contract") != null) {
           this.saving = true;
         }
+      },
+
+      async handleCreation() {
+        
       },
     },
   }
