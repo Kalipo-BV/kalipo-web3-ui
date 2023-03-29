@@ -5,6 +5,27 @@ export const isArray = (payload, errorName) => {
 	return result;
 }
 
+export const isValidPartyData = (payload) => {
+	if (isObject(payload, 'partiesObject')) {
+		const { target, data } = payload;
+
+		if (isString(target, `parties[target]`)) {
+			if (target !== "client" && target !== "contractor") {
+				return false;
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+export const isObject = (payload, errorName) => {
+	const result = (typeof payload === 'object' && !Array.isArray(payload));
+	logError(result, errorName, payload);
+
+	return result;
+}
+
 export const isString = (payload, errorName) => {
 	const result = (typeof payload === 'string' || payload === null);
 	logError(result, errorName, payload);
