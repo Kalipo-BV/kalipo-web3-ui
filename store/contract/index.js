@@ -192,6 +192,12 @@ export const actions = {
 		//save date to localstore
 		const oldState = getters["getContract"];
 		console.log("test save", oldState);
+
+		localStorage.setItem("Grant-Contract", this.$store.state.contract);
+		if (localStorage.getItem("Grant-Contract") != null) {
+			this.saving = true;
+			this.saved++;
+		}
 	}
 }
 

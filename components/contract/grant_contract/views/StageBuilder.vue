@@ -23,28 +23,41 @@
 					<slot></slot>
 				</v-col>
 			</v-row>
-			<br/>
-			<v-row justify="center">
-				<v-col v-if="!isFirst">
+			
+			<v-row justify="end">
+				<v-col sm="4" cols="12" v-if="!isFirst">
 					<v-btn  
 						block
 						@click="previous"
 					>Previous</v-btn>
 				</v-col>
-				<v-col>
+				<v-col sm="4" cols="12">
 					<v-btn
 						color="info"
 						block
 						@click="save"
 					>Save</v-btn>
 				</v-col>
-				<v-col>
+				<v-col sm="4" cols="12">
 					<v-btn
 						color="info"
 						block
 						@click="next"
 					>Next</v-btn>
 				</v-col>
+			</v-row>
+			<v-row>
+				<v-alert
+					v-if="saving"
+					v-model="saving"
+					width="100%"
+					dense
+					dismissible
+					elevation="5"
+					outlined
+					prominent
+					type="success"
+				>The contract has corectly been saved! ({{ this.saved }})</v-alert>
 			</v-row>
 	  </v-sheet>
 </template>
@@ -55,14 +68,29 @@ export default {
 		title: String
 	},
 
+    data: () => ({
+      saving: false,
+	  saved: 0,
+    }),
+
 	methods: {
 		previous: function() {
+			this.resetSave();
 			this.$emit('previous', null);
 		},
+
 		next: function() {
+			this.resetSave();
 			this.$emit('next', null);
 		},
+
+		resetSave() {
+			this.saving = false;
+			this.saved = 0;
+		},
+
 		save: function() {
+			// console.log(this.$store.state);
 			//test functions
 			// this.$store.dispatch("contract/loadPreviousState", {});
 			this.$store.dispatch("contract/saveState");

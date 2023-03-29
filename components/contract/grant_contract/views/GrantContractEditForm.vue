@@ -56,28 +56,28 @@
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <GoverningLawAndJurisdictionProvision />
+        <GoverningLawAndJurisdictionProvision/>
       </v-container>
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <FinalProvisions />
+        <FinalProvisions/>
       </v-container>
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Milestones"
       >
-        <!-- <MilestonesProvision /> -->
+        <MilestonesProvision/>
       </v-container>  
 
       <v-container
         style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
         label="Custom provision"
       >
-        <CustomProvision />
+        <CustomProvision/>
       </v-container>  
 
-      <RequiredToSignProvision/>
+      <!-- <RequiredToSignProvision/> -->
       
       <!-- <v-checkbox
         v-model="formData.signed"
@@ -86,12 +86,49 @@
         required
       /> -->
 
+
+      <v-row>
+        <v-alert
+          v-if="saving"
+          v-model="saving"
+          width="100%"
+          dense
+          dismissible
+          elevation="5"
+          outlined
+          prominent
+          type="success"
+        >The contract has corectly been saved!</v-alert>
+      </v-row>
+      <v-row>
+				<v-alert
+          v-if="signed"
+          v-model="signed"
+					width="100%"
+					dense
+					dismissible
+					elevation="5"
+					outlined
+					prominent
+					type="success"
+				>The contract has corectly been signed by you, and is now waiting for the other party(-ies) to sign it/accept it!</v-alert>
+      </v-row>
+
       <div class="d-flex flex-column">
+        <v-btn
+          color="info"
+          class="mt-4"
+          block
+          @click="save"
+        >
+          Save
+        </v-btn>
+
         <v-btn
           color="success"
           class="mt-4"
           block
-          @click="validate"
+          @click="sign"
         >
           Sign
         </v-btn>
@@ -118,8 +155,8 @@
 </template>
 <script>
   export default {
-    props: ["data"],
-
+    props: ["transaction", "uri", "title"],
+    
     computed: {
       formData: {
         get: function () {
@@ -131,16 +168,28 @@
       },
     },
 
+    data: () => ({
+      saving: false,
+      signed: false,
+    }),
+    
     methods: {
-      async validate() {
+      async sign() {
         const { valid } = await this.$refs.form.validate();
         if (valid)
-          alert("Form is valid");
-          this.test();
+          //call to backend
+          this.signed = true;
       },
       
       reset() {
         this.$refs.form.reset();
+      },
+
+      save: function() {
+        localStorage.setItem("Grant-Contract", this.$store.state.contract);
+        if(localStorage.getItem("Grant-Contract") != null) {
+          this.saving = true;
+        }
       },
     },
   }
