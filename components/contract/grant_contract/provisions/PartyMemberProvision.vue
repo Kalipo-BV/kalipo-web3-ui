@@ -82,10 +82,14 @@
         computed: {
             selected: {
                 get: function () {
-                    return this.$store.state.contract.formData.parties;
+                    if (this.$props.isContractor) {
+                        return this.$store.state.contract.formData.parties.contractor;
+                    } else {
+                        return this.$store.state.contract.formData.parties.client;
+                    }
                 },
-                set: function (payload) {
-                    this.$store.commit("contract/changeParties", payload);
+                set: function (partyArray) {
+                    this.$store.commit("contract/changeParties", this.makePayload(partyArray));
                 },
             },
             account() {
@@ -119,7 +123,9 @@
 
         methods: {
             remove(item) {
-                this.$store.commit("contract/removeFromParties", item);
+                this.$store.commit("contract/removeFromParties", this.makePayload(item));
+            },
+
             makePayload(payloadData) {
                 const payload = { target: "", data: payloadData }
                 if (this.$props.isContractor) {
