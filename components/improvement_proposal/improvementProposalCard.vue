@@ -64,10 +64,10 @@ export default {
       }
       if (result === "ACCEPTED") {
         console.log("accepted")
-        return "#fa8085";
+        return "#4b957e";
       }
       if (result === "REJECTED") {
-        return "#4b957e";
+        return "#fa8085";
       }
       return "accent";
     },
