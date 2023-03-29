@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent>
+    <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent id="stakeholder-form">
       <v-autocomplete
         v-model="selectedValue"
         :disabled="isUpdating"
@@ -29,21 +29,22 @@
         item-value="id"
         :rules="[rules.required]"
       >
-        <template v-slot:selection="data">
+
+        <template v-slot:selection="data" id="selection-template">
+
           <v-chip
             v-bind="data.attrs"
             :input-value="data.selectedValue"
             close
-            @click=" cycleStep(data)"
+            @click=""
             @click:close="remove()"
           >
             <v-avatar
               color="accent"
-              class="white--text text-caption"
+              class="white--text text-caption stakeholder-info"
               v-if="data.item.name"              
               left
-              >{{ getInitials(data.item.name, 2) }}</v-avatar
-            >
+              >{{ getInitials(data.item.name, 2) }}</v-avatar>
             {{ data.item.name}}
           </v-chip>
         </template>
@@ -74,23 +75,21 @@
 
     <v-container style="height: 100%" v-if="step == 'info-stakeholder'">
       <p>naam: {{ selectedValue.name }} <br> username: {{ selectedValue.username }}</p>
-      <v-btn @click="cycleStep" class="button">Change Stakeholder</v-btn>
+      <v-btn @click="cycleStep()" class="button">Change Stakeholder</v-btn>
   </v-container>
-    
   </div>
 </template>
 
 <script>
 export default {
-  props: ["selectedAccountId", "disabledNext", "autonId"],
+  props: ["selectedStakeholderId", "disabledNext", "autonId"],
   computed: {
     selectedValue: {
       get: function () {
-        return this.selectedAccountId;
+        return this.selectedStakeholderId;
       },
       set: function (newValue) {
-        this.selectedAccountId = newValue;
-//        this.$emit("update:selectedAccountId", newValue);
+        this.$emit("update:selectedStakeholderId", newValue);
       },
     },
   },
@@ -122,15 +121,20 @@ export default {
   },
   methods: {
     cycleStep(data) {
-      
             if (this.step == "voeg-stakeholder-toe") {
                 this.selectedValue = data.item
                 this.step = "info-stakeholder";
+
+                console.log("eerste if statement")
             }
             else if (this.step == "info-stakeholder") {
+                document.getElementById("stakeholder-form").reset
                 this.step = "voeg-stakeholder-toe";
+                
+                console.log("tweede if statement")
             }
           },
+          
     remove() {
       this.selectedValue = "";
     },

@@ -47,7 +47,6 @@
       </v-card-text>
 
       
-
       <v-card-text v-if="step == 'membership-invitation'">
         <AutonStepperHeader
           title="Submitting a new proposal"
@@ -71,20 +70,15 @@
           subtitle="for this proposal stakeholder voting will be implemented, you can specify the stakeholders below"
         ></AutonStepperHeader>
         
+        
+        
         <AutonProposalStakeholderInvitation
+          :selectedStakeholderId.sync="selectedStakeholderIds"
           class="mt-4"
           :autonId="autonId"
         ></AutonProposalStakeholderInvitation>
 
-        <AutonProposalStakeholderInvitation
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalStakeholderInvitation>
-        
-        <AutonProposalStakeholderInvitation
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalStakeholderInvitation>
+
 
         <v-btn>send data to backend</v-btn>
 
@@ -153,6 +147,7 @@ export default {
         disabledNext: false,
         selectedProposalType: null,
         selectedAccountId: null,
+        selectedStakeholderIds: [null],
         invitationMessage: "",
         proposalTitle: "",
         proposalDescription: "",
@@ -169,9 +164,7 @@ export default {
         this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
     },
     methods: {
-        prevStep() {        
-          console.log("de checkbox bool: "+this.stakeholdervoting)
-          
+        prevStep() {                  
           if (this.step == "proposal-profile") {
                 this.step = "select-proposal-type";
             }
@@ -204,6 +197,7 @@ export default {
                 this.disabledNext = false;
                 this.selectedProposalType = null;
                 this.selectedAccountId = null;
+                this.selectedStakeholderIds = [null];
                 this.invitationMessage = "";
                 this.proposalTitle = "";
                 this.proposalDescription = "";
