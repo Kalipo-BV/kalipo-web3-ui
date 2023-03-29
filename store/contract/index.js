@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isArray, isBoolean, isDate, isNumber, isString} from "./validation.js"
+import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
 
 const initFormData = {
 	parties: [],
