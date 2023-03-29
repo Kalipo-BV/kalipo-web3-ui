@@ -91,11 +91,9 @@ export default {
 
 		save: function() {
 			// console.log(this.$store.state);
-			localStorage.setItem("Grant-Contract", this.$store.state.contract);
-			if(localStorage.getItem("Grant-Contract") != null) {
-				this.saving = true;
-				this.saved++;
-			}
+			//test functions
+			// this.$store.dispatch("contract/loadPreviousState", {});
+			this.$store.dispatch("contract/saveState");
 		},
 	},
 }

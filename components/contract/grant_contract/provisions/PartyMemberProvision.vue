@@ -22,10 +22,10 @@
         clearable
         deletable-chips
         multiple
-        v-model="selectedValue"
+        v-model="selected"
         :disabled="isUpdating"
         :items="users"
-        :rules="[this.selectedValue?.length > 0 || 'There must be at least one party member!']"
+        :rules="[this.selected?.length > 0 || 'There must be at least one party member!']"
         color="blue-grey lighten-2"
         label="Add (additional) party members"
         item-text="name"
@@ -35,7 +35,7 @@
         <template v-slot:selection="data">
           <v-chip
             v-bind="data.attrs"
-            :input-value="data.selectedValue"
+            :input-value="data.selected"
             close
             @click="data.select"
             @click:close="remove(data.item)"
@@ -65,8 +65,8 @@
                     </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                <v-list-item-title>{{data.item.name}}</v-list-item-title>
-                <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
+                    <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                    <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
                 </v-list-item-content>
             </template>
         </template>
@@ -74,16 +74,22 @@
 </template>
 <script>
     export default {
-        props: ["party"],
+        props: {
+            partyName: {type: String, default: "" },
+            isContractor: {type: Boolean, default: false}
+        },
 
         computed: {
-            selectedValue: {
+            selected: {
                 get: function () {
-                    return this.$store.state.contract.formData.parties[this.party];
+                    if (this.$props.isContractor) {
+                        return this.$store.state.contract.formData.parties.contractor;
+                    } else {
+                        return this.$store.state.contract.formData.parties.client;
+                    }
                 },
-                set: function (payload) {
-                    payload.push(this.party);
-                    this.$store.commit(`contract/changeParties`, payload);
+                set: function (partyArray) {
+                    this.$store.commit("contract/changeParties", this.makePayload(partyArray));
                 },
             },
             account() {
@@ -117,9 +123,19 @@
 
         methods: {
             remove(item) {
-                this.$store.commit(`contract/removeFromParties`, {"item": item, "party": this.party});
+                this.$store.commit("contract/removeFromParties", this.makePayload(item));
             },
-            
+
+            makePayload(payloadData) {
+                const payload = { target: "", data: payloadData }
+                if (this.$props.isContractor) {
+                    payload.target = "contractor"
+                } else {
+                    payload.target = "client"
+                }
+                return payload
+            },
+
             getInitials(parseStr, max) {
                 if (parseStr != undefined) {
                     const nameList = parseStr.split(" ");

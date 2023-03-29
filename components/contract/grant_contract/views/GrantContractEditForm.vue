@@ -21,8 +21,8 @@
     <v-form ref="form">
 
       <v-container fluid style="padding: 1px; margin: 5px;">
-        <PartyMemberProvision :party="0"/>
-        <PartyMemberProvision :party="1"/>
+        <PartyMemberProvision isContractor partyName="contractor"/>
+        <PartyMemberProvision partyName="client"/>
       </v-container>
       
       <v-container fluid style="padding: 1px; margin: 5px;">
