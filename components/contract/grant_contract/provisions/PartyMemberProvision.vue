@@ -74,6 +74,10 @@
 </template>
 <script>
     export default {
+        props: {
+            partyName: {type: String, default: "" },
+            isContractor: {type: Boolean, default: false}
+        },
 
         computed: {
             selected: {
