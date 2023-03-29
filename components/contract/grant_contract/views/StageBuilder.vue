@@ -63,7 +63,9 @@ export default {
 			this.$emit('next', null);
 		},
 		save: function() {
-			
+			//test functions
+			// this.$store.dispatch("contract/loadPreviousState", {});
+			this.$store.dispatch("contract/saveState");
 		},
 	},
 }

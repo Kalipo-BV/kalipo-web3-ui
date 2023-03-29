@@ -17,30 +17,32 @@
 
 import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
 
-const initFormData = {
-	parties: {
-		contractor: [],
-		client: []
-	},
-	preample: null,
-	purpose: null,
-	payment: {
-		amount: null,
-		note: null,
-	},
-	dates: {
-		startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-		endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
-	},
-	propertyRights: null,
-	terminationOfAgreement: null,
-	governingLawAndJurisdiction: null,
-	finalProvisions: null,
-	milestones: [],
-	custom: [],
-	signingWindow: 0,
-	requiredToSign: false,
-	signed: false,
+const initFormData = () => {
+	return {
+		parties: {
+			contractor: [],
+			client: []
+		},
+		preample: null,
+		purpose: null,
+		payment: {
+			amount: null,
+			note: null,
+		},
+		dates: {
+			startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+			endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
+		},
+		propertyRights: null,
+		terminationOfAgreement: null,
+		governingLawAndJurisdiction: null,
+		finalProvisions: null,
+		milestones: [],
+		custom: [],
+		signingWindow: 0,
+		requiredToSign: false,
+		signed: false,
+	}
 }
 
 export const state = () => ({
@@ -49,7 +51,7 @@ export const state = () => ({
 	type: "Grant Contract",
 	fullySigned: false,
 	date: new Date().toISOString(),
-	formData: initFormData,
+	formData: initFormData()
 })
 
 export const mutations = {
@@ -167,13 +169,54 @@ export const mutations = {
 		state.formData.custom[payload.index].data = payload.data;
 	},
 
-	saveContract() {
-		console.log(state);
+	reset(state) {
+		state.formData = initFormData();
 	}
 }
 
 export const getters = {
-	getContract() {
-		return state;
+	getContract: (state) => {
+		return retreiveData(state);
 	}
+}
+
+export const actions = {
+	loadPreviousState({commit}, previousState) {
+		commit("reset");
+
+		//load data here
+		console.log("test load", previousState);
+	},
+
+	saveState({getters}) {
+		//save date to localstore
+		const oldState = getters["getContract"];
+		console.log("test save", oldState);
+	}
+}
+
+function retreiveData(state) {
+	const result = {};
+
+	for (const key in state) {
+		const currentProp = state[key];
+		const isObject = (typeof currentProp === 'object' && !Array.isArray(currentProp));
+		if (isObject) {
+			const data = retreiveData(currentProp);
+			if (Object.keys(data).length > 0) {
+				result[key] = data;
+			}
+		
+		} else if (Array.isArray(currentProp) ) {
+			
+			if (currentProp.length > 0) {
+				result[key] = currentProp;
+			}
+
+		} else if (currentProp !== "" && currentProp !== null && currentProp !== undefined) {
+			result[key] = currentProp;
+		}
+	}
+
+	return result;
 }
