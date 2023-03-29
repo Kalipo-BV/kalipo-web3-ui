@@ -65,8 +65,8 @@
                     </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                <v-list-item-title>{{ data.item.name }}</v-list-item-title>
-                <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
+                    <v-list-item-title>{{ data.item.name }}</v-list-item-title>
+                    <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
                 </v-list-item-content>
             </template>
         </template>
