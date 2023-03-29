@@ -120,8 +120,16 @@
         methods: {
             remove(item) {
                 this.$store.commit("contract/removeFromParties", item);
+            makePayload(payloadData) {
+                const payload = { target: "", data: payloadData }
+                if (this.$props.isContractor) {
+                    payload.target = "contractor"
+                } else {
+                    payload.target = "client"
+                }
+                return payload
             },
-            
+
             getInitials(parseStr, max) {
                 if (parseStr != undefined) {
                     const nameList = parseStr.split(" ");
