@@ -3,22 +3,21 @@
   <div @click="toProposal(proposal.link)">
 
     <!--  min-width: 30%; min-height: 20vh; border-radius: 7px; padding: 10px 3% 10px 20px;-->
-    <div :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px', minHeight: '160px', backgroundColor: 'white'}" >
+    <div :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px', minHeight: '160px', backgroundColor: 'white', borderColor: getResultColor(proposal.result), borderStyle: 'solid'}" >
       <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"
-           :style="{ minWidth: '300px', padding: '15px', display: 'flex' }">
+           :style="{ minWidth: '300px', padding: '15px', paddingTop: '0px', paddingLeft: '10px', display: 'flex' }">
         <div style="width: 90%!important;">
-          <p style="color: #0F6AF1; font-size: 29px!important;" class="text-h1 mb-2">{{ proposal.title }}</p>
+          <p style="color: #0F6AF1; font-size: 23px!important;" class="text-h1 mb-1">{{ proposal.title }}</p>
 
           <div>
+
             <p class="mb-0">
-              Type: {{ proposal.type }}
+              {{ proposal.type }}
             </p>
-            <v-btn outlined small @click="$router.push('/account/' + proposal.author)"
-            >@{{ proposal.author }}
-            </v-btn>
-            <v-chip :color="getResultColor(proposal.result)" dark outlined small>
-              {{ proposal.result }}
-            </v-chip>
+<!--            Haal dit er uit als peter t oké vindt-->
+<!--            <v-chip dark outlined small  :color=getResultColor(proposal.result)>-->
+<!--              {{ proposal.result }}-->
+<!--            </v-chip>-->
 
             <p>{{
                 new Date(parseInt(proposal.submission) * 1000).toLocaleDateString(
@@ -32,6 +31,9 @@
                   }
                 )
               }}</p>
+            <v-btn outlined small :style="{width: '113%'}" @click="$router.push('/account/' + proposal.author)"
+            >@{{ proposal.author }}
+            </v-btn>
           </div>
         </div>
         <div class="d-flex align-center" :style="{width: '10%', marginLeft: '2%'}">
@@ -58,13 +60,14 @@ export default {
     left,
     getResultColor(result) {
       if (result === "UNDECIDED") {
-        return "accent";
+        return "#4797f6";
       }
       if (result === "ACCEPTED") {
-        return "success";
+        console.log("accepted")
+        return "#fa8085";
       }
       if (result === "REJECTED") {
-        return "error";
+        return "#4b957e";
       }
       return "accent";
     },
