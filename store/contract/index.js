@@ -18,7 +18,10 @@
 import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
 
 const initFormData = {
-	parties: [],
+	parties: {
+		contractor: [],
+		client: []
+	},
 	preample: null,
 	purpose: null,
 	payment: {
