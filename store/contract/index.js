@@ -50,6 +50,11 @@ export const state = () => ({
 })
 
 export const mutations = {
+	// addPartyArray(state, payload) {
+	// 	if (isValidPartyData(payload) && isString(payload.data, `parties[${payload.target}]_data`) ) {
+	// 		state.formData.parties[payload.target].push(payload.data);
+	// 	}
+	// },
 
 	removeFromParties(state, payload) {
 		const index = state.formData.parties.indexOf(payload.id);
