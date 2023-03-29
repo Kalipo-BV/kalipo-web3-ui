@@ -33,14 +33,14 @@
 				</v-col>
 				<v-col sm="4" cols="12">
 					<v-btn
-						color="info"
+						color="accent"
 						block
 						@click="save"
 					>Save</v-btn>
 				</v-col>
 				<v-col sm="4" cols="12">
 					<v-btn
-						color="info"
+						color="accent"
 						block
 						@click="next"
 					>Next</v-btn>
