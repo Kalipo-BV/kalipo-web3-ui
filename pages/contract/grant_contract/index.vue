@@ -17,7 +17,7 @@
 
 <template>
   <v-row align="center" justify="center" style="height: 100%">
-    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Parties">
+    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Agreement Parties">
       <PartyMemberProvision :party="0"/>
       <PartyMemberProvision :party="1"/>
     </StageBuilder>
