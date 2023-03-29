@@ -169,15 +169,37 @@ export const mutations = {
 		state.formData.custom[payload.index].data = payload.data;
 	},
 
-	saveContract() {
-		console.log(state);
 	reset(state) {
 		state.formData = initFormData();
 	}
 }
 
 export const getters = {
-	getContract() {
-		return state;
+	getContract: (state) => {
+		return retreiveData(state);
 	}
+function retreiveData(state) {
+	const result = {};
+
+	for (const key in state) {
+		const currentProp = state[key];
+		const isObject = (typeof currentProp === 'object' && !Array.isArray(currentProp));
+		if (isObject) {
+			const data = retreiveData(currentProp);
+			if (Object.keys(data).length > 0) {
+				result[key] = data;
+			}
+		
+		} else if (Array.isArray(currentProp) ) {
+			
+			if (currentProp.length > 0) {
+				result[key] = currentProp;
+			}
+
+		} else if (currentProp !== "" && currentProp !== null && currentProp !== undefined) {
+			result[key] = currentProp;
+		}
+	}
+
+	return result;
 }
