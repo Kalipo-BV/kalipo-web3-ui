@@ -50,15 +50,6 @@ export const state = () => ({
 })
 
 export const mutations = {
-	changeCustom(state, payload) {
-		if (isArray(payload, 'custom')) {
-			state.formData.custom = payload;
-		}
-	},
-
-	addPartyArray(state, payload) {
-		state.formData.parties.push(payload);
-	},
 
 	removeFromParties(state, payload) {
 		const index = state.formData.parties.indexOf(payload.id);
@@ -136,7 +127,13 @@ export const mutations = {
 			state.formData.custom = payload;
 		}
 	},
-	
+
+	changeCustom(state, payload) {
+		if (isArray(payload, 'custom')) {
+			state.formData.custom = payload;
+		}
+	},
+
 	customAddProvision(state, item) {
 		state.formData.custom.push(item);
 	},
