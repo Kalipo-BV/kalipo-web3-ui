@@ -74,7 +74,6 @@
 </template>
 <script>
     export default {
-        // props: ["parties"],
 
         computed: {
             selected: {
@@ -106,8 +105,6 @@
                     }
                 }
             }
-            // filter so you cant add yourself
-            // this.users = this.users.filter((item) => item.id !== this.account.accountId);
             this.isUpdating = false;
         },
 
@@ -118,11 +115,6 @@
 
         methods: {
             remove(item) {
-                // const newArray =  this.selectedValue;
-                // const index = newArray.indexOf(item.id);
-                // if (index >= 0) {
-                //     newArray.splice(index, 1);
-                // }
                 this.$store.commit("contract/removeFromParties", item);
             },
             
