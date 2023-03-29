@@ -22,10 +22,10 @@
         clearable
         deletable-chips
         multiple
-        v-model="selectedValue"
+        v-model="selected"
         :disabled="isUpdating"
         :items="users"
-        :rules="[this.selectedValue?.length > 0 || 'There must be at least one party member!']"
+        :rules="[this.selected?.length > 0 || 'There must be at least one party member!']"
         color="blue-grey lighten-2"
         label="Add (additional) party members"
         item-text="name"
@@ -35,7 +35,7 @@
         <template v-slot:selection="data">
           <v-chip
             v-bind="data.attrs"
-            :input-value="data.selectedValue"
+            :input-value="data.selected"
             close
             @click="data.select"
             @click:close="remove(data.item)"
@@ -77,7 +77,7 @@
         // props: ["parties"],
 
         computed: {
-            selectedValue: {
+            selected: {
                 get: function () {
                     return this.$store.state.contract.formData.parties;
                 },
