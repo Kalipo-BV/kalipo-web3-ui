@@ -19,74 +19,61 @@
   <v-sheet width="90%" class="mx-auto pa-10" style="margin-top: 10vh; margin-bottom: 12vh;">
     <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
     <v-form ref="form">
-
-      <v-container fluid style="padding: 1px; margin: 5px;">
+      <ContractTypeContainer title="Agreement parties">
         <PartyMemberProvision isContractor partyName="contractor"/>
         <PartyMemberProvision partyName="client"/>
-      </v-container>
-      
-      <v-container fluid style="padding: 1px; margin: 5px;">
+      </ContractTypeContainer>
+
+      <ContractTypeContainer title="Preamples">
         <PreampleProvision/>
-      </v-container>
+      </ContractTypeContainer>
       
-      <v-container fluid style="padding: 1px; margin: 5px;">
-        <PurposeProvision/>
-      </v-container>
-
-      <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
-        label="Payment of the grant"
-      >
-        <PaymentProvision/>
-      </v-container>
+      <ContractTypeContainer title="Provision types">
+        <ProvisionTypeContainer title="Purpose">
+            <PurposeProvision/>
+        </ProvisionTypeContainer>
+        
+        <ProvisionTypeContainer title="Payment of grant">
+          <PaymentProvision/>
+        </ProvisionTypeContainer>
       
-      <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
-        label="Date (begin- & end date)"
-      >
-        <DateTimeProvision/>
-      </v-container>  
+        <ProvisionTypeContainer title="Date (begin- & end date)">
+          <DateTimeProvision/>
+        </ProvisionTypeContainer>
+
+        <ProvisionTypeContainer title="Property rights">
+          <PropertyRightsProvision/>
+        </ProvisionTypeContainer>
       
-      <v-container fluid style="padding: 1px; margin: 5px;">
-        <PropertyRightsProvision/>
-      </v-container>
+        <ProvisionTypeContainer title="Termination of Agreement">
+          <TerminationOfAgreement/>
+        </ProvisionTypeContainer>
+
+        <ProvisionTypeContainer title="Governing law and jurisdiction">
+          <GoverningLawAndJurisdictionProvision/>
+        </ProvisionTypeContainer>
+
+        <ProvisionTypeContainer title="Final provisions">
+          <FinalProvisions/>
+        </ProvisionTypeContainer>
+
+        <ProvisionTypeContainer title="Milestones">
+          <MilestonesProvision/>
+        </ProvisionTypeContainer>
+
+        <ProvisionTypeContainer title="Custom provision">
+          <CustomProvision/>
+        </ProvisionTypeContainer>
+
+        <!-- <RequiredToSignProvision/> -->
       
-      <v-container fluid style="padding: 1px; margin: 5px;">
-        <TerminationOfAgreement/>
-      </v-container>
-
-      <v-container fluid style="padding: 1px; margin: 5px;">
-        <GoverningLawAndJurisdictionProvision/>
-      </v-container>
-
-      <v-container fluid style="padding: 1px; margin: 5px;">
-        <FinalProvisions/>
-      </v-container>
-
-      <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
-        label="Milestones"
-      >
-        <MilestonesProvision/>
-      </v-container>  
-
-      <v-container
-        style="padding: 10px; margin: 5px; margin-bottom: 30px; outline: auto; outline-color: lightgray; min-width: 100%;"
-        label="Custom provision"
-      >
-        <CustomProvision/>
-      </v-container>  
-
-      <!-- <RequiredToSignProvision/> -->
-      
-      <!-- <v-checkbox
-        v-model="formData.signed"
-        :rules="[v => !!v || 'You must sign the contract to continue!']"
-        label="I hereby agree to the aforementioned contract?"
-        required
-      /> -->
-
-
+        <!-- <v-checkbox
+          v-model="formData.signed"
+          :rules="[v => !!v || 'You must sign the contract to continue!']"
+          label="I hereby agree to the aforementioned contract?"
+          required
+        /> -->
+      </ContractTypeContainer>
       <v-row>
         <v-alert
           v-if="saving"
@@ -154,44 +141,43 @@
   </v-sheet>
 </template>
 <script>
+import ContractTypeContainer from './ContractTypeContainer.vue';
+import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
+
   export default {
     props: ["transaction", "uri", "title"],
-    
     computed: {
-      formData: {
-        get: function () {
-          return this.data;
+        formData: {
+            get: function () {
+                return this.data;
+            },
+            set: function (newValue) {
+                this.$emit("update:data", newValue);
+            },
         },
-        set: function (newValue) {
-          this.$emit("update:data", newValue);
-        },
-      },
     },
-
     data: () => ({
-      saving: false,
-      signed: false,
+        saving: false,
+        signed: false,
     }),
-    
     methods: {
-      async sign() {
-        const { valid } = await this.$refs.form.validate();
-        if (valid)
-          //call to backend
-          this.signed = true;
-      },
-      
-      reset() {
-        this.$refs.form.reset();
-      },
-
-      save: function() {
-        localStorage.setItem("Grant-Contract", this.$store.state.contract);
-        if(localStorage.getItem("Grant-Contract") != null) {
-          this.saving = true;
-        }
-      },
+        async sign() {
+            const { valid } = await this.$refs.form.validate();
+            if (valid)
+                //call to backend
+                this.signed = true;
+        },
+        reset() {
+            this.$refs.form.reset();
+        },
+        save: function () {
+            localStorage.setItem("Grant-Contract", this.$store.state.contract);
+            if (localStorage.getItem("Grant-Contract") != null) {
+                this.saving = true;
+            }
+        },
     },
-  }
+    components: { ContractTypeContainer, ProvisionTypeContainer }
+}
 
 </script>
