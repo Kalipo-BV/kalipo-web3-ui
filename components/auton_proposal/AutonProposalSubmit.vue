@@ -86,7 +86,11 @@
           :autonId="autonId"
         ></AutonProposalStakeholderInvitation>
 
-        <v-btn>send data to backend</v-btn>
+        <v-btn @click="testButton">Send data to backend, get users from auton</v-btn>
+        <v-card text="hahaha" id="test" ref="memberResult">
+          hahaha
+      
+        </v-card>
 
         <!-- <AutonProposalStakeholderInvitation>
         </AutonProposalStakeholderInvitation> -->
@@ -162,6 +166,9 @@ export default {
             assetId: 0,
             assets: {},
         },
+      dialog: true,
+      members: [],
+      auton: null,
     }),
     created() {
         this.$nuxt.$on("AutonProposalSubmit-NextDisabled", ($event) => (this.disabledNext = $event));
@@ -169,6 +176,49 @@ export default {
         this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
     },
     methods: {
+      async testButton() {
+    //this.$nuxt.$emit("Auton-setPage", "members");
+
+    const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
+
+    const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
+      name: autonIdParam,
+    });
+    
+    if (autonIdWrapper.result === null) {
+      this.auton = null;
+      this.error = "Auton not found: " + autonIdParam;
+    } else {
+      this.autondId = autonIdWrapper.result.id;
+      const autonWrapper = await this.$invoke("auton:getByID", {
+        id: autonIdWrapper.result.id,
+      });
+      this.auton = autonWrapper.result;
+
+      for (let index = 0; index < this.auton.memberships.length; index++) {
+        const autonMembershipId = this.auton.memberships[index];
+        const autonMembershipWrapper = await this.$invoke(
+          "membership:getByID",
+          {
+            id: autonMembershipId,
+          }
+        );
+
+        const kalipoAccountWrapper = await this.$invoke(
+          "kalipoAccount:getByID",
+          {
+            id: autonMembershipWrapper.result.accountId,
+          }
+        );
+        autonMembershipWrapper.result.account = kalipoAccountWrapper.result;
+        //if (BigInt(autonMembershipWrapper.result.started) != BigInt(0)) {
+          this.members.push(autonMembershipWrapper.result.account);
+        //}
+      }
+    }
+    console.log(this.members)
+    this.$refs.memberResult.innerText = this.members;
+  },
         prevStep() {        
           console.log("de checkbox bool: "+this.stakeholdervoting)
           
@@ -259,6 +309,9 @@ export default {
         sendData(){
           $nuxt.$emit
         },
+        rr(){
+          console.log("hahahah");
+        }
     },
     components: { AutonProposalStakeholderInvitation, AutonProposalMembershipInvitation }
 };

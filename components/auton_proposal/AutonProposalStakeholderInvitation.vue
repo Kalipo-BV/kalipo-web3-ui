@@ -108,8 +108,7 @@ export default {
     step: "voeg-stakeholder-toe",
     rules: {
       required: (value) => !!value || "Required.",
-      min: (v) => v?.length >= 2 || "Min 2 characters",
-      max: (v) => v?.length <= 16 || "Max 16 characters",
+      
     },
     isUpdating: true,
     users: [{ header: "Most recent users" }],
