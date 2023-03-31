@@ -1,8 +1,8 @@
 <template>
 <!-- <improvement-proposal-card :parrentmessage="parentMessage"></improvement-proposal-card> -->
-<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; align-content: start">
+<div style="display: flex; flex-wrap: wrap; justify-content: start; margin: 20px 6% 0 6%">
 <!--  <p>TEST: </p>{{ proposal }}-->
-  <div style="margin-top: 20px"
+  <div style="margin: 30px 0 0 0"
        v-for="(item, i) in proposals"
        :key="i">
   <improvement-proposal-card :proposal="item"></improvement-proposal-card>
