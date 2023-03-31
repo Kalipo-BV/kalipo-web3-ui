@@ -189,7 +189,7 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
         console.log(this.$store.state.contract);
         // $router.push('/wallet');
         const { valid } = await this.$refs.form.validate();
-        // if (valid) {
+        if (valid) {
           // if(this.unlocked) {
             // this.transaction.assets = asset;
             this.transaction.assets = this.$store.state.contract;
@@ -203,7 +203,7 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
             // this.$emit("signGrantContract");
             // this.$nuxt.$emit("signGrantContract");
             this.signed = true;
-          // } else {
+          } // else {
 
           // }  
         // }
