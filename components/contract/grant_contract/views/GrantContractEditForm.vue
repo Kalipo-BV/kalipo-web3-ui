@@ -149,22 +149,23 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
     // props: ["transaction", "uri", "title"],
     
     computed: {
-        formData: {
-            get: function () {
-                return this.data;
-            },
-            set: function (newValue) {
-                this.$emit("update:data", newValue);
-            },
-        },
-        set: function (newValue) {
-          this.$emit("update:data", newValue);
-        },
+      formData: {
+          get: function () {
+              return this.data;
+          },
+          set: function (newValue) {
+              this.$emit("update:data", newValue);
+          },
       },
-      unlocked() {
-        return this.$store.state.wallet.unlocked;
+      set: function (newValue) {
+        this.$emit("update:data", newValue);
       },
     },
+  
+    unlocked() {
+      return this.$store.state.wallet.unlocked;
+    },
+      
     data: () => ({
       saving: false,
       signed: false,
