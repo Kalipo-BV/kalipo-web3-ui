@@ -93,36 +93,36 @@
         </DaoLegalFields>
       </v-card-text>
 
+      <v-card-text v-if="step == 5">
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Contact information">
+        </AutonStepperHeader>
+        <div class="text-body-1 mt-3">
+          Add one or multiple contact information fields to your DAO's profile to provide interested parties with a way to
+          get in touch. E.g. email, website, social media accounts, or other relevant information.
+        </div>
+        <DaoContactInformationList class="mt-1"></DaoContactInformationList>
+      </v-card-text>
+
       <v-card-text v-if="step == 6">
         <!-- default template -->
-        <AutonStepperHeader title="Creating a new DAO" subtitle="Bulk invite members into your new auton">
+        <AutonStepperHeader title="Creating a new DAO" subtitle="Inviting multiple founding members">
         </AutonStepperHeader>
+        <div class="text-body-1 mt-3">
+          To add additional founding members to your DAO, search for members and invite individuals who share your
+          organization's values and goals. Once invited, these individuals can help shape the organization's governance
+          and decision-making processes. Note: You can do this later as well.
+        </div>
         <AutonUserSelect :selectedFounderIds.sync="selectedFounderIds" class="mt-4">
         </AutonUserSelect>
       </v-card-text>
 
-      <v-card-text v-if="step == 5">
-        <AutonStepperHeader v-if="template == 'DEFAULT'" title="Creating a new DAO"
-          subtitle="Specify tags so users can find your auton"></AutonStepperHeader>
-        <AutonStepperHeader v-if="template == 'EVENT'" title="Founding a new event"
-          subtitle="Specify tags so users can find your event"></AutonStepperHeader>
-        <AutonTagSelect :tags.sync="tags" class="mt-4"></AutonTagSelect>
-      </v-card-text>
-
-      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 6 && template == 'DEFAULT'"
+      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 7 && template == 'DEFAULT'"
         callback="AutonCreate-PrevStep" title="Creating auton"></AccountSign>
-
-      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 6 && template == 'EVENT'"
-        callback="AutonCreate-PrevStep" title="Creating event"></AccountSign>
-
-      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 4 && template == 'LESSON'"
-        callback="AutonCreate-PrevStep" title="Creating lesson"></AccountSign>
 
       <v-divider></v-divider>
 
       <v-card-text v-if="
-        (template == 'DEFAULT' && step < 6) ||
-        (template == 'EVENT' && step < 6)
+        (template == 'DEFAULT' && step < 7)
       ">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="step--">
@@ -154,9 +154,12 @@
   </div>
 </template>
 <script>
+import DaoContactInformationList from './DaoContactInformationList.vue';
+
 export default {
   components: {
     Keypress: () => import("vue-keypress"),
+    DaoContactInformationList
   },
   data: () => ({
     step: 0,

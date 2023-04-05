@@ -25,52 +25,50 @@
               <v-row no-gutters class="d-flex align-center">
                 <v-col class="">
                   <div class="d-flex align-start">
-                    <v-avatar
-                      color="primary"
-                      size="40"
-                      class="white--text mr-1 mt-1"
-                      ><div class="text-caption font-weight-medium">
+                    <v-avatar color="primary" size="40" class="white--text mr-1 mt-1">
+                      <div class="text-caption font-weight-medium">
                         {{ getInitials(this.account.name) }}
-                      </div></v-avatar
-                    >
+                      </div>
+                    </v-avatar>
                     <div class="ml-2">
                       <div class="text-h3 primary--text">
                         {{ this.account.name }}
                       </div>
                       <div class="d-flex align-center text-caption">
-                        <v-avatar
-                          size="12"
-                          color="success"
-                          class="mr-1"
-                        ></v-avatar>
+                        <v-avatar size="12" color="success" class="mr-1"></v-avatar>
                         <div>online</div>
                       </div>
                     </div>
                   </div>
                 </v-col>
-                <v-col class="d-flex justify-end"> </v-col>
+                <v-col class="d-flex justify-end">
+                  <v-btn color="accent" @click="dialog = !dialog">
+                    Create DAO
+                  </v-btn>
+                </v-col>
               </v-row>
             </v-container>
           </v-row>
           <template v-slot:extension>
             <v-row>
-              <v-container
-                ><v-tabs>
+              <v-container><v-tabs>
                   <v-tabs-slider color="primary"></v-tabs-slider>
 
                   <v-tab v-for="(item, idx) in tabItems" :key="idx">
                     <v-icon small class="mr-2">{{ item.icon }}</v-icon>
                     {{ item.title }}
                   </v-tab>
-                </v-tabs></v-container
-              ></v-row
-            >
+                </v-tabs></v-container></v-row>
           </template>
         </v-app-bar>
         <Nuxt class="mt-n2" />
       </div>
     </v-main>
     <MainMenu></MainMenu>
+
+    <v-dialog v-model="dialog" max-width="500">
+      <DaoCreate></DaoCreate>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -94,6 +92,7 @@ export default {
     return {
       miniVariant: false,
       selectedItem: 0,
+      dialog: false,
       tabItems: [
         {
           icon: "mdi-monitor-dashboard",
@@ -122,5 +121,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>
