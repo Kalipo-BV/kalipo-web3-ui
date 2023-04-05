@@ -158,6 +158,8 @@ export default {
             this.step = "select-proposal-type";
           } else if (this.step === "proposers"){
             this.step = "proposal-profile";
+          } else if (this.step === "motivation"){
+            this.step = "proposers";
           }
           break;
       }
@@ -197,6 +199,8 @@ export default {
             this.step = "proposal-profile";
           } else if (this.step === "proposal-profile"){
             this.step = "proposers";
+          } else if (this.step === "proposers"){
+            this.step = "motivation";
           }
           break;
       }
