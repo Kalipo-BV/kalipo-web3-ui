@@ -112,12 +112,21 @@ export default {
   },
   methods: {
     prevStep() {
-      if (this.step === "proposal-profile") {
-        this.step = "select-proposal-type";
-      } else if (this.step === "membership-invitation") {
-        this.step = "proposal-profile";
-      } else if (this.step === "sign") {
-        this.step = "membership-invitation";
+      switch(this.selectedProposalType) {
+        case 'membership-invitation':
+          if (this.step === "proposal-profile") {
+            this.step = "select-proposal-type";
+          } else if (this.step === "membership-invitation") {
+            this.step = "proposal-profile";
+          } else if (this.step === "sign") {
+            this.step = "membership-invitation";
+          }
+          break;
+        case 'improvement-proposal':
+          if (this.step === "proposal-profile") {
+            this.step = "select-proposal-type";
+          }
+          break;
       }
     },
     finish() {
@@ -140,7 +149,6 @@ export default {
       }
     },
     async nextStep() {
-
       switch (this.selectedProposalType) {
         case 'membership-invitation':
           if (this.step === "select-proposal-type") {
