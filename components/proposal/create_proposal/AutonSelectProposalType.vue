@@ -32,6 +32,20 @@
           </div>
         </v-col>
       </v-row>
+      <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
+        Proposal types
+      </div>
+      <v-row justify="start">
+        <v-col cols="12" md="6">
+          <div @click="selectedProposalTypeInput = 'improvement-proposal'">
+            <ProposalTypeCard
+              icon="mdi-arrow-up-bold"
+              title="Improvement proposal"
+              :active="selectedProposalTypeInput == 'improvement-proposal'"
+            ></ProposalTypeCard>
+          </div>
+        </v-col>
+      </v-row>
       <v-divider class="mt-8"></v-divider>
     </div>
   </div>
