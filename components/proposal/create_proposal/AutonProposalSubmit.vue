@@ -18,7 +18,7 @@
 <template>
   <div class="">
     <v-card>
-      <v-card-text v-if="step == 'select-proposal-type'">
+      <v-card-text v-if="step === 'select-proposal-type'">
         <AutonStepperHeader
           title="Submitting a new proposal"
           subtitle="First choose the desired type that suits your proposal"
@@ -29,7 +29,7 @@
         ></AutonSelectProposalType>
       </v-card-text>
 
-      <v-card-text v-if="step == 'proposal-profile'">
+      <v-card-text v-if="step === 'proposal-profile'">
         <AutonStepperHeader
           title="Submitting a new proposal"
           subtitle="Describe your proposal by providing a title and description"
@@ -42,7 +42,7 @@
         ></AutonProposalProfile>
       </v-card-text>
 
-      <v-card-text v-if="step == 'membership-invitation'">
+      <v-card-text v-if="step === 'membership-invitation'">
         <AutonStepperHeader
           title="Submitting a new proposal"
           subtitle="Please select the user you'd like to invite and supply an invitation message"
@@ -61,13 +61,13 @@
         :uri="uri"
         callback="AutonProposalSubmit-PrevStep"
         callbackFinish="AutonProposalSubmit-Finish"
-        v-if="step == 'sign'"
+        v-if="step === 'sign'"
         title="Submitting proposal"
       ></AccountSign>
 
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
-          <v-btn :disabled="step == 'select-proposal-type'" @click="prevStep">
+          <v-btn :disabled="step === 'select-proposal-type'" @click="prevStep">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
           </v-btn>
           <v-btn
@@ -141,32 +141,22 @@ export default {
     },
     async nextStep() {
 
-      switch (this.selectedProposalType){
+      switch (this.selectedProposalType) {
         case 'membership-invitation':
           if (this.step === "select-proposal-type") {
-          this.step = "proposal-profile";
-        } else if (this.step === "proposal-profile") {
-          this.step = "membership-invitation";
-        } else if (this.step === "membership-invitation") {
-          this.step = "sign";
-        }
+            this.step = "proposal-profile";
+          } else if (this.step === "proposal-profile") {
+            this.step = "membership-invitation";
+          } else if (this.step === "membership-invitation") {
+            this.step = "sign";
+          }
           break;
         case 'improvement-proposal':
-          if(this.step === "select-proposal-type"){
+          if (this.step === "select-proposal-type") {
             this.step = "sign"
           }
           break;
-
-
-      if (this.step == "select-proposal-type") {
-        this.step = "proposal-profile";
-      } else if (this.step == "proposal-profile") {
-        this.step = "membership-invitation";
-      } else if (this.step == "membership-invitation") {
-        this.step = "sign";
-
       }
-
       // The transaction prop interface:
       // {
       //   moduleId: 0,
