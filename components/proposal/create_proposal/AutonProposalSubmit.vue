@@ -65,6 +65,22 @@
         title="Submitting proposal"
       ></AccountSign>
 
+  <!--  Improvement proposal pages    -->
+      <v-card-text v-if="step === 'proposal-proposers'">
+        <AutonStepperHeader
+          title="Selecting proposers"
+          subtitle="Please select the users which helped make the proposal"
+        ></AutonStepperHeader>
+
+        <AutonProposalProposerList
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalProposerList>
+      </v-card-text>
+
+  <!--  Buttons previous, next or sign    -->
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step === 'select-proposal-type'" @click="prevStep">
@@ -125,6 +141,8 @@ export default {
         case 'improvement-proposal':
           if (this.step === "proposal-profile") {
             this.step = "select-proposal-type";
+          } else if (this.step === "proposal-proposers"){
+            this.step = "proposal-profile";
           }
           break;
       }
@@ -161,7 +179,9 @@ export default {
           break;
         case 'improvement-proposal':
           if (this.step === "select-proposal-type") {
-            this.step = "sign"
+            this.step = "proposal-profile";
+          } else if (this.step === "proposal-profile"){
+            this.step = "proposal-proposers";
           }
           break;
       }
