@@ -15,29 +15,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isArray, isBoolean, isDate, isNumber, isString} from "./validation.js"
+import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
 
-const initFormData = {
-	parties: [[],[]],
-	preample: null,
-	purpose: null,
-	payment: {
-		amount: null,
-		note: null,
-	},
-	dates: {
-		startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-		endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
-	},
-	propertyRights: null,
-	terminationOfAgreement: null,
-	governingLawAndJurisdiction: null,
-	finalProvisions: null,
-	milestones: [],
-	custom: [],
-	signingWindow: 0,
-	requiredToSign: false,
-	signed: false,
+const initFormData = () => {
+	return {
+		parties: {
+			contractor: [],
+			client: []
+		},
+		preample: null,
+		purpose: null,
+		payment: {
+			amount: null,
+			note: null,
+		},
+		dates: {
+			startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+			endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
+		},
+		propertyRights: null,
+		terminationOfAgreement: null,
+		governingLawAndJurisdiction: null,
+		finalProvisions: null,
+		milestones: [],
+		custom: [],
+		signingWindow: 0,
+		requiredToSign: false,
+		signed: false,
+	}
 }
 
 export const state = () => ({
@@ -46,33 +51,30 @@ export const state = () => ({
 	type: "Grant Contract",
 	fullySigned: false,
 	date: new Date().toISOString(),
-	formData: initFormData,
+	formData: initFormData()
 })
 
 export const mutations = {
-	changeCustom(state, payload) {
-		if (isArray(payload, 'custom')) {
-			state.formData.custom = payload;
+	// addPartyArray(state, payload) {
+	// 	if (isValidPartyData(payload) && isString(payload.data, `parties[${payload.target}]_data`) ) {
+	// 		state.formData.parties[payload.target].push(payload.data);
+	// 	}
+	// },
+
+	removeFromParties(state, payload) {
+		if (isValidPartyData(payload) ) {
+			const currentParty = state.formData.parties[payload.target];
+			const index = currentParty.indexOf(payload.data.id);
+			if (index > -1) { // only splice array when item is found
+				currentParty.splice(index, 1); // 2nd parameter means remove one item only
+			}
 		}
 	},
 
-	addPartyArray(state, payload) {
-		state.formData.parties.push(payload);
-	},
-
-	removeFromParties(state, payload) {
-		// console.log(payload["party"]);
-		// console.log(state.formData.parties[payload["party"]]);
-		// console.log(state.formData.parties[payload["party"]].indexOf(payload["item"].id));
-		// const index = state.formData.parties[payload["party"]].indexOf(payload["item"].id);
-		// if (index > -1) { // only splice array when item is found
-		// 	state.formData.parties[payload["party"]].splice(index, 1); // 2nd parameter means remove one item only
-		// }
-		state.formData.parties[payload["party"]].pop(state.formData.parties[payload["party"]]);
-	},
-
 	changeParties(state, payload) {
-		state.formData.parties[payload[-1]] = payload[1];
+		if (isValidPartyData(payload) && isArray(payload.data, `parties[${payload.target}]_data`)) {
+			state.formData.parties[payload.target] = payload.data;
+		}
 	},
 
 	changePreample(state, payload) {
@@ -140,7 +142,13 @@ export const mutations = {
 			state.formData.custom = payload;
 		}
 	},
-	
+
+	changeCustom(state, payload) {
+		if (isArray(payload, 'custom')) {
+			state.formData.custom = payload;
+		}
+	},
+
 	customAddProvision(state, item) {
 		state.formData.custom.push(item);
 	},
@@ -161,13 +169,60 @@ export const mutations = {
 		state.formData.custom[payload.index].data = payload.data;
 	},
 
-	saveContract() {
-		console.log(state);
+	reset(state) {
+		state.formData = initFormData();
 	}
 }
 
 export const getters = {
-	getContract() {
-		return state;
+	getContract: (state) => {
+		return retreiveData(state);
 	}
+}
+
+export const actions = {
+	loadPreviousState({commit}, previousState) {
+		commit("reset");
+
+		//load data here
+		console.log("test load", previousState);
+	},
+
+	saveState({getters, state}) {
+		//save date to localstore
+		const oldState = getters["getContract"];
+		console.log("test save", oldState);
+
+		localStorage.setItem("Grant-Contract", state.contract);
+		if (localStorage.getItem("Grant-Contract") != null) {
+			this.saving = true;
+			this.saved++;
+		}
+	}
+}
+
+function retreiveData(state) {
+	const result = {};
+
+	for (const key in state) {
+		const currentProp = state[key];
+		const isObject = (typeof currentProp === 'object' && !Array.isArray(currentProp));
+		if (isObject) {
+			const data = retreiveData(currentProp);
+			if (Object.keys(data).length > 0) {
+				result[key] = data;
+			}
+		
+		} else if (Array.isArray(currentProp) ) {
+			
+			if (currentProp.length > 0) {
+				result[key] = currentProp;
+			}
+
+		} else if (currentProp !== "" && currentProp !== null && currentProp !== undefined) {
+			result[key] = currentProp;
+		}
+	}
+
+	return result;
 }

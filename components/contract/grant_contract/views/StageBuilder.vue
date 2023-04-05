@@ -23,25 +23,26 @@
 					<slot></slot>
 				</v-col>
 			</v-row>
-			<br/>
-			<v-row justify="center">
-				<v-col v-if="!isFirst">
+			
+			<v-row justify="end">
+				<v-col v-if="isFirst">
+					<v-btn disabled 
+					>Previous</v-btn>
+				</v-col>
+
+				<v-col v-else>
 					<v-btn  
-						block
 						@click="previous"
 					>Previous</v-btn>
 				</v-col>
-				<v-col>
+							
+				<v-col align="right">
 					<v-btn
-						color="info"
-						block
+						style="background-color: #002060; color: white"
 						@click="save"
 					>Save</v-btn>
-				</v-col>
-				<v-col>
 					<v-btn
-						color="info"
-						block
+						class="accent"
 						@click="next"
 					>Next</v-btn>
 				</v-col>
@@ -92,11 +93,9 @@ export default {
 
 		save: function() {
 			// console.log(this.$store.state);
-			localStorage.setItem("Grant-Contract", this.$store.state.contract);
-			if(localStorage.getItem("Grant-Contract") != null) {
-				this.saving = true;
-				this.saved++;
-			}
+			//test functions
+			// this.$store.dispatch("contract/loadPreviousState", {});
+			this.$store.dispatch("contract/saveState");
 		},
 	},
 }

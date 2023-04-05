@@ -18,8 +18,8 @@
 <template>
   <v-row align="center" justify="center" style="height: 100%">
     <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Parties">
-      <PartyMemberProvision :party="0"/>
-      <PartyMemberProvision :party="1"/>
+      <PartyMemberProvision is-contractor party-name="contractor"/>
+      <PartyMemberProvision party-name="client"/>
     </StageBuilder>
 
     <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preample">
