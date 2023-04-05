@@ -17,9 +17,9 @@
 
 <template>
   <div>
-    <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent id="stakeholder-form">
+    <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent id="stakeholder-form" v-for="stakeholder in selectedStakeholdersValue">
       <v-autocomplete
-        v-model="selectedValue"
+        v-model="stakeholder.accountId"
         :disabled="isUpdating"
         :items="users"
         chips
@@ -30,7 +30,7 @@
         :rules="[rules.required]"
       >
 
-        <template v-slot:selection="data" id="selection-template">
+        <template v-slot:selection="data" id="selection-template" @click="">
 
           <v-chip
             v-bind="data.attrs"
@@ -38,10 +38,11 @@
             close
             @click=""
             @click:close="remove()"
+            class="stakeholder-chip"
           >
             <v-avatar
               color="accent"
-              class="white--text text-caption stakeholder-info"
+              class="white--text text-caption"
               v-if="data.item.name"              
               left
               >{{ getInitials(data.item.name, 2) }}</v-avatar>
@@ -71,6 +72,12 @@
           </template>
         </template>
       </v-autocomplete>
+      <input type="radio" id="law_option" name="voting">
+      <Label for="law_option">law&rights expertise</Label>
+      <input type="radio" id="finance_option" name="voting" style="margin-left: 15px;">
+      <Label for="finance_option">financial expertise</Label>
+      <input type="radio" id="other_option" name="voting" style="margin-left: 15px;">
+      <Label for="other_option">other.. </Label>
     </v-form>
 
     <v-container style="height: 100%" v-if="step == 'info-stakeholder'">
@@ -82,14 +89,16 @@
 
 <script>
 export default {
-  props: ["selectedStakeholderId", "disabledNext", "autonId"],
+  props: ["selectedStakeholders", "disabledNext", "autonId"],
   computed: {
-    selectedValue: {
+    selectedStakeholdersValue: {
       get: function () {
-        return this.selectedStakeholderId;
+        return this.selectedStakeholders;
       },
       set: function (newValue) {
-        this.$emit("update:selectedStakeholderId", newValue);
+        console.log("stakeholders x: "+ this.selectedStakeholders)
+        console.log("stakeholders: "+ newValue)
+        this.$emit("update:selectedStakeholders", newValue);
       },
     },
   },
