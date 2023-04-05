@@ -19,41 +19,41 @@
   <div class="">
     <v-card>
       <v-card-text v-if="step === 'select-proposal-type'">
-        <AutonStepperHeader
+        <StepperHeader
           title="Submitting a new proposal"
           subtitle="First choose the desired type that suits your proposal"
-        ></AutonStepperHeader>
+        ></StepperHeader>
 
-        <AutonSelectProposalType
+        <ProposalType
           :selectedProposalType.sync="selectedProposalType"
-        ></AutonSelectProposalType>
+        ></ProposalType>
       </v-card-text>
 
       <v-card-text v-if="step === 'proposal-profile'">
-        <AutonStepperHeader
+        <StepperHeader
           title="Submitting a new proposal"
           subtitle="Describe your proposal by providing a title and description"
-        ></AutonStepperHeader>
+        ></StepperHeader>
 
-        <AutonProposalProfile
+        <Profile
           :disabledNext.sync="disabledNext"
           :title.sync="proposalTitle"
           :description.sync="proposalDescription"
-        ></AutonProposalProfile>
+        ></Profile>
       </v-card-text>
 
       <v-card-text v-if="step === 'membership-invitation'">
-        <AutonStepperHeader
+        <StepperHeader
           title="Submitting a new proposal"
           subtitle="Please select the user you'd like to invite and supply an invitation message"
-        ></AutonStepperHeader>
+        ></StepperHeader>
 
-        <AutonProposalMembershipInvitation
+        <MembershipInvitation
           :selectedAccountId.sync="selectedAccountId"
           :invitationMessage.sync="invitationMessage"
           class="mt-4"
           :autonId="autonId"
-        ></AutonProposalMembershipInvitation>
+        ></MembershipInvitation>
       </v-card-text>
 
       <AccountSign
@@ -67,24 +67,24 @@
 
   <!--  Improvement proposal pages    -->
       <v-card-text v-if="step === 'proposers'">
-        <AutonStepperHeader
+        <StepperHeader
           title="Selecting proposers"
           subtitle="Please select the users which helped make the proposal"
-        ></AutonStepperHeader>
+        ></StepperHeader>
 
-        <AutonProposalProposerList
+        <ProposerList
           :selectedAccountId.sync="selectedAccountId"
           :invitationMessage.sync="invitationMessage"
           class="mt-4"
           :autonId="autonId"
-        ></AutonProposalProposerList>
+        ></ProposerList>
       </v-card-text>
 
       <v-card-text v-if="step === 'motivation'">
-        <AutonStepperHeader
+        <StepperHeader
           title="Motivation"
           subtitle="Please write a motivation for your improvement proposal"
-        ></AutonStepperHeader>
+        ></StepperHeader>
 
         <Motivation
           :selectedAccountId.sync="selectedAccountId"

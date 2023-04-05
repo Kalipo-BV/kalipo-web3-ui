@@ -1,5 +1,5 @@
 <template>
-  <p>Test</p>
+  <p>Proposer</p>
 </template>
 
 <script>
