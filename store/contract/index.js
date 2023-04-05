@@ -39,7 +39,7 @@ const initFormData = () => {
 		finalProvisions: null,
 		milestones: [],
 		custom: [],
-		signingWindow: 0,
+		signingWindow: "",
 		requiredToSign: false,
 		signed: false,
 	}

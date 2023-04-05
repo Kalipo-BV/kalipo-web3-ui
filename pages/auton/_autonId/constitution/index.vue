@@ -154,6 +154,9 @@
         <v-col cols="12" md="3">
           <ProposalTypeCard icon="mdi-bank" title="Bill"></ProposalTypeCard>
         </v-col>
+        <v-col cols="12" md="3" @click="() => {this.$router.push('/contract/select-template');}">
+          <ProposalTypeCard icon="" title="Contract"/>
+        </v-col>
       </v-row>
     </div>
   </v-container>

@@ -76,8 +76,8 @@
       </ContractTypeContainer>
       <v-row>
         <v-alert
-          v-if="saving"
-          v-model="saving"
+          v-if="saved"
+          v-model="saved"
           width="100%"
           dense
           dismissible
@@ -139,6 +139,17 @@
         </v-btn> -->
       </div>
     </v-form>
+    <v-dialog
+      v-model="dialog"
+      activator="parent"
+    >
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        callback="AutonCreate-PrevStep"
+        title="Sign the contract"
+      ></AccountSign>
+    </v-dialog>
   </v-sheet>
 </template>
 <script>
@@ -167,7 +178,7 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
     },
       
     data: () => ({
-      saving: false,
+      saved: false,
       signed: false,
       dialog: false,
       transaction: {
@@ -186,24 +197,27 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
     
     methods: {
       async sign() {
-        console.log(this.$store.state.contract);
+        // console.log(this.$store.state.contract);
         // $router.push('/wallet');
-        const { valid } = await this.$refs.form.validate();
-        if (valid) {
+        // const { valid } = await this.$refs.form.validate();
+        // if (valid) {
           // if(this.unlocked) {
             // this.transaction.assets = asset;
             this.transaction.assets = this.$store.state.contract;
-            this.transaction.uri = "contract/signGrantContract-asset";
-            await this.$invoke("contract:signGrantContract", {
-              formData: this.$store.state.contract,
-              // .toString("hex")
-            });
+            this.uri = "contract/signConctract-asset";
+            // await this.$invoke("contract:signGrantContract", {
+            //   formData: this.$store.state.contract,
+            //   // .toString("hex")
+            // });
             
             // this.$nuxt.$emit("IAH-triggerCreateAccount");
             // this.$emit("signGrantContract");
             // this.$nuxt.$emit("signGrantContract");
-            this.signed = true;
-          } // else {
+            this.dialog = true;
+
+            
+            // this.signed = true;
+          //} // else {
 
           // }  
         // }
@@ -216,7 +230,7 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
       save: function() {
         localStorage.setItem("Grant-Contract", this.$store.state.contract);
         if(localStorage.getItem("Grant-Contract") != null) {
-          this.saving = true;
+          this.saved = true;
         }
       },
 
