@@ -67,7 +67,7 @@
 
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
-          <v-btn :disabled="step == 0" @click="prevStep">
+          <v-btn :disabled="step == 'select-proposal-type'" @click="prevStep">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
           </v-btn>
           <v-btn
@@ -140,7 +140,7 @@ export default {
       }
     },
     async nextStep() {
-      console.log(this.selectedProposalType)
+
       switch (this.selectedProposalType){
         case 'membership-invitation':
           if (this.step === "select-proposal-type") {
@@ -156,6 +156,14 @@ export default {
             this.step = "sign"
           }
           break;
+
+
+      if (this.step == "select-proposal-type") {
+        this.step = "proposal-profile";
+      } else if (this.step == "proposal-profile") {
+        this.step = "membership-invitation";
+      } else if (this.step == "membership-invitation") {
+        this.step = "sign";
 
       }
 
