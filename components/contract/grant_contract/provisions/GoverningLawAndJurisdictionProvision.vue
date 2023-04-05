@@ -26,6 +26,7 @@
         model-value="fill me in"
         :rules="[v => !!v || 'This field can\'t be left open!']"
         prepend-icon="mdi-gavel" 
+        hide-details="auto"
     />
 </template>
 <script>
@@ -35,8 +36,8 @@
                 get: function () {
                     return this.$store.state.contract.formData.governingLawAndJurisdiction;
                 },
-                set: function (newValue) {
-                    this.$emit("update:governingLawAndJurisdiction", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/changeGoverningLawAndJurisdiction", payload);
                 },
             },
         },

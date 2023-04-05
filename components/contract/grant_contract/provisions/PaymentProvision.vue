@@ -19,7 +19,6 @@
     <div>
         <v-text-field
             v-model="amount"
-            style="padding: 1px"
             label="Payment amount"
             prepend-icon="mdi-cash-multiple" 
             type="number"
@@ -44,8 +43,7 @@
 <script>
     export default {
         computed: {
-            
-            note: {
+            amount: {
                 get: function () {
                     return this.$store.state.contract.formData.payment.amount;
                 },
@@ -53,7 +51,7 @@
                     this.$store.commit("contract/changePaymentAmount", payload);
                 },
             },
-            amount: {
+            note: {
                 get: function () {
                     return this.$store.state.contract.formData.payment.note;
                 },

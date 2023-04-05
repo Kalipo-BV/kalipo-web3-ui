@@ -129,14 +129,6 @@
         >
           Reset Form
         </v-btn>
-
-        <!-- <v-btn
-          class="mt-4"
-          block
-          @click="test"
-        >
-          Test
-        </v-btn> -->
       </div>
     </v-form>
     <v-dialog
