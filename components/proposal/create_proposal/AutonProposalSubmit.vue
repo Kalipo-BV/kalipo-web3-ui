@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -83,6 +83,8 @@
   </div>
 </template>
 <script>
+import improvementproposal from "~/pages/auton/_autonId/improvementproposal/index.vue";
+
 export default {
   props: ["autonId", "autonName", "callbackFinish"],
   data: () => ({
@@ -110,11 +112,11 @@ export default {
   },
   methods: {
     prevStep() {
-      if (this.step == "proposal-profile") {
+      if (this.step === "proposal-profile") {
         this.step = "select-proposal-type";
-      } else if (this.step == "membership-invitation") {
+      } else if (this.step === "membership-invitation") {
         this.step = "proposal-profile";
-      } else if (this.step == "sign") {
+      } else if (this.step === "sign") {
         this.step = "membership-invitation";
       }
     },
@@ -138,12 +140,23 @@ export default {
       }
     },
     async nextStep() {
-      if (this.step == "select-proposal-type") {
-        this.step = "proposal-profile";
-      } else if (this.step == "proposal-profile") {
-        this.step = "membership-invitation";
-      } else if (this.step == "membership-invitation") {
-        this.step = "sign";
+      console.log(this.selectedProposalType)
+      switch (this.selectedProposalType){
+        case 'membership-invitation':
+          if (this.step === "select-proposal-type") {
+          this.step = "proposal-profile";
+        } else if (this.step === "proposal-profile") {
+          this.step = "membership-invitation";
+        } else if (this.step === "membership-invitation") {
+          this.step = "sign";
+        }
+          break;
+        case 'improvement-proposal':
+          if(this.step === "select-proposal-type"){
+            this.step = "sign"
+          }
+          break;
+
       }
 
       // The transaction prop interface:
@@ -152,7 +165,7 @@ export default {
       //   assetId: 0,
       //   assets: {};
       // }
-      if (this.step == "sign") {
+      if (this.step === "sign") {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
         });
