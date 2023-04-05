@@ -65,7 +65,7 @@
                 </v-col>
                 <v-col class="d-flex justify-end">
                   <v-btn
-                    v-if="auton.type == 'DEFAULT'"
+                    v-if="auton.type === 'DEFAULT'"
                     class="mr-12"
                     color="accent"
                     @click="dialog = !dialog"
@@ -73,7 +73,7 @@
                     New proposal
                   </v-btn>
                   <v-btn
-                    v-if="auton.type == 'EVENT'"
+                    v-if="auton.type === 'EVENT'"
                     class="mr-12"
                     color="accent"
                     @click="dialog = !dialog"
@@ -82,7 +82,7 @@
                     Add attendee
                   </v-btn>
                   <v-btn
-                    v-if="auton.type == 'LESSON'"
+                    v-if="auton.type === 'LESSON'"
                     class="mr-12"
                     color="accent"
                     :disabled="authorizedAddAttendee"
@@ -100,7 +100,7 @@
                 <v-tabs-slider color="primary"></v-tabs-slider>
 
                 <v-tab
-                  v-if="auton.type == 'DEFAULT'"
+                  v-if="auton.type === 'DEFAULT'"
                   v-for="(item, idx) in tabItemsDefault"
                   :key="idx"
                   @click="navigate(item.to)"
@@ -110,7 +110,7 @@
                 </v-tab>
 
                 <v-tab
-                  v-if="auton.type == 'EVENT'"
+                  v-if="auton.type === 'EVENT'"
                   v-for="(item, idx) in tabItemsEvent"
                   :key="idx"
                   @click="navigate(item.to)"
@@ -120,7 +120,7 @@
                 </v-tab>
 
                 <v-tab
-                  v-if="auton.type == 'LESSON'"
+                  v-if="auton.type === 'LESSON'"
                   v-for="(item, idx) in tabItemsLesson"
                   :key="idx"
                   @click="navigate(item.to)"
@@ -139,21 +139,21 @@
 
     <v-dialog v-model="dialog" max-width="500">
       <AutonProposalSubmit
-        v-if="auton.type == 'DEFAULT'"
+        v-if="auton.type === 'DEFAULT'"
         :autonId="autondId"
         :autonName="autonName"
         callbackFinish="Auton-ProposalModalClose"
       ></AutonProposalSubmit>
 
       <AutonAddAttendee
-        v-if="auton.type == 'EVENT'"
+        v-if="auton.type === 'EVENT'"
         title="Inviting attendees"
         :autonId="autondId"
         callbackFinish="Auton-ProposalModalClose"
       ></AutonAddAttendee>
 
       <LessonCheckIn
-        v-if="auton.type == 'LESSON'"
+        v-if="auton.type === 'LESSON'"
         :autonId="autondId"
         callbackFinish="Auton-ProposalModalClose"
       ></LessonCheckIn>
@@ -163,9 +163,10 @@
 
 <script>
 import AutonAddAttendee from "~/components/event/AutonAddAttendee.vue";
+import AutonProposalSubmit from "~/components/proposal/create_proposal/Submit.vue";
 
 export default {
-  components: { AutonAddAttendee },
+  components: {AutonProposalSubmit, AutonAddAttendee },
   computed: {
     xs() {
       return this.$vuetify.breakpoint.xs;
@@ -276,8 +277,8 @@ export default {
             id: element,
           });
           if (
-            mship.result.autonId == this.id &&
-            mship.result.role == "FULL_MEMBER"
+            mship.result.autonId === this.id &&
+            mship.result.role === "FULL_MEMBER"
           ) {
             this.authorizedAddAttendee = false;
           }
@@ -299,10 +300,10 @@ export default {
         this.selectedItem = 2;
       } else if (page === "attendees") {
         this.selectedItem = 2;
-      } 
+      }
     },
     navigate(to) {
-      if (to == "/") {
+      if (to === "/") {
         this.$router.push(`/auton/${this.$route.params.autonId}`);
       } else {
         this.$router.push(`/auton/${this.$route.params.autonId}/${to}/`);

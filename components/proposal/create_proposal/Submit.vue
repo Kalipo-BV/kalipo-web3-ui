@@ -66,7 +66,7 @@
       ></AccountSign>
 
   <!--  Improvement proposal pages    -->
-      <v-card-text v-if="step === 'proposal-proposers'">
+      <v-card-text v-if="step === 'proposers'">
         <AutonStepperHeader
           title="Selecting proposers"
           subtitle="Please select the users which helped make the proposal"
@@ -78,6 +78,20 @@
           class="mt-4"
           :autonId="autonId"
         ></AutonProposalProposerList>
+      </v-card-text>
+
+      <v-card-text v-if="step === 'motivation'">
+        <AutonStepperHeader
+          title="Motivation"
+          subtitle="Please write a motivation for your improvement proposal"
+        ></AutonStepperHeader>
+
+        <Motivation
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></Motivation>
       </v-card-text>
 
   <!--  Buttons previous, next or sign    -->
@@ -102,6 +116,7 @@
 import improvementproposal from "~/pages/auton/_autonId/improvementproposal/index.vue";
 
 export default {
+  name: "AutonProposalSubmit",
   props: ["autonId", "autonName", "callbackFinish"],
   data: () => ({
     step: "select-proposal-type",
@@ -141,7 +156,7 @@ export default {
         case 'improvement-proposal':
           if (this.step === "proposal-profile") {
             this.step = "select-proposal-type";
-          } else if (this.step === "proposal-proposers"){
+          } else if (this.step === "proposers"){
             this.step = "proposal-profile";
           }
           break;
@@ -181,7 +196,7 @@ export default {
           if (this.step === "select-proposal-type") {
             this.step = "proposal-profile";
           } else if (this.step === "proposal-profile"){
-            this.step = "proposal-proposers";
+            this.step = "proposers";
           }
           break;
       }
