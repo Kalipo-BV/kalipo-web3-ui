@@ -127,9 +127,10 @@ export default {
     proposalTitle: "",
     proposalDescription: "",
     uri: "",
+    proposers: [], abstract: "abstract", motivation: "mot", specification: "spec",  references: "ref", budget: "bud is vies", executionRoles: [], timeBasedConstraint: "tijd is geld nou gappie gooi wat tijd op me.",
     transaction: {
       moduleId: -1,
-      assetId: 0,
+      assetId: 1,
       assets: {},
     },
   }),
@@ -196,7 +197,7 @@ export default {
           break;
         case 'improvement-proposal':
           if (this.step === "select-proposal-type") {
-            this.step = "proposal-profile";
+            this.step = "sign";
           } else if (this.step === "proposal-profile"){
             this.step = "proposers";
           } else if (this.step === "proposers"){
@@ -210,6 +211,33 @@ export default {
       //   assetId: 0,
       //   assets: {};
       // }
+
+
+
+
+      // if (this.step === "sign") {
+      //   const autonWrapper = await this.$invoke("auton:getByID", {
+      //     id: this.autonId,
+      //   });
+      //   this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${
+      //     autonWrapper.result.proposals.length + 1
+      //   }/campaigning`;
+      //
+      //   const asset = {
+      //     title: this.proposalTitle,
+      //     campaignComment: this.proposalDescription,
+      //     proposalType: this.selectedProposalType,
+      //     autonId: this.autonId,
+      //     accountIdToInvite: this.selectedAccountId,
+      //     invitationMessage: this.invitationMessage,
+      //   };
+      //   this.transaction.moduleId = 1004;
+      //   this.transaction.assetId = 0;
+      //   this.transaction.assets = asset;
+      // }
+
+
+
       if (this.step === "sign") {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
@@ -223,12 +251,23 @@ export default {
           campaignComment: this.proposalDescription,
           proposalType: this.selectedProposalType,
           autonId: this.autonId,
-          accountIdToInvite: this.selectedAccountId,
-          invitationMessage: this.invitationMessage,
+          proposers: this.proposers,
+          abstract: this.abstract,
+          motivation: this.motivation,
+          specification: this.specification,
+          references: this.references,
+          budget: this.budget,
+          executionRoles: this.executionRoles,
+          timeBasedConstraint: this.timeBasedConstraint
+
+
         };
         this.transaction.moduleId = 1004;
-        this.transaction.assetId = 0;
+        this.transaction.assetId = 1;
         this.transaction.assets = asset;
+        console.log(
+          this.proposalTitle + "\n" + this.proposalDescription + "\n" + this.selectedProposalType + "\n" + this.autonId + "\n" + this.abstract + "\n" + this.timeBasedConstraint
+        )
       }
     },
   },
