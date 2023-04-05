@@ -34,7 +34,7 @@ export default {
     proposals: [],
   }),
   async mounted() {
-    this.$nuxt.$emit("Auton-setPage", "proposals");
+    this.$nuxt.$emit("Auton-setPage", "improvementproposal");
     this.userLang = navigator.language || navigator.userLanguage;
 
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");

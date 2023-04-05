@@ -3,11 +3,12 @@
   <div @click="toProposal(proposal.link)">
 
     <!--  min-width: 30%; min-height: 20vh; border-radius: 7px; padding: 10px 3% 10px 20px;-->
-    <div :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px', minHeight: '160px', backgroundColor: 'white', borderColor: getResultColor(proposal.result), borderStyle: 'solid'}" >
-      <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white"
-           :style="{ minWidth: '300px', padding: '15px', paddingTop: '0px', paddingLeft: '10px', display: 'flex' }">
+
+    <div :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px', minHeight: '160px', backgroundColor: 'white'}" >
+      <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white pl-3"
+           :style="{ minWidth: '300px', padding: '15px', paddingTop: '0px', display: 'flex' }">
         <div style="width: 90%!important;">
-          <p style="color: #0F6AF1; font-size: 23px!important;" class="text-h1 mb-1">{{ proposal.title }}</p>
+          <p style="font-size: 23px!important;" class="text-h1 mb-1 accent--text">{{ proposal.title }}</p>
 
           <div>
 
@@ -15,9 +16,7 @@
               {{ proposal.type }}
             </p>
 <!--            Haal dit er uit als peter t oké vindt-->
-<!--            <v-chip dark outlined small  :color=getResultColor(proposal.result)>-->
-<!--              {{ proposal.result }}-->
-<!--            </v-chip>-->
+
 
             <p>{{
                 new Date(parseInt(proposal.submission) * 1000).toLocaleDateString(
@@ -31,6 +30,9 @@
                   }
                 )
               }}</p>
+            <v-chip dark outlined small  :color=getResultColor(proposal.result)>
+            {{ proposal.result }}
+          </v-chip>
             <v-btn outlined small :style="{width: '113%'}" @click="$router.push('/account/' + proposal.author)"
             >@{{ proposal.author }}
             </v-btn>
