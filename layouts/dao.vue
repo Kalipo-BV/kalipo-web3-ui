@@ -16,43 +16,27 @@
 -->
 
 <template>
-  <v-app id="auton-layout">
+  <v-app id="dao-layout">
     <v-main class="primary">
       <div style="height: 100%; background: #eef1f6">
-        <div class="primary">
-          <v-container>
-            <v-breadcrumbs class="px-0 py-0">
-              <v-breadcrumbs-item v-for="(breadcrumb, i) in breadcrumbs" :key="i" @click="$router.push(breadcrumb.to)"
-                class="white--text text-h6 px-0">
-                <v-avatar v-if="breadcrumb.icon" :tile="breadcrumb.tileIcon" color="accent" size="20px" class="mr-2">
-                  <v-icon color="white">
-                    {{ breadcrumb.icon }}
-                  </v-icon>
-                </v-avatar>
-                {{ breadcrumb.text }}
-                <li v-if="i !== breadcrumbs.length - 1" class="pl-3">/</li>
-              </v-breadcrumbs-item>
-            </v-breadcrumbs>
-          </v-container>
-        </div>
         <v-app-bar height="148px" color="white" flat>
           <v-row>
             <v-container>
               <v-row no-gutters class="d-flex align-center">
                 <v-col class="">
                   <div class="d-flex align-start">
-                    <v-avatar color="primary" size="40" class="white--text mr-2 mt-1"><v-icon color="white">{{
-                      auton.autonProfile.icon
+                    <v-avatar color="primary" size="40" class="white--text mr-2 mt-1" tile><v-icon color="white">{{
+                      dao.daoProfile.icon
                     }}</v-icon></v-avatar>
                     <div class="ml-2">
                       <div class="text-h3 primary--text">
-                        {{ auton.autonProfile.name }}
+                        {{ dao.daoProfile.name }}
                       </div>
                       <div class="text-caption">
                         Founded since
                         {{
                           new Date(
-                            parseInt(auton.autonProfile.foundingDate) * 1000
+                            parseInt(dao.daoProfile.foundingDate) * 1000
                           ).toLocaleDateString(userLang, {
                             day: "numeric",
                             month: "long",
@@ -61,22 +45,22 @@
                         }}
                       </div>
                       <div class="text-caption mt-2" style="min-height: 16px">
-                        <v-chip x-small link color="" class="px-2 mr-1" v-for="(tag, i) in auton.tags" :key="i">#{{ tag
+                        <v-chip x-small link color="" class="px-2 mr-1" v-for="(tag, i) in dao.tags" :key="i">#{{ tag
                         }}</v-chip>
                       </div>
                     </div>
                   </div>
                 </v-col>
                 <v-col class="d-flex justify-end">
-                  <v-btn v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'" class="mr-12" color="accent"
+                  <v-btn v-if="dao.type == 'DEFAULT' || dao.type == 'GOVERNING'" class="mr-12" color="accent"
                     @click="dialog = !dialog">
                     New proposal
                   </v-btn>
-                  <v-btn v-if="auton.type == 'EVENT'" class="mr-12" color="accent" @click="dialog = !dialog"
+                  <v-btn v-if="dao.type == 'EVENT'" class="mr-12" color="accent" @click="dialog = !dialog"
                     :disabled="authorizedAddAttendee">
                     Add attendee
                   </v-btn>
-                  <v-btn v-if="auton.type == 'LESSON'" class="mr-12" color="accent" :disabled="authorizedAddAttendee"
+                  <v-btn v-if="dao.type == 'LESSON'" class="mr-12" color="accent" :disabled="authorizedAddAttendee"
                     @click="dialog = !dialog">
                     Check in/out
                   </v-btn>
@@ -88,19 +72,19 @@
             <v-container><v-tabs show-arrows v-model="selectedItem">
                 <v-tabs-slider color="primary"></v-tabs-slider>
 
-                <v-tab v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'" v-for="(item, idx) in tabItemsDefault"
+                <v-tab v-if="dao.type == 'DEFAULT' || dao.type == 'GOVERNING'" v-for="(item, idx) in tabItemsDefault"
                   :key="idx" @click="navigate(item.to)">
                   <v-icon small class="mr-2">{{ item.icon }}</v-icon>
                   {{ item.title }}
                 </v-tab>
 
-                <v-tab v-if="auton.type == 'EVENT'" v-for="(item, idx) in tabItemsEvent" :key="idx"
+                <v-tab v-if="dao.type == 'EVENT'" v-for="(item, idx) in tabItemsEvent" :key="idx"
                   @click="navigate(item.to)">
                   <v-icon small class="mr-2">{{ item.icon }}</v-icon>
                   {{ item.title }}
                 </v-tab>
 
-                <v-tab v-if="auton.type == 'LESSON'" v-for="(item, idx) in tabItemsLesson" :key="idx"
+                <v-tab v-if="dao.type == 'LESSON'" v-for="(item, idx) in tabItemsLesson" :key="idx"
                   @click="navigate(item.to)">
                   <v-icon small class="mr-2">{{ item.icon }}</v-icon>
                   {{ item.title }}
@@ -109,19 +93,19 @@
             </v-container>
           </template>
         </v-app-bar>
-        <Nuxt class="mt-n2 px-8 px-lg-3" :auton="auton" />
+        <Nuxt class="mt-n2 px-8 px-lg-3" :dao="dao" />
       </div>
     </v-main>
     <MainMenu></MainMenu>
 
     <v-dialog v-model="dialog" max-width="500">
-      <AutonProposalSubmit v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'" :autonId="autondId"
-        :daoName="daoName" :autonName="autonName" callbackFinish="Auton-ProposalModalClose"></AutonProposalSubmit>
+      <AutonProposalSubmit v-if="dao.type == 'DEFAULT'" :autonId="daoId" :daoName="daoName" :autonName="daoName"
+        callbackFinish="Auton-ProposalModalClose"></AutonProposalSubmit>
 
-      <AutonAddAttendee v-if="auton.type == 'EVENT'" title="Inviting attendees" :autonId="autondId"
+      <AutonAddAttendee v-if="dao.type == 'EVENT'" title="Inviting attendees" :autonId="daoId"
         callbackFinish="Auton-ProposalModalClose"></AutonAddAttendee>
 
-      <LessonCheckIn v-if="auton.type == 'LESSON'" :autonId="autondId" callbackFinish="Auton-ProposalModalClose">
+      <LessonCheckIn v-if="dao.type == 'LESSON'" :autonId="daoId" callbackFinish="Auton-ProposalModalClose">
       </LessonCheckIn>
     </v-dialog>
   </v-app>
@@ -152,20 +136,18 @@ export default {
   data() {
     return {
       authorizedAddAttendee: true,
-      autondId: null,
+      daoId: null,
       id: "",
       autonName: null,
       daoName: null,
-      auton: {
-        autonProfile: {},
+      dao: {
+        daoProfile: {},
         tags: [],
       },
       dialog: false,
       miniVariant: false,
       selectedItem: 0,
       userLang: null,
-      breadcrumbs: [
-      ],
       tabItemsDefault: [
         {
           icon: "mdi-monitor-dashboard",
@@ -267,91 +249,36 @@ export default {
     },
     navigate(to) {
       if (to == "/") {
-        this.$router.push(`/dao/${this.$route.params.daoId}/auton/${this.$route.params.autonId}`);
+        this.$router.push(`/auton/${this.$route.params.autonId}`);
       } else {
-        this.$router.push(`/dao/${this.$route.params.daoId}/auton/${this.$route.params.autonId}/${to}/`);
+        this.$router.push(`/auton/${this.$route.params.autonId}/${to}/`);
       }
     },
   },
   async mounted() {
-    this.$nuxt.$emit("MainMenu-setPage", "autons");
+    this.$nuxt.$emit("MainMenu-setPage", "daos");
     this.userLang = navigator.language || navigator.userLanguage;
-    const urlParam = this.$route.params.autonId.replaceAll("_", " ");
+    const urlParam = this.$route.params.daoId.replaceAll("_", " ");
 
-    const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
+    const daoIdWrapper = await this.$invoke("dao:getDaoIdByName", {
       name: urlParam,
     });
-    if (autonIdWrapper.result === null) {
+    if (daoIdWrapper.result === null) {
       this.auton = null;
-      this.error = "Auton not found: " + urlParam;
+      this.error = "dao not found: " + urlParam;
     } else {
-      this.autondId = autonIdWrapper.result.id;
+      this.daoId = daoIdWrapper.result.id;
 
-      this.id = autonIdWrapper.result.id;
-      const autonWrapper = await this.$invoke("auton:getByID", {
-        id: autonIdWrapper.result.id,
-      });
-      this.auton = autonWrapper.result;
-      this.autonName = autonWrapper.result.autonProfile.name;
-
-      const daoId = autonWrapper.result.daoId;
+      this.id = daoIdWrapper.result.id;
       const daoWrapper = await this.$invoke("dao:getByID", {
-        id: daoId
+        id: daoIdWrapper.result.id,
       });
-      console.log(daoId)
-      console.log(daoWrapper)
-      const dao = daoWrapper.result;
-      this.daoName = dao.daoProfile.name;
-
-      this.breadcrumbs.push({
-        text: dao.daoProfile.name,
-        icon: dao.daoProfile.icon,
-        tileIcon: true,
-        to: `/dao/${dao.daoProfile.name.replaceAll(" ", "_")}`,
-      });
-
-      let parentAutons = [];
-      if (this.auton.parentAutonId != "") {
-        let hasParent = true;
-        let currentParentId = this.auton.parentAutonId;
-        while (hasParent) {
-          const parentWrapper = await this.$invoke("auton:getByID", {
-            id: currentParentId,
-          });
-          const parent = parentWrapper.result;
-          parentAutons.push(parent);
-          if (parent.parentAutonId != "") {
-            currentParentId = parent.parentAutonId;
-          } else {
-            hasParent = false;
-            break;
-          }
-        }
-      }
-      parentAutons.reverse();
-
-      for (let index = 0; index < parentAutons.length; index++) {
-        const element = parentAutons[index];
-        this.breadcrumbs.push({
-          text: element.autonProfile.name,
-          icon: element.autonProfile.icon,
-          to: `/dao/${dao.daoProfile.name.replaceAll(" ", "_")}/auton/${element.autonProfile.name.replaceAll(" ", "_")}`,
-        });
-      }
-
-      this.breadcrumbs.push({
-        text: this.auton.autonProfile.name,
-        icon: this.auton.autonProfile.icon,
-        to: `/dao/${dao.daoProfile.name.replaceAll(" ", "_")}/auton/${this.auton.autonProfile.name.replaceAll(" ", "_")}`,
-      });
+      this.dao = daoWrapper.result;
+      this.daoName = daoWrapper.result.daoProfile.name;
     }
 
     this.authorized();
   },
 };
 </script>
-<style>
-#auton-layout .v-breadcrumbs li {
-  cursor: pointer;
-}
-</style>
+<style></style>

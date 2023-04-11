@@ -17,9 +17,9 @@
 
 <template>
   <div class="">
-    <!--    Key code 13 is Enter key-->
+    <!-- Key code 13 is Enter key -->
     <Keypress key-event="keyup" :key-code="13" @success="nextStep"
-      v-if="!(disabledNext || disabledNextStep4) && step !== 6" />
+      v-if="!(disabledNext || disabledNextStep4) && step !== 7" />
 
     <v-card>
       <v-card-text v-if="step == 0">
@@ -48,7 +48,6 @@
       </v-card-text>
 
       <v-card-text v-if="step == 1">
-        <!-- default template -->
         <AutonStepperHeader title="Creating a new DAO" subtitle="Naming your DAO and Governing Auton">
         </AutonStepperHeader>
         <div class="text-body-1 mt-3">
@@ -100,11 +99,10 @@
           Add one or multiple contact information fields to your DAO's profile to provide interested parties with a way to
           get in touch. E.g. email, website, social media accounts, or other relevant information.
         </div>
-        <DaoContactInformationList class="mt-1"></DaoContactInformationList>
+        <DaoContactInformationList :channelList.sync="channelList" class="mt-1"></DaoContactInformationList>
       </v-card-text>
 
       <v-card-text v-if="step == 6">
-        <!-- default template -->
         <AutonStepperHeader title="Creating a new DAO" subtitle="Inviting multiple founding members">
         </AutonStepperHeader>
         <div class="text-body-1 mt-3">
@@ -116,14 +114,12 @@
         </AutonUserSelect>
       </v-card-text>
 
-      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 7 && template == 'DEFAULT'"
-        callback="AutonCreate-PrevStep" title="Creating auton"></AccountSign>
+      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 7" callback="AutonCreate-PrevStep"
+        title="Creating auton"></AccountSign>
 
       <v-divider></v-divider>
 
-      <v-card-text v-if="
-        (template == 'DEFAULT' && step < 7)
-      ">
+      <v-card-text v-if="step < 7">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="step--">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
@@ -131,21 +127,7 @@
           <v-btn color="accent" v-if="step != 6" @click="nextStep" :disabled="disabledNext || disabledNextStep4">
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
-          <v-btn color="accent" v-if="step == 6" @click="step++">
-            sign <v-icon class="ml-2" small>mdi-draw-pen</v-icon>
-          </v-btn>
-        </div>
-      </v-card-text>
-
-      <v-card-text v-if="template == 'LESSON' && step < 4">
-        <div class="d-flex align-center justify-space-between">
-          <v-btn :disabled="step == 0" @click="step--">
-            <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
-          </v-btn>
-          <v-btn color="accent" v-if="step != 6" @click="nextStep" :disabled="disabledNext || disabledNextStep4">
-            next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
-          </v-btn>
-          <v-btn color="accent" v-if="step == 6" @click="step++">
+          <v-btn color="accent" v-if="step == 6" @click="nextStep">
             sign <v-icon class="ml-2" small>mdi-draw-pen</v-icon>
           </v-btn>
         </div>
@@ -154,19 +136,15 @@
   </div>
 </template>
 <script>
-import DaoContactInformationList from './DaoContactInformationList.vue';
-
 export default {
   components: {
-    Keypress: () => import("vue-keypress"),
-    DaoContactInformationList
+    Keypress: () => import("vue-keypress")
   },
   data: () => ({
     step: 0,
     uri: "",
-    template: "DEFAULT",
     transaction: {
-      moduleId: 1003,
+      moduleId: 1000,
       assetId: 0,
       assets: {},
     },
@@ -179,82 +157,23 @@ export default {
     jurisdiction: "",
     cocId: "",
     businessAddress: "",
+    channelList: null,
     selectedFounderIds: null,
-    tags: null,
     disabledNext: false,
     disabledNextStep4: false,
 
-    // event and lesson
-    startTime: "",
-    endTime: "",
-    description: "",
-    location: "",
-    start: BigInt(1),
-    end: BigInt(1),
-
-    // event
-    startDate: "",
-    endDate: "",
-    capacity: 0,
-    price: 0,
-
-    // lesson
-    subject: "",
-    lessonName: "",
-    date: "",
-    studentIds: [],
-    checkoutRequired: false,
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
     this.$nuxt.$on("AutonCreate-PrevStep", ($event) => this.step--);
-    this.$nuxt.$on(
-      "OptionCard-SelectTemplate",
-      ($event) => (this.template = $event)
-    );
   },
   methods: {
     makeTransaction() { },
     nextStep() {
       this.step++;
-      console.log("TEMPLATE: " + this.template);
-
-      if (this.step == 4 && this.template == "LESSON") {
-        this.uri = `auton/${this.lessonName.replace(" ", "_")}`;
-
-        if (this.date != "") {
-          this.start = BigInt(
-            new Date(this.date + ":" + this.startTime).getTime()
-          );
-          this.end = BigInt(new Date(this.date + ":" + this.endTime).getTime());
-        }
-
-        // auton lesson asset
-        const asset = {
-          icon: this.icon,
-          name: this.lessonName,
-          subtitle: "",
-          mission: "",
-          vision: "",
-          bulkInviteAccountIds: this.studentIds,
-          tags: [],
-          type: this.template,
-          location: this.location,
-          price: BigInt(0),
-          capacity: BigInt(0),
-          description: this.description,
-          start: this.start,
-          end: this.end,
-          subject: this.subject,
-          // het is geen fout dat dit een string is, voor een of ander manier accepteert lisk het niet als boolean
-          checkoutRequired: this.checkoutRequired ? "true" : "false",
-        };
-
-        this.transaction.assets = asset;
-      }
-
-      if (this.step == 6) {
-        this.uri = `auton/${this.name.replace(" ", "_")}`;
+      console.log(this.step)
+      if (this.step == 7) {
+        this.uri = `dao/${this.name.replace(" ", "_")}/auton/${this.governingName.replace(" ", "_")}`;
 
         if (this.tags == null) {
           this.tags = [];
@@ -268,35 +187,34 @@ export default {
         if (this.selectedFounderIds == null) {
           this.selectedFounderIds = [];
         }
-        if (this.startDate != "") {
-          this.start = BigInt(
-            new Date(this.startDate + ":" + this.startTime).getTime()
-          );
-        }
-        if (this.endDate != "") {
-          this.end = BigInt(
-            new Date(this.endDate + ":" + this.endTime).getTime()
-          );
+
+        let linkedChannels = []
+        if (this.channelList != null && this.channelList.length > 1 || this.channelList[0].channel != "") {
+          let tempChannelList = [];
+          for (let index = 0; index < this.channelList.length; index++) {
+            const element = this.channelList[index];
+            if (element.channel != "" && element.link != "") {
+              tempChannelList.push(element);
+            }
+          }
+          linkedChannels = tempChannelList;
         }
 
         const asset = {
-          icon: this.icon,
           name: this.name,
-          subtitle: this.slogan,
+          governingAutonName: this.governingName,
+          icon: this.icon,
           mission: this.mission,
           vision: this.vision,
           bulkInviteAccountIds: this.selectedFounderIds,
-          tags: this.tags,
-          type: this.template,
-          location: this.location,
-          price: BigInt(0),
-          capacity: BigInt(0),
-          description: this.description,
-          start: BigInt(0),
-          end: BigInt(0),
-          subject: "",
-          checkoutRequired: "false",
+          linkedChannels: linkedChannels,
+          hasLegalEntity: this.hasLegalEntity,
+          jurisdiction: this.jurisdiction,
+          cocId: this.cocId,
+          businessAddress: this.businessAddress
         };
+
+        console.log(asset)
 
         this.transaction.assets = asset;
       }

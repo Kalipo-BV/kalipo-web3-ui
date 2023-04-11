@@ -17,8 +17,8 @@
 
 <template>
   <div>
-    <v-combobox v-model="countryValue" :items="items" :filter="customFilter" hide-selected :label="label" :rules="rules"
-      :search-input.sync="search" persistent-hint item-text="name" solo>
+    <v-autocomplete v-model="countryValue" :items="items" :filter="customFilter" hide-selected :label="label"
+      :rules="rules" persistent-hint item-text="name" item-value="code" solo>
       <template v-slot:item="data">
         <template>
           <v-list-item-content>
@@ -36,7 +36,7 @@
           </v-list-item-content>
         </v-list-item>
       </template>
-    </v-combobox>
+    </v-autocomplete>
   </div>
 </template>
 <script>
@@ -84,11 +84,11 @@ export default {
         for (let index = 0; index < this.items.length; index++) {
           const element = this.items[index];
           if (val.toLowerCase() == element.name.toLowerCase()) {
-            this.countryValue = element;
+            this.countryValue = element.code;
           }
         }
       }
-    },
+    }
   },
   data: () => ({
     search: "",

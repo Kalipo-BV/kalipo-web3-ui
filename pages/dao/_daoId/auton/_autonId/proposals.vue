@@ -20,34 +20,18 @@
     <div class="mt-4">
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            append-icon="mdi-magnify"
-            label="Search a proposal"
-            solo
-            hide-details
-            v-model="search"
-            style="max-width: 250px"
-          ></v-text-field>
+          <v-text-field append-icon="mdi-magnify" label="Search a proposal" solo hide-details v-model="search"
+            style="max-width: 250px"></v-text-field>
         </v-col>
       </v-row>
 
       <v-row> </v-row>
     </div>
 
-    <v-data-table
-      :headers="headers"
-      :items="proposals"
-      :items-per-page="5"
-      :search="search"
-      class="elevation-0 mt-4"
-      :custom-filter="filter"
-      :sort-by="['submission']"
-      :sort-desc="[true]"
-    >
+    <v-data-table :headers="headers" :items="proposals" :items-per-page="5" :search="search" class="elevation-0 mt-4"
+      :custom-filter="filter" :sort-by="['submission']" :sort-desc="[true]">
       <template v-slot:item.link="{ item }">
-        <v-btn color="accent" @click="$router.push(item.link)" small
-          >Open</v-btn
-        >
+        <v-btn color="accent" @click="$router.push(item.link)" small>Open</v-btn>
       </template>
       <template v-slot:item.status="{ item }">
         <v-chip :color="getStatusColor(item.status)" dark outlined small>
@@ -55,9 +39,7 @@
         </v-chip>
       </template>
       <template v-slot:item.author="{ item }">
-        <v-btn outlined small @click="$router.push('/account/' + item.author)"
-          >@{{ item.author }}</v-btn
-        >
+        <v-btn outlined small @click="$router.push('/account/' + item.author)">@{{ item.author }}</v-btn>
       </template>
       <template v-slot:item.result="{ item }">
         <v-chip :color="getResultColor(item.result)" dark outlined small>
@@ -123,6 +105,10 @@ export default {
       id: autonIdWrapper.result.id,
     });
 
+    const daoWrapper = await this.$invoke("dao:getByID", {
+      id: autonWrapper.result.daoId,
+    });
+
     for (let index = 0; index < autonWrapper.result.proposals.length; index++) {
       const proposalId = autonWrapper.result.proposals[index];
       const proposalWrapper = await this.$invoke("proposal:getByID", {
@@ -156,9 +142,11 @@ export default {
       }
 
       this.proposals.push({
-        link: `/auton/${this.$route.params.autonId}/proposal/${
-          index + 1
-        }/${linkStatus}`,
+        link: `/dao/${daoWrapper.result.daoProfile.name.replaceAll(
+          " ",
+          "_"
+        )}/auton/${this.$route.params.autonId}/proposal/${index + 1
+          }/${linkStatus}`,
         status: proposalWrapper.result.status,
         type: proposalWrapper.result.type,
         title: proposalWrapper.result.title,
@@ -166,7 +154,7 @@ export default {
         author: submitterAccountWrapper.result.username,
         result: proposalWrapper.result.binaryVoteResult.result,
       });
-      
+
     }
   },
   methods: {

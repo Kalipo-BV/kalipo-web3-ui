@@ -19,14 +19,13 @@
   <v-row>
     <div>
       <v-card-text>
-        {{ services.length }} available services
+        {{ channels.length }} available channels
         <v-row v-for="(item, i) in contactInformationList" :key="i" class="my-0" dense>
 
           <v-col class="d-flex" cols="12" sm="5">
-            <!-- <v-select :items="services" label="Social" solo v-model="social.social" hide-details></v-select> -->
-
-            <v-combobox v-model="item.service" :items="services" :filter="customFilter" hide-selected :label="label"
-              :rules="rules" :search-input.sync="item.search" persistent-hint item-text="service" solo hide-details>
+            <v-autocomplete v-model="item.channel" :items="channels" :filter="customFilter" hide-selected :label="label"
+              :rules="rules" :search-input="item.search" persistent-hint item-text="channel" item-value="channel" solo
+              hide-details>
               <template v-slot:item="data">
                 <template>
                   <v-list-item-icon>
@@ -34,7 +33,7 @@
                     <v-icon v-if="!cat_map[data.item.category]">mdi-share-variant</v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title v-html="data.item.service"></v-list-item-title>
+                    <v-list-item-title v-html="data.item.channel"></v-list-item-title>
                     <v-list-item-subtitle v-html="data.item.category"></v-list-item-subtitle>
                   </v-list-item-content>
                 </template>
@@ -48,7 +47,7 @@
                   </v-list-item-content>
                 </v-list-item>
               </template>
-            </v-combobox>
+            </v-autocomplete>
           </v-col>
 
           <v-col class="d-flex align-center" cols="12" sm="7">
@@ -66,30 +65,24 @@
 <script>
 export default {
   props: {
-    country: {
-      type: String,
+    channelList: {
+      type: Array,
+      default() {
+        return [{ channel: "", link: "" }]
+      }
     },
     label: {
       type: String,
-      default: "Select service"
+      default: "Select channel"
     },
     rules: {
       type: Array,
     }
   },
   methods: {
-    update() {
-      this.transaction.assets.contactInformationList = [];
-      for (let index = 0; index < this.contactInformationList.length; index++) {
-        const social = this.contactInformationList[index];
-        if (social.service.length > 0 && social.link.length > 0) {
-          this.transaction.assets.contactInformationList.push(social);
-        }
-      }
-    },
     deleteSocial(index) {
-      if (index == 0) {
-        this.contactInformationList[index] = { service: "", link: "" };
+      if (index == 0 && this.contactInformationList.length == 1) {
+        this.contactInformationList[index] = { channel: "", link: "" };
       } else {
         this.contactInformationList.splice(index, 1);
       }
@@ -107,7 +100,7 @@ export default {
       });
     },
     customFilter(item, queryText, itemText) {
-      const textOne = item.service.toLowerCase()
+      const textOne = item.channel.toLowerCase()
       const textTwo = item.category.toLowerCase()
       const searchText = queryText.toLowerCase()
 
@@ -116,12 +109,12 @@ export default {
     },
   },
   computed: {
-    countryValue: {
+    contactInformationList: {
       get: function () {
-        return this.country;
+        return this.channelList;
       },
       set: function (newValue) {
-        this.$emit("update:country", newValue);
+        this.$emit("update:channelList", newValue);
       },
     },
   },
@@ -137,21 +130,19 @@ export default {
     contactInformationList: {
       handler(val) {
         const latestEntry = val[val.length - 1];
-        console.log(this.contactInformationList)
 
         if (
-          typeof latestEntry.service === 'object' &&
-          latestEntry.service.service.length > 0 &&
+          latestEntry.channel != null &&
           latestEntry.link.length > 0 &&
           val.length < 5
         ) {
-          this.contactInformationList.push({ service: "", link: "" });
+          this.contactInformationList.push({ channel: "", link: "" });
         }
 
         if (latestEntry.search != undefined && latestEntry.search.length > 0 && latestEntry.search != null && latestEntry.search.length > 1) {
-          for (let index = 0; index < this.services.length; index++) {
-            const element = this.services[index];
-            if (latestEntry.search.toLowerCase() == element.service.toLowerCase() || element.category.toLowerCase().includes(latestEntry.search.toLowerCase())) {
+          for (let index = 0; index < this.channels.length; index++) {
+            const element = this.channels[index];
+            if (latestEntry.search.toLowerCase() == element.channel.toLowerCase() || element.category.toLowerCase().includes(latestEntry.search.toLowerCase())) {
               this.countryValue = element;
             }
           }
@@ -160,913 +151,910 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    if (this.contactInformationList == null || this.contactInformationList.length == 0) {
+      this.contactInformationList = [{ channel: "", link: "" }];
+    }
+  },
   data: () => ({
     uri: "/dashboard",
-    transaction: {
-      moduleId: 1001,
-      assetId: 4,
-      assets: {
-        contactInformationList: null,
-      },
-    },
     chipText: "",
-    contactInformationList: [{ service: "", link: "" }],
     dialog: false,
     renderComponent: true,
     search: "",
-    services: [
+    channels: [
       {
-        "service": "email",
+        "channel": "email",
         "category": "communication",
         "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
       },
       {
-        "service": "website",
+        "channel": "website",
         "category": "general",
         "regex": "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$"
       },
       {
-        "service": "facebook",
+        "channel": "facebook",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.facebook\\.com\\/[^/]+\\/?$"
       },
       {
-        "service": "twitter",
+        "channel": "twitter",
         "category": "social_media",
         "regex": "^https?:\\/\\/twitter\\.com\\/(?!\\#)([a-zA-Z0-9_]{1,15})$"
       },
       {
-        "service": "youtube",
+        "channel": "youtube",
         "category": "video_sharing",
         "regex": "^https?:\\/\\/(www\\.)?youtube\\.com\\/channel\\/UC[a-zA-Z0-9-_]{22}$"
       },
       {
-        "service": "vimeo",
+        "channel": "vimeo",
         "category": "video_sharing",
         "regex": "^https?:\\/\\/vimeo\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "twitch",
+        "channel": "twitch",
         "category": "live_streaming",
         "regex": "^https?:\\/\\/www\\.twitch\\.tv\\/([a-zA-Z0-9_]{4,25})$"
       },
       {
-        "service": "linkedin",
+        "channel": "linkedin",
         "category": "professional_network",
         "regex": "^https?:\\/\\/([a-z]{2,3}\\.)?linkedin\\.com\\/(company|in)\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "instagram",
+        "channel": "instagram",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.instagram\\.com\\/([a-zA-Z0-9_]{1,30})\\/?$"
       },
       {
-        "service": "pinterest",
+        "channel": "pinterest",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.pinterest\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "snapchat",
+        "channel": "snapchat",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.snapchat\\.com\\/add\\/([a-zA-Z0-9-_]{3,15})$"
       },
       {
-        "service": "tiktok",
+        "channel": "tiktok",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.tiktok\\.com\\/@([a-zA-Z0-9-_]{2,24})\\/?$"
       },
       {
-        "service": "reddit",
+        "channel": "reddit",
         "category": "social_news",
         "regex": "^https?:\\/\\/www\\.reddit\\.com\\/user\\/([a-zA-Z0-9-_]{3,20})$"
       },
       {
-        "service": "whatsapp",
+        "channel": "whatsapp",
         "category": "messaging",
         "regex": "^https?:\\/\\/wa\\.me\\/([0-9]{6,14})$"
       },
       {
-        "service": "telegram",
+        "channel": "telegram",
         "category": "messaging",
         "regex": "^https?:\\/\\/t\\.me\\/([a-zA-Z0-9_]{5,32})$"
       },
       {
-        "service": "wechat",
+        "channel": "wechat",
         "category": "messaging",
         "regex": "^https?:\\/\\/weixin\\.qq\\.com\\/qr\\/code\\/([a-zA-Z0-9]{27})$"
       },
       {
-        "service": "line",
+        "channel": "line",
         "category": "messaging",
         "regex": "^https?:\\/\\/line\\.me\\/ti\\/p\\/@([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "viber",
+        "channel": "viber",
         "category": "messaging",
         "regex": "^https?:\\/\\/chats\\.viber\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "skype",
+        "channel": "skype",
         "category": "communication",
         "regex": "^https?:\\/\\/join\\.skype\\.com\\/invite\\/[a-zA-Z0-9]{27}$"
       },
       {
-        "service": "slack",
+        "channel": "slack",
         "category": "team_collaboration",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.slack\\.com\\/?$"
       },
       {
-        "service": "discord",
+        "channel": "discord",
         "category": "team_collaboration",
         "regex": "^https?:\\/\\/discord\\.gg\\/[a-zA-Z0-9-_]{2,16}$"
       },
       {
-        "service": "github",
+        "channel": "github",
         "category": "developer_tools",
         "regex": "^https?:\\/\\/github\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "gitlab",
+        "channel": "gitlab",
         "category": "developer_tools",
         "regex": "^https?:\\/\\/gitlab\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "bitbucket",
+        "channel": "bitbucket",
         "category": "developer_tools",
         "regex": "^https?:\\/\\/bitbucket\\.org\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "dribbble",
+        "channel": "dribbble",
         "category": "design",
         "regex": "^https?:\\/\\/dribbble\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "behance",
+        "channel": "behance",
         "category": "design",
         "regex": "^https?:\\/\\/www\\.behance\\.net\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "medium",
+        "channel": "medium",
         "category": "blogging",
         "regex": "^https?:\\/\\/medium\\.com\\/@?([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "blogger",
+        "channel": "blogger",
         "category": "blogging",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.blogspot\\.com\\/?$"
       },
       {
-        "service": "wordpress",
+        "channel": "wordpress",
         "category": "blogging",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.wordpress\\.com\\/?$"
       },
       {
-        "service": "tumblr",
+        "channel": "tumblr",
         "category": "blogging",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.tumblr\\.com\\/?$"
       },
       {
-        "service": "soundcloud",
+        "channel": "soundcloud",
         "category": "audio_sharing",
         "regex": "^https?:\\/\\/soundcloud\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "spotify",
+        "channel": "spotify",
         "category": "music_streaming",
         "regex": "^https?:\\/\\/open\\.spotify\\.com\\/user\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "apple_music",
+        "channel": "apple_music",
         "category": "music_streaming",
         "regex": "^https?:\\/\\/music\\.apple\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "deezer",
+        "channel": "deezer",
         "category": "music_streaming",
         "regex": "^https?:\\/\\/www\\.deezer\\.com\\/[a-zA-Z0-9-_\\/]+\\/?$"
       },
       {
-        "service": "trello",
+        "channel": "trello",
         "category": "project_management",
         "regex": "^https?:\\/\\/trello\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "asana",
+        "channel": "asana",
         "category": "project_management",
         "regex": "^https?:\\/\\/app\\.asana\\.com\\/[a-zA-Z0-9-_\\/]+\\/?$"
       },
       {
-        "service": "basecamp",
+        "channel": "basecamp",
         "category": "project_management",
         "regex": "^https?:\\/\\/3\\.basecamp\\.com\\/([a-zA-Z0-9]+)\\/?$"
       },
       {
-        "service": "stackoverflow",
+        "channel": "stackoverflow",
         "category": "developer_community",
         "regex": "^https?:\\/\\/stackoverflow\\.com\\/users\\/([0-9]+)\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "angellist",
+        "channel": "angellist",
         "category": "startup_network",
         "regex": "^https?:\\/\\/angel\\.co\\/[a-zA-Z0-9-_\\/]+\\/?$"
       },
       {
-        "service": "crunchbase",
+        "channel": "crunchbase",
         "category": "business_information",
         "regex": "^https?:\\/\\/www\\.crunchbase\\.com\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "glassdoor",
+        "channel": "glassdoor",
         "category": "employment",
         "regex": "^https?:\\/\\/www\\.glassdoor\\.com\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "xing",
+        "channel": "xing",
         "category": "professional_network",
         "regex": "^https?:\\/\\/www\\.xing\\.com\\/profile\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "viadeo",
+        "channel": "viadeo",
         "category": "professional_network",
         "regex": "^https?:\\/\\/www\\.viadeo\\.com\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "flickr",
+        "channel": "flickr",
         "category": "photo_sharing",
         "regex": "^https?:\\/\\/www\\.flickr\\.com\\/photos\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "500px",
+        "channel": "500px",
         "category": "photo_sharing",
         "regex": "^https?:\\/\\/500px\\.com\\/p\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "ello",
+        "channel": "ello",
         "category": "social_media",
         "regex": "^https?:\\/\\/ello\\.co\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "clubhouse",
+        "channel": "clubhouse",
         "category": "social_audio",
         "regex": "^https?:\\/\\/www\\.joinclubhouse\\.com\\/(@[a-zA-Z0-9-_]{2,16})$"
       },
       {
-        "service": "quora",
+        "channel": "quora",
         "category": "social_qa",
         "regex": "^https?:\\/\\/www\\.quora\\.com\\/profile\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "yelp",
+        "channel": "yelp",
         "category": "local_search",
         "regex": "^https?:\\/\\/www\\.yelp\\.com\\/biz\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "tripadvisor",
+        "channel": "tripadvisor",
         "category": "travel",
         "regex": "^https?:\\/\\/www\\.tripadvisor\\.com\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "foursquare",
+        "channel": "foursquare",
         "category": "local_search",
         "regex": "^https?:\\/\\/foursquare\\.com\\/v\\/[a-zA-Z0-9-_\\/]+\\/?$"
       },
       {
-        "service": "swarm",
+        "channel": "swarm",
         "category": "location_based",
         "regex": "^https?:\\/\\/www\\.swarmapp\\.com\\/c\\/[a-zA-Z0-9-_\\/]+\\/?$"
       },
       {
-        "service": "google_my_business",
+        "channel": "google_my_business",
         "category": "local_search",
         "regex": "^https?:\\/\\/g\\.page\\/[a-zA-Z0-9-_\\/]+\\/?$"
       },
       {
-        "service": "badoo",
+        "channel": "badoo",
         "category": "social_media",
         "regex": "^https?:\\/\\/badoo\\.com\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "hubspot",
+        "channel": "hubspot",
         "category": "marketing_automation",
         "regex": "^https?:\\/\\/app\\.hubspot\\.com\\/contacts\\/([0-9]+)\\/?$"
       },
       {
-        "service": "mailchimp",
+        "channel": "mailchimp",
         "category": "email_marketing",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.us[0-9]+\\.list-manage\\.com\\/subscribe\\/?$"
       },
       {
-        "service": "last_fm",
+        "channel": "last_fm",
         "category": "music_streaming",
         "regex": "^https?:\\/\\/www\\.last\\.fm\\/user\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "vkontakte",
+        "channel": "vkontakte",
         "category": "social_media",
         "regex": "^https?:\\/\\/vk\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "odnoklassniki",
+        "channel": "odnoklassniki",
         "category": "social_media",
         "regex": "^https?:\\/\\/ok\\.ru\\/profile\\/([0-9]+)$"
       },
       {
-        "service": "houzz",
+        "channel": "houzz",
         "category": "home_design",
         "regex": "^https?:\\/\\/www\\.houzz\\.com\\/pro\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "etsy",
+        "channel": "etsy",
         "category": "ecommerce",
         "regex": "^https?:\\/\\/www\\.etsy\\.com\\/shop\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "shopify",
+        "channel": "shopify",
         "category": "ecommerce",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.myshopify\\.com\\/?$"
       },
       {
-        "service": "zillow",
+        "channel": "zillow",
         "category": "real_estate",
         "regex": "^https?:\\/\\/www\\.zillow\\.com\\/profile\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "trulia",
+        "channel": "trulia",
         "category": "real_estate",
         "regex": "^https?:\\/\\/www\\.trulia\\.com\\/profile\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "realtor",
+        "channel": "realtor",
         "category": "real_estate",
         "regex": "^https?:\\/\\/www\\.realtor\\.com\\/realestateagents\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "zoom",
+        "channel": "zoom",
         "category": "video_conferencing",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.zoom\\.us\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "teams",
+        "channel": "teams",
         "category": "team_collaboration",
         "regex": "^https?:\\/\\/teams\\.microsoft\\.com\\/l\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "webex",
+        "channel": "webex",
         "category": "video_conferencing",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.webex\\.com\\/meet\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "gotomeeting",
+        "channel": "gotomeeting",
         "category": "video_conferencing",
         "regex": "^https?:\\/\\/global\\.gotomeeting\\.com\\/join\\/([0-9]{9,10})$"
       },
       {
-        "service": "pixiv",
+        "channel": "pixiv",
         "category": "illustration",
         "regex": "^https?:\\/\\/www\\.pixiv\\.net\\/users\\/([0-9]+)$"
       },
       {
-        "service": "mastodon",
+        "channel": "mastodon",
         "category": "social_media",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.mastodon\\.social\\/@([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "gab",
+        "channel": "gab",
         "category": "social_media",
         "regex": "^https?:\\/\\/gab\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "minds",
+        "channel": "minds",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.minds\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "goodreads",
+        "channel": "goodreads",
         "category": "book_reviews",
         "regex": "^https?:\\/\\/www\\.goodreads\\.com\\/user\\/show\\/([0-9]+)$"
       },
       {
-        "service": "artstation",
+        "channel": "artstation",
         "category": "art_portfolio",
         "regex": "^https?:\\/\\/www\\.artstation\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "pinterest",
+        "channel": "pinterest",
         "category": "image_sharing",
         "regex": "^https?:\\/\\/www\\.pinterest\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "evernote",
+        "channel": "evernote",
         "category": "note_taking",
         "regex": "^https?:\\/\\/www\\.evernote\\.com\\/pub\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "onedrive",
+        "channel": "onedrive",
         "category": "cloud_storage",
         "regex": "^https?:\\/\\/1drv\\.ms\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "google_drive",
+        "channel": "google_drive",
         "category": "cloud_storage",
         "regex": "^https?:\\/\\/drive\\.google\\.com\\/drive\\/folders\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "dropbox",
+        "channel": "dropbox",
         "category": "cloud_storage",
         "regex": "^https?:\\/\\/www\\.dropbox\\.com\\/sh\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "icloud",
+        "channel": "icloud",
         "category": "cloud_storage",
         "regex": "^https?:\\/\\/www\\.icloud\\.com\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "box",
+        "channel": "box",
         "category": "cloud_storage",
         "regex": "^https?:\\/\\/app\\.box\\.com\\/s\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "dribbble",
+        "channel": "dribbble",
         "category": "design_portfolio",
         "regex": "^https?:\\/\\/dribbble\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "behance",
+        "channel": "behance",
         "category": "design_portfolio",
         "regex": "^https?:\\/\\/www\\.behance\\.net\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "skype",
+        "channel": "skype",
         "category": "instant_messaging",
         "regex": "^skype:([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "telegram",
+        "channel": "telegram",
         "category": "instant_messaging",
         "regex": "^https?:\\/\\/t\\.me\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "signal",
+        "channel": "signal",
         "category": "instant_messaging",
         "regex": "^sgnl:\\/\\/addme\\?phone=([0-9]+)$"
       },
       {
-        "service": "viber",
+        "channel": "viber",
         "category": "instant_messaging",
         "regex": "^viber:\\/\\/add\\?number=([0-9]+)$"
       },
       {
-        "service": "line",
+        "channel": "line",
         "category": "instant_messaging",
         "regex": "^http(?:s)?:\\/\\/line\\.me\\/ti\\/p\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "weibo",
+        "channel": "weibo",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.weibo\\.com\\/u\\/([0-9]+)$"
       },
       {
-        "service": "tiktok",
+        "channel": "tiktok",
         "category": "short_video",
         "regex": "^https?:\\/\\/www\\.tiktok\\.com\\/@([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "bitly",
+        "channel": "bitly",
         "category": "url_shortening",
         "regex": "^https?:\\/\\/bit\\.ly\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "tinyurl",
+        "channel": "tinyurl",
         "category": "url_shortening",
         "regex": "^https?:\\/\\/tinyurl\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "medium",
+        "channel": "medium",
         "category": "blogging",
         "regex": "^https?:\\/\\/medium\\.com\\/@([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "substack",
+        "channel": "substack",
         "category": "newsletter",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.substack\\.com\\/?$"
       },
       {
-        "service": "revue",
+        "channel": "revue",
         "category": "newsletter",
         "regex": "^https?:\\/\\/www\\.getrevue\\.co\\/profile\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "ghost",
+        "channel": "ghost",
         "category": "blogging",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.ghost\\.io\\/?$"
       },
       {
-        "service": "wix",
+        "channel": "wix",
         "category": "website_builder",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.wixsite\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "weebly",
+        "channel": "weebly",
         "category": "website_builder",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.weebly\\.com\\/?$"
       },
       {
-        "service": "squarespace",
+        "channel": "squarespace",
         "category": "website_builder",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.squarespace\\.com\\/?$"
       },
       {
-        "service": "snapchat",
+        "channel": "snapchat",
         "category": "social_media",
         "regex": "^https?:\\/\\/www\\.snapchat\\.com\\/add\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "kik",
+        "channel": "kik",
         "category": "instant_messaging",
         "regex": "^kik:\\/\\/users\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "slack",
+        "channel": "slack",
         "category": "team_collaboration",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.slack\\.com\\/?$"
       },
       {
-        "service": "discord",
+        "channel": "discord",
         "category": "gaming_community",
         "regex": "^https?:\\/\\/discord\\.gg\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "trello",
+        "channel": "trello",
         "category": "project_management",
         "regex": "^https?:\\/\\/trello\\.com\\/b\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "asana",
+        "channel": "asana",
         "category": "project_management",
         "regex": "^https?:\\/\\/app\\.asana\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "basecamp",
+        "channel": "basecamp",
         "category": "project_management",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.basecamphq\\.com\\/?$"
       },
       {
-        "service": "airtable",
+        "channel": "airtable",
         "category": "spreadsheet_database",
         "regex": "^https?:\\/\\/airtable\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "notion",
+        "channel": "notion",
         "category": "note_taking",
         "regex": "^https?:\\/\\/www\\.notion\\.so\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "coda",
+        "channel": "coda",
         "category": "document_editor",
         "regex": "^https?:\\/\\/coda\\.io\\/d\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "quip",
+        "channel": "quip",
         "category": "document_editor",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.quip\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "nextdoor",
+        "channel": "nextdoor",
         "category": "local_community",
         "regex": "^https?:\\/\\/nextdoor\\.com\\/pages\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "xing",
+        "channel": "xing",
         "category": "professional_networking",
         "regex": "^https?:\\/\\/www\\.xing\\.com\\/profile\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "viadeo",
+        "channel": "viadeo",
         "category": "professional_networking",
         "regex": "^https?:\\/\\/www\\.viadeo\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "ello",
+        "channel": "ello",
         "category": "social_media",
         "regex": "^https?:\\/\\/ello\\.co\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "imgur",
+        "channel": "imgur",
         "category": "image_sharing",
         "regex": "^https?:\\/\\/imgur\\.com\\/user\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "reddit",
+        "channel": "reddit",
         "category": "social_news",
         "regex": "^https?:\\/\\/www\\.reddit\\.com\\/user\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "giphy",
+        "channel": "giphy",
         "category": "gif_sharing",
         "regex": "^https?:\\/\\/giphy\\.com\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "tenor",
+        "channel": "tenor",
         "category": "gif_sharing",
         "regex": "^https?:\\/\\/tenor\\.com\\/users\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "hubspot",
+        "channel": "hubspot",
         "category": "marketing_automation",
         "regex": "^https?:\\/\\/app\\.hubspot\\.com\\/contacts\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "mailchimp",
+        "channel": "mailchimp",
         "category": "email_marketing",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.mailchimpapp\\.net\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "zendesk",
+        "channel": "zendesk",
         "category": "customer_support",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.zendesk\\.com\\/agent\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "freshdesk",
+        "channel": "freshdesk",
         "category": "customer_support",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.freshdesk\\.com\\/a\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "salesforce",
+        "channel": "salesforce",
         "category": "customer_relationship_management",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.salesforce\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "zoho",
+        "channel": "zoho",
         "category": "business_software_suite",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.zoho\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "docusign",
+        "channel": "docusign",
         "category": "document_signing",
         "regex": "^https?:\\/\\/www\\.docusign\\.net\\/member\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "evernote",
+        "channel": "evernote",
         "category": "note_taking",
         "regex": "^https?:\\/\\/www\\.evernote\\.com\\/pub\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "onedrive",
+        "channel": "onedrive",
         "category": "cloud_storage",
         "regex": "^https?:\\/\\/onedrive\\.live\\.com\\/?([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "yammer",
+        "channel": "yammer",
         "category": "enterprise_social_network",
         "regex": "^https?:\\/\\/www\\.yammer\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "microsoft_teams",
+        "channel": "microsoft_teams",
         "category": "team_collaboration",
         "regex": "^https?:\\/\\/teams\\.microsoft\\.com\\/l\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "google_meet",
+        "channel": "google_meet",
         "category": "video_conferencing",
         "regex": "^https?:\\/\\/meet\\.google\\.com\\/?([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "google_drive",
+        "channel": "google_drive",
         "category": "cloud_storage",
         "regex": "^https?:\\/\\/drive\\.google\\.com\\/([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "google_docs",
+        "channel": "google_docs",
         "category": "document_editor",
         "regex": "^https?:\\/\\/docs\\.google\\.com\\/([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "google_sheets",
+        "channel": "google_sheets",
         "category": "spreadsheet",
         "regex": "^https?:\\/\\/sheets\\.google\\.com\\/([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "google_slides",
+        "channel": "google_slides",
         "category": "presentation",
         "regex": "^https?:\\/\\/slides\\.google\\.com\\/([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "google_forms",
+        "channel": "google_forms",
         "category": "survey",
         "regex": "^https?:\\/\\/forms\\.google\\.com\\/([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "google_calendar",
+        "channel": "google_calendar",
         "category": "calendar",
         "regex": "^https?:\\/\\/calendar\\.google\\.com\\/([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "google_maps",
+        "channel": "google_maps",
         "category": "mapping",
         "regex": "^https?:\\/\\/maps\\.google\\.com\\/?([a-zA-Z0-9-_\\/?=&]+)$"
       },
       {
-        "service": "pinterest",
+        "channel": "pinterest",
         "category": "image_sharing",
         "regex": "^https?:\\/\\/www\\.pinterest\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "bandcamp",
+        "channel": "bandcamp",
         "category": "music_sharing",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.bandcamp\\.com\\/?$"
       },
       {
-        "service": "soundcloud",
+        "channel": "soundcloud",
         "category": "music_sharing",
         "regex": "^https?:\\/\\/soundcloud\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "spotify",
+        "channel": "spotify",
         "category": "music_streaming",
         "regex": "^https?:\\/\\/open\\.spotify\\.com\\/user\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "lastfm",
+        "channel": "lastfm",
         "category": "music_recommendation",
         "regex": "^https?:\\/\\/www\\.last\\.fm\\/user\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "reverbnation",
+        "channel": "reverbnation",
         "category": "music_promotion",
         "regex": "^https?:\\/\\/www\\.reverbnation\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "mixcloud",
+        "channel": "mixcloud",
         "category": "music_sharing",
         "regex": "^https?:\\/\\/www\\.mixcloud\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "deezer",
+        "channel": "deezer",
         "category": "music_streaming",
         "regex": "^https?:\\/\\/www\\.deezer\\.com\\/([a-zA-Z0-9-_\\/]+)\\/?$"
       },
       {
-        "service": "tidal",
+        "channel": "tidal",
         "category": "music_streaming",
         "regex": "^https?:\\/\\/listen\\.tidal\\.com\\/artist\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "vimeo",
+        "channel": "vimeo",
         "category": "video_sharing",
         "regex": "^https?:\\/\\/vimeo\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "dailymotion",
+        "channel": "dailymotion",
         "category": "video_sharing",
         "regex": "^https?:\\/\\/www\\.dailymotion\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "tiktok",
+        "channel": "tiktok",
         "category": "short_video",
         "regex": "^https?:\\/\\/www\\.tiktok\\.com\\/@([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "dribbble",
+        "channel": "dribbble",
         "category": "design",
         "regex": "^https?:\\/\\/dribbble\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "behance",
+        "channel": "behance",
         "category": "design",
         "regex": "^https?:\\/\\/www\\.behance\\.net\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "medium",
+        "channel": "medium",
         "category": "blogging",
         "regex": "^https?:\\/\\/medium\\.com\\/@([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "deviantart",
+        "channel": "deviantart",
         "category": "art_community",
         "regex": "^https?:\\/\\/www\\.deviantart\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "artstation",
+        "channel": "artstation",
         "category": "art_community",
         "regex": "^https?:\\/\\/www\\.artstation\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "itch_io",
+        "channel": "itch_io",
         "category": "game_platform",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.itch\\.io\\/?$"
       },
       {
-        "service": "gamejolt",
+        "channel": "gamejolt",
         "category": "game_platform",
         "regex": "^https?:\\/\\/gamejolt\\.com\\/@([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "steam",
+        "channel": "steam",
         "category": "game_platform",
         "regex": "^https?:\\/\\/steamcommunity\\.com\\/id\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "epic_games",
+        "channel": "epic_games",
         "category": "game_platform",
         "regex": "^https?:\\/\\/www\\.epicgames\\.com\\/site\\/en-US\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "gumroad",
+        "channel": "gumroad",
         "category": "digital_product_sales",
         "regex": "^https?:\\/\\/gumroad\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "etsy",
+        "channel": "etsy",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/www\\.etsy\\.com\\/shop\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "society6",
+        "channel": "society6",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/society6\\.com\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "redbubble",
+        "channel": "redbubble",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/www\\.redbubble\\.com\\/people\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "teespring",
+        "channel": "teespring",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/teespring\\.com\\/stores\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "shopify",
+        "channel": "shopify",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.myshopify\\.com\\/?$"
       },
       {
-        "service": "bigcartel",
+        "channel": "bigcartel",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.bigcartel\\.com\\/?$"
       },
       {
-        "service": "storenvy",
+        "channel": "storenvy",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/www\\.storenvy\\.com\\/stores\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "ebay",
+        "channel": "ebay",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/www\\.ebay\\.com\\/usr\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "amazon",
+        "channel": "amazon",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/www\\.amazon\\.com\\/shops\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "walmart",
+        "channel": "walmart",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/www\\.walmart\\.com\\/cp\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "aliexpress",
+        "channel": "aliexpress",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/www\\.aliexpress\\.com\\/store\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "taobao",
+        "channel": "taobao",
         "category": "e-commerce",
         "regex": "^https?:\\/\\/shop(\\d+)\\.taobao\\.com\\/?$"
       },
       {
-        "service": "twitch",
+        "channel": "twitch",
         "category": "live_streaming",
         "regex": "^https?:\\/\\/www\\.twitch\\.tv\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "youtube",
+        "channel": "youtube",
         "category": "video_sharing",
         "regex": "^https?:\\/\\/www\\.youtube\\.com\\/user\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "flickr",
+        "channel": "flickr",
         "category": "photo_sharing",
         "regex": "^https?:\\/\\/www\\.flickr\\.com\\/people\\/([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "unsplash",
+        "channel": "unsplash",
         "category": "photo_sharing",
         "regex": "^https?:\\/\\/unsplash\\.com\\/@([a-zA-Z0-9-_]+)\\/?$"
       },
       {
-        "service": "zoom",
+        "channel": "zoom",
         "category": "video_conferencing",
         "regex": "^https?:\\/\\/zoom\\.us\\/(?:j|my)\\/([a-zA-Z0-9-_]+)$"
       },
       {
-        "service": "cisco_webex",
+        "channel": "cisco_webex",
         "category": "video_conferencing",
         "regex": "^https?:\\/\\/([a-zA-Z0-9-_]+)\\.webex\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       },
       {
-        "service": "skype",
+        "channel": "skype",
         "category": "communication",
         "regex": "^https?:\\/\\/join\\.skype\\.com\\/([a-zA-Z0-9-_\\/]+)$"
       }],
@@ -1101,7 +1089,7 @@ export default {
       "communication": "mdi-phone",
       "team_collaboration": "mdi-account-multiple",
       "file_sharing": "mdi-folder",
-      "project_management": "mdi-file-document-box-check",
+      "project_management": "mdi-text-box-check",
       "task_management": "mdi-check-box-multiple-outline",
       "document_collaboration": "mdi-file-document-edit",
       "knowledge_base": "mdi-book-open",

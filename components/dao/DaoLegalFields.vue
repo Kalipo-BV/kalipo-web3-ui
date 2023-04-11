@@ -19,7 +19,7 @@
   <div>
     <v-form v-model="valid" @submit.prevent>
       <CountrySelect :country.sync="jurisdictionValue" label="Select your Jurisdiction" class="mt-4"
-        :rules="[rules.required, rules.validJurisdiction]" style=" max-width: 450px">
+        :rules="[rules.required]" style=" max-width: 450px">
       </CountrySelect>
 
       <v-text-field solo label="Chamber of Commerce ID" class="mt-2" counter style="max-width: 450px" maxlength="128"
@@ -73,7 +73,6 @@ export default {
     autonErrorMessage: "",
     rules: {
       required: (value) => !!value || "Required.",
-      validJurisdiction: (value) => typeof value === 'object' || "Is not an valid jurisdiction.",
       min: (v) => v?.length >= 2 || "Min 2 characters",
       maxcocId: (v) => v?.length <= 128 || "Max 128 characters",
       maxBusinessAddress: (v) => v?.length <= 256 || "Max 256 characters",

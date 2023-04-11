@@ -72,6 +72,12 @@ export default {
           id: membership.autonId,
         });
         const auton = autonWrapper.result;
+        const daoId = auton.daoId;
+        const daoWrapper = await this.$invoke("dao:getByID", {
+          id: daoId,
+        });
+        const dao = daoWrapper.result;
+        auton.dao = dao;
 
         const now = new Date();
         const nowInSec = BigInt(Math.floor(now / 1000));
@@ -99,11 +105,14 @@ export default {
   },
   methods: {
     navigate(index) {
-      this.$router.push(
+      this.$router.push("/dao/" +
+        this.autons[index].dao.daoProfile.name
+          .replaceAll(" ", "_")
+          .toLowerCase() +
         "/auton/" +
-          this.autons[index].autonProfile.name
-            .replaceAll(" ", "_")
-            .toLowerCase()
+        this.autons[index].autonProfile.name
+          .replaceAll(" ", "_")
+          .toLowerCase()
       );
     },
   },

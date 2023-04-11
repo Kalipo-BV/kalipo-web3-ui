@@ -25,51 +25,26 @@
               <div class="mt-4">
                 <v-row>
                   <v-col cols="12" md="4">
-                    <v-text-field
-                      append-icon="mdi-magnify"
-                      label="Search a proposal"
-                      solo
-                      hide-details
-                      v-model="search"
-                      style="max-width: 250px"
-                    ></v-text-field>
+                    <v-text-field append-icon="mdi-magnify" label="Search a proposal" solo hide-details v-model="search"
+                      style="max-width: 250px"></v-text-field>
                   </v-col>
                 </v-row>
 
                 <v-row> </v-row>
               </div>
 
-              <v-data-table
-                :headers="headers"
-                :items="proposals"
-                :items-per-page="5"
-                :search="search"
-                :sort-by="['submission']"
-                :sort-desc="[true]"
-                class="elevation-0 mt-4"
-              >
+              <v-data-table :headers="headers" :items="proposals" :items-per-page="5" :search="search"
+                :sort-by="['submission']" :sort-desc="[true]" class="elevation-0 mt-4">
                 <template v-slot:item.link="{ item }">
-                  <v-btn color="accent" @click="$router.push(item.link)" small
-                    >Open</v-btn
-                  >
+                  <v-btn color="accent" @click="$router.push(item.link)" small>Open</v-btn>
                 </template>
                 <template v-slot:item.status="{ item }">
-                  <v-chip
-                    :color="getStatusColor(item.status)"
-                    dark
-                    outlined
-                    small
-                  >
+                  <v-chip :color="getStatusColor(item.status)" dark outlined small>
                     {{ item.status }}
                   </v-chip>
                 </template>
                 <template v-slot:item.result="{ item }">
-                  <v-chip
-                    :color="getResultColor(item.result)"
-                    dark
-                    outlined
-                    small
-                  >
+                  <v-chip :color="getResultColor(item.result)" dark outlined small>
                     {{ item.result }}
                   </v-chip>
                 </template>
@@ -164,6 +139,10 @@ export default {
             id: proposalWrapper.result.autonId,
           });
 
+          const daoWrapper = await this.$invoke("dao:getByID", {
+            id: autonWrapper.result.daoId,
+          });
+
           let linkStatus = "";
           if (proposalWrapper.result.status == "CAMPAIGNING") {
             linkStatus = "campaigning";
@@ -180,12 +159,14 @@ export default {
           }
 
           this.proposals.push({
-            link: `/auton/${autonWrapper.result.autonProfile.name.replaceAll(
+            link: `/dao/${daoWrapper.result.daoProfile.name.replaceAll(
               " ",
               "_"
-            )}/proposal/${
-              autonWrapper.result.proposals.indexOf(proposalId) + 1
-            }/${linkStatus}`,
+            )}/auton/${autonWrapper.result.autonProfile.name.replaceAll(
+              " ",
+              "_"
+            )}/proposal/${autonWrapper.result.proposals.indexOf(proposalId) + 1
+              }/${linkStatus}`,
             status: proposalWrapper.result.status,
             type: proposalWrapper.result.type,
             title: proposalWrapper.result.title,
@@ -214,15 +195,7 @@ export default {
         return "error";
       }
       return "accent";
-    },
-    navigate(index) {
-      this.$router.push(
-        "/auton/" +
-          this.autons[index].autonProfile.name
-            .replaceAll(" ", "_")
-            .toLowerCase()
-      );
-    },
+    }
   },
 };
 </script>

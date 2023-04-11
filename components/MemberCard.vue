@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-card flat link min-height="360px">
+    <v-card flat link>
       <v-card-text @click="$router.push('/account/' + member.account.username)">
         <div class="d-flex justify-center">
           <v-avatar size="90" color="primary" class="white--text text-h2">{{
@@ -35,10 +35,7 @@
       <v-divider v-if="member.started"></v-divider>
 
       <v-card-text v-if="member.started">
-        <div
-          class="d-flex justify-center text-caption text--primary"
-          v-if="userLang"
-        >
+        <div class="d-flex justify-center text-caption text--primary" v-if="userLang">
           Joined:
           {{
             new Date(parseInt(member.started) * 1000).toLocaleDateString(
@@ -61,7 +58,8 @@
           Checked in
         </v-chip>
 
-        <v-chip v-else-if="member.checkedStatus === 'CHECKEDOUT'  && studentCard" class="ma-2" align="center" color="green" text-color="white">
+        <v-chip v-else-if="member.checkedStatus === 'CHECKEDOUT' && studentCard" class="ma-2" align="center" color="green"
+          text-color="white">
           <v-icon left>mdi-account-check</v-icon>
           Checked out
         </v-chip>
@@ -77,35 +75,23 @@
       <v-card-text>
         <div class="d-flex justify-center">
           <div v-for="(social, z) in member.account.socials" :key="z">
-            <v-btn color="accent" fab x-small class="mr-1"
-              ><Icon
-                :icon="getIcon(social.social)"
-                width="18"
-                height="18"
-              ></Icon
-            ></v-btn>
+            <v-btn color="accent" fab x-small class="mr-1">
+              <Icon :icon="getIcon(social.social)" width="18" height="18"></Icon>
+            </v-btn>
           </div>
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
           </div>
         </div>
         <div class="mt-2">
-          <v-btn
-            v-if="attendeeCard"
-            :disabled="authorizedIssuePoa"
-            @click="dialog = !dialog"
-            :style="{ left: '50%', transform: 'translateX(-50%)' }"
-            >Issue poa</v-btn
-          >
+          <v-btn v-if="attendeeCard" :disabled="authorizedIssuePoa" @click="dialog = !dialog"
+            :style="{ left: '50%', transform: 'translateX(-50%)' }">Issue poa</v-btn>
         </div>
       </v-card-text>
     </v-card>
 
     <v-dialog v-model="dialog" max-width="500">
-      <PoaIssueDialog
-        :member="member"
-        :autonId="member.autonId"
-      ></PoaIssueDialog>
+      <PoaIssueDialog :member="member" :autonId="member.autonId"></PoaIssueDialog>
     </v-dialog>
   </div>
 </template>
@@ -202,7 +188,7 @@ export default {
     console.log(this.member.checkedStatus);
 
     const autonWrapper = await this.$invoke("auton:getByID", {
-        id: this.autonId,
+      id: this.autonId,
     });
 
     this.auton = autonWrapper.result;
