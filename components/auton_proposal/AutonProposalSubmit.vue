@@ -194,7 +194,7 @@ export default {
         this.disabledNext = false;
         this.selectedProposalType = null;
         this.selectedAccountId = null;
-        this.selectedStakeholders = null,
+        this.selectedStakeholderIds = [null, null, null];
         this.invitationMessage = "";
         this.proposalTitle = "";
         this.proposalDescription = "";
