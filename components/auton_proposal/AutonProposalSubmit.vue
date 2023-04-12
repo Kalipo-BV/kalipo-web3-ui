@@ -75,7 +75,15 @@
           :autonId="autonId">
       </AutonProposalStakeholderInvitation>
 
-
+        <AutonProposalStakeholderInvitation
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalStakeholderInvitation>
+        
+        <AutonProposalStakeholderInvitation
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalStakeholderInvitation>
 
 
       <!-- <AutonProposalStakeholderInvitation>

@@ -35,7 +35,7 @@
             :input-value="data.selectedValue"
             close
             @click="data.select"
-            @click:close="remove()"
+            @click:close="remove(data)"
           >
             <v-avatar
               color="accent"
@@ -131,8 +131,10 @@ export default {
     this.$emit("update:disabledNext", false);
   },
   methods: {
-    remove() {
-      this.selectedValue = "";
+    remove(data) {
+      //console.log(this)
+      const index = this.selectedValue.indexOf(data.item.username);
+      if (index >= 0) this.selectedValue.splice(index, 1);  
     },
     getInitials(parseStr, max) {
       if (parseStr != undefined) {
