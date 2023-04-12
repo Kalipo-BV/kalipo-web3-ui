@@ -16,6 +16,28 @@
  */
 
 import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
+import { saveToLocalstorage as _saveToLocalstorage, getFromLocalstorage as _getFromLocalstorage } from "./localstorage.js"
+
+const loadState = () => {
+	const contract = _getFromLocalstorage();
+	if (contract === null) {
+		return initState();
+	}
+
+	return contract;
+	
+}
+
+const initState = () => {
+	return {
+		editFase: 3,
+		status: "",
+		type: "Grant Contract",
+		fullySigned: false,
+		date: new Date().toISOString(),
+		formData: initFormData()
+	}
+}
 
 const initFormData = () => {
 	return {
@@ -45,14 +67,9 @@ const initFormData = () => {
 	}
 }
 
-export const state = () => ({
-	editFase: 3,
-	status: "",
-	type: "Grant Contract",
-	fullySigned: false,
-	date: new Date().toISOString(),
-	formData: initFormData()
-})
+export const state = () => (
+	loadState()
+)
 
 export const mutations = {
 	// addPartyArray(state, payload) {
