@@ -136,6 +136,20 @@
         ></Budget>
       </v-card-text>
 
+      <v-card-text v-if="step === 'execution-roles'">
+        <StepperHeader
+          title="Execution roles (Optional)"
+          subtitle="Write down the execution roles for the proposal"
+        ></StepperHeader>
+
+        <ExecutionRoles
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></ExecutionRoles>
+      </v-card-text>
+
   <!--  Buttons previous, next or sign    -->
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
@@ -176,7 +190,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['select-proposal-type', 'proposal-profile', 'membership-invitation', 'sign'],
-    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification', 'references', 'budget'],
+    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification', 'references', 'budget', 'execution-roles'],
   }),
   created() {
     this.$nuxt.$on(
