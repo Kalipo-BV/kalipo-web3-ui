@@ -132,6 +132,10 @@ export default {
       assetId: 0,
       assets: {},
     },
+    currentPage: 0,
+    membershipScreenList: ['select-proposal-type', 'proposal-profile', 'membership-invitation', 'sign'],
+    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation'],
+
   }),
   created() {
     this.$nuxt.$on(
@@ -143,25 +147,19 @@ export default {
   },
   methods: {
     prevStep() {
-      switch(this.selectedProposalType) {
-        case 'membership-invitation':
-          if (this.step === "proposal-profile") {
-            this.step = "select-proposal-type";
-          } else if (this.step === "membership-invitation") {
-            this.step = "proposal-profile";
-          } else if (this.step === "sign") {
-            this.step = "membership-invitation";
-          }
-          break;
-        case 'improvement-proposal':
-          if (this.step === "proposal-profile") {
-            this.step = "select-proposal-type";
-          } else if (this.step === "proposers"){
-            this.step = "proposal-profile";
-          } else if (this.step === "motivation"){
-            this.step = "proposers";
-          }
-          break;
+      // Set the currentPage number
+      if(this.currentPage > 0){
+        this.currentPage -= 1;
+        switch(this.selectedProposalType) {
+          // Set the page to the one in the list from 'data'
+          // If there is a new type of proposal, add a list of screen names above and add a new case.
+          case 'membership-invitation':
+            this.step = this.membershipScreenList[this.currentPage];
+            break;
+          case 'improvement-proposal':
+            this.step = this.improvementScreenList[this.currentPage];
+            break;
+        }
       }
     },
     finish() {
@@ -175,7 +173,7 @@ export default {
         this.invitationMessage = "";
         this.proposalTitle = "";
         this.proposalDescription = "";
-        (this.uri = ""),
+        this.uri = "";
           (this.transaction = {
             moduleId: -1,
             assetId: 0,
@@ -184,32 +182,18 @@ export default {
       }
     },
     async nextStep() {
-      switch (this.selectedProposalType) {
+      // Set the currentPage
+      this.currentPage += 1;
+      // Set the page to the one in the list from 'data'
+      // If there is a new type of proposal, add a list of screen names above and add a new case.
+      switch(this.selectedProposalType) {
         case 'membership-invitation':
-          if (this.step === "select-proposal-type") {
-            this.step = "proposal-profile";
-          } else if (this.step === "proposal-profile") {
-            this.step = "membership-invitation";
-          } else if (this.step === "membership-invitation") {
-            this.step = "sign";
-          }
+          this.step = this.membershipScreenList[this.currentPage];
           break;
         case 'improvement-proposal':
-          if (this.step === "select-proposal-type") {
-            this.step = "proposal-profile";
-          } else if (this.step === "proposal-profile"){
-            this.step = "proposers";
-          } else if (this.step === "proposers"){
-            this.step = "motivation";
-          }
+          this.step = this.improvementScreenList[this.currentPage];
           break;
       }
-      // The transaction prop interface:
-      // {
-      //   moduleId: 0,
-      //   assetId: 0,
-      //   assets: {};
-      // }
       if (this.step === "sign") {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
