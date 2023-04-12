@@ -122,6 +122,20 @@
         ></References>
       </v-card-text>
 
+      <v-card-text v-if="step === 'budget'">
+        <StepperHeader
+          title="Budget (Optional)"
+          subtitle="Write down the budget for the proposal"
+        ></StepperHeader>
+
+        <Budget
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></Budget>
+      </v-card-text>
+
   <!--  Buttons previous, next or sign    -->
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
@@ -162,7 +176,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['select-proposal-type', 'proposal-profile', 'membership-invitation', 'sign'],
-    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification', 'references'],
+    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification', 'references', 'budget'],
   }),
   created() {
     this.$nuxt.$on(
