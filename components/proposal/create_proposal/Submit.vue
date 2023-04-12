@@ -124,7 +124,7 @@ export default {
     selectedProposalType: null,
     selectedAccountId: null,
     invitationMessage: "",
-    proposalTitle: "",
+    proposalTitle: "hahahah",
     proposalDescription: "",
     uri: "",
     proposers: [], abstract: "abstract", motivation: "mot", specification: "spec",  references: "ref", budget: "bud is vies", executionRoles: [], timeBasedConstraint: "tijd is geld nou gappie gooi wat tijd op me.",
