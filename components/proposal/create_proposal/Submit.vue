@@ -153,7 +153,7 @@
       <v-card-text v-if="step === 'time-constraints'">
         <StepperHeader
           title="Time constraints (Optional)"
-          subtitle="Write down the time constraints roles for the proposal"
+          subtitle="Write down the time constraints for the proposal"
         ></StepperHeader>
 
         <TimeConstraints
@@ -162,6 +162,20 @@
           class="mt-4"
           :autonId="autonId"
         ></TimeConstraints>
+      </v-card-text>
+
+      <v-card-text v-if="step === 'additional-headers'">
+        <StepperHeader
+          title="Additional headers (Optional)"
+          subtitle="If necessary, write down extra customizable headers for the proposal"
+        ></StepperHeader>
+
+        <AdditionalHeaders
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></AdditionalHeaders>
       </v-card-text>
 
   <!--  Buttons previous, next or sign    -->
@@ -183,8 +197,6 @@
   </div>
 </template>
 <script>
-import improvementproposal from "~/pages/auton/_autonId/improvementproposal/index.vue";
-
 export default {
   name: "AutonProposalSubmit",
   props: ["autonId", "autonName", "callbackFinish"],
@@ -204,7 +216,8 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['select-proposal-type', 'proposal-profile', 'membership-invitation', 'sign'],
-    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification', 'references', 'budget', 'execution-roles'],
+    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification',
+      'references', 'budget', 'execution-roles', 'time-constraints', 'additional-headers', 'sign'],
   }),
   created() {
     this.$nuxt.$on(
