@@ -150,6 +150,20 @@
         ></ExecutionRoles>
       </v-card-text>
 
+      <v-card-text v-if="step === 'time-constraints'">
+        <StepperHeader
+          title="Time constraints (Optional)"
+          subtitle="Write down the time constraints roles for the proposal"
+        ></StepperHeader>
+
+        <TimeConstraints
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></TimeConstraints>
+      </v-card-text>
+
   <!--  Buttons previous, next or sign    -->
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
