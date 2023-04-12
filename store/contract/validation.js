@@ -1,3 +1,7 @@
+export const isValidContract = (contract) => {
+	return true;
+}
+
 export const isArray = (payload, errorName) => {
 	const result = (Array.isArray(payload));
 	logError(result, errorName, payload);
