@@ -94,6 +94,20 @@
         ></Motivation>
       </v-card-text>
 
+      <v-card-text v-if="step === 'specification'">
+        <StepperHeader
+          title="Specification"
+          subtitle="Please write a specification for your improvement proposal"
+        ></StepperHeader>
+
+        <Specification
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></Specification>
+      </v-card-text>
+
   <!--  Buttons previous, next or sign    -->
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
@@ -134,7 +148,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['select-proposal-type', 'proposal-profile', 'membership-invitation', 'sign'],
-    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation'],
+    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification'],
 
   }),
   created() {
@@ -188,6 +202,7 @@ export default {
       // If there is a new type of proposal, add a list of screen names above and add a new case.
       switch(this.selectedProposalType) {
         case 'membership-invitation':
+          if(this.currentPage )
           this.step = this.membershipScreenList[this.currentPage];
           break;
         case 'improvement-proposal':
