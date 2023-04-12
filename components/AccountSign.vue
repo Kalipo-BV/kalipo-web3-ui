@@ -133,7 +133,11 @@ export default {
         pin,
         displayNotificationOnError
       );
-
+      console.log("ModuleId: " + moduleId + "AssetID: " +
+        assetId + "Asset: " +
+        asset + "Pin: "+
+        pin + "displaynot: " +
+        displayNotificationOnError)
       console.log("Transaction response: ");
       console.log(transactionWrapper);
 
@@ -180,6 +184,8 @@ export default {
             { id: transactionIdAttendancePoa }
           );
         }
+
+        console.log("Transaction :" + transaction)
 
         if (transaction != null && !transaction.error) {
           if (this.callbackFinish != null) {

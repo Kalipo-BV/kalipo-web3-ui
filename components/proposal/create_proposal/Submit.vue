@@ -121,8 +121,8 @@ export default {
   data: () => ({
     step: "select-proposal-type",
     disabledNext: false,
-    selectedProposalType: null,
-    selectedAccountId: null,
+    selectedProposalType: "",
+    selectedAccountId: "",
     invitationMessage: "",
     proposalTitle: "hahahah",
     proposalDescription: "",
@@ -171,8 +171,8 @@ export default {
 
         this.step = "select-proposal-type";
         this.disabledNext = false;
-        this.selectedProposalType = null;
-        this.selectedAccountId = null;
+        this.selectedProposalType = "";
+        this.selectedAccountId = "";
         this.invitationMessage = "";
         this.proposalTitle = "";
         this.proposalDescription = "";
@@ -265,9 +265,9 @@ export default {
         this.transaction.moduleId = 1004;
         this.transaction.assetId = 1;
         this.transaction.assets = asset;
-        console.log(
-          this.proposalTitle + "\n" + this.proposalDescription + "\n" + this.selectedProposalType + "\n" + this.autonId + "\n" + this.abstract + "\n" + this.timeBasedConstraint
-        )
+        // console.log(
+        //   this.proposalTitle + "\n" + this.proposalDescription + "\n" + this.selectedProposalType + "\n" + this.autonId + "\n" + this.abstract + "\n" + this.timeBasedConstraint
+        // )
       }
     },
   },

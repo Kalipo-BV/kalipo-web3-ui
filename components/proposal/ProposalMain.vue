@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -194,18 +194,23 @@ export default {
         leftText: "Proposal type:",
         rightText: this.proposal.type.replaceAll("-", " "),
       });
+      console.log(this.proposal.type)
+      if (this.proposal.type == "membership-invitation") {
+        const invitedId = this.proposal.membershipInvitationArguments.accountId;
+        const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
+          id: invitedId,
+        });
+        const invited = invitedWrapper.result;
+        this.list.push({
+          icon: "mdi-account-plus",
+          leftText: "Membership candidate:",
+          rightText: "@" + invited.username,
+          link: "/account/" + invited.username,
+        });
+      } else if (this.proposal.type == "improvement") {
 
-      const invitedId = this.proposal.membershipInvitationArguments.accountId;
-      const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
-        id: invitedId,
-      });
-      const invited = invitedWrapper.result;
-      this.list.push({
-        icon: "mdi-account-plus",
-        leftText: "Membership candidate:",
-        rightText: "@" + invited.username,
-        link: "/account/" + invited.username,
-      });
+      }
+
     }
   },
   methods: {
