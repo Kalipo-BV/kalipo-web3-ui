@@ -72,12 +72,6 @@ export const state = () => (
 )
 
 export const mutations = {
-	// addPartyArray(state, payload) {
-	// 	if (isValidPartyData(payload) && isString(payload.data, `parties[${payload.target}]_data`) ) {
-	// 		state.formData.parties[payload.target].push(payload.data);
-	// 	}
-	// },
-
 	removeFromParties(state, payload) {
 		if (isValidPartyData(payload) ) {
 			const currentParty = state.formData.parties[payload.target];
@@ -208,33 +202,11 @@ export const mutations = {
 	reset(state) {
 		state.formData = initFormData();
 	},
-	}
 }
 
 export const getters = {
 	getContract: (state) => {
 		return retreiveData(state);
-	}
-}
-
-export const actions = {
-	loadPreviousState({commit}, previousState) {
-		commit("reset");
-
-		//load data here
-		console.log("test load", previousState);
-	},
-
-	saveState({getters, state}) {
-		//save date to localstore
-		const oldState = getters["getContract"];
-		console.log("test save", oldState);
-
-		localStorage.setItem("Grant-Contract", state.contract);
-		if (localStorage.getItem("Grant-Contract") != null) {
-			this.saving = true;
-			this.saved++;
-		}
 	}
 }
 
