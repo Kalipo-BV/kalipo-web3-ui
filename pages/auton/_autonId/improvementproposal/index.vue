@@ -79,17 +79,19 @@ export default {
         linkStatus = "results";
       }
 
-      this.proposals.push({
-        link: `/auton/${this.$route.params.autonId}/proposal/${
-          index + 1
-        }/${linkStatus}`,
-        status: proposalWrapper.result.status,
-        type: proposalWrapper.result.type,
-        title: proposalWrapper.result.title,
-        submission: proposalWrapper.result.created,
-        author: submitterAccountWrapper.result.username,
-        result: proposalWrapper.result.binaryVoteResult.result,
-      });
+      if (proposalWrapper.result.type === "improvement") {
+        this.proposals.push({
+          link: `/auton/${this.$route.params.autonId}/proposal/${
+            index + 1
+          }/${linkStatus}`,
+          status: proposalWrapper.result.status,
+          type: proposalWrapper.result.type,
+          title: proposalWrapper.result.title,
+          submission: proposalWrapper.result.created,
+          author: submitterAccountWrapper.result.username,
+          result: proposalWrapper.result.binaryVoteResult.result,
+        });
+      }
 
     }
   },
