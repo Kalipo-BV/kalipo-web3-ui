@@ -17,6 +17,7 @@
 
 import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
 import { saveToLocalstorage as _saveToLocalstorage, getFromLocalstorage as _getFromLocalstorage } from "./localstorage.js"
+import { initFormData, initState } from "./initData.js";
 
 const loadState = () => {
 	const contract = _getFromLocalstorage();
@@ -26,45 +27,6 @@ const loadState = () => {
 
 	return contract;
 	
-}
-
-const initState = () => {
-	return {
-		editFase: 3,
-		status: "",
-		type: "Grant Contract",
-		fullySigned: false,
-		date: new Date().toISOString(),
-		formData: initFormData()
-	}
-}
-
-const initFormData = () => {
-	return {
-		parties: {
-			contractor: [],
-			client: []
-		},
-		preample: null,
-		purpose: null,
-		payment: {
-			amount: null,
-			note: null,
-		},
-		dates: {
-			startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-			endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
-		},
-		propertyRights: null,
-		terminationOfAgreement: null,
-		governingLawAndJurisdiction: null,
-		finalProvisions: null,
-		milestones: [],
-		custom: [],
-		signingWindow: 0,
-		requiredToSign: false,
-		signed: false,
-	}
 }
 
 export const state = () => (
