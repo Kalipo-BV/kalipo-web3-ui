@@ -108,6 +108,20 @@
         ></Specification>
       </v-card-text>
 
+      <v-card-text v-if="step === 'references'">
+        <StepperHeader
+          title="References (Optional)"
+          subtitle="Write down the references that could be useful for your improvement proposal"
+        ></StepperHeader>
+
+        <References
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></References>
+      </v-card-text>
+
   <!--  Buttons previous, next or sign    -->
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
@@ -148,8 +162,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['select-proposal-type', 'proposal-profile', 'membership-invitation', 'sign'],
-    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification'],
-
+    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification', 'references'],
   }),
   created() {
     this.$nuxt.$on(
