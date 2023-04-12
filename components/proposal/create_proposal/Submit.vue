@@ -94,6 +94,90 @@
         ></Motivation>
       </v-card-text>
 
+      <v-card-text v-if="step === 'specification'">
+        <StepperHeader
+          title="Specification"
+          subtitle="Please write a specification for your improvement proposal"
+        ></StepperHeader>
+
+        <Specification
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></Specification>
+      </v-card-text>
+
+      <v-card-text v-if="step === 'references'">
+        <StepperHeader
+          title="References (Optional)"
+          subtitle="Write down the references that could be useful for your improvement proposal"
+        ></StepperHeader>
+
+        <References
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></References>
+      </v-card-text>
+
+      <v-card-text v-if="step === 'budget'">
+        <StepperHeader
+          title="Budget (Optional)"
+          subtitle="Write down the budget for the proposal"
+        ></StepperHeader>
+
+        <Budget
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></Budget>
+      </v-card-text>
+
+      <v-card-text v-if="step === 'execution-roles'">
+        <StepperHeader
+          title="Execution roles (Optional)"
+          subtitle="Write down the execution roles for the proposal"
+        ></StepperHeader>
+
+        <ExecutionRoles
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></ExecutionRoles>
+      </v-card-text>
+
+      <v-card-text v-if="step === 'time-constraints'">
+        <StepperHeader
+          title="Time constraints (Optional)"
+          subtitle="Write down the time constraints for the proposal"
+        ></StepperHeader>
+
+        <TimeConstraints
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></TimeConstraints>
+      </v-card-text>
+
+      <v-card-text v-if="step === 'additional-headers'">
+        <StepperHeader
+          title="Additional headers (Optional)"
+          subtitle="If necessary, write down extra customizable headers for the proposal"
+        ></StepperHeader>
+
+        <AdditionalHeaders
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></AdditionalHeaders>
+      </v-card-text>
+
   <!--  Buttons previous, next or sign    -->
       <v-card-text v-if="step !== 'sign'">
         <div class="d-flex align-center justify-space-between">
@@ -113,8 +197,6 @@
   </div>
 </template>
 <script>
-import improvementproposal from "~/pages/auton/_autonId/improvementproposal/index.vue";
-
 export default {
   name: "AutonProposalSubmit",
   props: ["autonId", "autonName", "callbackFinish"],
@@ -133,6 +215,10 @@ export default {
       assetId: 1,
       assets: {},
     },
+    currentPage: 0,
+    membershipScreenList: ['select-proposal-type', 'proposal-profile', 'membership-invitation', 'sign'],
+    improvementScreenList: ['select-proposal-type', 'proposal-profile', 'proposers', 'motivation', 'specification',
+      'references', 'budget', 'execution-roles', 'time-constraints', 'additional-headers', 'sign'],
   }),
   created() {
     this.$nuxt.$on(
@@ -144,25 +230,19 @@ export default {
   },
   methods: {
     prevStep() {
-      switch(this.selectedProposalType) {
-        case 'membership-invitation':
-          if (this.step === "proposal-profile") {
-            this.step = "select-proposal-type";
-          } else if (this.step === "membership-invitation") {
-            this.step = "proposal-profile";
-          } else if (this.step === "sign") {
-            this.step = "membership-invitation";
-          }
-          break;
-        case 'improvement-proposal':
-          if (this.step === "proposal-profile") {
-            this.step = "select-proposal-type";
-          } else if (this.step === "proposers"){
-            this.step = "proposal-profile";
-          } else if (this.step === "motivation"){
-            this.step = "proposers";
-          }
-          break;
+      // Set the currentPage number
+      if(this.currentPage > 0){
+        this.currentPage -= 1;
+        switch(this.selectedProposalType) {
+          // Set the page to the one in the list from 'data'
+          // If there is a new type of proposal, add a list of screen names above and add a new case.
+          case 'membership-invitation':
+            this.step = this.membershipScreenList[this.currentPage];
+            break;
+          case 'improvement-proposal':
+            this.step = this.improvementScreenList[this.currentPage];
+            break;
+        }
       }
     },
     finish() {
@@ -176,7 +256,7 @@ export default {
         this.invitationMessage = "";
         this.proposalTitle = "";
         this.proposalDescription = "";
-        (this.uri = ""),
+        this.uri = "";
           (this.transaction = {
             moduleId: -1,
             assetId: 0,
@@ -185,59 +265,19 @@ export default {
       }
     },
     async nextStep() {
-      switch (this.selectedProposalType) {
+      // Set the currentPage
+      this.currentPage += 1;
+      // Set the page to the one in the list from 'data'
+      // If there is a new type of proposal, add a list of screen names above and add a new case.
+      switch(this.selectedProposalType) {
         case 'membership-invitation':
-          if (this.step === "select-proposal-type") {
-            this.step = "proposal-profile";
-          } else if (this.step === "proposal-profile") {
-            this.step = "membership-invitation";
-          } else if (this.step === "membership-invitation") {
-            this.step = "sign";
-          }
+          if(this.currentPage )
+          this.step = this.membershipScreenList[this.currentPage];
           break;
         case 'improvement-proposal':
-          if (this.step === "select-proposal-type") {
-            this.step = "sign";
-          } else if (this.step === "proposal-profile"){
-            this.step = "proposers";
-          } else if (this.step === "proposers"){
-            this.step = "motivation";
-          }
+          this.step = this.improvementScreenList[this.currentPage];
           break;
       }
-      // The transaction prop interface:
-      // {
-      //   moduleId: 0,
-      //   assetId: 0,
-      //   assets: {};
-      // }
-
-
-
-
-      // if (this.step === "sign") {
-      //   const autonWrapper = await this.$invoke("auton:getByID", {
-      //     id: this.autonId,
-      //   });
-      //   this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${
-      //     autonWrapper.result.proposals.length + 1
-      //   }/campaigning`;
-      //
-      //   const asset = {
-      //     title: this.proposalTitle,
-      //     campaignComment: this.proposalDescription,
-      //     proposalType: this.selectedProposalType,
-      //     autonId: this.autonId,
-      //     accountIdToInvite: this.selectedAccountId,
-      //     invitationMessage: this.invitationMessage,
-      //   };
-      //   this.transaction.moduleId = 1004;
-      //   this.transaction.assetId = 0;
-      //   this.transaction.assets = asset;
-      // }
-
-
-
       if (this.step === "sign") {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
