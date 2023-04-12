@@ -17,9 +17,9 @@
 
 <template>
   <div>
-    <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent id="stakeholder-form" v-for="stakeholder in selectedStakeholdersValue">
+    <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent>
       <v-autocomplete
-        v-model="stakeholder.accountId"
+        v-model="selectedValue"
         :disabled="isUpdating"
         :items="users"
         chips
@@ -29,23 +29,21 @@
         item-value="id"
         :rules="[rules.required]"
       >
-
-        <template v-slot:selection="data" id="selection-template" @click="">
-
+        <template v-slot:selection="data">
           <v-chip
             v-bind="data.attrs"
             :input-value="data.selectedValue"
             close
-            @click=""
+            @click=" cycleStep(data)"
             @click:close="remove()"
-            class="stakeholder-chip"
           >
             <v-avatar
               color="accent"
               class="white--text text-caption"
               v-if="data.item.name"              
               left
-              >{{ getInitials(data.item.name, 2) }}</v-avatar>
+              >{{ getInitials(data.item.name, 2) }}</v-avatar
+            >
             {{ data.item.name}}
           </v-chip>
         </template>
@@ -72,33 +70,27 @@
           </template>
         </template>
       </v-autocomplete>
-      <input type="radio" id="law_option" name="voting">
-      <Label for="law_option">law&rights expertise</Label>
-      <input type="radio" id="finance_option" name="voting" style="margin-left: 15px;">
-      <Label for="finance_option">financial expertise</Label>
-      <input type="radio" id="other_option" name="voting" style="margin-left: 15px;">
-      <Label for="other_option">other.. </Label>
     </v-form>
 
     <v-container style="height: 100%" v-if="step == 'info-stakeholder'">
       <p>naam: {{ selectedValue.name }} <br> username: {{ selectedValue.username }}</p>
-      <v-btn @click="cycleStep()" class="button">Change Stakeholder</v-btn>
+      <v-btn @click="cycleStep" class="button">Change Stakeholder</v-btn>
   </v-container>
+    
   </div>
 </template>
 
 <script>
 export default {
-  props: ["selectedStakeholders", "disabledNext", "autonId"],
+  props: ["selectedAccountId", "disabledNext", "autonId"],
   computed: {
-    selectedStakeholdersValue: {
+    selectedValue: {
       get: function () {
-        return this.selectedStakeholders;
+        return this.selectedAccountId;
       },
       set: function (newValue) {
-        console.log("stakeholders x: "+ this.selectedStakeholders)
-        console.log("stakeholders: "+ newValue)
-        this.$emit("update:selectedStakeholders", newValue);
+        this.selectedAccountId = newValue;
+//        this.$emit("update:selectedAccountId", newValue);
       },
     },
   },
@@ -116,8 +108,7 @@ export default {
     step: "voeg-stakeholder-toe",
     rules: {
       required: (value) => !!value || "Required.",
-      min: (v) => v?.length >= 2 || "Min 2 characters",
-      max: (v) => v?.length <= 16 || "Max 16 characters",
+      
     },
     isUpdating: true,
     users: [{ header: "Most recent users" }],
@@ -130,20 +121,15 @@ export default {
   },
   methods: {
     cycleStep(data) {
+      
             if (this.step == "voeg-stakeholder-toe") {
                 this.selectedValue = data.item
                 this.step = "info-stakeholder";
-
-                console.log("eerste if statement")
             }
             else if (this.step == "info-stakeholder") {
-                document.getElementById("stakeholder-form").reset
                 this.step = "voeg-stakeholder-toe";
-                
-                console.log("tweede if statement")
             }
           },
-          
     remove() {
       this.selectedValue = "";
     },
