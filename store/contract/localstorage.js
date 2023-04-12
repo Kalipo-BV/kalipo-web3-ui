@@ -1,6 +1,5 @@
 import { isValidContract } from "./validation.js"
 
-
 export const saveToLocalstorage = (contract) => {
 	const data = JSON.stringify(contract);
 	localStorage.setItem("Agreements", data);
