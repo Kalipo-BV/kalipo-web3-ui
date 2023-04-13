@@ -163,6 +163,7 @@ export const mutations = {
 
 	reset(state) {
 		state.formData = initFormData();
+		_saveToLocalstorage(state);
 	},
 }
 

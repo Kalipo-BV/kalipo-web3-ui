@@ -104,15 +104,6 @@
 
       <div class="d-flex flex-column">
         <v-btn
-          color="info"
-          class="mt-4"
-          block
-          @click="save"
-        >
-          Save
-        </v-btn>
-
-        <v-btn
           color="success"
           class="mt-4"
           block
@@ -210,14 +201,9 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
       },
       
       reset() {
-        this.$refs.form.reset();
-      },
+        this.$store.commit("contract/reset");
 
-      save: function() {
-        localStorage.setItem("Grant-Contract", this.$store.state.contract);
-        if(localStorage.getItem("Grant-Contract") != null) {
-          this.saving = true;
-        }
+        console.log(this.$store.state.contract);
       },
 
       async handleCreation() {
