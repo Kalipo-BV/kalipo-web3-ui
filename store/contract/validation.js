@@ -7,19 +7,29 @@ export const isValidContract = (contract) => {
 
 	const stateKeys = Object.keys(contract);
 	const formDataKeys = Object.keys(contract.formData);
+	
+	const isStateStructureCorrect = arrayHasValues(stateKeys, initStateKeys);
+	const isFormDataStructureCorrect = arrayHasValues(formDataKeys, initFormDataKeys);
 
-	arrayHasValues(initStateKeys, stateKeys);
-	arrayHasValues(initFormDataKeys, formDataKeys);
+	if (!isStateStructureCorrect) {
+		console.error("State structure of the loaded agreement is malformed")
+		return false;
+	}
+
+	if (!isFormDataStructureCorrect) {
+		console.error("State structure of the loaded agreement is malformed")
+		return false;
+	}
 
 	return true;
 }
 
-const arrayHasValues = (arrayToCheck, valuesArray) => {
-	
+const arrayHasValues = (arrayToCheck, neededValues) => {
 	let i=0;
-	for (i; i<valuesArray.length; i++) {
-		const hasValue = arrayToCheck.includes(valuesArray[i]);
+	for (i; i < neededValues.length; i++) {
+		const hasValue = arrayToCheck.includes(neededValues[i]);
 		if(!hasValue) {
+			console.error(`Field doesnt exist ${neededValues[i]}`)
 			return false;
 		}
 	}
