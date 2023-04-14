@@ -30,14 +30,14 @@
         :rules="[rules.required]"
       >
 
-        <template v-slot:selection="data" id="selection-template" @click="">
+        <template v-slot:selection="data" id="selection-template">
 
           <v-chip
             v-bind="data.attrs"
             :input-value="data.selectedValue"
             close
             @click=""
-            @click:close="remove()"
+            @click:close="remove(data)"
             class="stakeholder-chip"
           >
             <v-avatar
@@ -72,12 +72,9 @@
           </template>
         </template>
       </v-autocomplete>
-      <input type="radio" id="law_option" name="voting">
-      <Label for="law_option">law&rights expertise</Label>
-      <input type="radio" id="finance_option" name="voting" style="margin-left: 15px;">
-      <Label for="finance_option">financial expertise</Label>
-      <input type="radio" id="other_option" name="voting" style="margin-left: 15px;">
-      <Label for="other_option">other.. </Label>
+      <Label for="law_option">expertise</Label>
+      <input type="text" id="law_option" name="voting" v-model="stakeholder.expertise">
+
     </v-form>
 
     <v-container style="height: 100%" v-if="step == 'info-stakeholder'">
@@ -144,8 +141,10 @@ export default {
             }
           },
           
-    remove() {
-      this.selectedValue = "";
+    remove(data) {
+      const index = this.selectedStakeholdersValue.indexOf(data);
+      console.log("index: "+index)
+      console.log("data: "+data[0].accountId)
     },
     getInitials(parseStr, max) {
       if (parseStr != undefined) {
@@ -194,7 +193,6 @@ export default {
 
     if (!accountIdsWrapper.error) {
       const ids = accountIdsWrapper.result.ids.reverse();
-      // waarom worden de id's gereversed? ff weghalen en kijken hoe de members worden weergeven
       for (let index = 0; index < ids.length; index++) {
         const id = ids[index];
         const accountWrapper = await this.$invoke("kalipoAccount:getByID", {

@@ -136,6 +136,7 @@
         </v-card>
       </div>
     </v-card>
+    <p>{{ this.proposals }}</p>
   </div>
 </template>
 
@@ -147,12 +148,31 @@ export default {
     userLang: null,
     mainPath: null,
     step: 1,
+    proposals: [null],
   }),
   async mounted() {
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
     const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
     this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
 
+    const proposals = await this.$invoke("kalipoAccount:getAll");
+
+    if (!proposals.error) {
+      const ids = proposals.result.ids.reverse();
+      for (let index = 0; index < ids.length; index++) {
+        const id = ids[index];
+        const proposalWrapper = await this.$invoke("kalipoProposal:getByID", {
+          id: id,
+        });
+        if (!proposalWrapper.error && alreadyMemberAccounts.indexOf(id) == -1) {
+          proposalWrapper.result.id = id;
+          this.proposals.push(proposalWrapper.result);
+        }
+      }
+    }
+
+    console.log("proposals uit database: "+this.proposals)
+    
     if (
       this.proposal != null &&
       this.submitter != null &&

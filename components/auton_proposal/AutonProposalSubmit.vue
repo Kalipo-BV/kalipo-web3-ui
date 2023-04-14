@@ -75,19 +75,9 @@
           :autonId="autonId">
       </AutonProposalStakeholderInvitation>
 
-        <AutonProposalStakeholderInvitation
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalStakeholderInvitation>
-        
-        <AutonProposalStakeholderInvitation
-          class="mt-4"
-          :autonId="autonId"
-        ></AutonProposalStakeholderInvitation>
 
 
-      <!-- <AutonProposalStakeholderInvitation>
-        </AutonProposalStakeholderInvitation> -->
+
 
       <!-- <v-radio-group       
         v-model="column" 
@@ -159,8 +149,13 @@ export default {
   },
   methods: {
     prevStep() {
-      console.log("stakeholderIDs: "+this.selectedStakeholderIds+ "\ntype:" +typeof this.selectedStakeholderIds)
-      console.log("invitation IDs: "+this.selectedAccountId+ "\ntype:" +typeof this.selectedAccountId)
+      let i = 0;
+      while(i < this.selectedStakeholders.length){
+              console.log("stakeholder id: "+this.selectedStakeholders[i].accountId);
+              console.log("stakeholder expertise: "+this.selectedStakeholders[i].expertise);
+              i++;
+      }
+      console.log("invitation IDs: "+this.selectedAccountId)
       if (this.step == "proposal-profile") {
         this.step = "select-proposal-type";
       }
@@ -194,7 +189,7 @@ export default {
         this.disabledNext = false;
         this.selectedProposalType = null;
         this.selectedAccountId = null;
-        this.selectedStakeholderIds = [null, null, null];
+        this.selectedStakeholders = [null];
         this.invitationMessage = "";
         this.proposalTitle = "";
         this.proposalDescription = "";
@@ -229,7 +224,7 @@ export default {
       //   assetId: 0,
       //   assets: {};
       // }
-      if (this.step == "sign") {
+      if (this.step == "sign") {       
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
         });
@@ -241,6 +236,7 @@ export default {
           autonId: this.autonId,
           accountIdToInvite: this.selectedAccountId,
           invitationMessage: this.invitationMessage,
+          stakeholders: this.selectedStakeholders
         };
         this.transaction.moduleId = 1004;
         this.transaction.assetId = 0;

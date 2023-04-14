@@ -88,4 +88,5 @@ sw.*
 
 # Vim swap files
 *.swp
+
 plugins/LiskClient.js
