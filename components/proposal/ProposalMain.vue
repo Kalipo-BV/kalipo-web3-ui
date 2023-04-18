@@ -17,10 +17,21 @@
 
 <template>
   <div>
-    <v-stepper alt-labels class="mt-0" style="background-color: #eef1f5" flat v-model="step">
+    <v-stepper
+      alt-labels
+      class="mt-0"
+      style="background-color: #eef1f5"
+      flat
+      v-model="step"
+    >
       <v-stepper-header class="py-2">
-        <v-stepper-step step="1" color="accent" :complete="proposal.status != 'CAMPAIGNING'"
-          @click="$router.push(mainPath + 'campaigning')" style="cursor: pointer;">
+        <v-stepper-step
+          step="1"
+          color="accent"
+          :complete="proposal.status != 'CAMPAIGNING'"
+          @click="$router.push(mainPath + 'campaigning')"
+          style="cursor: pointer"
+        >
           <div class="d-flex justify-center">Dialogue</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
@@ -40,8 +51,15 @@
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="2" @click="$router.push(mainPath + 'voting')" color="accent" :complete="
-          proposal.status != 'CAMPAIGNING' && proposal.status != 'VOTING'" style="cursor: pointer;">
+        <v-stepper-step
+          step="2"
+          @click="$router.push(mainPath + 'voting')"
+          color="accent"
+          :complete="
+            proposal.status != 'CAMPAIGNING' && proposal.status != 'VOTING'
+          "
+          style="cursor: pointer"
+        >
           <div class="d-flex justify-center">Voting</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
@@ -61,8 +79,13 @@
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="3" @click="$router.push(mainPath + 'results')" color="accent"
-          :complete="proposal.status == 'ENDED'" style="cursor: pointer;">
+        <v-stepper-step
+          step="3"
+          @click="$router.push(mainPath + 'results')"
+          color="accent"
+          :complete="proposal.status == 'ENDED'"
+          style="cursor: pointer"
+        >
           <div class="d-flex justify-center">Closed</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
@@ -95,8 +118,13 @@
         <v-card flat link @click="navigateTo(item.link)">
           <v-card-text class="py-2">
             <div class="d-flex align-center">
-              <v-avatar color="primary" size="25" class="white--text mr-2" v-if="item.icon"><v-icon dark x-small>{{
-                item.icon }}</v-icon></v-avatar>
+              <v-avatar
+                color="primary"
+                size="25"
+                class="white--text mr-2"
+                v-if="item.icon"
+                ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
+              >
 
               <div class="d-flex justify-space-between" style="width: 100%">
                 <div class="text-caption font-weight-medium">
@@ -184,7 +212,7 @@ export default {
           link: "/account/" + invited.username,
         });
       } else if (this.proposal.type == "auton-creation") {
-        console.log(this.proposal)
+        console.log(this.proposal);
         this.list.push({
           icon: "mdi-web",
           leftText: "Auton name:",
@@ -210,22 +238,26 @@ export default {
           link: "/account/" + this.submitter.username,
         });
 
-        for (let index = 0; index < this.proposal.autonCreationArguments.bulkInviteAccountIds.length; index++) {
-          const invitedId = this.proposal.autonCreationArguments.bulkInviteAccountIds[index];
+        for (
+          let index = 0;
+          index <
+          this.proposal.autonCreationArguments.bulkInviteAccountIds.length;
+          index++
+        ) {
+          const invitedId =
+            this.proposal.autonCreationArguments.bulkInviteAccountIds[index];
           const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
             id: invitedId,
           });
           const invited = invitedWrapper.result;
           this.list.push({
             icon: "mdi-account-plus",
-            leftText: "Invited member " + i + 2 + ":",
+            leftText: "Invited member " + index + 2 + ":",
             rightText: "@" + invited.username,
             link: "/account/" + invited.username,
           });
         }
       }
-
-
     }
   },
   methods: {
