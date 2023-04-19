@@ -17,12 +17,12 @@
 
 <template>
   <v-container>
-  <v-row class="mt-0">
-    <v-col cols="12" md="8">
-      <div class="text-h2 primary--text">My DAOs and autons</div>
+    <v-row class="mt-0">
+      <v-col cols="12" md="8">
+        <div class="text-h2 primary--text">My DAOs and autons</div>
 
-      <v-row>
-        <!-- <v-col xs="12" sm="6" md="4" lg="3" v-for="(auton, i) in autons" :key="i">
+        <v-row>
+          <!-- <v-col xs="12" sm="6" md="4" lg="3" v-for="(auton, i) in autons" :key="i">
             <div @click="
               $router.push(
                   '/auton/' + auton.autonProfile.name.replaceAll(' ', '_')
@@ -47,16 +47,26 @@
       <v-col cols="12" md="4">
         <div class="text-h2 primary--text">Personal backlog</div>
 
-        <v-card class="mt-4" flat v-for="(membership, i) in membershipInvitations" :key="i">
-          <v-card v-if="membership.proposal" flat link @click="
-            $router.push(
-              '/auton/' +
-              membership.auton.autonProfile.name.replaceAll(' ', '_') +
-              '/proposal/' +
-              (membership.proposalIndex + 1) +
-              '/results'
-            )
-          ">
+        <v-card
+          class="mt-4"
+          flat
+          v-for="(membership, i) in membershipInvitations"
+          :key="i"
+        >
+          <v-card
+            v-if="membership.proposal"
+            flat
+            link
+            @click="
+              $router.push(
+                '/auton/' +
+                  membership.auton.autonProfile.name.replaceAll(' ', '_') +
+                  '/proposal/' +
+                  (membership.proposalIndex + 1) +
+                  '/results'
+              )
+            "
+          >
             <v-card-text class="py-2">
               <div class="text-caption d-flex align-center">
                 <v-icon small class="mr-1">mdi-account-plus</v-icon>
@@ -79,12 +89,16 @@
 
           <v-row align="center" dense>
             <v-col cols="6">
-              <v-card flat link @click="
-                $router.push(
-                  '/auton/' +
-                  membership.auton.autonProfile.name.replaceAll(' ', '_')
-                )
-              ">
+              <v-card
+                flat
+                link
+                @click="
+                  $router.push(
+                    '/auton/' +
+                      membership.auton.autonProfile.name.replaceAll(' ', '_')
+                  )
+                "
+              >
                 <v-card-text class="">
                   <div class="text-caption d-flex align-center">
                     <v-avatar color="accent" class="mr-1" size="25">
@@ -104,10 +118,19 @@
               <v-card flat>
                 <v-card-text class="">
                   <div class="d-flex align-center justify-end">
-                    <v-btn color="error" class="mr-2" small @click="rejecttMembership(membership)">
+                    <v-btn
+                      color="error"
+                      class="mr-2"
+                      small
+                      @click="rejecttMembership(membership)"
+                    >
                       Reject
                     </v-btn>
-                    <v-btn color="success" small @click="acceptMembership(membership)">
+                    <v-btn
+                      color="success"
+                      small
+                      @click="acceptMembership(membership)"
+                    >
                       Accept
                     </v-btn>
                   </div>
@@ -119,9 +142,15 @@
       </v-col>
     </v-row>
     <v-dialog v-model="genericDialog" max-width="500">
-      <GenericTransaction title="Membership invitation" subtitle="Consensus was reached to invite you"
-        :actionText="actionText" :chipText="chipText" :uri="uri" :transaction="transaction"
-        callbackFinish="Dashboard-ModalClose"></GenericTransaction>
+      <GenericTransaction
+        title="Membership invitation"
+        subtitle="Consensus was reached to invite you"
+        :actionText="actionText"
+        :chipText="chipText"
+        :uri="uri"
+        :transaction="transaction"
+        callbackFinish="Dashboard-ModalClose"
+      ></GenericTransaction>
     </v-dialog>
   </v-container>
 </template>
@@ -153,7 +182,10 @@ export default {
   methods: {
     acceptMembership(membership) {
       this.uri =
-        "/auton/" + membership.auton.autonProfile.name.replaceAll(" ", "_");
+        "/dao/" +
+        membership.dao.daoProfile.name.replaceAll(" ", "_") +
+        "/auton/" +
+        membership.auton.autonProfile.name.replaceAll(" ", "_");
       this.transaction.assetId = 0;
       this.transaction.assets.membershipId = membership.id;
       this.actionText = "Joining: " + membership.auton.autonProfile.name;
@@ -196,6 +228,10 @@ export default {
       });
       const auton = autonWrapper.result;
 
+      const daoWrapper = await this.$invoke("dao:getByID", {
+        id: auton.daoId,
+      });
+      const dao = daoWrapper.result;
 
       const now = new Date();
       const nowInSec = BigInt(Math.floor(now / 1000));
@@ -264,6 +300,7 @@ export default {
           membership.invitation.proposalId
         );
         membership.auton = auton;
+        membership.dao = dao;
         membership.id = membershipId;
         this.membershipInvitations.push(membership);
       }
