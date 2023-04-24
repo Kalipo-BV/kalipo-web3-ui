@@ -8,7 +8,7 @@
       <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white pl-3"
            :style="{ minWidth: '300px', padding: '15px', paddingTop: '0px', display: 'flex' }">
         <div style="width: 90%!important;">
-          <p style="font-size: 23px!important;" class="text-h1 mb-1 accent--text">{{ proposal.title }}</p>
+          <p style="font-size: 22px!important;" class="text-h1 mb-1 accent--text">{{ proposal.title }}</p>
 
           <div>
 
