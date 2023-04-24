@@ -26,7 +26,7 @@
         model-value="fill me in"
         :rules="[v => !!v || 'The purpose of the grand can\'t be left open!']"
         prepend-icon="mdi-card-text-outline" 
-        
+        hide-details="auto"
     />
 </template>
 <script>

@@ -76,8 +76,8 @@
       </ContractTypeContainer>
       <v-row>
         <v-alert
-          v-if="saving"
-          v-model="saving"
+          v-if="saved"
+          v-model="saved"
           width="100%"
           dense
           dismissible
@@ -121,6 +121,15 @@
           test
         </v-btn>
 
+        <!-- <v-btn
+          color=""
+          class="mt-4"
+          block
+          @click="test"
+        >
+          test
+        </v-btn> -->
+
         <v-btn
           color="error"
           class="mt-4"
@@ -129,21 +138,25 @@
         >
           Reset Form
         </v-btn>
-
-        <!-- <v-btn
-          class="mt-4"
-          block
-          @click="test"
-        >
-          Test
-        </v-btn> -->
       </div>
     </v-form>
+    <v-dialog
+      width="60%"
+      v-model="dialog"
+      activator="parent"
+    >
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        callback="AutonCreate-PrevStep"
+        title="Sign the contract"
+      ></AccountSign>
+    </v-dialog>
   </v-sheet>
 </template>
 <script>
-import ContractTypeContainer from './ContractTypeContainer.vue';
-import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
+  import ContractTypeContainer from './ContractTypeContainer.vue';
+  import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
 
   export default {
     // props: ["transaction", "uri", "title"],
@@ -167,7 +180,7 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
     },
       
     data: () => ({
-      saving: false,
+      saved: false,
       signed: false,
       dialog: false,
       transaction: {
@@ -185,25 +198,57 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
     },
     
     methods: {
+      async test() {
+       // const existingAccoundIdWrapper = await this.$invoke(
+       //   "grant_contract:getAll",
+        //);
+       // console.log(existingAccoundIdWrapper);
+        
+        // const existingAccoundIdWrapper = await this.$invoke(
+        //   "grantContract:getByID",
+        //   { id: "4d6b950d770990be4ee5f682b8329f02dcac8587a3fee170ca067abbdbd840af" },
+        // );
+        // console.log(existingAccoundIdWrapper);
+
+        const existingAccoundIdWrapper = await this.$invoke(
+          "grantContract:getAllInfo",
+        );
+        console.log(existingAccoundIdWrapper); 
+      },
+
       async sign() {
         console.log(this.$store.state.contract);
         // $router.push('/wallet');
-        const { valid } = await this.$refs.form.validate();
-        if (valid) {
+        // const { valid } = await this.$refs.form.validate();
+        // if (valid) {
           // if(this.unlocked) {
-            // this.transaction.assets = asset;
-            this.transaction.assets = this.$store.state.contract;
-            this.transaction.uri = "contract/signGrantContract-asset";
-            await this.$invoke("contract:signGrantContract", {
-              formData: this.$store.state.contract,
-              // .toString("hex")
-            });
+
+
+
+          // this.transaction.assets = asset;
+          // this.transaction.assets = this.$store.state.contract;
+          // delete this.transaction.assets.formData;
+          this.transaction.assets = this.$store.state.contract;
+          this.transaction.assets["contractId"] = "test";
+          // this.transaction.assets = {contractId: "test", editFase: 1, status: {type:"", info:""}};
+          console.log(this.$store.state.contract);
+          this.uri = "contract/signConctract-asset";
+
+
+
+            // await this.$invoke("contract:signGrantContract", {
+            //   formData: this.$store.state.contract,
+            //   // .toString("hex")
+            // });
             
             // this.$nuxt.$emit("IAH-triggerCreateAccount");
             // this.$emit("signGrantContract");
             // this.$nuxt.$emit("signGrantContract");
-            this.signed = true;
-          } // else {
+            this.dialog = true;
+
+            
+            // this.signed = true;
+          //} // else {
 
           // }  
         // }

@@ -94,7 +94,7 @@ export const mutations = {
 	},
 
 	changePaymentAmount(state, payload) {
-		if (isNumber(payload, 'payment amount')) {
+		if (isNumber(payload, 'paymentAmount')) {
 			state.formData.payment.amount = payload;
 			_saveToLocalstorage(state);
 		}
@@ -158,6 +158,12 @@ export const mutations = {
 	customChangeData(state, payload) {
 		state.formData.custom[payload.index].data = payload.data;
 		_saveToLocalstorage(state);
+	},
+
+	changeTerminationOfAgreement(state, payload) {
+		if (isString(payload, 'terminationOfAgreement')) {
+			state.formData.terminationOfAgreement = payload;
+		}
 	},
 
 	reset(state) {

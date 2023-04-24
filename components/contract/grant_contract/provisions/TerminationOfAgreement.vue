@@ -26,6 +26,7 @@
         model-value="fill me in"
         :rules="[v => !!v || 'This field can\'t be left open!']"
         prepend-icon="mdi-calendar-remove-outline" 
+        hide-details="auto"
     />
 </template>
 <script>
@@ -36,7 +37,7 @@
                     return this.$store.state.contract.formData.terminationOfAgreement;
                 },
                 set: function (payload) {
-                    this.$store.commit("contract/terminationOfAgreement", payload);
+                    this.$store.commit("contract/changeTerminationOfAgreement", payload);
                 },
             },
         },

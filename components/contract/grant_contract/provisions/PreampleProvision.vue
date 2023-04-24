@@ -27,6 +27,7 @@
         label="Preample"
         required
         v-model="preample"
+        hide-details="auto"
     />
 </template>
 <script>

@@ -26,6 +26,7 @@
         model-value="fill me in"
         :rules="[v => !!v || 'This field can\'t be left open!']"
         prepend-icon="mdi-file-certificate-outline" 
+        hide-details="auto"
     />
 </template>
 <script>
