@@ -1,10 +1,33 @@
 <template>
-  <p>Execution roles</p>
+  <div>
+    <v-form v-model="valid" @submit.prevent>
+      <v-textarea
+        filled
+        auto-grow
+        label="Description"
+        rows="4"
+        row-height="20"
+        maxlength="1024"
+        counter
+        v-model="executionRolesValue"
+      ></v-textarea>
+    </v-form>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "ExecutionRoles"
+  props: ["executionRoles"],
+  computed: {
+    executionRolesValue: {
+      get: function () {
+        return this.executionRoles;
+      },
+      set: function (newValue) {
+        this.$emit("update:executionRules", newValue);
+      },
+    }
+  }
 }
 </script>
 
