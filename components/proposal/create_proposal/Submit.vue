@@ -233,7 +233,7 @@ export default {
           break;
         case 1:
           switch(this.selectedProposalType) {
-            // Set the page to the one in the list from 'data'
+            // Set the inputs of the page to contain the ones in the list from 'data'
             // If there is a new type of proposal, add a list of screen names above and add a new case.
             case 'membership-invitation':
               this.steps = this.membershipScreenList;
@@ -248,7 +248,7 @@ export default {
     async nextStep() {
       // Set the currentPage
       this.currentPage += 1;
-      // Set the page to the one in the list from 'data'
+      // Set the inputs of the page to contain the ones in the list from 'data'
       // If there is a new type of proposal, add a list of screen names above and add a new case.
       switch(this.currentPage){
         case 1:
