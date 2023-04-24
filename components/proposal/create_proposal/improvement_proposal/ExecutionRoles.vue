@@ -1,18 +1,16 @@
 <template>
   <div>
     <v-form v-model="valid" @submit.prevent>
-      <li v-for="(role, index) in executionRoles">
-        <v-textarea
-          filled
-          auto-grow
-          label="Description"
-          rows="4"
-          row-height="0"
-          maxlength="32"
-          counter
-          v-model="executionRolesValue[index]"
-        ></v-textarea>
-      </li>
+      <v-textarea
+        filled
+        auto-grow
+        label="Description"
+        rows="4"
+        row-height="20"
+        maxlength="1024"
+        counter
+        v-model="executionRolesValue"
+      ></v-textarea>
     </v-form>
   </div>
 </template>
