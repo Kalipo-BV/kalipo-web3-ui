@@ -33,7 +33,8 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="startDate"
+              readonly
+              :value=startDate
               label="Start date"
               hint="YYYY/MM/DD format"
               persistent-hint
@@ -44,8 +45,9 @@
             ></v-text-field>
           </template>
           <v-date-picker
-              v-model="startDate"
-              no-title
+            @input="(e) => {startDate = e}"
+            :value=startDate
+            no-title
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -64,7 +66,8 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="endDate"
+              readonly
+              :value=endDate
               label="End date"
               hint="YYYY/MM/DD format"
               persistent-hint
@@ -75,7 +78,8 @@
             ></v-text-field>
           </template>
           <v-date-picker
-              v-model="endDate"
+              @input="(e) => { endDate = e }"
+              :value=endDate
               no-title
           ></v-date-picker>
         </v-menu>

@@ -86,7 +86,7 @@ export const isNumber = (payload, errorName) => {
 }
 
 export const isDate = (payload, errorName) => {
-	const regex = "[0-9]{2,4}[-/]{1}[0-9]{2,4}[-/]{1}[0-9]{2,4}";
+	const regex = "[0-9]{4}[-/]{1}[0-9]{2}[-/]{1}[0-9]{2}$";
 	const result = (payload.match(regex));
 	
 	logError(result, errorName, payload);
