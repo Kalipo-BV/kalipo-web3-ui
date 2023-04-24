@@ -181,7 +181,7 @@ export default {
     specification: "spec",
     references: "ref",
     budget: "bud is vies",
-    executionRoles: ['test', 'test2', 'hoi'],
+    executionRoles: "ROLEEEES",
     timeBasedConstraint: "tijd is geld nou gappie gooi wat tijd op me.",
     transaction: {
       moduleId: -1,
