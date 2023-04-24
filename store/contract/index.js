@@ -78,7 +78,7 @@ const initFormData = () => {
 
 export const state = () => ({
 	editFase: 3,
-	status: "",
+	status: "test",
 	type: "Grant Contract",
 	fullySigned: false,
 	date: new Date().toISOString(),
