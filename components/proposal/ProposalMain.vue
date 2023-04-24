@@ -167,6 +167,7 @@ export default {
       }
 
       this.userLang = navigator.language || navigator.userLanguage;
+      // Submission date
       this.list.push({
         icon: "mdi-calendar",
 
@@ -182,6 +183,7 @@ export default {
         }),
       });
 
+      // Proposer
       this.list.push({
         icon: "mdi-account",
         leftText: "Proposer:",
@@ -189,18 +191,23 @@ export default {
         link: "/account/" + this.submitter.username,
       });
 
+      // Proposal type
       this.list.push({
         icon: "mdi-bank",
         leftText: "Proposal type:",
         rightText: this.proposal.type.replaceAll("-", " "),
       });
-      console.log(this.proposal.type)
+
+      console.log(this.proposal)
+
+      // Some attributes linked to a proposal type.
       if (this.proposal.type == "membership-invitation") {
         const invitedId = this.proposal.membershipInvitationArguments.accountId;
         const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
           id: invitedId,
         });
         const invited = invitedWrapper.result;
+        // Membership candidate.
         this.list.push({
           icon: "mdi-account-plus",
           leftText: "Membership candidate:",
@@ -208,7 +215,12 @@ export default {
           link: "/account/" + invited.username,
         });
       } else if (this.proposal.type == "improvement") {
-
+        // Abstract
+        this.list.push({
+          icon: "mdi-text",
+          leftText: "Abstract:",
+          rightText: this.proposal.improvementArguments.abstract,
+        });
       }
 
     }

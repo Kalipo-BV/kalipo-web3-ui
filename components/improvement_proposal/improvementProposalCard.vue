@@ -30,9 +30,10 @@
                   }
                 )
               }}</p>
-            <v-chip dark outlined small  :color=getResultColor(proposal.result)>
+            <v-chip dark outlined small :style="{marginBottom: '10px'}"  :color=getResultColor(proposal.result)>
             {{ proposal.result }}
           </v-chip>
+<!--            <p>TEST</p>-->
             <v-btn outlined small :style="{width: '113%'}" @click="$router.push('/account/' + proposal.author)"
             >@{{ proposal.author }}
             </v-btn>
