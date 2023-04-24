@@ -116,19 +116,10 @@
           color=""
           class="mt-4"
           block
-          @click="test"
+          @click="devDialog = true"
         >
-          test
+          Dev preview
         </v-btn>
-
-        <!-- <v-btn
-          color=""
-          class="mt-4"
-          block
-          @click="test"
-        >
-          test
-        </v-btn> -->
 
         <v-btn
           color="error"
@@ -152,15 +143,56 @@
         title="Sign the contract"
       ></AccountSign>
     </v-dialog>
+
+
+
+
+
+    <!-- dev dialog (delete this) -->
+    <v-dialog
+      width="60%"
+      v-model="devDialog"
+      activator="parent"
+    >
+      <div style="background-color: cadetblue; padding: 20px;">
+        <h1>Dev preview (see log for result)</h1>
+
+        <v-btn
+          color=""
+          block
+          @click="getAllIds"
+        >
+          getAllids
+        </v-btn>
+
+        <v-btn
+          color=""
+          class="mt-4"
+          block
+          @click="getBySetIdTest"
+        >
+          getBySetIdTest
+        </v-btn>
+
+        <v-btn
+          color=""
+          class="mt-4"
+          block
+          @click="getAllWithInfo"
+        >
+          getAllWithInfo
+        </v-btn>
+      </div>
+    </v-dialog>
+
+
+
+
+
   </v-sheet>
 </template>
 <script>
-  import ContractTypeContainer from './ContractTypeContainer.vue';
-  import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
-
   export default {
-    // props: ["transaction", "uri", "title"],
-    
     computed: {
       formData: {
           get: function () {
@@ -183,6 +215,7 @@
       saved: false,
       signed: false,
       dialog: false,
+      devDialog: false,
       transaction: {
         moduleId: 1010,
         assetId: 1,
@@ -192,71 +225,41 @@
     }),
 
     created() {
-      this.$nuxt.$on("IAH-triggerSignComplete", function ($event) {
+      this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
         this.handleCreation();
       });
     },
     
     methods: {
-      async test() {
-       // const existingAccoundIdWrapper = await this.$invoke(
-       //   "grant_contract:getAll",
-        //);
-       // console.log(existingAccoundIdWrapper);
-        
-        // const existingAccoundIdWrapper = await this.$invoke(
-        //   "grantContract:getByID",
-        //   { id: "4d6b950d770990be4ee5f682b8329f02dcac8587a3fee170ca067abbdbd840af" },
-        // );
-        // console.log(existingAccoundIdWrapper);
-
+      async getAllIds() {
+        const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
+        console.log(existingAccoundIdWrapper);
+      },
+      async getBySetIdTest() {       
         const existingAccoundIdWrapper = await this.$invoke(
-          "grantContract:getAllInfo",
+          "grantContract:getByID",
+          { id: "4d6b950d770990be4ee5f682b8329f02dcac8587a3fee170ca067abbdbd840af" },
         );
+        console.log(existingAccoundIdWrapper);
+      },
+      async getAllWithInfo() {       
+        const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
         console.log(existingAccoundIdWrapper); 
       },
 
+      
+
       async sign() {
         console.log(this.$store.state.contract);
-        // $router.push('/wallet');
-        // const { valid } = await this.$refs.form.validate();
-        // if (valid) {
-          // if(this.unlocked) {
-
-
-
-          // this.transaction.assets = asset;
-          // this.transaction.assets = this.$store.state.contract;
-          // delete this.transaction.assets.formData;
-          this.transaction.assets = this.$store.state.contract;
-          this.transaction.assets["contractId"] = "test";
-          // this.transaction.assets = {contractId: "test", editFase: 1, status: {type:"", info:""}};
-          console.log(this.$store.state.contract);
-          this.uri = "contract/signConctract-asset";
-
-
-
-            // await this.$invoke("contract:signGrantContract", {
-            //   formData: this.$store.state.contract,
-            //   // .toString("hex")
-            // });
-            
-            // this.$nuxt.$emit("IAH-triggerCreateAccount");
-            // this.$emit("signGrantContract");
-            // this.$nuxt.$emit("signGrantContract");
-            this.dialog = true;
-
-            
-            // this.signed = true;
-          //} // else {
-
-          // }  
-        // }
+        this.transaction.assets = this.$store.state.contract;
+        this.transaction.assets["contractId"] = "test";
+        console.log(this.$store.state.contract);
+        this.uri = "contract/signConctract-asset";
+        this.dialog = true;
       },
       
       reset() {
         this.$store.commit("contract/reset");
-
         console.log(this.$store.state.contract);
       },
 
@@ -264,7 +267,5 @@
         
       },
     },
-    components: { ContractTypeContainer, ProvisionTypeContainer }
-}
-
+  };
 </script>
