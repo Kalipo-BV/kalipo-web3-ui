@@ -109,7 +109,7 @@
         </v-card-text>
       </v-card>
 
-      <div v-for="(item, i) in list" :key="i">
+      <div id="standardAttributeList" v-for="(item, i) in standardAttributeList" :key="i">
         <v-divider></v-divider>
 
         <v-card flat link @click="navigateTo(item.link)">
@@ -135,7 +135,40 @@
           </v-card-text>
         </v-card>
       </div>
+      <div id="extraInfo">
+      <div id="extraInfoContainer" v-for="(item, i) in extraInfoList" :key="i">
+        <v-divider></v-divider>
+
+        <v-card flat link @click="navigateTo(item.link)">
+          <v-card-text class="py-2">
+            <div class="d-flex align-center">
+              <v-avatar
+                color="primary"
+                size="25"
+                class="white--text mr-2"
+                v-if="item.icon"
+              ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
+              >
+
+              <div class="d-flex justify-space-between" style="width: 100%">
+                <div class="text-caption font-weight-medium">
+                  {{ item.leftText }}
+                </div>
+                <div class="text-caption">
+                  {{ item.rightText }}
+                  <button>V</button>
+                </div>
+
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+      </div>
     </v-card>
+    <div style="justify-content: center; display: flex;">
+    <v-btn style="background-color: #0a75f3; color: white;  margin-top: 5px; " id="buttonShow" @click="hideExtraInfo">Show more</v-btn>
+  </div>
   </div>
 </template>
 
@@ -143,12 +176,15 @@
 export default {
   props: ["proposal", "submitter"],
   data: () => ({
-    list: [],
+    standardAttributeList: [],
+    extraInfoList: [],
     userLang: null,
     mainPath: null,
     step: 1,
   }),
   async mounted() {
+    const extraInfoContainer = document.getElementById('extraInfo');
+    extraInfoContainer.style.display = 'none';
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
     const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
     this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
@@ -168,7 +204,7 @@ export default {
 
       this.userLang = navigator.language || navigator.userLanguage;
       // Submission date
-      this.list.push({
+      this.standardAttributeList.push({
         icon: "mdi-calendar",
 
         leftText: "Submission:",
@@ -184,7 +220,7 @@ export default {
       });
 
       // Proposer
-      this.list.push({
+      this.standardAttributeList.push({
         icon: "mdi-account",
         leftText: "Proposer:",
         rightText: "@" + this.submitter.username,
@@ -192,7 +228,7 @@ export default {
       });
 
       // Proposal type
-      this.list.push({
+      this.standardAttributeList.push({
         icon: "mdi-bank",
         leftText: "Proposal type:",
         rightText: this.proposal.type.replaceAll("-", " "),
@@ -208,57 +244,58 @@ export default {
         });
         const invited = invitedWrapper.result;
         // Membership candidate.
-        this.list.push({
+        this.standardAttributeList.push({
           icon: "mdi-account-plus",
           leftText: "Membership candidate:",
           rightText: "@" + invited.username,
           link: "/account/" + invited.username,
         });
       } else if (this.proposal.type == "improvement") {
+        console.log(this.proposal)
         // Abstract
-        this.list.push({
+        this.extraInfoList.push({
           icon: "mdi-text",
           leftText: "Abstract:",
           rightText: this.proposal.improvementArguments.abstract,
         });
 
         // Motivation
-        this.list.push({
+        this.extraInfoList.push({
           icon: "mdi-target",
           leftText: "Motivation:",
           rightText: this.proposal.improvementArguments.motivation,
         });
 
         // Specification
-        this.list.push({
+        this.extraInfoList.push({
           icon: "mdi-text-search",
           leftText: "Specification:",
           rightText: this.proposal.improvementArguments.specification,
         });
 
         // References
-        this.list.push({
+        this.extraInfoList.push({
           icon: "mdi-link-box",
           leftText: "References:",
           rightText: this.proposal.improvementArguments.references,
         });
 
         // Budget
-        this.list.push({
+        this.extraInfoList.push({
           icon: "mdi-currency-eur",
           leftText: "Budget:",
           rightText: this.proposal.improvementArguments.budget,
         });
 
         // Roles
-        this.list.push({
+        this.extraInfoList.push({
           icon: "mdi-account-multiple",
           leftText: "Roles:",
           rightText: this.proposal.improvementArguments.executionRoles,
         });
 
         // Timebasedconstraints
-        this.list.push({
+        this.extraInfoList.push({
           icon: "mdi-calendar-range",
           leftText: "Time based constraints:",
           rightText: this.proposal.improvementArguments.timeBasedConstraint,
@@ -272,6 +309,11 @@ export default {
       if (to) {
         this.$router.push(to);
       }
+    },
+    hideExtraInfo() {
+      const extraInfoContainer = document.getElementById('extraInfo');
+      document.getElementById('buttonShow').innerText = extraInfoContainer.style.display !== 'none' ? 'Show more' : 'Show less';
+      extraInfoContainer.style.display = extraInfoContainer.style.display !== 'none' ? 'none' : 'block';
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {
