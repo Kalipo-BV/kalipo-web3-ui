@@ -4,7 +4,7 @@
       <v-textarea
         filled
         auto-grow
-        label="Motivation"
+        label="Time constraints"
         rows="4"
         row-height="20"
         maxlength="1024"
