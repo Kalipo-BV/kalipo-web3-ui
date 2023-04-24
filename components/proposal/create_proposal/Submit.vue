@@ -309,11 +309,20 @@ export default {
         this.proposalTitle = "";
         this.proposalDescription = "";
         this.uri = "";
+        this.proposers = "";
+        this.abstract = "";
+        this.motivation = "";
+        this.specification = "";
+        this.references = "";
+        this.budget = "";
+        this.executionRoles = "";
+        this.timeBasedConstraint = "";
         (this.transaction = {
           moduleId: -1,
           assetId: 0,
           assets: {},
         });
+        this.currentPage = 0;
       }
     },
   },
