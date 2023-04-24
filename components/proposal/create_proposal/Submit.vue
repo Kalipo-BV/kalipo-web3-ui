@@ -148,7 +148,7 @@
       ></AccountSign>
 
   <!--  Buttons previous, next or sign    -->
-      <v-card-text v-if="steps !== ['sign']">
+      <v-card-text v-if="!steps.includes('sign')">
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="this.currentPage === 0" @click="prevStep">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
