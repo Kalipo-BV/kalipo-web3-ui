@@ -148,9 +148,9 @@
       ></AccountSign>
 
   <!--  Buttons previous, next or sign    -->
-      <v-card-text v-if="steps !== 'sign'">
+      <v-card-text v-if="steps !== ['sign']">
         <div class="d-flex align-center justify-space-between">
-          <v-btn :disabled="steps === 'select-proposal-type'" @click="prevStep">
+          <v-btn :disabled="this.currentPage === 0" @click="prevStep">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
           </v-btn>
           <v-btn
@@ -301,7 +301,7 @@ export default {
       if (this.callbackFinish) {
         this.$nuxt.$emit(this.callbackFinish, true);
 
-        this.steps = "select-proposal-type";
+        this.steps = ["select-proposal-type"];
         this.disabledNext = false;
         this.selectedProposalType = "";
         this.selectedAccountId = "";
