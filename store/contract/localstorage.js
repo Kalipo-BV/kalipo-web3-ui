@@ -9,7 +9,7 @@ export const saveToLocalstorage = (contract) => {
 
 export const getFromLocalstorage = () => {
 	if (localStorage.getItem("Agreements") == null) {
-		console.warning("no Agreements in localstorage");
+		console.warn("no Agreements in localstorage");
 		return null;
 	}
 
@@ -25,6 +25,14 @@ export const getFromLocalstorage = () => {
 	return contract;
 }
 
+/**
+ * this function creates a object in the format of the required object
+ * every field that matches in the given object will be copied over
+ * every missing field will be created empty
+ * 
+ * This method does this recursively for all objects within the required object
+ * currently this method does not support 2d arrays, 3d+ arrays and objects within arrays
+ */
 function extractDataByObject(requiredObject, givenObject) {
 	const result = {};
 
@@ -39,7 +47,7 @@ function extractDataByObject(requiredObject, givenObject) {
 		}
 
 
-		
+
 		const isRequiredPropObject = (typeof currentRequiredProp === 'object' && !Array.isArray(currentRequiredProp));
 		const isGivenPropObject = (typeof currentGivenProp === 'object' && !Array.isArray(currentGivenProp));
 		if (isRequiredPropObject) {
@@ -55,7 +63,7 @@ function extractDataByObject(requiredObject, givenObject) {
 		}
 
 
-
+		
 		if (Array.isArray(currentRequiredProp)) {
 			if (Array.isArray(currentGivenProp)) {
 				result[key] = currentGivenProp;

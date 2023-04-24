@@ -26,7 +26,6 @@ const loadState = () => {
 	}
 
 	return contract;
-	
 }
 
 export const state = () => (

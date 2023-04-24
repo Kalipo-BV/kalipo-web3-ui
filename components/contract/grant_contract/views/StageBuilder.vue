@@ -92,10 +92,7 @@ export default {
 		},
 
 		save: function() {
-			// console.log(this.$store.state);
-			//test functions
-			// this.$store.dispatch("contract/loadPreviousState", {});
-			this.$store.dispatch("contract/saveState");
+			// this.$store.commit("contract/reset");
 		},
 	},
 }
