@@ -27,7 +27,12 @@ export default {
         this.$emit("update:executionRules", newValue);
       },
     }
-  }
+  },
+  data: () => ({
+    valid: false,
+    autonName: "",
+    autonErrorMessage: "",
+  }),
 }
 </script>
 

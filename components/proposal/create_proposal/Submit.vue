@@ -64,6 +64,9 @@
         ></StepperHeader>
 
         <ProposerList
+          :proposers.sync="proposers"
+          class="mt-4"
+          :autonId="autonId"
         ></ProposerList>
       </v-card-text>
 
@@ -175,7 +178,7 @@ export default {
     proposalTitle: "Test",
     proposalDescription: "",
     uri: "",
-    proposers: [],
+    proposers: "",
     abstract: "abstract",
     motivation: "mot",
     specification: "spec",

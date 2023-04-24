@@ -27,7 +27,12 @@ export default {
         this.$emit("update:timeConstraints", newValue);
       },
     }
-  }
+  },
+  data: () => ({
+    valid: false,
+    autonName: "",
+    autonErrorMessage: "",
+  }),
 }
 </script>
 
