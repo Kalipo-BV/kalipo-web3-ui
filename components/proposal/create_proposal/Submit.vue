@@ -64,10 +64,6 @@
         ></StepperHeader>
 
         <ProposerList
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
-          class="mt-4"
-          :autonId="autonId"
         ></ProposerList>
       </v-card-text>
 
@@ -78,8 +74,7 @@
         ></StepperHeader>
 
         <Motivation
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
+          :motivation.sync="motivation"
           class="mt-4"
           :autonId="autonId"
         ></Motivation>
@@ -92,10 +87,7 @@
         ></StepperHeader>
 
         <Specification
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
-          class="mt-4"
-          :autonId="autonId"
+          :specification.sync="specification"
         ></Specification>
       </v-card-text>
 
@@ -106,10 +98,7 @@
         ></StepperHeader>
 
         <References
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
-          class="mt-4"
-          :autonId="autonId"
+          :references.sync="references"
         ></References>
       </v-card-text>
 
@@ -120,10 +109,7 @@
         ></StepperHeader>
 
         <Budget
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
-          class="mt-4"
-          :autonId="autonId"
+          :budget.sync="budget"
         ></Budget>
       </v-card-text>
 
@@ -134,10 +120,7 @@
         ></StepperHeader>
 
         <ExecutionRoles
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
-          class="mt-4"
-          :autonId="autonId"
+          :executionRoles.sync="executionRoles"
         ></ExecutionRoles>
       </v-card-text>
 
@@ -148,10 +131,7 @@
         ></StepperHeader>
 
         <TimeConstraints
-          :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage"
-          class="mt-4"
-          :autonId="autonId"
+          :timeConstraints.sync="timeBasedConstraint"
         ></TimeConstraints>
       </v-card-text>
 
@@ -201,7 +181,7 @@ export default {
     specification: "spec",
     references: "ref",
     budget: "bud is vies",
-    executionRoles: [],
+    executionRoles: ['test', 'test2', 'hoi'],
     timeBasedConstraint: "tijd is geld nou gappie gooi wat tijd op me.",
     transaction: {
       moduleId: -1,
