@@ -221,6 +221,48 @@ export default {
           leftText: "Abstract:",
           rightText: this.proposal.improvementArguments.abstract,
         });
+
+        // Motivation
+        this.list.push({
+          icon: "mdi-target",
+          leftText: "Motivation:",
+          rightText: this.proposal.improvementArguments.motivation,
+        });
+
+        // Specification
+        this.list.push({
+          icon: "mdi-text-search",
+          leftText: "Specification:",
+          rightText: this.proposal.improvementArguments.specification,
+        });
+
+        // References
+        this.list.push({
+          icon: "mdi-link-box",
+          leftText: "References:",
+          rightText: this.proposal.improvementArguments.references,
+        });
+
+        // Budget
+        this.list.push({
+          icon: "mdi-currency-eur",
+          leftText: "Budget:",
+          rightText: this.proposal.improvementArguments.budget,
+        });
+
+        // Roles
+        this.list.push({
+          icon: "mdi-account-multiple",
+          leftText: "Roles:",
+          rightText: this.proposal.improvementArguments.executionRoles,
+        });
+
+        // Timebasedconstraints
+        this.list.push({
+          icon: "mdi-calendar-range",
+          leftText: "Time based constraints:",
+          rightText: this.proposal.improvementArguments.timeBasedConstraint,
+        });
       }
 
     }
