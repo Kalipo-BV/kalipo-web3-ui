@@ -4,7 +4,6 @@ import { initState } from "./initData.js";
 export const saveToLocalstorage = (contract) => {
 	const data = JSON.stringify(contract);
 	localStorage.setItem("Agreements", data);
-
 }
 
 export const getFromLocalstorage = () => {

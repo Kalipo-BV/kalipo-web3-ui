@@ -113,6 +113,15 @@
         </v-btn>
 
         <v-btn
+          color=""
+          class="mt-4"
+          block
+          @click="test"
+        >
+          test
+        </v-btn>
+
+        <v-btn
           color="error"
           class="mt-4"
           block
