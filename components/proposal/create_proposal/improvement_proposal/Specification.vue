@@ -10,7 +10,6 @@
         maxlength="1024"
         counter
         v-model="specificationValue"
-        :rules="rules.required"
       ></v-textarea>
     </v-form>
   </div>

@@ -10,7 +10,6 @@
         maxlength="1024"
         counter
         v-model="motivationValue"
-        :rules="rules.required"
       ></v-textarea>
     </v-form>
   </div>
@@ -34,7 +33,7 @@ export default {
     autonName: "",
     autonErrorMessage: "",
     rules: {
-      required: (value) => !!value || "Required.",
+      required: (value) => !!value || "Required."
     },
   }),
 }
