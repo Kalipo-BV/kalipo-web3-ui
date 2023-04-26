@@ -36,8 +36,8 @@
                 get: function () {
                     return this.$store.state.contract.formData.governingLawAndJurisdiction;
                 },
-                set: function (newValue) {
-                    this.$emit("update:governingLawAndJurisdiction", newValue);
+                set: function (payload) {
+                    this.$store.commit("contract/changeGoverningLawAndJurisdiction", payload);
                 },
             },
         },

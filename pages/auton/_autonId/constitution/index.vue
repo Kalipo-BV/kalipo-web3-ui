@@ -154,15 +154,22 @@
         <v-col cols="12" md="3">
           <ProposalTypeCard icon="mdi-bank" title="Bill"></ProposalTypeCard>
         </v-col>
+        <v-col cols="12" md="3" @click="() => {dialog = true}">
+          <ProposalTypeCard icon="" title="Contract"/>
+        </v-col>
       </v-row>
     </div>
+
+    <v-dialog scrollable v-model="dialog" max-width="500">
+      <SelectAgreementTemplate />
+    </v-dialog>
   </v-container>
 </template>
 <script>
 export default {
   layout: "auton",
   data: () => ({
-    dialog: true,
+    dialog: false,
   }),
   mounted() {
     this.$nuxt.$emit("Auton-setPage", "constitution");

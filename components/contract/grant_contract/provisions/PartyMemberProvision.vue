@@ -33,6 +33,7 @@
             item-text="name"
             item-value="id"
             style="padding: 1px; margin: 5px;"
+            hide-details="auto"
         >
         <template v-slot:selection="data">
           <v-chip

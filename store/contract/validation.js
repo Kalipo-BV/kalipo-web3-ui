@@ -1,3 +1,41 @@
+import { initState } from "./initData";
+
+export const isValidContract = (contract) => {
+	const _initState = initState();
+	const initStateKeys = Object.keys(_initState);
+	const initFormDataKeys = Object.keys(_initState.formData);
+
+	const stateKeys = Object.keys(contract);
+	const formDataKeys = Object.keys(contract.formData);
+	
+	const isStateStructureCorrect = arrayHasValues(stateKeys, initStateKeys);
+	const isFormDataStructureCorrect = arrayHasValues(formDataKeys, initFormDataKeys);
+
+	if (!isStateStructureCorrect) {
+		console.error("State structure of the loaded agreement is malformed")
+		return false;
+	}
+
+	if (!isFormDataStructureCorrect) {
+		console.error("State structure of the loaded agreement is malformed")
+		return false;
+	}
+
+	return true;
+}
+
+const arrayHasValues = (arrayToCheck, neededValues) => {
+	let i=0;
+	for (i; i < neededValues.length; i++) {
+		const hasValue = arrayToCheck.includes(neededValues[i]);
+		if(!hasValue) {
+			console.error(`Field doesnt exist ${neededValues[i]}`)
+			return false;
+		}
+	}
+	return true;
+};
+
 export const isArray = (payload, errorName) => {
 	const result = (Array.isArray(payload));
 	logError(result, errorName, payload);
@@ -48,7 +86,7 @@ export const isNumber = (payload, errorName) => {
 }
 
 export const isDate = (payload, errorName) => {
-	const regex = "/[0-9]{1,4}[-/]{1}[0-9]{1,4}[-/]{1}[0-9]$/";
+	const regex = "[0-9]{4}[-/]{1}[0-9]{2}[-/]{1}[0-9]{2}$";
 	const result = (payload.match(regex));
 	
 	logError(result, errorName, payload);

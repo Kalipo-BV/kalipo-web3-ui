@@ -55,8 +55,7 @@
 <script>
     export default {
         computed: {
-            
-            note: {
+            amount: {
                 get: function () {
                     return this.$store.state.contract.formData.payment.amount;
                 },
@@ -64,7 +63,7 @@
                     this.$store.commit("contract/changePaymentAmount", payload);
                 },
             },
-            amount: {
+            note: {
                 get: function () {
                     return this.$store.state.contract.formData.payment.note;
                 },

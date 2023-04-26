@@ -37,7 +37,7 @@
                     return this.$store.state.contract.formData.terminationOfAgreement;
                 },
                 set: function (payload) {
-                    this.$store.commit("contract/terminationOfAgreement", payload);
+                    this.$store.commit("contract/changeTerminationOfAgreement", payload);
                 },
             },
         },

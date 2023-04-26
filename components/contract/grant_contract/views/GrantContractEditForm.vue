@@ -16,9 +16,9 @@
 -->
 
 <template>
-    <v-container width="90%">
-      <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
-      <v-form validate-on="submit">
+  <v-container width="90%">
+    <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
+    <v-form ref="form">
       <div class="text-h2 pb-2">Agreement Parties</div>
       <v-card>
         <PartyMemberProvision isContractor partyName="contractor"/>
@@ -76,8 +76,8 @@
         /> -->
       <v-row>
         <v-alert
-          v-if="saving"
-          v-model="saving"
+          v-if="saved"
+          v-model="saved"
           width="100%"
           dense
           dismissible
@@ -102,34 +102,93 @@
 				>The contract has corectly been signed by you, and is now waiting for the other party(-ies) to sign it/accept it!</v-alert>
       </v-row>
 
-      <v-row>
+      <v-row style="margin-bottom: 10px;">
         <v-col>
           <v-btn>Back</v-btn>
         </v-col>
         <v-col align="right">
-                    <v-btn
-            @click="save"
-            style="background-color: #002060; color: white"
+          <v-btn
+            color="error"
+            @click="reset"
           >
-            Save
+            Reset Form
           </v-btn>
           <v-btn 
             @click="sign" 
             class="accent">
             Sign
           </v-btn>
+          <v-btn
+            color="primary"
+            @click="devDialog = true"
+          >
+            Dev preview
+          </v-btn>
         </v-col>
       </v-row>
     </v-form>
+
+    <v-dialog
+      width="60%"
+      v-model="dialog"
+      activator="parent"
+    >
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        callback="AutonCreate-PrevStep"
+        title="Sign the contract"
+      ></AccountSign>
+    </v-dialog>
+
+
+
+
+
+    <!-- dev dialog (delete this) -->
+    <v-dialog
+      width="60%"
+      v-model="devDialog"
+      activator="parent"
+    >
+      <div style="background-color: cadetblue; padding: 20px;">
+        <h1>Dev preview (see log for result)</h1>
+
+        <v-btn
+          color=""
+          block
+          @click="getAllIds"
+        >
+          getAllids
+        </v-btn>
+
+        <v-btn
+          color=""
+          class="mt-4"
+          block
+          @click="getBySetIdTest"
+        >
+          getBySetIdTest
+        </v-btn>
+
+        <v-btn
+          color=""
+          class="mt-4"
+          block
+          @click="getAllWithInfo"
+        >
+          getAllWithInfo
+        </v-btn>
+      </div>
+    </v-dialog>
+
+
+
+
   </v-container>
 </template>
 <script>
-import ContractTypeContainer from './ContractTypeContainer.vue';
-import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
-
   export default {
-    // props: ["transaction", "uri", "title"],
-    
     computed: {
       formData: {
           get: function () {
@@ -143,15 +202,12 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
         this.$emit("update:data", newValue);
       },
     },
-  
-    unlocked() {
-      return this.$store.state.wallet.unlocked;
-    },
       
     data: () => ({
-      saving: false,
+      saved: false,
       signed: false,
       dialog: false,
+      devDialog: false,
       transaction: {
         moduleId: 1010,
         assetId: 1,
@@ -161,52 +217,42 @@ import ProvisionTypeContainer from './ProvisionTypeContainer.vue';
     }),
 
     created() {
-      this.$nuxt.$on("IAH-triggerSignComplete", function ($event) {
+      this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
         this.handleCreation();
       });
     },
     
     methods: {
-      async sign() {
-        console.log(this.$store.state.contract);
-        // $router.push('/wallet');
-        const { valid } = await this.$refs.form.validate();
-        // if (valid) {
-          // if(this.unlocked) {
-            // this.transaction.assets = asset;
-            this.transaction.assets = this.$store.state.contract;
-            this.transaction.uri = "contract/signGrantContract-asset";
-            await this.$invoke("contract:signGrantContract", {
-              formData: this.$store.state.contract,
-              // .toString("hex")
-            });
-            
-            // this.$nuxt.$emit("IAH-triggerCreateAccount");
-            // this.$emit("signGrantContract");
-            // this.$nuxt.$emit("signGrantContract");
-            this.signed = true;
-          // } else {
+      async getAllIds() {
+        const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
+        console.log(existingAccoundIdWrapper);
+      },
+      async getBySetIdTest() {       
+        const existingAccoundIdWrapper = await this.$invoke(
+          "grantContract:getByID",
+          { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" },
+        );
+        console.log(existingAccoundIdWrapper);
+      },
+      async getAllWithInfo() {       
+        const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
+        console.log(existingAccoundIdWrapper); 
+      },
 
-          // }  
-        // }
+      
+
+      sign() {
+        if(this.$refs.form.validate()) {
+          this.transaction.assets = this.$store.state.contract;
+          this.uri = "";
+          this.dialog = true;
+        }
       },
       
       reset() {
-        this.$refs.form.reset();
-      },
-
-      save: function() {
-        localStorage.setItem("Grant-Contract", this.$store.state.contract);
-        if(localStorage.getItem("Grant-Contract") != null) {
-          this.saving = true;
-        }
-      },
-
-      async handleCreation() {
-        
+        this.$store.commit("contract/reset");
+        console.log(this.$store.state.contract);
       },
     },
-    components: { ContractTypeContainer, ProvisionTypeContainer }
-}
-
+  };
 </script>

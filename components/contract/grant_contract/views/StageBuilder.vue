@@ -37,17 +37,17 @@
 				</v-col>
 							
 				<v-col align="right">
-					<v-btn
+					<!-- <v-btn
 						style="background-color: #002060; color: white"
 						@click="save"
-					>Save</v-btn>
+					>Save</v-btn> -->
 					<v-btn
 						class="accent"
 						@click="next"
 					>Next</v-btn>
 				</v-col>
 			</v-row>
-			<v-row>
+			<!-- <v-row>
 				<v-alert
 					v-if="saving"
 					v-model="saving"
@@ -60,7 +60,7 @@
 					prominent
 					type="success"
 				>The contract has corectly been saved! ({{ this.saved }})</v-alert>
-			</v-row>
+			</v-row> -->
 	  </v-sheet>
 </template>
 <script>
@@ -92,10 +92,7 @@ export default {
 		},
 
 		save: function() {
-			// console.log(this.$store.state);
-			//test functions
-			// this.$store.dispatch("contract/loadPreviousState", {});
-			this.$store.dispatch("contract/saveState");
+			// this.$store.commit("contract/reset");
 		},
 	},
 }
