@@ -19,11 +19,11 @@
     <v-container>
         <!-- <div class="text--primary pl-2"> {{ title }}</div> -->
         <v-autocomplete
-            prepend-icon="mdi-account-multiple-plus"
             chips
             clearable
             deletable-chips
             multiple
+            outlined
             v-model="selected"
             :disabled="isUpdating"
             :items="users"

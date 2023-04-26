@@ -94,8 +94,9 @@ export const mutations = {
 	},
 
 	changePaymentAmount(state, payload) {
+		console.log(payload)
 		if (isNumber(payload, 'paymentAmount')) {
-			state.formData.payment.amount = payload;
+			state.formData.payment.amount = Number.parseFloat(payload);
 			_saveToLocalstorage(state);
 		}
 	},

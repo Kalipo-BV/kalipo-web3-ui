@@ -18,7 +18,7 @@ export const initFormData = () => {
 		preample: "",
 		purpose: "",
 		payment: {
-			amount: "",
+			amount: 0,
 			note: "",
 		},
 		dates: {
@@ -31,7 +31,7 @@ export const initFormData = () => {
 		finalProvisions: "",
 		milestones: [],
 		custom: [],
-		signingWindow: 0,
+		signingWindow: "",
 		requiredToSign: false,
 		signed: false,
 

@@ -16,12 +16,10 @@
 -->
 
 <template>
-	 <v-container class="container mb-5">
+	 <v-card class="container mb-5">
 		<h2 class="title">{{ title }}</h2>
-		<v-container class="container outline">
-			<slot></slot>
-		</v-container>	
-	 </v-container>
+		<slot></slot>
+	 </v-card>
 </template>
 <script>
 export default {

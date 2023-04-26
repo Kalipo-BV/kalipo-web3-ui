@@ -18,16 +18,14 @@
 <template>
     <v-textarea
         rows="2"
-        solo
+        outlined
+        hide-details="auto"
         clearable
         auto-grow
-        prepend-icon="mdi-file-document-edit-outline"
-        style="padding: 1px; margin: 5px;"
         :rules="[v => !!v || 'This field can\'t be left open!']"
         label="Preample"
         required
         v-model="preample"
-        hide-details="auto"
     />
 </template>
 <script>

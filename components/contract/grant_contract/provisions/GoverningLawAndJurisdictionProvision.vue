@@ -19,14 +19,14 @@
     <v-textarea
         v-model="governingLawAndJurisdiction"
         rows="2"
-        solo
-        clearable
         label="Governing law and jurisdiction"
+        outlined
+        hide-details="auto"
+        style="background-color: white;"
+        clearable
         auto-grow
         model-value="fill me in"
         :rules="[v => !!v || 'This field can\'t be left open!']"
-        prepend-icon="mdi-gavel" 
-        hide-details="auto"
     />
 </template>
 <script>

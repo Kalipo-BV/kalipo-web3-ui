@@ -19,7 +19,6 @@
 	<v-container class="container mt-3">
 		<h3 class="title mb-1">{{ title }}</h3>
 		<slot></slot>
-		<v-divider class="mt-5"/>
 	</v-container>
 </template>
 <script>
