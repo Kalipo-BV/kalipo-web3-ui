@@ -251,9 +251,9 @@
 
       async sign() {
         console.log(this.$store.state.contract);
-        this.transaction.assets = this.$store.state.contract;
+        this.transaction.assets = this.$store.getters["contract/filtered"];
         this.transaction.assets["contractId"] = "test";
-        console.log(this.$store.state.contract);
+        console.log(this.$store.getters["contract/filtered"]);
         this.uri = "contract/signConctract-asset";
         this.dialog = true;
       },
