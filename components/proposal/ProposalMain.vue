@@ -123,10 +123,10 @@
                 ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
               >
               <div class="d-flex justify-space-between align-center" style="width: 100%">
-                <div class="text-caption font-weight-medium mr-2">
+                <div class="text-caption font-weight-medium mr-2" style="width: 20%;">
                   {{ item.leftText }}
                 </div>
-                <div class="ma-0 text-caption">
+                <div class="ma-0 text-caption pr-8" style="width: 80%;">
                   {{ item.rightText }}
                 </div>
               </div>
