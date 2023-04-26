@@ -154,7 +154,7 @@
                   </div>
                   <div class="ma-0 text-caption pr-8" style="width: 80%; text-align: right;">
                     {{ item.rightText }}
-                    <button :style="{visibility:item.rightText.length<53?'hidden':'inherit'}" @click="showMoreshowLess(item)">V</button>
+                    <button :style="{visibility:item.rightText.length<53?'hidden':'inherit'}" @click="showMoreshowLess(item)">{{buttonText}}</button>
                   </div>
                 </div>
               </div>
@@ -177,6 +177,7 @@ export default {
     userLang: null,
     mainPath: null,
     step: 1,
+    buttonText: "V",
   }),
   async mounted() {
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
@@ -310,7 +311,7 @@ export default {
     this.extraInfoList.forEach(element => {
       this.showMoreshowLess(element);
     })
-    
+
   },
   methods: {
     navigateTo(to) {
@@ -319,17 +320,20 @@ export default {
       }
     },
     showMoreshowLess(item) {
+
       var indexInTheList = this.extraInfoList.indexOf(item);
 
       // Al gesliced.
       if(this.extraInfoList[indexInTheList].rightText.length === 53 && this.extraInfoListFullRightText[indexInTheList].length > 50){
         this.extraInfoList[indexInTheList].rightText = this.extraInfoListFullRightText[indexInTheList];
-        // button naar boven.
+        //Veranderd de tekst van de button naar ^
+        this.buttonText = "^";
       }
       // Nog niet gesliced.
       else if(this.extraInfoListFullRightText[indexInTheList].length > 50) {
         this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0,50) + "...";
-        // button naar beneden.
+        //Veranderd de tekst van de button naar V
+        this.buttonText = "V"
       }
     },
     hideExtraInfo() {
