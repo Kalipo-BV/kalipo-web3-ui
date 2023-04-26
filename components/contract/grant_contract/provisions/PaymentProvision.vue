@@ -17,28 +17,39 @@
 
 <template>
     <div>
-        <v-text-field
-            v-model="amount"
-            style="padding: 1px"
-            label="Payment amount"
-            prepend-icon="mdi-cash-multiple" 
-            type="number"
-            clearable
-            required
-            :rules="[v => v > 0 || 'This field can\'t be left open (>0)!']"
-        />
-
-        <v-textarea
-            v-model="note"
-            rows="1"
-            solo
-            clearable
-            label="Payment note"
-            auto-grow
-            hide-details="auto"
-            prepend-icon="mdi-receipt-text-plus-outline" 
-            style="padding-bottom: 5px;"
-        />
+        <v-row>
+            <v-col cols=6>
+                <v-card>
+                    <v-text-field
+                        v-model="amount"
+                        style="background-color: white; margin-bottom: 15px;"
+                        type="number"
+                        clearable
+                        auto-grow
+                        required
+                        outlined
+                        hide-details="auto"
+                        label="Payment Amount"
+                        :rules="[v => v > 0 || 'This field can\'t be left open (>0)!']"
+                    />
+                </v-card>
+            </v-col>
+            
+            <v-col cols="6">
+                <v-card>
+                    <v-text-field
+                        v-model="note"
+                        rows="1"
+                        clearable
+                        auto-grow
+                        outlined
+                        hide-details="auto"
+                        label="Payment Note"
+                        style="background-color: white;"
+                    />
+                </v-card>
+            </v-col>
+        </v-row>
     </div>
 </template>
 <script>

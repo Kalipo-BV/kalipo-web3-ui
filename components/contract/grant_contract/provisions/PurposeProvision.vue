@@ -17,15 +17,16 @@
 
 <template>
     <v-textarea
+        outlined
         v-model="purpose"
         rows="2"
-        solo
+        hide-details="auto"
+        style="background-color: white;"
         clearable
         label="Purpose of the grand"
         auto-grow
         model-value="fill me in"
         :rules="[v => !!v || 'The purpose of the grand can\'t be left open!']"
-        prepend-icon="mdi-card-text-outline" 
         
     />
 </template>

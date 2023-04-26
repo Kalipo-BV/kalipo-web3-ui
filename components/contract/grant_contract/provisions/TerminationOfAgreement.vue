@@ -19,13 +19,14 @@
     <v-textarea
         v-model="terminationOfAgreement"
         rows="2"
-        solo
+        label="Termination of agreement"
+        outlined
+        hide-details="auto"
+        style="background-color: white;"
         clearable
-        label="Termination of the agreement"
         auto-grow
         model-value="fill me in"
         :rules="[v => !!v || 'This field can\'t be left open!']"
-        prepend-icon="mdi-calendar-remove-outline" 
     />
 </template>
 <script>

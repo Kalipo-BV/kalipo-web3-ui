@@ -16,54 +16,55 @@
 -->
 
 <template>
-  <v-sheet width="90%" class="mx-auto pa-10" style="margin-top: 10vh; margin-bottom: 12vh;">
-    <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
-    <v-form ref="form">
-      <ContractTypeContainer title="Agreement parties">
+    <v-container width="90%">
+      <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
+      <v-form validate-on="submit">
+      <div class="text-h2 pb-2">Agreement Parties</div>
+      <v-card>
         <PartyMemberProvision isContractor partyName="contractor"/>
         <PartyMemberProvision partyName="client"/>
-      </ContractTypeContainer>
+      </v-card>
 
-      <ContractTypeContainer title="Preamples">
-        <PreampleProvision/>
-      </ContractTypeContainer>
-      
-      <ContractTypeContainer title="Provision types">
-        <ProvisionTypeContainer title="Purpose">
-            <PurposeProvision/>
-        </ProvisionTypeContainer>
-        
-        <ProvisionTypeContainer title="Payment of grant">
-          <PaymentProvision/>
-        </ProvisionTypeContainer>
-      
-        <ProvisionTypeContainer title="Date (begin- & end date)">
-          <DateTimeProvision/>
-        </ProvisionTypeContainer>
+      <div class="text-h2 pt-2 pb-2 mt-5">Preamples</div>
+      <v-card>
+        <PreampleProvision />
+      </v-card>
 
-        <ProvisionTypeContainer title="Property rights">
-          <PropertyRightsProvision/>
-        </ProvisionTypeContainer>
-      
-        <ProvisionTypeContainer title="Termination of Agreement">
-          <TerminationOfAgreement/>
-        </ProvisionTypeContainer>
+      <div class="text-h2 mt-6">Provision types</div>
+      <v-card class="mb-4">
+        <PurposeProvision />
+      </v-card>
 
-        <ProvisionTypeContainer title="Governing law and jurisdiction">
-          <GoverningLawAndJurisdictionProvision/>
-        </ProvisionTypeContainer>
+      <PaymentProvision />
 
-        <ProvisionTypeContainer title="Final provisions">
-          <FinalProvisions/>
-        </ProvisionTypeContainer>
+      <v-card class="mt-4 mb-4">
+        <DateTimeProvision />
+      </v-card>
 
-        <ProvisionTypeContainer title="Milestones">
-          <MilestonesProvision/>
-        </ProvisionTypeContainer>
-
-        <ProvisionTypeContainer title="Custom provision">
-          <CustomProvision/>
-        </ProvisionTypeContainer>
+      <v-row>
+        <v-col cols=6>
+          <v-card>
+            <PropertyRightsProvision />
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card>
+            <TerminationOfAgreement />
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols=6>
+          <v-card>
+            <GoverningLawAndJurisdictionProvision />
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card>
+            <FinalProvisions />
+          </v-card>
+        </v-col>
+      </v-row>
 
         <!-- <RequiredToSignProvision/> -->
       
@@ -73,7 +74,6 @@
           label="I hereby agree to the aforementioned contract?"
           required
         /> -->
-      </ContractTypeContainer>
       <v-row>
         <v-alert
           v-if="saving"
@@ -102,44 +102,26 @@
 				>The contract has corectly been signed by you, and is now waiting for the other party(-ies) to sign it/accept it!</v-alert>
       </v-row>
 
-      <div class="d-flex flex-column">
-        <v-btn
-          color="info"
-          class="mt-4"
-          block
-          @click="save"
-        >
-          Save
-        </v-btn>
-
-        <v-btn
-          color="success"
-          class="mt-4"
-          block
-          @click="sign"
-        >
-          Sign
-        </v-btn>
-
-        <v-btn
-          color="error"
-          class="mt-4"
-          block
-          @click="reset"
-        >
-          Reset Form
-        </v-btn>
-
-        <!-- <v-btn
-          class="mt-4"
-          block
-          @click="test"
-        >
-          Test
-        </v-btn> -->
-      </div>
+      <v-row>
+        <v-col>
+          <v-btn>Back</v-btn>
+        </v-col>
+        <v-col align="right">
+                    <v-btn
+            @click="save"
+            style="background-color: #002060; color: white"
+          >
+            Save
+          </v-btn>
+          <v-btn 
+            @click="sign" 
+            class="accent">
+            Sign
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-form>
-  </v-sheet>
+  </v-container>
 </template>
 <script>
 import ContractTypeContainer from './ContractTypeContainer.vue';

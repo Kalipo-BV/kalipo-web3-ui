@@ -19,13 +19,14 @@
     <v-textarea
         v-model="propertyRights"
         rows="2"
-        solo
+        style="background-color: white;"
+        label="Property rights"
+        outlined
+        hide-details="auto"
         clearable
-        label="Intelectual property rights"
         auto-grow
         model-value="fill me in"
         :rules="[v => !!v || 'This field can\'t be left open!']"
-        prepend-icon="mdi-file-certificate-outline" 
     />
 </template>
 <script>
