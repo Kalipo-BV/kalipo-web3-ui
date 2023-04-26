@@ -248,7 +248,7 @@ export default {
         case 2:
           this.steps = ['sign'];
       }
-
+      
       if (this.currentPage === 2) {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
