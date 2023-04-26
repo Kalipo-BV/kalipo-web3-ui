@@ -262,11 +262,10 @@ export default {
           case "improvement-proposal":
             asset = {
               title: this.proposalTitle,
-              campaignComment: this.proposalDescription,
+              abstract: this.proposalDescription,
               proposalType: this.selectedProposalType,
               autonId: this.autonId,
               proposers: this.proposers,
-              abstract: this.abstract,
               motivation: this.motivation,
               specification: this.specification,
               references: this.references,
