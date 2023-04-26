@@ -34,17 +34,17 @@
           <div class="d-flex justify-center">Dialogue</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
-                new Date(parseInt(proposal.created) * 1000).toLocaleDateString(
-                  userLang,
-                  {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  }
-                )
-              }}</small>
+              new Date(parseInt(proposal.created) * 1000).toLocaleDateString(
+                userLang,
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                }
+              )
+            }}</small>
           </div>
         </v-stepper-step>
 
@@ -61,17 +61,17 @@
           <div class="d-flex justify-center">Voting</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
-                new Date(parseInt(proposal.windowOpen) * 1000).toLocaleDateString(
-                  userLang,
-                  {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  }
-                )
-              }}</small>
+              new Date(parseInt(proposal.windowOpen) * 1000).toLocaleDateString(
+                userLang,
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                }
+              )
+            }}</small>
           </div>
         </v-stepper-step>
 
@@ -86,16 +86,16 @@
           <div class="d-flex justify-center">Closed</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
-                new Date(
-                  parseInt(proposal.windowClosed) * 1000
-                ).toLocaleDateString(userLang, {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                })
-              }}</small>
+              new Date(
+                parseInt(proposal.windowClosed) * 1000
+              ).toLocaleDateString(userLang, {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })
+            }}</small>
           </div>
         </v-stepper-step>
       </v-stepper-header>
@@ -109,7 +109,7 @@
         </v-card-text>
       </v-card>
 
-      <div id="standardAttributeList" v-for="(item, i) in standardAttributeList" :key="i">
+      <div v-for="(item, i) in list" :key="i">
         <v-divider></v-divider>
 
         <v-card flat link @click="navigateTo(item.link)">
@@ -120,14 +120,13 @@
                 size="25"
                 class="white--text mr-2"
                 v-if="item.icon"
-              ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
+                ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
               >
-
-              <div class="d-flex justify-space-between" style="width: 100%">
-                <div class="text-caption font-weight-medium">
+              <div class="d-flex justify-space-between align-center" style="width: 100%">
+                <div class="text-caption font-weight-medium mr-2" style="width: 20%;">
                   {{ item.leftText }}
                 </div>
-                <div class="text-caption">
+                <div class="ma-0 text-caption pr-8" style="width: 80%; text-align: right">
                   {{ item.rightText }}
                 </div>
               </div>
@@ -147,18 +146,16 @@
                   size="25"
                   class="white--text mr-2"
                   v-if="item.icon"
-                ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
+                  ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
                 >
-
-                <div class="d-flex justify-space-between" style="width: 100%">
-                  <div class="text-caption font-weight-medium">
+                <div class="d-flex justify-space-between align-center" style="width: 100%">
+                  <div class="text-caption font-weight-medium mr-2" style="width: 20%;">
                     {{ item.leftText }}
                   </div>
-                  <div class="text-caption">
-                    {{ item.rightText}}
-                    <button @click="showMoreshowLess(item)">V</button>
+                  <div class="ma-0 text-caption pr-8" style="width: 80%; text-align: right;">
+                    {{ item.rightText }}
+                    <button :style="{visibility:item.rightText.length<53?'hidden':'inherit'}" @click="showMoreshowLess(item)">V</button>
                   </div>
-
                 </div>
               </div>
             </v-card-text>
@@ -166,9 +163,6 @@
         </div>
       </div>
     </v-card>
-    <div style="justify-content: center; display: flex;">
-      <v-btn style="background-color: #0a75f3; color: white;  margin-top: 5px; " id="buttonShow" @click="hideExtraInfo">Show more</v-btn>
-    </div>
   </div>
 </template>
 
@@ -179,13 +173,12 @@ export default {
     standardAttributeList: [],
     extraInfoList: [],
     extraInfoListFullRightText: [],
+    list: [],
     userLang: null,
     mainPath: null,
     step: 1,
   }),
   async mounted() {
-    const extraInfoContainer = document.getElementById('extraInfo');
-    extraInfoContainer.style.display = 'none';
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
     const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
     this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
@@ -205,7 +198,7 @@ export default {
 
       this.userLang = navigator.language || navigator.userLanguage;
       // Submission date
-      this.standardAttributeList.push({
+      this.list.push({
         icon: "mdi-calendar",
 
         leftText: "Submission:",
@@ -221,7 +214,7 @@ export default {
       });
 
       // Proposer
-      this.standardAttributeList.push({
+      this.list.push({
         icon: "mdi-account",
         leftText: "Proposer:",
         rightText: "@" + this.submitter.username,
@@ -229,7 +222,7 @@ export default {
       });
 
       // Proposal type
-      this.standardAttributeList.push({
+      this.list.push({
         icon: "mdi-bank",
         leftText: "Proposal type:",
         rightText: this.proposal.type.replaceAll("-", " "),
@@ -245,7 +238,7 @@ export default {
         });
         const invited = invitedWrapper.result;
         // Membership candidate.
-        this.standardAttributeList.push({
+        this.list.push({
           icon: "mdi-account-plus",
           leftText: "Membership candidate:",
           rightText: "@" + invited.username,
@@ -329,15 +322,15 @@ export default {
       var indexInTheList = this.extraInfoList.indexOf(item);
 
       // Al gesliced.
-      if(this.extraInfoList[indexInTheList].rightText.length === 63 && this.extraInfoListFullRightText[indexInTheList].length > 60){
+      if(this.extraInfoList[indexInTheList].rightText.length === 53 && this.extraInfoListFullRightText[indexInTheList].length > 50){
         this.extraInfoList[indexInTheList].rightText = this.extraInfoListFullRightText[indexInTheList];
+        // button naar boven.
       }
       // Nog niet gesliced.
-      else {
-        this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0,60) + "...";
+      else if(this.extraInfoListFullRightText[indexInTheList].length > 50) {
+        this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0,50) + "...";
+        // button naar beneden.
       }
-        
-      
     },
     hideExtraInfo() {
       const extraInfoContainer = document.getElementById('extraInfo');
