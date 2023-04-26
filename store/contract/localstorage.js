@@ -15,13 +15,16 @@ export const getFromLocalstorage = () => {
 	const contract = JSON.parse(localStorage.getItem("Agreements"));
 
 	if (!isValidContract(contract)) {
-		const data = extractDataByObject(initState(), contract);
 		console.warn("getFromLocalstorage uses a fallback to fill the holes in its required dataStructure");
-
-		return data;
+		return normalizeContract(contract);;
 	}
 
 	return contract;
+}
+
+
+export const normalizeContract = (contract) => {
+	return extractDataByObject(initState(), contract);
 }
 
 /**
