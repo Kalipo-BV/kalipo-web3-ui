@@ -122,12 +122,11 @@
                 v-if="item.icon"
                 ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
               >
-
-              <div class="d-flex justify-space-between" style="width: 100%">
-                <div class="text-caption font-weight-medium">
+              <div class="d-flex justify-space-between align-center" style="width: 100%">
+                <div class="text-caption font-weight-medium mr-2">
                   {{ item.leftText }}
                 </div>
-                <div class="text-caption">
+                <div class="ma-0 text-caption">
                   {{ item.rightText }}
                 </div>
               </div>
