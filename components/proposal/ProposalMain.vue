@@ -156,7 +156,7 @@
                   </div>
                   <div class="text-caption">
                     {{ item.rightText}}
-                    <button @click="test(item.rightText)">V</button>
+                    <button @click="showMoreshowLess(item)">V</button>
                   </div>
 
                 </div>
@@ -178,6 +178,7 @@ export default {
   data: () => ({
     standardAttributeList: [],
     extraInfoList: [],
+    extraInfoListFullRightText: [],
     userLang: null,
     mainPath: null,
     step: 1,
@@ -252,7 +253,9 @@ export default {
         });
       } else if (this.proposal.type == "improvement") {
         console.log(this.proposal)
+
         // Abstract
+        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.abstract);
         this.extraInfoList.push({
           icon: "mdi-text",
           leftText: "Abstract:",
@@ -260,6 +263,7 @@ export default {
         });
 
         // Motivation
+        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.motivation);
         this.extraInfoList.push({
           icon: "mdi-target",
           leftText: "Motivation:",
@@ -267,6 +271,7 @@ export default {
         });
 
         // Specification
+        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.specification);
         this.extraInfoList.push({
           icon: "mdi-text-search",
           leftText: "Specification:",
@@ -274,6 +279,7 @@ export default {
         });
 
         // References
+        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.references);
         this.extraInfoList.push({
           icon: "mdi-link-box",
           leftText: "References:",
@@ -281,6 +287,7 @@ export default {
         });
 
         // Budget
+        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.budget);
         this.extraInfoList.push({
           icon: "mdi-currency-eur",
           leftText: "Budget:",
@@ -288,6 +295,7 @@ export default {
         });
 
         // Roles
+        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.executionRoles);
         this.extraInfoList.push({
           icon: "mdi-account-multiple",
           leftText: "Roles:",
@@ -295,6 +303,7 @@ export default {
         });
 
         // Timebasedconstraints
+        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.timeBasedConstraint);
         this.extraInfoList.push({
           icon: "mdi-calendar-range",
           leftText: "Time based constraints:",
@@ -303,6 +312,12 @@ export default {
       }
 
     }
+
+    // Zorgt ervoor dat de items worden ingekort die ingekort moeten worden.
+    this.extraInfoList.forEach(element => {
+      this.showMoreshowLess(element);
+    })
+    
   },
   methods: {
     navigateTo(to) {
@@ -310,9 +325,19 @@ export default {
         this.$router.push(to);
       }
     },
-    test(item) {
-      item = item.slice(0, 50) + "..."
-      console.log(item)
+    showMoreshowLess(item) {
+      var indexInTheList = this.extraInfoList.indexOf(item);
+
+      // Al gesliced.
+      if(this.extraInfoList[indexInTheList].rightText.length === 63 && this.extraInfoListFullRightText[indexInTheList].length > 60){
+        this.extraInfoList[indexInTheList].rightText = this.extraInfoListFullRightText[indexInTheList];
+      }
+      // Nog niet gesliced.
+      else {
+        this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0,60) + "...";
+      }
+        
+      
     },
     hideExtraInfo() {
       const extraInfoContainer = document.getElementById('extraInfo');
