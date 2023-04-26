@@ -5,7 +5,7 @@
         <div class="text-h4 text--primary">Creating a new agreement</div>
       </v-card-title>
     </v-toolbar>
-    <v-card-items>
+    <v-card-text>
       <v-col cols="12" md="4" class="pt-0" style="min-width: 100%;">
         <v-text-field 
           hide-details="auto" 
@@ -17,12 +17,12 @@
           @input="searchTemplate">
         </v-text-field>
       </v-col>
-    </v-card-items>
+    </v-card-text>
     <v-card-text>
       <v-item-group v-model="selected" mandatory>
         <div v-if="s_templates.length === 0" class="text-h4">No templates found</div>
         <v-row>
-            <v-col v-for="(template, index) in this.s_templates" key="index" cols="6" class="px">
+            <v-col v-for="(template, index) in this.s_templates" :key="index" cols="6" class="px">
               <v-item v-slot="{ active, toggle }">
                 <OptionCard 
                   :active="active" 
