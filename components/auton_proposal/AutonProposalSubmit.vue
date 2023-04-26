@@ -236,8 +236,8 @@ export default {
           autonId: this.autonId,
           accountIdToInvite: this.selectedAccountId,
           invitationMessage: this.invitationMessage,
-          stakeholders: this.selectedStakeholders
-        };
+          stakeholders: "testtesttesttest"
+          };
         this.transaction.moduleId = 1004;
         this.transaction.assetId = 0;
         this.transaction.assets = asset;

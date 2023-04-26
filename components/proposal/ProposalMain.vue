@@ -136,7 +136,7 @@
         </v-card>
       </div>
     </v-card>
-    <p>{{ this.proposals }}</p>
+    <p>proposals: {{ getStakeholders() }}</p>
   </div>
 </template>
 
@@ -151,6 +151,9 @@ export default {
     proposals: [null],
   }),
   async mounted() {
+
+
+    
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
     const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
     this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
@@ -171,7 +174,8 @@ export default {
       }
     }
 
-    console.log("proposals uit database: "+this.proposals)
+    console.log("proposals uit database: ")
+    console.log(proposals)
     
     if (
       this.proposal != null &&
@@ -233,6 +237,9 @@ export default {
       if (to) {
         this.$router.push(to);
       }
+    },
+    getStakeholders(){
+      return this.proposal.stakeholders;
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {
