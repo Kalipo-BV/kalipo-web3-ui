@@ -178,7 +178,7 @@ export default {
     proposalTitle: "Test",
     proposalDescription: "",
     uri: "",
-    proposers: "",
+    proposers: [],
     abstract: "abstract",
     motivation: "mot",
     specification: "spec",
@@ -309,7 +309,7 @@ export default {
         this.proposalTitle = "";
         this.proposalDescription = "";
         this.uri = "";
-        this.proposers = "";
+        this.proposers = [];
         this.abstract = "";
         this.motivation = "";
         this.specification = "";
