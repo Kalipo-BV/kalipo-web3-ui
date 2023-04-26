@@ -34,17 +34,17 @@
           <div class="d-flex justify-center">Dialogue</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
-                new Date(parseInt(proposal.created) * 1000).toLocaleDateString(
-                  userLang,
-                  {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  }
-                )
-              }}</small>
+              new Date(parseInt(proposal.created) * 1000).toLocaleDateString(
+                userLang,
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                }
+              )
+            }}</small>
           </div>
         </v-stepper-step>
 
@@ -61,17 +61,17 @@
           <div class="d-flex justify-center">Voting</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
-                new Date(parseInt(proposal.windowOpen) * 1000).toLocaleDateString(
-                  userLang,
-                  {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  }
-                )
-              }}</small>
+              new Date(parseInt(proposal.windowOpen) * 1000).toLocaleDateString(
+                userLang,
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                }
+              )
+            }}</small>
           </div>
         </v-stepper-step>
 
@@ -86,16 +86,16 @@
           <div class="d-flex justify-center">Closed</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
-                new Date(
-                  parseInt(proposal.windowClosed) * 1000
-                ).toLocaleDateString(userLang, {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                })
-              }}</small>
+              new Date(
+                parseInt(proposal.windowClosed) * 1000
+              ).toLocaleDateString(userLang, {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })
+            }}</small>
           </div>
         </v-stepper-step>
       </v-stepper-header>
@@ -109,7 +109,7 @@
         </v-card-text>
       </v-card>
 
-      <div id="standardAttributeList" v-for="(item, i) in standardAttributeList" :key="i">
+      <div v-for="(item, i) in list" :key="i">
         <v-divider></v-divider>
 
         <v-card flat link @click="navigateTo(item.link)">
@@ -120,7 +120,7 @@
                 size="25"
                 class="white--text mr-2"
                 v-if="item.icon"
-              ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
+                ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
               >
               <div class="d-flex justify-space-between align-center" style="width: 100%">
                 <div class="text-caption font-weight-medium mr-2" style="width: 20%;">
@@ -134,40 +134,7 @@
           </v-card-text>
         </v-card>
       </div>
-      <div id="extraInfo">
-        <div id="extraInfoContainer" v-for="(item, i) in extraInfoList" :key="i">
-          <v-divider></v-divider>
-
-          <v-card flat link @click="navigateTo(item.link)">
-            <v-card-text class="py-2">
-              <div class="d-flex align-center">
-                <v-avatar
-                  color="primary"
-                  size="25"
-                  class="white--text mr-2"
-                  v-if="item.icon"
-                ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
-                >
-
-                <div class="d-flex justify-space-between" style="width: 100%">
-                  <div class="text-caption font-weight-medium">
-                    {{ item.leftText }}
-                  </div>
-                  <div class="text-caption">
-                    {{ item.rightText}}
-                    <button @click="test(item.rightText)">V</button>
-                  </div>
-
-                </div>
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
-      </div>
     </v-card>
-    <div style="justify-content: center; display: flex;">
-      <v-btn style="background-color: #0a75f3; color: white;  margin-top: 5px; " id="buttonShow" @click="hideExtraInfo">Show more</v-btn>
-    </div>
   </div>
 </template>
 
@@ -175,15 +142,12 @@
 export default {
   props: ["proposal", "submitter"],
   data: () => ({
-    standardAttributeList: [],
-    extraInfoList: [],
+    list: [],
     userLang: null,
     mainPath: null,
     step: 1,
   }),
   async mounted() {
-    const extraInfoContainer = document.getElementById('extraInfo');
-    extraInfoContainer.style.display = 'none';
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
     const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
     this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
@@ -203,7 +167,7 @@ export default {
 
       this.userLang = navigator.language || navigator.userLanguage;
       // Submission date
-      this.standardAttributeList.push({
+      this.list.push({
         icon: "mdi-calendar",
 
         leftText: "Submission:",
@@ -219,7 +183,7 @@ export default {
       });
 
       // Proposer
-      this.standardAttributeList.push({
+      this.list.push({
         icon: "mdi-account",
         leftText: "Proposer:",
         rightText: "@" + this.submitter.username,
@@ -227,7 +191,7 @@ export default {
       });
 
       // Proposal type
-      this.standardAttributeList.push({
+      this.list.push({
         icon: "mdi-bank",
         leftText: "Proposal type:",
         rightText: this.proposal.type.replaceAll("-", " "),
@@ -243,58 +207,57 @@ export default {
         });
         const invited = invitedWrapper.result;
         // Membership candidate.
-        this.standardAttributeList.push({
+        this.list.push({
           icon: "mdi-account-plus",
           leftText: "Membership candidate:",
           rightText: "@" + invited.username,
           link: "/account/" + invited.username,
         });
       } else if (this.proposal.type == "improvement") {
-        console.log(this.proposal)
         // Abstract
-        this.extraInfoList.push({
+        this.list.push({
           icon: "mdi-text",
           leftText: "Abstract:",
           rightText: this.proposal.improvementArguments.abstract,
         });
 
         // Motivation
-        this.extraInfoList.push({
+        this.list.push({
           icon: "mdi-target",
           leftText: "Motivation:",
           rightText: this.proposal.improvementArguments.motivation,
         });
 
         // Specification
-        this.extraInfoList.push({
+        this.list.push({
           icon: "mdi-text-search",
           leftText: "Specification:",
           rightText: this.proposal.improvementArguments.specification,
         });
 
         // References
-        this.extraInfoList.push({
+        this.list.push({
           icon: "mdi-link-box",
           leftText: "References:",
           rightText: this.proposal.improvementArguments.references,
         });
 
         // Budget
-        this.extraInfoList.push({
+        this.list.push({
           icon: "mdi-currency-eur",
           leftText: "Budget:",
           rightText: this.proposal.improvementArguments.budget,
         });
 
         // Roles
-        this.extraInfoList.push({
+        this.list.push({
           icon: "mdi-account-multiple",
           leftText: "Roles:",
           rightText: this.proposal.improvementArguments.executionRoles,
         });
 
         // Timebasedconstraints
-        this.extraInfoList.push({
+        this.list.push({
           icon: "mdi-calendar-range",
           leftText: "Time based constraints:",
           rightText: this.proposal.improvementArguments.timeBasedConstraint,
@@ -308,15 +271,6 @@ export default {
       if (to) {
         this.$router.push(to);
       }
-    },
-    test(item) {
-      item = item.slice(0, 50) + "..."
-      console.log(item)
-    },
-    hideExtraInfo() {
-      const extraInfoContainer = document.getElementById('extraInfo');
-      document.getElementById('buttonShow').innerText = extraInfoContainer.style.display !== 'none' ? 'Show more' : 'Show less';
-      extraInfoContainer.style.display = extraInfoContainer.style.display !== 'none' ? 'none' : 'block';
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {
