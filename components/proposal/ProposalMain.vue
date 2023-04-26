@@ -155,8 +155,8 @@
                     {{ item.leftText }}
                   </div>
                   <div class="text-caption">
-                    {{ item.rightText }}
-                    <button>V</button>
+                    {{ item.rightText}}
+                    <button @click="test(item.rightText)">V</button>
                   </div>
 
                 </div>
@@ -309,6 +309,10 @@ export default {
       if (to) {
         this.$router.push(to);
       }
+    },
+    test(item) {
+      item = item.slice(0, 50) + "..."
+      console.log(item)
     },
     hideExtraInfo() {
       const extraInfoContainer = document.getElementById('extraInfo');
