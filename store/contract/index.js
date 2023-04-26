@@ -16,7 +16,7 @@
  */
 
 import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
-import { saveToLocalstorage as _saveToLocalstorage, getFromLocalstorage as _getFromLocalstorage } from "./localstorage.js"
+import { saveToLocalstorage as _saveToLocalstorage, getFromLocalstorage as _getFromLocalstorage, normalizeContract } from "./localstorage.js"
 import { initFormData, initState } from "./initData.js";
 
 const loadState = () => {
@@ -174,8 +174,8 @@ export const mutations = {
 }
 
 export const getters = {
-	getContract: (state) => {
-		return retreiveData(state);
+	filtered: (state) => {
+		return normalizeContract(state);
 	}
 }
 
