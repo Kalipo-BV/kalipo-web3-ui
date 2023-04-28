@@ -163,6 +163,9 @@
         </div>
       </div>
     </v-card>
+    <div style="justify-content: center; display: flex;">
+      <v-btn style="background-color: #0a75f3; color: white;  margin-top: 5px; " id="buttonShow" @click="hideExtraInfo">Show more</v-btn>
+    </div>
   </div>
 </template>
 
@@ -311,6 +314,8 @@ export default {
     this.extraInfoList.forEach(element => {
       this.showMoreshowLess(element);
     })
+
+    this.hideExtraInfo();
 
   },
   methods: {
