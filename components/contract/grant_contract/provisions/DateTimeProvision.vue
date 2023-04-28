@@ -34,11 +34,11 @@
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               readonly
+              outlined
               :value=startDate
               label="Start date"
               hint="YYYY/MM/DD format"
               persistent-hint
-              prepend-icon="mdi-calendar"
               v-bind="attrs"
               v-on="on"
               :rules="[v => !!v || 'A start-date must be selected!', startDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The start-date must be in the future or today', startDate < endDate || 'The start-date must come before the end-date!'].flat()"
@@ -67,11 +67,11 @@
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               readonly
+              outlined
               :value=endDate
               label="End date"
               hint="YYYY/MM/DD format"
               persistent-hint
-              prepend-icon="mdi-calendar"
               v-bind="attrs"
               v-on="on"
               :rules="[v => !!v || 'An end-date must be selected!', endDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The end-date must be in the future', endDate > startDate || 'The end-date must come after the start-date!'].flat()"
