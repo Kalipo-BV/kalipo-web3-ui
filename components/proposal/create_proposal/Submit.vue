@@ -56,20 +56,6 @@
         ></MembershipInvitation>
       </v-card-text>
 
-  <!--  Improvement proposal pages    -->
-      <v-card-text v-if="steps.includes('proposers')">
-        <StepperHeader
-          title="Selecting proposers"
-          subtitle="Please select the users which helped make the proposal"
-        ></StepperHeader>
-
-        <ProposerList
-          :proposers.sync="proposers"
-          class="mt-4"
-          :autonId="autonId"
-        ></ProposerList>
-      </v-card-text>
-
       <v-card-text v-if="steps.includes('motivation')">
         <StepperHeader
           title="Motivation"
