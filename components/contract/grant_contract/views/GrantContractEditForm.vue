@@ -31,40 +31,38 @@
       </v-card>
 
       <div class="text-h2 mt-6">Provision types</div>
+      <div class="text-h3">Purpose provision</div>
       <v-card class="mb-4">
         <PurposeProvision />
       </v-card>
 
+      <div class="text-h3">Payment provision</div>
       <PaymentProvision />
 
-      <v-card class="mt-4 mb-4">
+      <div class="text-h3">Date provision</div>
+      <v-card class="mt-4 mb-2">
         <DateTimeProvision />
       </v-card>
 
-      <v-row>
-        <v-col cols=6>
-          <v-card>
-            <PropertyRightsProvision />
-          </v-card>
-        </v-col>
-        <v-col cols="6">
-          <v-card>
-            <TerminationOfAgreement />
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols=6>
-          <v-card>
-            <GoverningLawAndJurisdictionProvision />
-          </v-card>
-        </v-col>
-        <v-col cols="6">
-          <v-card>
-            <FinalProvisions />
-          </v-card>
-        </v-col>
-      </v-row>
+      <div class="text-h3 mb-2 mt-2">Property provision</div>
+      <v-card>
+        <PropertyRightsProvision />
+      </v-card>
+
+      <div class="text-h3 mb-2 mt-2">Termination of Agreement</div>
+      <v-card>
+        <TerminationOfAgreement />
+      </v-card>
+
+      <div class="text-h3 mb-2 mt-2">Governing and Law</div>
+      <v-card>
+        <GoverningLawAndJurisdictionProvision />
+      </v-card>
+
+      <div class="text-h3 mb-2 mt-2">Final provisions</div>
+      <v-card>
+        <FinalProvisions />
+      </v-card>
 
         <!-- <RequiredToSignProvision/> -->
       
