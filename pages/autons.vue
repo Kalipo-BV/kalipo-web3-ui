@@ -17,15 +17,8 @@
 
 <template>
   <v-container style="height: 100%">
-    <v-text-field
-      v-if="autons.length != null"
-      solo
-      label="Search an auton"
-      append-icon="mdi-magnify"
-      class="mt-4"
-      style="max-width: 250px"
-      v-model="search"
-    ></v-text-field>
+    <v-text-field v-if="autons.length != null" solo label="Search an auton" append-icon="mdi-magnify" class="mt-4"
+      style="max-width: 250px" v-model="search"></v-text-field>
     <v-row dense>
       <v-col cols="12" md="3" v-for="(auton, i) in filtered" :key="i">
         <div @click="navigate(i)">
@@ -48,7 +41,7 @@ export default {
       );
     },
   },
-  created() {},
+  created() { },
   mounted: async function () {
     this.$nuxt.$emit("MainMenu-setPage", "autons");
 
@@ -61,6 +54,12 @@ export default {
         });
 
         const auton = autonWrapper.result;
+        const daoId = auton.daoId;
+        const daoWrapper = await this.$invoke("dao:getByID", {
+          id: daoId,
+        });
+        const dao = daoWrapper.result;
+        auton.dao = dao;
 
         const now = new Date();
         const nowInSec = BigInt(Math.floor(now / 1000));
@@ -88,11 +87,14 @@ export default {
   },
   methods: {
     navigate(index) {
-      this.$router.push(
+      this.$router.push("/dao/" +
+        this.autons[index].dao.daoProfile.name
+          .replaceAll(" ", "_")
+          .toLowerCase() +
         "/auton/" +
-          this.autons[index].autonProfile.name
-            .replaceAll(" ", "_")
-            .toLowerCase()
+        this.autons[index].autonProfile.name
+          .replaceAll(" ", "_")
+          .toLowerCase()
       );
     },
   },

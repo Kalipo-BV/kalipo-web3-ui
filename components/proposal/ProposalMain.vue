@@ -30,6 +30,7 @@
           color="accent"
           :complete="proposal.status != 'CAMPAIGNING'"
           @click="$router.push(mainPath + 'campaigning')"
+          style="cursor: pointer"
         >
           <div class="d-flex justify-center">Dialogue</div>
           <div class="d-flex justify-center mt-2">
@@ -57,6 +58,7 @@
           :complete="
             proposal.status != 'CAMPAIGNING' && proposal.status != 'VOTING'
           "
+          style="cursor: pointer"
         >
           <div class="d-flex justify-center">Voting</div>
           <div class="d-flex justify-center mt-2">
@@ -82,6 +84,7 @@
           @click="$router.push(mainPath + 'results')"
           color="accent"
           :complete="proposal.status == 'ENDED'"
+          style="cursor: pointer"
         >
           <div class="d-flex justify-center">Closed</div>
           <div class="d-flex justify-center mt-2">
@@ -150,8 +153,9 @@ export default {
   }),
   async mounted() {
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
+    const daoIdParam = this.$route.params.daoId.replaceAll("_", " ");
     const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
-    this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
+    this.mainPath = `/dao/${daoIdParam}/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
 
     if (
       this.proposal != null &&
@@ -195,17 +199,65 @@ export default {
         rightText: this.proposal.type.replaceAll("-", " "),
       });
 
-      const invitedId = this.proposal.membershipInvitationArguments.accountId;
-      const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
-        id: invitedId,
-      });
-      const invited = invitedWrapper.result;
-      this.list.push({
-        icon: "mdi-account-plus",
-        leftText: "Membership candidate:",
-        rightText: "@" + invited.username,
-        link: "/account/" + invited.username,
-      });
+      if (this.proposal.type == "membership-invitation") {
+        const invitedId = this.proposal.membershipInvitationArguments.accountId;
+        const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
+          id: invitedId,
+        });
+        const invited = invitedWrapper.result;
+        this.list.push({
+          icon: "mdi-account-plus",
+          leftText: "Membership candidate:",
+          rightText: "@" + invited.username,
+          link: "/account/" + invited.username,
+        });
+      } else if (this.proposal.type == "auton-creation") {
+        console.log(this.proposal);
+        this.list.push({
+          icon: "mdi-web",
+          leftText: "Auton name:",
+          rightText: this.proposal.autonCreationArguments.name,
+        });
+
+        this.list.push({
+          icon: "mdi-subtitles",
+          leftText: "Auton subtitle:",
+          rightText: this.proposal.autonCreationArguments.subtitle,
+        });
+
+        this.list.push({
+          icon: "mdi-shape",
+          leftText: "Template:",
+          rightText: this.proposal.autonCreationArguments.type,
+        });
+
+        this.list.push({
+          icon: "mdi-account-plus",
+          leftText: "Invited member 1:",
+          rightText: "@" + this.submitter.username,
+          link: "/account/" + this.submitter.username,
+        });
+
+        for (
+          let index = 0;
+          index <
+          this.proposal.autonCreationArguments.bulkInviteAccountIds.length;
+          index++
+        ) {
+          const invitedId =
+            this.proposal.autonCreationArguments.bulkInviteAccountIds[index];
+          const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
+            id: invitedId,
+          });
+          const invited = invitedWrapper.result;
+          this.list.push({
+            icon: "mdi-account-plus",
+            leftText: "Invited member " + index + 2 + ":",
+            rightText: "@" + invited.username,
+            link: "/account/" + invited.username,
+          });
+        }
+      }
     }
   },
   methods: {
@@ -233,5 +285,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

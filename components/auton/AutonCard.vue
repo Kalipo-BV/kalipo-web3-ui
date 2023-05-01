@@ -18,39 +18,38 @@
 <template>
   <div>
     <v-card flat link>
+      <v-card-text class="py-2">
+        <div class="d-flex align-center">
+          <v-avatar size="20" color="primary" class="white--text" tile>
+            <v-icon dark x-small>{{ auton.dao.daoProfile.icon }}</v-icon>
+          </v-avatar>
+          <div class="text-caption pl-1 first-letter-upper">{{ auton.dao.daoProfile.name }}</div>
+
+        </div>
+      </v-card-text>
+      <v-divider></v-divider>
       <div class="d-flex justify-end">
-        <v-chip
-          color="error"
-          style="position: absolute"
-          class="mt-n2 mr-n2"
-          v-if="auton.votable && auton.votable != 0"
-          >{{ auton.votable }}</v-chip
-        >
+        <v-chip color="error" style="position: absolute" class="mt-n2 mr-n2" v-if="auton.votable && auton.votable != 0">{{
+          auton.votable }}</v-chip>
       </div>
-      <v-card-text>
+      <v-card-text class="">
         <div class="d-flex justify-center">
-          <v-avatar size="90" color="accent" class="white--text">
+          <v-avatar size="90" color="accent" class="primary--text">
             <v-icon dark x-large>{{ auton.autonProfile.icon }}</v-icon>
           </v-avatar>
         </div>
-        <div class="d-flex justify-center text-h4 text--primary mt-2">
+        <div class="d-flex justify-center text-h4 primary--text mt-2">
           {{ auton.autonProfile.name }}
         </div>
 
-        <div
-          v-if="auton.type != 'LESSON'"
-          class="d-flex justify-center text-caption text--primary mt-2"
-        >
+        <div v-if="auton.type != 'LESSON'" class="d-flex justify-center text-caption primary--text mt-2">
           {{
             auton.autonProfile.subtitle != ""
-              ? auton.autonProfile.subtitle
-              : "This is an event"
+            ? auton.autonProfile.subtitle
+            : "This is an event"
           }}
         </div>
-        <div
-          v-if="auton.type == 'LESSON'"
-          class="d-flex justify-center text-caption text--primary mt-2"
-        >
+        <div v-if="auton.type == 'LESSON'" class="d-flex justify-center text-caption text--primary mt-2">
           {{ "This is a lesson" }}
         </div>
       </v-card-text>
@@ -59,10 +58,8 @@
       <v-card-text>
         <v-row>
           <v-col cols="6">
-            <div
-              class="d-flex justify-center text-caption text--primary"
-              v-if="auton.activeMembershipsCount != undefined"
-            >
+            <div class="d-flex justify-center text-caption text--primary"
+              v-if="auton.activeMembershipsCount != undefined">
               {{ auton.activeMembershipsCount }} member{{
                 auton.activeMembershipsCount == 1 ? "" : "s"
               }}
@@ -85,3 +82,8 @@ export default {
   methods: {},
 };
 </script>
+<style scoped>
+.first-letter-upper {
+  text-transform: capitalize;
+}
+</style>

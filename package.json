@@ -19,10 +19,10 @@
     "sodium-native": "^3.4.1",
     "uuid": "^9.0.0",
     "vue-keypress": "^2.1.2",
-    "vuetify": "^2.6.6"
+    "vuetify": "^2.6.14"
   },
   "devDependencies": {
-    "@iconify/vue2": "^2.0.1",
-    "@nuxtjs/vuetify": "^1.12.1"
+    "@iconify/vue2": "^2.1.0",
+    "@nuxtjs/vuetify": "^1.12.3"
   }
 }

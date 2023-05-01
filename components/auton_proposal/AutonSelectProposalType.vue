@@ -18,17 +18,20 @@
 <template>
   <div>
     <div>
-      <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
-        Memberships & roles
+      <div class="d-flex justify-start text-h4 primary--text mt-4 mb-4">
+        General
       </div>
       <v-row justify="start">
         <v-col cols="12" md="6">
           <div @click="selectedProposalTypeInput = 'membership-invitation'">
-            <ProposalTypeCard
-              icon="mdi-account-plus"
-              title="Membership invitation"
-              :active="selectedProposalTypeInput == 'membership-invitation'"
-            ></ProposalTypeCard>
+            <ProposalTypeCard icon="mdi-account-plus" title="Membership invitation"
+              :active="selectedProposalTypeInput == 'membership-invitation'"></ProposalTypeCard>
+          </div>
+        </v-col>
+        <v-col cols="12" md="6">
+          <div @click="selectedProposalTypeInput = 'auton-creation'">
+            <ProposalTypeCard icon="mdi-web-plus" title="Auton creation"
+              :active="selectedProposalTypeInput == 'auton-creation'"></ProposalTypeCard>
           </div>
         </v-col>
       </v-row>
@@ -56,5 +59,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
