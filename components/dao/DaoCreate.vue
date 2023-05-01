@@ -18,63 +18,88 @@
 <template>
   <div class="">
     <!-- Key code 13 is Enter key -->
-    <Keypress key-event="keyup" :key-code="13" @success="nextStep"
-      v-if="!(disabledNext || disabledNextStep4) && step !== 7" />
+    <Keypress
+      key-event="keyup"
+      :key-code="13"
+      @success="nextStep"
+      v-if="!(disabledNext || disabledNextStep4) && step !== 7"
+    />
 
     <v-card>
       <v-card-text v-if="step == 0">
-        <AutonStepperHeader title="Creating a new DAO" subtitle="Informing about DAOs and Autons"></AutonStepperHeader>
+        <AutonStepperHeader
+          title="Creating a new DAO"
+          subtitle="Informing about DAOs and Autons"
+        ></AutonStepperHeader>
 
         <div class="text-body-1 mt-3">
-          A DAO (Decentralized Autonomous Organization) is an organization that operates on Kalipo's platform, supporting
-          members in their self-management in a transparent manner.
+          A DAO (Decentralized Autonomous Organization) is an organization that
+          operates on Kalipo's platform, supporting members in their
+          self-management in a transparent manner.
         </div>
         <v-row class="mt-3">
           <v-col cols="12" md="6">
             <v-img src="/kalipo-dao-auton-constellation-example.png" />
-
           </v-col>
           <v-col cols="12" md="6">
             <div class="text-caption mt-8">
-              By creating a new DAO you will establish a <b>DAO</b> with one <b>Governing Auton</b> (Autonomous
-              Organizational Unit).
-              This Auton is the team that governs the leading constitution of the DAO. <b>Sub Autons</b> can be used to
-              define an
-              organizational structure.
+              By creating a new DAO you will establish a <b>DAO</b> with one
+              <b>Governing Auton</b> (Autonomous Organizational Unit). This
+              Auton is the team that governs the leading constitution of the
+              DAO. <b>Sub Autons</b> can be used to define an organizational
+              structure.
             </div>
           </v-col>
         </v-row>
-
       </v-card-text>
 
       <v-card-text v-if="step == 1">
-        <AutonStepperHeader title="Creating a new DAO" subtitle="Naming your DAO and Governing Auton">
+        <AutonStepperHeader
+          title="Creating a new DAO"
+          subtitle="Naming your DAO and Governing Auton"
+        >
         </AutonStepperHeader>
         <div class="text-body-1 mt-3">
-          When creating a name, it's important to choose something unique and memorable that reflects the organization's
-          purpose and values. Consider using a combination of descriptive and creative words, and make sure the name is
-          easy to spell and pronounce.
+          When creating a name, it's important to choose something unique and
+          memorable that reflects the organization's purpose and values.
+          Consider using a combination of descriptive and creative words, and
+          make sure the name is easy to spell and pronounce.
         </div>
-        <DaoNamingFields :name.sync="name" :governingName.sync="governingName" :disabledNext.sync="disabledNext">
+        <DaoNamingFields
+          :name.sync="name"
+          :governingName.sync="governingName"
+          :disabledNext.sync="disabledNext"
+        >
         </DaoNamingFields>
-
       </v-card-text>
 
       <v-card-text v-if="step == 2">
-        <AutonStepperHeader title="Creating a new DAO" subtitle="Select an icon that suits your auton">
+        <AutonStepperHeader
+          title="Creating a new DAO"
+          subtitle="Select an icon that suits your auton"
+        >
         </AutonStepperHeader>
         <AutonRandomIcons :icon.sync="icon"></AutonRandomIcons>
       </v-card-text>
 
       <v-card-text v-if="step == 3">
-        <AutonStepperHeader title="Creating a new DAO" subtitle="Creating a mission and vision">
+        <AutonStepperHeader
+          title="Creating a new DAO"
+          subtitle="Creating a mission and vision"
+        >
         </AutonStepperHeader>
         <div class="text-body-1 mt-3">
-          Create a clear and concise mission and vision statement for your DAO by defining its purpose, values, and goals.
-          The mission statement should describe what your DAO does and who it serves, and the vision statement should
-          outline where you want the organization to be in the future.
+          Create a clear and concise mission and vision statement for your DAO
+          by defining its purpose, values, and goals. The mission statement
+          should describe what your DAO does and who it serves, and the vision
+          statement should outline where you want the organization to be in the
+          future.
         </div>
-        <DaoMissionVisionFields :mission.sync="mission" :vision.sync="vision" class="mt-4">
+        <DaoMissionVisionFields
+          :mission.sync="mission"
+          :vision.sync="vision"
+          class="mt-4"
+        >
         </DaoMissionVisionFields>
       </v-card-text>
 
@@ -82,40 +107,71 @@
         <AutonStepperHeader title="Creating a new DAO" subtitle="Legal entity">
         </AutonStepperHeader>
         <div class="text-body-1 mt-3">
-          If your DAO has a jurisdiction and a Chamber of Commerce identification number, you can add this information to
-          your organization's profile. This helps to provide legitimacy and transparency to your DAO, and may be required
-          for legal or regulatory purposes.
+          If your DAO has a jurisdiction and a Chamber of Commerce
+          identification number, you can add this information to your
+          organization's profile. This helps to provide legitimacy and
+          transparency to your DAO, and may be required for legal or regulatory
+          purposes.
         </div>
-        <v-checkbox v-model="hasLegalEntity" label="Has legal entity"></v-checkbox>
-        <DaoLegalFields v-if="hasLegalEntity" :jurisdiction.sync="jurisdiction" :cocId.sync="cocId"
-          :businessAddress.sync="businessAddress" :disabledNext.sync="disabledNext" class="mt-4">
+        <v-checkbox
+          v-model="hasLegalEntity"
+          label="Has legal entity"
+        ></v-checkbox>
+        <DaoLegalFields
+          v-if="hasLegalEntity"
+          :jurisdiction.sync="jurisdiction"
+          :cocId.sync="cocId"
+          :businessAddress.sync="businessAddress"
+          :disabledNext.sync="disabledNext"
+          class="mt-4"
+        >
         </DaoLegalFields>
       </v-card-text>
 
       <v-card-text v-if="step == 5">
-        <AutonStepperHeader title="Creating a new DAO" subtitle="Contact information">
+        <AutonStepperHeader
+          title="Creating a new DAO"
+          subtitle="Contact information"
+        >
         </AutonStepperHeader>
         <div class="text-body-1 mt-3">
-          Add one or multiple contact information fields to your DAO's profile to provide interested parties with a way to
-          get in touch. E.g. email, website, social media accounts, or other relevant information.
+          Add one or multiple contact information fields to your DAO's profile
+          to provide interested parties with a way to get in touch. E.g. email,
+          website, social media accounts, or other relevant information.
         </div>
-        <DaoContactInformationList :channelList.sync="channelList" class="mt-1"></DaoContactInformationList>
+        <DaoContactInformationList
+          :channelList.sync="channelList"
+          class="mt-1"
+        ></DaoContactInformationList>
       </v-card-text>
 
       <v-card-text v-if="step == 6">
-        <AutonStepperHeader title="Creating a new DAO" subtitle="Inviting multiple founding members">
+        <AutonStepperHeader
+          title="Creating a new DAO"
+          subtitle="Inviting multiple founding members"
+        >
         </AutonStepperHeader>
         <div class="text-body-1 mt-3">
-          To add additional founding members to your DAO, search for members and invite individuals who share your
-          organization's values and goals. Once invited, these individuals can help shape the organization's governance
-          and decision-making processes. Note: You can do this later as well.
+          To add additional founding members to your DAO, search for members and
+          invite individuals who share your organization's values and goals.
+          Once invited, these individuals can help shape the organization's
+          governance and decision-making processes. Note: You can do this later
+          as well.
         </div>
-        <AutonUserSelect :selectedFounderIds.sync="selectedFounderIds" class="mt-4">
-        </AutonUserSelect>
+        <DaoUserSelect
+          :selectedFounderIds.sync="selectedFounderIds"
+          class="mt-4"
+        >
+        </DaoUserSelect>
       </v-card-text>
 
-      <AccountSign :transaction="transaction" :uri="uri" v-if="step == 7" callback="AutonCreate-PrevStep"
-        title="Creating auton"></AccountSign>
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        v-if="step == 7"
+        callback="AutonCreate-PrevStep"
+        title="Creating DAO"
+      ></AccountSign>
 
       <v-divider></v-divider>
 
@@ -124,7 +180,12 @@
           <v-btn :disabled="step == 0" @click="step--">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
           </v-btn>
-          <v-btn color="accent" v-if="step != 6" @click="nextStep" :disabled="disabledNext || disabledNextStep4">
+          <v-btn
+            color="accent"
+            v-if="step != 6"
+            @click="nextStep"
+            :disabled="disabledNext || disabledNextStep4"
+          >
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
           <v-btn color="accent" v-if="step == 6" @click="nextStep">
@@ -138,7 +199,7 @@
 <script>
 export default {
   components: {
-    Keypress: () => import("vue-keypress")
+    Keypress: () => import("vue-keypress"),
   },
   data: () => ({
     step: 0,
@@ -161,19 +222,21 @@ export default {
     selectedFounderIds: null,
     disabledNext: false,
     disabledNextStep4: false,
-
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
     this.$nuxt.$on("AutonCreate-PrevStep", ($event) => this.step--);
   },
   methods: {
-    makeTransaction() { },
+    makeTransaction() {},
     nextStep() {
       this.step++;
-      console.log(this.step)
+      console.log(this.step);
       if (this.step == 7) {
-        this.uri = `dao/${this.name.replace(" ", "_")}/auton/${this.governingName.replace(" ", "_")}`;
+        this.uri = `dao/${this.name.replace(
+          " ",
+          "_"
+        )}/auton/${this.governingName.replace(" ", "_")}`;
 
         if (this.tags == null) {
           this.tags = [];
@@ -188,8 +251,11 @@ export default {
           this.selectedFounderIds = [];
         }
 
-        let linkedChannels = []
-        if (this.channelList != null && this.channelList.length > 1 || this.channelList[0].channel != "") {
+        let linkedChannels = [];
+        if (
+          (this.channelList != null && this.channelList.length > 1) ||
+          this.channelList[0].channel != ""
+        ) {
           let tempChannelList = [];
           for (let index = 0; index < this.channelList.length; index++) {
             const element = this.channelList[index];
@@ -211,10 +277,10 @@ export default {
           hasLegalEntity: this.hasLegalEntity,
           jurisdiction: this.jurisdiction,
           cocId: this.cocId,
-          businessAddress: this.businessAddress
+          businessAddress: this.businessAddress,
         };
 
-        console.log(asset)
+        console.log(asset);
 
         this.transaction.assets = asset;
       }

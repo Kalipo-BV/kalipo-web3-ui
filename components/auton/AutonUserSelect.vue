@@ -27,13 +27,32 @@
 
     <v-divider class="my-3"></v-divider>
 
-    <v-autocomplete v-model="selectedValue" :disabled="isUpdating" :items="users" chips color="blue-grey lighten-2"
-      label="Add additional members" item-text="name" item-value="id" multiple>
+    <v-autocomplete
+      v-model="selectedValue"
+      :disabled="isUpdating"
+      :items="users"
+      chips
+      color="blue-grey lighten-2"
+      label="Add additional members"
+      item-text="name"
+      item-value="id"
+      multiple
+    >
       <template v-slot:selection="data">
-        <v-chip v-bind="data.attrs" :input-value="data.selectedValue" close @click="data.select"
-          @click:close="remove(data.username)">
-          <v-avatar color="accent" class="white--text text-caption" v-if="data.item.name" left>{{
-            getInitials(data.item.name, 2) }}</v-avatar>
+        <v-chip
+          v-bind="data.attrs"
+          :input-value="data.selectedValue"
+          close
+          @click="data.select"
+          @click:close="remove(data.username)"
+        >
+          <v-avatar
+            color="accent"
+            class="white--text text-caption"
+            v-if="data.item.name"
+            left
+            >{{ getInitials(data.item.name, 2) }}</v-avatar
+          >
           {{ data.item.name }}
         </v-chip>
       </template>
@@ -43,8 +62,12 @@
         </template>
         <template v-else>
           <v-list-item-avatar class="d-flex align-center justify-center">
-            <v-avatar color="accent" class="white--text text-caption" v-if="data.item.name">{{ getInitials(data.item.name,
-              3) }}</v-avatar>
+            <v-avatar
+              color="accent"
+              class="white--text text-caption"
+              v-if="data.item.name"
+              >{{ getInitials(data.item.name, 3) }}</v-avatar
+            >
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ data.item.name }}</v-list-item-title>
@@ -90,10 +113,6 @@ export default {
         }
       }
     }
-    // filter so you cant add yourself
-    this.users = this.users.filter(
-      (item) => item.id !== this.account.accountId
-    );
     this.isUpdating = false;
   },
   methods: {
