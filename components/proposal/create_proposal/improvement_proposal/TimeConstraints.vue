@@ -4,7 +4,7 @@
       <v-textarea
         filled
         auto-grow
-        label="Time constraints"
+        label="Time based constraint(s)"
         rows="4"
         row-height="20"
         maxlength="1024"
@@ -17,14 +17,14 @@
 
 <script>
 export default {
-  props: ["timeConstraints"],
+  props: ["timeBasedConstraint"],
   computed: {
     timeConstraintsValue: {
       get: function () {
-        return this.timeConstraints;
+        return this.timeBasedConstraint;
       },
       set: function (newValue) {
-        this.$emit("update:timeConstraints", newValue);
+        this.$emit("update:timeBasedConstraint", newValue);
       },
     }
   },

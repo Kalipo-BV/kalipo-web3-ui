@@ -4,12 +4,12 @@
       <v-textarea
         filled
         auto-grow
-        label="Execution roles"
+        label="Abstract"
         rows="4"
         row-height="20"
         maxlength="1024"
         counter
-        v-model="executionRolesValue"
+        v-model="abstractValue"
       ></v-textarea>
     </v-form>
   </div>
@@ -17,14 +17,14 @@
 
 <script>
 export default {
-  props: ["executionRoles"],
+  props: ["abstract"],
   computed: {
-    executionRolesValue: {
+    abstractValue: {
       get: function () {
-        return this.executionRoles;
+        return this.abstract;
       },
       set: function (newValue) {
-        this.$emit("update:executionRoles", newValue);
+        this.$emit("update:abstract", newValue);
       },
     }
   },
