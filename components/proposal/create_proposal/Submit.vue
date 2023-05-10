@@ -146,6 +146,17 @@
         ></TimeConstraints>
       </v-card-text>
 
+      <v-card-text v-if="steps.includes('agreementAndApproval')">
+        <StepperHeader
+          title="Expert advice and agreement (Optional)"
+          subtitle="Check expert advice and agreement if needed"
+        ></StepperHeader>
+
+        <ApprovalAndAgreement
+          :approval-and-agreement.sync="approvalAndAgreement"
+        ></ApprovalAndAgreement>
+      </v-card-text>
+
       <AccountSign
         :transaction="transaction"
         :uri="uri"
@@ -175,10 +186,17 @@
 </template>
 <script>
 import Abstract from "~/components/proposal/create_proposal/improvement_proposal/Abstract.vue";
+import ApprovalAndAgreement from "~/components/proposal/create_proposal/improvement_proposal/ApprovalAndAgreement.vue";
+import approvalAndAgreement from "~/components/proposal/create_proposal/improvement_proposal/ApprovalAndAgreement.vue";
 
 export default {
   name: "AutonProposalSubmit",
-  components: {Abstract},
+  computed: {
+    approvalAndAgreement() {
+      return approvalAndAgreement
+    }
+  },
+  components: {ApprovalAndAgreement, Abstract},
   props: ["autonId", "autonName", "callbackFinish"],
   data: () => ({
     steps: "select-proposal-type",
@@ -205,7 +223,7 @@ export default {
     currentPage: 0,
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
     improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
-      'references', 'budget', 'execution-roles', 'time-constraints']
+      'references', 'budget', 'execution-roles', 'time-constraints', 'agreementAndApproval']
   }),
   created() {
     this.$nuxt.$on(
