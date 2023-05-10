@@ -146,7 +146,7 @@
         ></TimeConstraints>
       </v-card-text>
 
-      <v-card-text v-if="steps.includes('agreementAndApproval')">
+      <v-card-text v-if="steps.includes('extraOptions')">
         <StepperHeader
           title="Expert advice and agreement (Optional)"
           subtitle="Check expert advice and agreement if needed"
@@ -223,7 +223,8 @@ export default {
     currentPage: 0,
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
     improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
-      'references', 'budget', 'execution-roles', 'time-constraints', 'agreementAndApproval']
+      'references', 'budget', 'execution-roles', 'time-constraints'],
+    extraOptionBoxList: ['extraOptions','agreement', 'expertAdvice']
   }),
   created() {
     this.$nuxt.$on(
@@ -231,7 +232,7 @@ export default {
       ($event) => (this.disabledNext = $event)
     );
     this.$nuxt.$on("AutonProposalSubmit-PrevStep", ($event) => this.prevStep());
-    this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish()); 
+    this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
   },
   methods: {
     prevStep() {
@@ -255,6 +256,8 @@ export default {
               break;
           }
           break;
+        case 2:
+          this.steps = this.extraOptionBoxList;
       }
     },
     async nextStep() {
@@ -275,10 +278,20 @@ export default {
         }
         break;
         case 2:
-          this.steps = ['sign'];
+          switch(this.selectedProposalType) {
+            case 'membership-invitation':
+              this.steps = ['sign'];
+              break;
+            case 'improvement-proposal':
+              this.steps = this.extraOptionBoxList;
+              break;
+          }
+        break;
+        default:
+          this.steps = ['sign']
       }
 
-      if (this.currentPage === 2) {
+      if (this.steps === ['sign']) {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
         });
