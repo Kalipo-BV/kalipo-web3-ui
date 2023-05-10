@@ -196,7 +196,7 @@ export default {
     references: "ref",
     budget: "bud is vies",
     executionRoles: "ROLEEEES",
-    timeBasedConstraint: "geen tijd is geld nou gappie gooi wat tijd op me.",
+    timeBasedConstraint: "tijd is geld nou gappie gooi wat tijd op me.",
     transaction: {
       moduleId: -1,
       assetId: 1,
