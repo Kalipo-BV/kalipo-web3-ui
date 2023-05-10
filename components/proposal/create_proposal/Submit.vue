@@ -231,7 +231,7 @@ export default {
       ($event) => (this.disabledNext = $event)
     );
     this.$nuxt.$on("AutonProposalSubmit-PrevStep", ($event) => this.prevStep());
-    this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
+    this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish()); 
   },
   methods: {
     prevStep() {
