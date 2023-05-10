@@ -17,20 +17,10 @@
 
 <template>
   <div>
-    <v-stepper
-      alt-labels
-      class="mt-0"
-      style="background-color: #eef1f5"
-      flat
-      v-model="step"
-    >
+    <v-stepper alt-labels class="mt-0" style="background-color: #eef1f5" flat v-model="step">
       <v-stepper-header class="py-2">
-        <v-stepper-step
-          step="1"
-          color="accent"
-          :complete="proposal.status != 'CAMPAIGNING'"
-          @click="$router.push(mainPath + 'campaigning')"
-        >
+        <v-stepper-step step="1" color="accent" :complete="proposal.status != 'CAMPAIGNING'"
+          @click="$router.push(mainPath + 'campaigning')">
           <div class="d-flex justify-center">Dialogue</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
@@ -50,14 +40,8 @@
 
         <v-divider></v-divider>
 
-        <v-stepper-step
-          step="2"
-          @click="$router.push(mainPath + 'voting')"
-          color="accent"
-          :complete="
-            proposal.status != 'CAMPAIGNING' && proposal.status != 'VOTING'
-          "
-        >
+        <v-stepper-step step="2" @click="$router.push(mainPath + 'voting')" color="accent" :complete="proposal.status != 'CAMPAIGNING' && proposal.status != 'VOTING'
+            ">
           <div class="d-flex justify-center">Voting</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
@@ -77,12 +61,8 @@
 
         <v-divider></v-divider>
 
-        <v-stepper-step
-          step="3"
-          @click="$router.push(mainPath + 'results')"
-          color="accent"
-          :complete="proposal.status == 'ENDED'"
-        >
+        <v-stepper-step step="3" @click="$router.push(mainPath + 'results')" color="accent"
+          :complete="proposal.status == 'ENDED'">
           <div class="d-flex justify-center">Closed</div>
           <div class="d-flex justify-center mt-2">
             <small v-if="proposal && userLang">{{
@@ -115,13 +95,8 @@
         <v-card flat link @click="navigateTo(item.link)">
           <v-card-text class="py-2">
             <div class="d-flex align-center">
-              <v-avatar
-                color="primary"
-                size="25"
-                class="white--text mr-2"
-                v-if="item.icon"
-                ><v-icon dark x-small>{{ item.icon }}</v-icon></v-avatar
-              >
+              <v-avatar color="primary" size="25" class="white--text mr-2" v-if="item.icon"><v-icon dark x-small>{{
+                item.icon }}</v-icon></v-avatar>
 
               <div class="d-flex justify-space-between" style="width: 100%">
                 <div class="text-caption font-weight-medium">
@@ -152,7 +127,7 @@ export default {
   async mounted() {
 
 
-    
+
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
     const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
     this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
@@ -175,7 +150,7 @@ export default {
 
     console.log("proposals uit database: ")
     console.log(proposals)
-    
+
     if (
       this.proposal != null &&
       this.submitter != null &&
@@ -189,6 +164,7 @@ export default {
         this.step = 3;
       }
 
+      
       this.userLang = navigator.language || navigator.userLanguage;
       this.list.push({
         icon: "mdi-calendar",
@@ -213,12 +189,6 @@ export default {
       });
 
       this.list.push({
-        icon: "mdi-account",
-        leftText: "Stakeholder(s):",
-        rightText: this.proposal.stakeholders,
-      });
-
-      this.list.push({
         icon: "mdi-bank",
         leftText: "Proposal type:",
         rightText: this.proposal.type.replaceAll("-", " "),
@@ -235,6 +205,26 @@ export default {
         rightText: "@" + invited.username,
         link: "/account/" + invited.username,
       });
+
+      let i = 0;
+        while (i < this.proposal.stakeholders.length) {
+          console.log("loop1")
+          if(this.proposal.stakeholders[i].stakeholderId == ""){
+            this.proposal.stakeholders.pop(i)
+          }else{i++;}
+        }
+        
+        for(i = 0; i<this.proposal.stakeholders.length; i++){
+          let stakeholder = await this.$invoke("kalipoAccount:getByID", 
+          {id: this.proposal.stakeholders[i].stakeholderId,})
+          console.log("loop2")
+          this.list.push({
+          icon: "mdi-account",
+          leftText: "Stakeholder "+(i+1)+":",
+          rightText:  "naam: "+stakeholder.result.name+" expertise: "+this.proposal.stakeholders[i].expertise,
+        });
+        }
+
     }
   },
   methods: {
@@ -243,7 +233,7 @@ export default {
         this.$router.push(to);
       }
     },
-    getStakeholders(){
+    getStakeholders() {
       return this.proposal.stakeholders;
     },
     getInitials(parseStr) {
@@ -265,5 +255,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
