@@ -131,7 +131,7 @@ export default {
     disabledNext: false,
     selectedProposalType: null,
     selectedAccountId: null,
-    selectedStakeholders: [{accountId: "", expertise: "finance"}, {accountId: "", expertise: "sport"}, {accountId: "", expertise: "medical"}],
+    selectedStakeholders: [{stakeholderId: "", expertise: "finance"}, {stakeholderId: "", expertise: "sport"}, {stakeholderId: "", expertise: "medical"}],
     invitationMessage: "",
     proposalTitle: "",
     proposalDescription: "",
@@ -228,6 +228,7 @@ export default {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
         });
+        const dummydata = "stakeholder 1, expertise: voetbal";
         this.uri = `/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1}/campaigning`;
         const asset = {
           title: this.proposalTitle,
@@ -236,7 +237,7 @@ export default {
           autonId: this.autonId,
           accountIdToInvite: this.selectedAccountId,
           invitationMessage: this.invitationMessage,
-          stakeholders: "testtesttesttest"
+          stakeholders: this.selectedStakeholders,
           };
         this.transaction.moduleId = 1004;
         this.transaction.assetId = 0;

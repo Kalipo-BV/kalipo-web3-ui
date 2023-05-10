@@ -136,7 +136,6 @@
         </v-card>
       </div>
     </v-card>
-    <p>proposals: {{ getStakeholders() }}</p>
   </div>
 </template>
 
@@ -211,6 +210,12 @@ export default {
         leftText: "Proposer:",
         rightText: "@" + this.submitter.username,
         link: "/account/" + this.submitter.username,
+      });
+
+      this.list.push({
+        icon: "mdi-account",
+        leftText: "Stakeholder(s):",
+        rightText: this.proposal.stakeholders,
       });
 
       this.list.push({

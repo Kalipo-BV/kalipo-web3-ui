@@ -19,7 +19,7 @@
   <div>
     <v-form v-if="step == 'voeg-stakeholder-toe'" v-model="valid" @submit.prevent id="stakeholder-form" v-for="stakeholder in selectedStakeholdersValue">
       <v-autocomplete
-        v-model="stakeholder.accountId"
+        v-model="stakeholder.stakeholderId"
         :disabled="isUpdating"
         :items="users"
         chips
