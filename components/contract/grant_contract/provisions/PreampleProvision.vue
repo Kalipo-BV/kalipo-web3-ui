@@ -33,7 +33,7 @@
         computed: {
             preample: {
                 get: function () {
-                    return this.$store.state.contract.formData.preample;
+                    return this.$store.state.contract.contract.formData.preample;
                 },
                 set: function (payload) {
                     this.$store.commit("contract/changePreample", payload);

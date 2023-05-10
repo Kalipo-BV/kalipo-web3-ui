@@ -61,7 +61,7 @@
     computed: {
       requiredToSignValue: {
         get: function () {
-            this.$store.state.contract.signed
+            this.$store.state.contract.contract.signed
         },
         set: function (payload) {
           this.$store.commit("contract/changeRequiredSign", payload);
