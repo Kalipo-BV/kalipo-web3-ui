@@ -157,6 +157,9 @@
         <v-col cols="12" md="3" @click="() => {dialog = true}">
           <ProposalTypeCard icon="" title="Contract"/>
         </v-col>
+        <v-col cols="12" md="3" @click="openAgreement">
+          <ProposalTypeCard icon="" title="Agreements"/>
+        </v-col>
       </v-row>
     </div>
 
@@ -174,5 +177,10 @@ export default {
   mounted() {
     this.$nuxt.$emit("Auton-setPage", "constitution");
   },
+  methods: {
+    openAgreement() {
+      this.$router.push("/contract/agreements")
+    }
+  }
 };
 </script>
