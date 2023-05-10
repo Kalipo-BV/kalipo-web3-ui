@@ -80,3 +80,24 @@ function extractDataByObject(requiredObject, givenObject) {
 	}
 	return result;
 }
+
+function addContractToLocalStorage(contract, id) {
+	const data = getNormalizedLocalStorageData();
+	data[id] = contract;
+
+	return data;
+}
+
+function saveInLocalStorage(data) {
+	const dataJson = JSON.stringify(data);
+	localStorage.setItem("Agreements", dataJson);
+}
+
+function getNormalizedLocalStorageData() {
+	const localStorageReference = localStorage.getItem("Agreements");
+	if (localStorageReference == null) {
+		return {};
+	}
+
+	return JSON.parse(localStorageReference);
+}
