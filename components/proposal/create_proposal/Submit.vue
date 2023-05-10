@@ -29,6 +29,17 @@
         ></ProposalType>
       </v-card-text>
 
+      <v-card-text v-if="steps.includes('title')">
+        <StepperHeader
+          title="Title"
+          subtitle="Write down the title for the proposal"
+        ></StepperHeader>
+
+        <Title
+          :title.sync="proposalTitle"
+        ></Title>
+      </v-card-text>
+
       <v-card-text v-if="steps.includes('proposal-profile')">
         <StepperHeader
           title="Submitting a new proposal"
@@ -193,7 +204,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
-    improvementScreenList: ['proposal-profile', 'abstract', 'proposers', 'motivation', 'specification',
+    improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
       'references', 'budget', 'execution-roles', 'time-constraints']
   }),
   created() {
