@@ -1,4 +1,4 @@
-export const initState = () => {
+export const initContract = () => {
 	return {
 		editFase: 3,
 		status: "",

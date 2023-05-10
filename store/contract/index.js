@@ -16,166 +16,193 @@
  */
 
 import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
-import { saveToLocalstorage as _saveToLocalstorage, getFromLocalstorage as _getFromLocalstorage, normalizeContract } from "./localstorage.js"
-import { initFormData, initState } from "./initData.js";
+import { saveNewToLocalStorage, saveToLocalStorage, getFromLocalStorage, normalizeContract } from "./localstorage.js"
+import { initFormData, initContract } from "./initData.js";
 
-const loadState = () => {
-	const contract = _getFromLocalstorage();
-	if (contract === null) {
-		return initState();
+// const loadState = () => {
+// 	const contract = getFromLocalStorage();
+// 	if (contract === null) {
+// 		return initState();
+// 	}
+
+// 	return contract;
+// }
+
+function initState () {
+	return {
+		contract: initContract(),
+		id: -1
 	}
-
-	return contract;
 }
 
 export const state = () => (
-	loadState()
+	initState()
 )
 
 export const mutations = {
+	createNew(state) {
+		const id = saveNewToLocalStorage();
+		this.loadContract(state, {id: id});
+	},
+
+	loadContract(state, payload) {
+		const id = (payload.id ? payload.id: -1);
+		if (id < 0) {
+			return;
+		}
+	
+		const contract = getFromLocalStorage(id);	
+		if (contract == null) {
+			return;
+		}
+
+		state.contract = payload.contract;
+		state.id = id;
+	},
+
 	removeFromParties(state, payload) {
 		if (isValidPartyData(payload) ) {
-			const currentParty = state.formData.parties[payload.target];
+			const currentParty = state.contract.formData.parties[payload.target];
 			const index = currentParty.indexOf(payload.data.id);
 			if (index > -1) { // only splice array when item is found
 				currentParty.splice(index, 1); // 2nd parameter means remove one item only
 			}
-			_saveToLocalstorage(state);
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeParties(state, payload) {
 		if (isValidPartyData(payload) && isArray(payload.data, `parties[${payload.target}]_data`)) {
-			state.formData.parties[payload.target] = payload.data;
-			_saveToLocalstorage(state);
+			state.contract.formData.parties[payload.target] = payload.data;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changePreample(state, payload) {
 		if (isString(payload, 'preample')) {
-			state.formData.preample = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.preample = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changePropertyRights(state, payload) {
 		if (isString(payload, 'propertyRights')) {
-			state.formData.propertyRights = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.propertyRights = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeGoverningLawAndJurisdiction(state, payload) {
 		if (isString(payload, 'governingLawAndJurisdiction')) {
-			state.formData.governingLawAndJurisdiction = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.governingLawAndJurisdiction = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeRequiredSign(state, payload) {
 		if (isBoolean(payload, 'required to sign')) {
-			state.formData.purpose = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.purpose = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changePurpose(state, payload) {
 		if (isString(payload, 'purpose')) {
-			state.formData.purpose = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.purpose = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeFinalProvisions(state, payload) {
 		if (isString(payload, 'finalProvision')) {
-			state.formData.finalProvisions = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.finalProvisions = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changePaymentAmount(state, payload) {
 		console.log(payload)
 		if (isNumber(payload, 'paymentAmount')) {
-			state.formData.payment.amount = Number.parseFloat(payload);
-			_saveToLocalstorage(state);
+			state.contract.formData.payment.amount = Number.parseFloat(payload);
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changePaymentNote(state, payload) {
 		if (isString(payload, 'paymentNote')) {
-			state.formData.payment.note = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.payment.note = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeStartDate(state, payload) {
 		if (isDate(payload, 'startDate')) {
-			state.formData.dates.startDate = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.dates.startDate = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeEndDate(state, payload) {
 		if (isDate(payload, 'endDate')) {
-			state.formData.dates.endDate = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.dates.endDate = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeCustom(state, payload) {
 		if (isArray(payload, 'customProvision')) {
-			state.formData.custom = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.custom = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	changeCustom(state, payload) {
 		if (isArray(payload, 'custom')) {
-			state.formData.custom = payload;
-			_saveToLocalstorage(state);
+			state.contract.formData.custom = payload;
+			saveToLocalStorage(state.contract, state.id);
 		}
 	},
 
 	customAddProvision(state, item) {
-		state.formData.custom.push(item);
-		_saveToLocalstorage(state);
+		state.contract.formData.custom.push(item);
+		saveToLocalStorage(state.contract, state.id);
 	},
 
 	customRemoveProvision(state, index) {
-		state.formData.custom.splice(index, 1);
-		_saveToLocalstorage(state);
+		state.contract.formData.custom.splice(index, 1);
+		saveToLocalStorage(state.contract, state.id);
 	},
 
 	customChangeType(state, payload) {
-		state.formData.custom[payload.index].type = payload.data;
-		_saveToLocalstorage(state);
+		state.contract.formData.custom[payload.index].type = payload.data;
+		saveToLocalStorage(state.contract, state.id);
 	},
 
 	customChangeInfo(state, payload) {
-		state.formData.custom[payload.index].info = payload.data;
-		_saveToLocalstorage(state);
+		state.contract.formData.custom[payload.index].info = payload.data;
+		saveToLocalStorage(state.contract, state.id);
 	},
 
 	customChangeData(state, payload) {
-		state.formData.custom[payload.index].data = payload.data;
-		_saveToLocalstorage(state);
+		state.contract.formData.custom[payload.index].data = payload.data;
+		saveToLocalStorage(state.contract, state.id);
 	},
 
 	changeTerminationOfAgreement(state, payload) {
 		if (isString(payload, 'terminationOfAgreement')) {
-			state.formData.terminationOfAgreement = payload;
+			state.contract.formData.terminationOfAgreement = payload;
 		}
 	},
 
 	reset(state) {
 		state.formData = initFormData();
-		_saveToLocalstorage(state);
+		saveToLocalStorage(state.contract, state.id);
 	},
 }
 
 export const getters = {
 	filtered: (state) => {
-		return normalizeContract(state);
+		return normalizeContract(state.contract);
 	}
 }
 

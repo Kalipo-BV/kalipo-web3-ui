@@ -1,18 +1,21 @@
 import { isValidContract } from "./validation.js"
-import { initState } from "./initData.js";
+import { initContract } from "./initData.js";
 
-export const saveToLocalstorage = (contract) => {
-	const data = JSON.stringify(contract);
-	localStorage.setItem("Agreements", data);
+export const saveToLocalStorage = (contract, id = 0) => {
+	const data = putContractToLocalStorage(contract, id);
+	saveInLocalStorage(data);
 }
 
-export const getFromLocalstorage = () => {
-	if (localStorage.getItem("Agreements") == null) {
-		console.warn("no Agreements in localstorage");
-		return null;
-	}
+export const saveNewToLocalStorage = (contract) => {
+	const data = addContractToLocalStorage(contract);
+	saveInLocalStorage(data);
+	
+	return id;
+}
 
-	const contract = JSON.parse(localStorage.getItem("Agreements"));
+export const getFromLocalStorage = (id = 0) => {
+	const contracten = getNormalizedLocalStorageData();
+	const contract = contracten[id];
 
 	if (!isValidContract(contract)) {
 		console.warn("getFromLocalstorage uses a fallback to fill the holes in its required dataStructure");
@@ -24,7 +27,7 @@ export const getFromLocalstorage = () => {
 
 
 export const normalizeContract = (contract) => {
-	return extractDataByObject(initState(), contract);
+	return extractDataByObject(initContract(), contract);
 }
 
 /**
@@ -47,7 +50,6 @@ function extractDataByObject(requiredObject, givenObject) {
 			console.warn(`uses a fallback for the following key -> ${key}\n key is not defined or null`);
 			continue;
 		}
-
 
 
 		const isRequiredPropObject = (typeof currentRequiredProp === 'object' && !Array.isArray(currentRequiredProp));
@@ -81,7 +83,19 @@ function extractDataByObject(requiredObject, givenObject) {
 	return result;
 }
 
-function addContractToLocalStorage(contract, id) {
+
+function getHighestKeyInLocalStorage() {
+	const data = getNormalizedLocalStorageData();
+	const keys = Object.keys(data);
+	return Math.max(...keys);
+};
+
+function addContractToLocalStorageData(contract) {
+	const newKey = getHighestKeyInLocalStorage() +1;
+	return putContractToLocalStorage(contract, newKey)
+}
+
+function putContractToLocalStorageData(contract, id) {
 	const data = getNormalizedLocalStorageData();
 	data[id] = contract;
 

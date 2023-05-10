@@ -1,17 +1,17 @@
-import { initState } from "./initData";
+import { initContract } from "./initData";
 
 export const isValidContract = (contract) => {
-	const _initState = initState();
-	const initStateKeys = Object.keys(_initState);
-	const initFormDataKeys = Object.keys(_initState.formData);
+	const _initContract = initContract();
+	const initContractKeys = Object.keys(_initContract);
+	const initFormDataKeys = Object.keys(_initContract.formData);
 
 	const stateKeys = Object.keys(contract);
 	const formDataKeys = Object.keys(contract.formData);
 	
-	const isStateStructureCorrect = arrayHasValues(stateKeys, initStateKeys);
+	const isContractStructureCorrect = arrayHasValues(stateKeys, initContractKeys);
 	const isFormDataStructureCorrect = arrayHasValues(formDataKeys, initFormDataKeys);
 
-	if (!isStateStructureCorrect) {
+	if (!isContractStructureCorrect) {
 		console.error("State structure of the loaded agreement is malformed")
 		return false;
 	}
