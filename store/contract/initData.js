@@ -34,35 +34,5 @@ export const initFormData = () => {
 		signingWindow: "",
 		requiredToSign: false,
 		signed: false,
-
-		// parties: {
-		// 	contractor: [
-		// 		"f2131b1ec164f1e32f148378d9b61ba9fbddef1d9b6b212028ddd86f2b554db6",
-		// 		"b61d53937da7a3c9d81ea5a9cdcb88de3a742494d61d0c415fd50373c6dc8215"
-		// 	],
-		// 	client: [
-		// 		"f2131b1ec164f1e32f148378d9b61ba9fbddef1d9b6b212028ddd86f2b554db6",
-		// 		"b61d53937da7a3c9d81ea5a9cdcb88de3a742494d61d0c415fd50373c6dc8215"
-		// 	]
-		// },
-		// preample: "123123",
-		// purpose: "231123123",
-		// payment: {
-		// 	amount: 132,
-		// 	note: "123123"
-		// },
-		// dates: {
-		// 	startDate: "2023-04-05",
-		// 	endDate: "2023-04-06"
-		// },
-		// propertyRights: "123123",
-		// terminationOfAgreement: "asdadad",
-		// governingLawAndJurisdiction: "wdadawdawd",
-		// finalProvisions: "123123",
-		// milestones: [],
-		// custom: [],
-		// signingWindow: "",
-		// requiredToSign: false,
-		// signed: false
 	}
 }
