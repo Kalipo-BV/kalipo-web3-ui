@@ -29,6 +29,17 @@
         ></ProposalType>
       </v-card-text>
 
+      <v-card-text v-if="steps.includes('title')">
+        <StepperHeader
+          title="Title"
+          subtitle="Write down the title for the proposal"
+        ></StepperHeader>
+
+        <Title
+          :title.sync="proposalTitle"
+        ></Title>
+      </v-card-text>
+
       <v-card-text v-if="steps.includes('proposal-profile')">
         <StepperHeader
           title="Submitting a new proposal"
@@ -54,6 +65,17 @@
           class="mt-4"
           :autonId="autonId"
         ></MembershipInvitation>
+      </v-card-text>
+
+      <v-card-text v-if="steps.includes('abstract')">
+        <StepperHeader
+          title="Abstract"
+          subtitle="Write down the abstract for the proposal"
+        ></StepperHeader>
+
+        <Abstract
+          :abstract.sync="abstract"
+        ></Abstract>
       </v-card-text>
 
       <v-card-text v-if="steps.includes('motivation')">
@@ -120,7 +142,7 @@
         ></StepperHeader>
 
         <TimeConstraints
-          :timeConstraints.sync="timeBasedConstraint"
+          :timeBasedConstraint.sync="timeBasedConstraint"
         ></TimeConstraints>
       </v-card-text>
 
@@ -152,8 +174,11 @@
   </div>
 </template>
 <script>
+import Abstract from "~/components/proposal/create_proposal/improvement_proposal/Abstract.vue";
+
 export default {
   name: "AutonProposalSubmit",
+  components: {Abstract},
   props: ["autonId", "autonName", "callbackFinish"],
   data: () => ({
     steps: "select-proposal-type",
@@ -179,7 +204,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
-    improvementScreenList: ['proposal-profile', 'proposers', 'motivation', 'specification',
+    improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
       'references', 'budget', 'execution-roles', 'time-constraints']
   }),
   created() {
@@ -234,7 +259,7 @@ export default {
         case 2:
           this.steps = ['sign'];
       }
-      
+
       if (this.currentPage === 2) {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
