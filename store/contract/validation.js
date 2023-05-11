@@ -5,10 +5,10 @@ export const isValidContract = (contract) => {
 	const initContractKeys = Object.keys(_initContract);
 	const initFormDataKeys = Object.keys(_initContract.formData);
 
-	const stateKeys = Object.keys(contract);
+	const contractKeys = Object.keys(contract);
 	const formDataKeys = Object.keys(contract.formData);
 	
-	const isContractStructureCorrect = arrayHasValues(stateKeys, initContractKeys);
+	const isContractStructureCorrect = arrayHasValues(contractKeys, initContractKeys);
 	const isFormDataStructureCorrect = arrayHasValues(formDataKeys, initFormDataKeys);
 
 	if (!isContractStructureCorrect) {

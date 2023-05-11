@@ -2,20 +2,29 @@ import { isValidContract } from "./validation.js"
 import { initContract } from "./initData.js";
 
 export const saveToLocalStorage = (contract, id = 0) => {
-	const data = putContractToLocalStorage(contract, id);
-	saveInLocalStorage(data);
+	if (isValidContract(contract)) {
+		const data = putContractToLocalStorageData(contract, id);
+		saveInLocalStorage(data);
+	}
 }
 
 export const saveNewToLocalStorage = (contract) => {
-	const data = addContractToLocalStorage(contract);
-	saveInLocalStorage(data);
-	
-	return id;
+	if (isValidContract(contract)) {
+		const { data, id } = addContractToLocalStorageData(contract);
+		saveInLocalStorage(data);
+		return id;
+	};
+
+	return -1;
 }
 
 export const getFromLocalStorage = (id = 0) => {
 	const contracten = getNormalizedLocalStorageData();
 	const contract = contracten[id];
+
+	if (contract == undefined) {
+		return null;
+	}
 
 	if (!isValidContract(contract)) {
 		console.warn("getFromLocalstorage uses a fallback to fill the holes in its required dataStructure");
@@ -85,17 +94,31 @@ function extractDataByObject(requiredObject, givenObject) {
 
 
 function getHighestKeyInLocalStorage() {
-	const data = getNormalizedLocalStorageData();
+	const data = getNormalizedLocalStorageData();	
 	const keys = Object.keys(data);
-	return Math.max(...keys);
+
+	if (keys.length == 0) {
+		return 0;
+	}
+
+	return Math.max(...keys) * 1;
 };
 
 function addContractToLocalStorageData(contract) {
 	const newKey = getHighestKeyInLocalStorage() +1;
-	return putContractToLocalStorage(contract, newKey)
+	const data = putContractToLocalStorageData(contract, newKey)
+
+	console.log(data);
+
+	return {data, id: newKey}
 }
 
 function putContractToLocalStorageData(contract, id) {
+	if (contract == undefined) {
+		console.error(`cannot add contract with key:${id}, \n contract == undefined,\n specific contract value = ${contract}`)
+		return false;
+	}
+
 	const data = getNormalizedLocalStorageData();
 	data[id] = contract;
 
@@ -104,12 +127,15 @@ function putContractToLocalStorageData(contract, id) {
 
 function saveInLocalStorage(data) {
 	const dataJson = JSON.stringify(data);
-	localStorage.setItem("Agreements", dataJson);
+
+	if (dataJson != null || dataJson != undefined) {
+		localStorage.setItem("Agreements", dataJson);
+	}
 }
 
 function getNormalizedLocalStorageData() {
 	const localStorageReference = localStorage.getItem("Agreements");
-	if (localStorageReference == null) {
+	if (localStorageReference == null || localStorageReference == undefined) {
 		return {};
 	}
 

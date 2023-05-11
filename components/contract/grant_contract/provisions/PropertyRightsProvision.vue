@@ -34,7 +34,7 @@
         computed: {
             propertyRights: {
                 get: function () {
-                    return this.$store.state.contract.contract.formData.propertyRights;
+                    return this.$store.state.contract.body.formData.propertyRights;
                 },
                 set: function (payload) {
                     this.$store.commit("contract/changePropertyRights", payload);
