@@ -36,6 +36,13 @@ const arrayHasValues = (arrayToCheck, neededValues) => {
 	return true;
 };
 
+export const isNotNull = (payload, errorName) => {
+	const result = (payload !== undefined && payload !== null);
+	logError(result, errorName, payload);
+
+	return result;
+}
+
 export const isArray = (payload, errorName) => {
 	const result = (Array.isArray(payload));
 	logError(result, errorName, payload);
@@ -80,6 +87,13 @@ export const isBoolean = (payload, errorName) => {
 
 export const isNumber = (payload, errorName) => {
 	const result = (typeof Number.parseFloat(payload) === 'number' || payload === null);
+	logError(result, errorName, payload);
+
+	return result;
+}
+
+export const isId = (payload, errorName) => {
+	const result = (isNumber(payload, errorName) && payload >= 0);
 	logError(result, errorName, payload);
 
 	return result;

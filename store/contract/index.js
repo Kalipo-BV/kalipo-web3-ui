@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { isArray, isObject, isBoolean, isDate, isNumber, isString, isValidPartyData } from "./validation.js"
+import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValidPartyData, isNotNull } from "./validation.js"
 import { saveNewToLocalStorage, saveToLocalStorage, getFromLocalStorage, normalizeContract } from "./localstorage.js"
 import { initFormData, initContract } from "./initData.js";
 
@@ -48,14 +48,13 @@ export const mutations = {
 
 	loadContract(state, payload) {
 		const id = payload.id;
-		const isValidId = isNumber(id, "invalid id") && id >= 0;
 
-		if (!isValidId) {
+		if (!isId(id, "id")) {
 			return;
 		}
 		
 		const contract = getFromLocalStorage(id);	
-		if (contract != null) {
+		if (isNotNull(contract, "contract is null")) {
 			state.body = contract;
 			state.id = id;
 		}		
