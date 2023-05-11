@@ -16,10 +16,10 @@
 
       <v-row class="mb-2">
         <v-col>
-          <v-btn-toggle v-model="toggle_exclusive">
-            <v-btn value="All" @click="sortOnStatus('All')">All</v-btn>
-            <v-btn value="In progress" @click="sortOnStatus('In progress')">In progress</v-btn>
-            <v-btn value="Active" @click="sortOnStatus('Active')">Active</v-btn>
+          <v-btn-toggle v-model="toggle_exclusive" group outlined class="mx-4">
+            <v-btn value="All" @click="sortOnStatus('All')" style="margin-right: 20px;">All</v-btn>
+            <v-btn value="In progress" @click="sortOnStatus('In progress')" style="margin-right: 20px;">In progress</v-btn>
+            <v-btn value="Active" @click="sortOnStatus('Active')" style="margin-right: 20px;">Active</v-btn>
             <v-btn value="Inactive" @click="sortOnStatus('Inactive')">Inactive</v-btn>
           </v-btn-toggle>
         </v-col>
