@@ -56,7 +56,6 @@ export const mutations = {
 		
 		const contract = getFromLocalStorage(id);	
 		if (contract != null) {
-			console.log(contract);
 			state.body = contract;
 			state.id = id;
 		}		

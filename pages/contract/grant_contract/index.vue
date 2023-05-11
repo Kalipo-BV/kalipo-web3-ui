@@ -56,11 +56,7 @@
       if (id === -1) {
         this.$store.commit("contract/createNew", {});
         const newId = this.$store.state.contract.id;
-        setTimeout(() => {
-          console.log('timout',this.$store.state.contract.id);
-        }, 0)
-        console.log(newId);
-
+        
         this.$router.push({ path: this.$route.path, query: { id: newId } });
       } else {
         this.$store.commit("contract/loadContract", {id: id});

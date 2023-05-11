@@ -108,8 +108,6 @@ function addContractToLocalStorageData(contract) {
 	const newKey = getHighestKeyInLocalStorage() +1;
 	const data = putContractToLocalStorageData(contract, newKey)
 
-	console.log(data);
-
 	return {data, id: newKey}
 }
 
