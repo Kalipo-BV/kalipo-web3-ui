@@ -1,3 +1,4 @@
+import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValidPartyData, isNotNull } from "./validation.js"
 import { isValidContract } from "./validation.js"
 import { initContract } from "./initData.js";
 
@@ -22,7 +23,7 @@ export const getFromLocalStorage = (id = 0) => {
 	const contracten = getNormalizedLocalStorageData();
 	const contract = contracten[id];
 
-	if (contract == undefined) {
+	if (!isNotNull(contract, "contract is null")) {
 		return null;
 	}
 
@@ -112,30 +113,27 @@ function addContractToLocalStorageData(contract) {
 }
 
 function putContractToLocalStorageData(contract, id) {
-	if (contract == undefined) {
-		console.error(`cannot add contract with key:${id}, \n contract == undefined,\n specific contract value = ${contract}`)
-		return false;
+	if (isNotNull(contract, "contract is null")) {
+		const data = getNormalizedLocalStorageData();
+		data[id] = contract;
+
+		return data;
 	}
 
-	const data = getNormalizedLocalStorageData();
-	data[id] = contract;
-
-	return data;
+	return false;
 }
 
 function saveInLocalStorage(data) {
 	const dataJson = JSON.stringify(data);
 
-	if (dataJson != null || dataJson != undefined) {
+	if (isNotNull(dataJson)) {
 		localStorage.setItem("Agreements", dataJson);
 	}
 }
 
 function getNormalizedLocalStorageData() {
 	const localStorageReference = localStorage.getItem("Agreements");
-	if (localStorageReference == null || localStorageReference == undefined) {
-		return {};
+	if (isNotNull(localStorageReference, "localStorageReference is not null")) {
+		return JSON.parse(localStorageReference);
 	}
-
-	return JSON.parse(localStorageReference);
 }
