@@ -34,7 +34,7 @@
         computed: {
             governingLawAndJurisdiction: {
                 get: function () {
-                    return this.$store.state.contract.formData.governingLawAndJurisdiction;
+                    return this.$store.state.contract.body.formData.governingLawAndJurisdiction;
                 },
                 set: function (payload) {
                     this.$store.commit("contract/changeGoverningLawAndJurisdiction", payload);

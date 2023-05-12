@@ -88,9 +88,9 @@
             selected: {
                 get: function () {
                     if (this.$props.isContractor) {
-                        return this.$store.state.contract.formData.parties.contractor;
+                        return this.$store.state.contract.body.formData.parties.contractor;
                     } else {
-                        return this.$store.state.contract.formData.parties.client;
+                        return this.$store.state.contract.body.formData.parties.client;
                     }
                 },
                 set: function (partyArray) {

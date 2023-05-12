@@ -146,7 +146,7 @@
         computed: {
             custom: {
                 get: function () {
-                    return this.$store.state.contract.formData.custom;
+                    return this.$store.state.contract.body.formData.custom;
                 },
 
                 set: function (payload) {
