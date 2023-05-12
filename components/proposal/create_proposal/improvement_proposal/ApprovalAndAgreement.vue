@@ -2,11 +2,6 @@
   <div>
     <v-form v-model="valid" @submit.prevent>
       <v-checkbox
-        label="Agreement"
-        :value="false"
-        v-model="approvalAndAgreementValue">
-      </v-checkbox>
-      <v-checkbox
       label="Expert advice"
       :value="false"
       v-model="approvalAndAgreementValue"
