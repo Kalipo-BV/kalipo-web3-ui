@@ -1,18 +1,31 @@
+import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValidPartyData, isNotNull } from "./validation.js"
 import { isValidContract } from "./validation.js"
-import { initState } from "./initData.js";
+import { initContract } from "./initData.js";
 
-export const saveToLocalstorage = (contract) => {
-	const data = JSON.stringify(contract);
-	localStorage.setItem("Agreements", data);
+export const saveToLocalStorage = (contract, id = 0) => {
+	if (isValidContract(contract)) {
+		const data = putContractToLocalStorageData(contract, id);
+		saveInLocalStorage(data);
+	}
 }
 
-export const getFromLocalstorage = () => {
-	if (localStorage.getItem("Agreements") == null) {
-		console.warn("no Agreements in localstorage");
+export const saveNewToLocalStorage = (contract) => {
+	if (isValidContract(contract)) {
+		const { data, id } = addContractToLocalStorageData(contract);
+		saveInLocalStorage(data);
+		return id;
+	};
+
+	return -1;
+}
+
+export const getFromLocalStorage = (id = 0) => {
+	const contracten = getNormalizedLocalStorageData();
+	const contract = contracten[id];
+
+	if (!isNotNull(contract, "contract is null")) {
 		return null;
 	}
-
-	const contract = JSON.parse(localStorage.getItem("Agreements"));
 
 	if (!isValidContract(contract)) {
 		console.warn("getFromLocalstorage uses a fallback to fill the holes in its required dataStructure");
@@ -24,7 +37,7 @@ export const getFromLocalstorage = () => {
 
 
 export const normalizeContract = (contract) => {
-	return extractDataByObject(initState(), contract);
+	return extractDataByObject(initContract(), contract);
 }
 
 /**
@@ -47,7 +60,6 @@ function extractDataByObject(requiredObject, givenObject) {
 			console.warn(`uses a fallback for the following key -> ${key}\n key is not defined or null`);
 			continue;
 		}
-
 
 
 		const isRequiredPropObject = (typeof currentRequiredProp === 'object' && !Array.isArray(currentRequiredProp));
@@ -79,4 +91,49 @@ function extractDataByObject(requiredObject, givenObject) {
 		result[key] = currentGivenProp;
 	}
 	return result;
+}
+
+
+function getHighestKeyInLocalStorage() {
+	const data = getNormalizedLocalStorageData();	
+	const keys = Object.keys(data);
+
+	if (keys.length == 0) {
+		return 0;
+	}
+
+	return Math.max(...keys) * 1;
+};
+
+function addContractToLocalStorageData(contract) {
+	const newKey = getHighestKeyInLocalStorage() +1;
+	const data = putContractToLocalStorageData(contract, newKey)
+
+	return {data, id: newKey}
+}
+
+function putContractToLocalStorageData(contract, id) {
+	if (isNotNull(contract, "contract is null")) {
+		const data = getNormalizedLocalStorageData();
+		data[id] = contract;
+
+		return data;
+	}
+
+	return false;
+}
+
+function saveInLocalStorage(data) {
+	const dataJson = JSON.stringify(data);
+
+	if (isNotNull(dataJson)) {
+		localStorage.setItem("Agreements", dataJson);
+	}
+}
+
+function getNormalizedLocalStorageData() {
+	const localStorageReference = localStorage.getItem("Agreements");
+	if (isNotNull(localStorageReference, "localStorageReference is not null")) {
+		return JSON.parse(localStorageReference);
+	}
 }

@@ -34,7 +34,7 @@
         computed: {
             finalProvisions: {
                 get: function () {
-                    return this.$store.state.contract.formData.finalProvisions;
+                    return this.$store.state.contract.body.formData.finalProvisions;
                 },
                 set: function (payload) {
                     this.$store.commit("contract/changeFinalProvisions", payload);

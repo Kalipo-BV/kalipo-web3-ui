@@ -1,17 +1,17 @@
-import { initState } from "./initData";
+import { initContract } from "./initData";
 
 export const isValidContract = (contract) => {
-	const _initState = initState();
-	const initStateKeys = Object.keys(_initState);
-	const initFormDataKeys = Object.keys(_initState.formData);
+	const _initContract = initContract();
+	const initContractKeys = Object.keys(_initContract);
+	const initFormDataKeys = Object.keys(_initContract.formData);
 
-	const stateKeys = Object.keys(contract);
+	const contractKeys = Object.keys(contract);
 	const formDataKeys = Object.keys(contract.formData);
 	
-	const isStateStructureCorrect = arrayHasValues(stateKeys, initStateKeys);
+	const isContractStructureCorrect = arrayHasValues(contractKeys, initContractKeys);
 	const isFormDataStructureCorrect = arrayHasValues(formDataKeys, initFormDataKeys);
 
-	if (!isStateStructureCorrect) {
+	if (!isContractStructureCorrect) {
 		console.error("State structure of the loaded agreement is malformed")
 		return false;
 	}
@@ -35,6 +35,13 @@ const arrayHasValues = (arrayToCheck, neededValues) => {
 	}
 	return true;
 };
+
+export const isNotNull = (payload, errorName) => {
+	const result = (payload !== undefined && payload !== null);
+	logError(result, errorName, payload);
+
+	return result;
+}
 
 export const isArray = (payload, errorName) => {
 	const result = (Array.isArray(payload));
@@ -80,6 +87,13 @@ export const isBoolean = (payload, errorName) => {
 
 export const isNumber = (payload, errorName) => {
 	const result = (typeof Number.parseFloat(payload) === 'number' || payload === null);
+	logError(result, errorName, payload);
+
+	return result;
+}
+
+export const isId = (payload, errorName) => {
+	const result = (isNumber(payload, errorName) && payload >= 0);
 	logError(result, errorName, payload);
 
 	return result;

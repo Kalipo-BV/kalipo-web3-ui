@@ -57,7 +57,7 @@
         computed: {
             amount: {
                 get: function () {
-                    return this.$store.state.contract.formData.payment.amount;
+                    return this.$store.state.contract.body.formData.payment.amount;
                 },
                 set: function (payload) {
                     this.$store.commit("contract/changePaymentAmount", payload);
@@ -65,7 +65,7 @@
             },
             note: {
                 get: function () {
-                    return this.$store.state.contract.formData.payment.note;
+                    return this.$store.state.contract.body.formData.payment.note;
                 },
                 set: function (payload) {
                     this.$store.commit("contract/changePaymentNote", payload);

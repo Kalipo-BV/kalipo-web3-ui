@@ -92,7 +92,7 @@
     computed: {
       startDate: {
         get: function () {
-          return this.$store.state.contract.formData.dates.startDate;
+          return this.$store.state.contract.body.formData.dates.startDate;
         },
         set: function (payload) {
           this.$store.commit("contract/changeStartDate", payload);
@@ -101,7 +101,7 @@
 
       endDate: {
         get: function () {
-          return this.$store.state.contract.formData.dates.endDate;
+          return this.$store.state.contract.body.formData.dates.endDate;
         },
         set: function (payload) {
           this.$store.commit("contract/changeEndDate", payload);

@@ -47,6 +47,21 @@
       next: function() {
         this.editFase--;
       },
+    },
+
+    mounted: function() {
+      const idIn = this.$route.query.id;
+      const id = (idIn && idIn*1 > -1 ? this.$route.query.id: -1);
+      
+      if (id === -1) {
+        this.$store.commit("contract/createNew", {});
+        const newId = this.$store.state.contract.id;
+        
+        this.$router.push({ path: this.$route.path, query: { id: newId } });
+      } else {
+        this.$store.commit("contract/loadContract", {id: id});
+      }
     }
   };
+
 </script>

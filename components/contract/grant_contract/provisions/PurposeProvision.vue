@@ -35,7 +35,7 @@
         computed: {
             purpose: {
                 get: function () {
-                    return this.$store.state.contract.formData.purpose;
+                    return this.$store.state.contract.body.formData.purpose;
                 },
                 set: function (payload) {
                     this.$store.commit("contract/changePurpose", payload);
