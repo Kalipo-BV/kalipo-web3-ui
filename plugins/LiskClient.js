@@ -101,6 +101,7 @@ export default ({ app }, inject) => {
     //     publicKey: this.account.publicKey,
     //     crypt: decryptToLayerOneStr
     // }
+
     let authAccount = {
         address: null,
         publicKey: null,
