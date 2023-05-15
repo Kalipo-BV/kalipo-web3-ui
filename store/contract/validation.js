@@ -38,7 +38,10 @@ const arrayHasValues = (arrayToCheck, neededValues) => {
 
 export const isNotNull = (payload, errorName) => {
 	const result = (payload !== undefined && payload !== null);
-	logError(result, errorName, payload);
+	
+	if (errorName === undefined) {
+		logError(result, errorName, payload);
+	}
 
 	return result;
 }
@@ -110,6 +113,6 @@ export const isDate = (payload, errorName) => {
 
 export const logError = (bool, errorName, payload) => {
 	if (!bool) {
-		console.error(`invalid ${errorName} given\n\n`, `payload = ${payload}\n\n`, `typeof payload = ${typeof payload}`);
+		console.error(`${errorName}\n\n`, `payload = ${payload}\n\n`, `typeof payload = ${typeof payload}`);
 	}
 }

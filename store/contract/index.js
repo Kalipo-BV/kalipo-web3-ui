@@ -79,84 +79,84 @@ export const mutations = {
 	},
 
 	changePreample(state, payload) {
-		if (isString(payload, 'preample')) {
+		if (isString(payload, 'invalid preample given')) {
 			state.body.formData.preample = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changePropertyRights(state, payload) {
-		if (isString(payload, 'propertyRights')) {
+		if (isString(payload, 'invalid propertyRights given')) {
 			state.body.formData.propertyRights = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changeGoverningLawAndJurisdiction(state, payload) {
-		if (isString(payload, 'governingLawAndJurisdiction')) {
+		if (isString(payload, 'invalid governingLawAndJurisdiction given')) {
 			state.body.formData.governingLawAndJurisdiction = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changeRequiredSign(state, payload) {
-		if (isBoolean(payload, 'required to sign')) {
+		if (isBoolean(payload, 'invalid required to sign given')) {
 			state.body.formData.purpose = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changePurpose(state, payload) {
-		if (isString(payload, 'purpose')) {
+		if (isString(payload, 'invalid purpose given')) {
 			state.body.formData.purpose = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changeFinalProvisions(state, payload) {
-		if (isString(payload, 'finalProvision')) {
+		if (isString(payload, 'invalid finalProvision given')) {
 			state.body.formData.finalProvisions = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changePaymentAmount(state, payload) {
-		if (isNumber(payload, 'paymentAmount')) {
+		if (isNumber(payload, 'invalid paymentAmount given')) {
 			state.body.formData.payment.amount = Number.parseFloat(payload);
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changePaymentNote(state, payload) {
-		if (isString(payload, 'paymentNote')) {
+		if (isString(payload, 'invalid paymentNote given')) {
 			state.body.formData.payment.note = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changeStartDate(state, payload) {
-		if (isDate(payload, 'startDate')) {
+		if (isDate(payload, 'invalid startDate given')) {
 			state.body.formData.dates.startDate = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changeEndDate(state, payload) {
-		if (isDate(payload, 'endDate')) {
+		if (isDate(payload, 'invalid endDate given')) {
 			state.body.formData.dates.endDate = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changeCustom(state, payload) {
-		if (isArray(payload, 'customProvision')) {
+		if (isArray(payload, 'invalid customProvision given')) {
 			state.body.formData.custom = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changeCustom(state, payload) {
-		if (isArray(payload, 'custom')) {
+		if (isArray(payload, 'invalid custom given')) {
 			state.body.formData.custom = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
@@ -188,7 +188,7 @@ export const mutations = {
 	},
 
 	changeTerminationOfAgreement(state, payload) {
-		if (isString(payload, 'terminationOfAgreement')) {
+		if (isString(payload, 'invalid terminationOfAgreement given')) {
 			state.body.formData.terminationOfAgreement = payload;
 		}
 	},
