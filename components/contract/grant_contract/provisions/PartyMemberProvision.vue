@@ -32,7 +32,7 @@
         item-text="name"
         item-value="id"
         hide-details="auto"
-        class="mb-4"
+        class="distance"
     >
         <template v-slot:selection="data">
             <v-chip
@@ -161,3 +161,9 @@
         },
     }
 </script>
+
+<style>
+    .distance:first-child {
+        padding-bottom:16px;
+    }
+</style>
