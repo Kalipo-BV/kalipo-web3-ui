@@ -18,7 +18,7 @@ export const initFormData = () => {
 		preample: "",
 		purpose: "",
 		payment: {
-			amount: 0,
+			amount: "",
 			note: "",
 		},
 		dates: {
