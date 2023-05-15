@@ -21,6 +21,7 @@
       <v-col
         cols="12"
         lg="6"
+        style="padding:0;"
       >
         <v-menu
           ref="menu1"
@@ -55,6 +56,7 @@
       <v-col
         cols="12"
         lg="6"
+        style="padding:0;"
       >
         <v-menu
           v-model="menu2"

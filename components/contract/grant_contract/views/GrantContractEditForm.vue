@@ -40,7 +40,7 @@
       <PaymentProvision />
 
       <div class="text-h3">Date provision</div>
-      <v-card class="mt-4 mb-2">
+      <v-card class="mt-4 mb-2" style="padding: 12px;">
         <DateTimeProvision />
       </v-card>
 
