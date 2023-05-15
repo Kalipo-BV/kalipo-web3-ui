@@ -37,6 +37,11 @@ export const getFromLocalStorage = (id = 0) => {
 	return contract;
 }
 
+export const getAllFromLocalStorage = () => {
+	setEmptyLocalStorageIfNotSet();
+	const localStorageReference = localStorage.getItem("Agreements");
+	return JSON.parse(localStorageReference);
+}
 
 export const normalizeContract = (contract) => {
 	return extractDataByObject(initContract(), contract);
