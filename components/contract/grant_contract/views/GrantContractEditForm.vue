@@ -20,7 +20,7 @@
     <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
     <v-form ref="form">
       <div class="text-h2 pb-2">Agreement Parties</div>
-      <v-card style="padding:12px">
+      <v-card style="padding:12px 12px 20px 12px">
         <PartyMemberProvision isContractor partyName="contractor"/>
         <PartyMemberProvision partyName="client"/>
       </v-card>
