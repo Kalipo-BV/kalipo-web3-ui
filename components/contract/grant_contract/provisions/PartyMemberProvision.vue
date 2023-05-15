@@ -16,42 +16,41 @@
 -->
 
 <template>
-    <v-container>
-        <!-- <div class="text--primary pl-2"> {{ title }}</div> -->
-        <v-autocomplete
-            chips
-            clearable
-            deletable-chips
-            multiple
-            outlined
-            v-model="selected"
-            :disabled="isUpdating"
-            :items="users"
-            :rules="[this.selected?.length > 0 || 'There must be at least one party member!']"
-            color="blue-grey lighten-2"
-            label="Add (additional) party members"
-            item-text="name"
-            item-value="id"
-            style="padding: 1px; margin: 5px;"
-            hide-details="auto"
-        >
+    <!-- <div class="text--primary pl-2"> {{ title }}</div> -->
+    <v-autocomplete
+        chips
+        clearable
+        deletable-chips
+        multiple
+        outlined
+        v-model="selected"
+        :disabled="isUpdating"
+        :items="users"
+        :rules="[this.selected?.length > 0 || 'There must be at least one party member!']"
+        color="blue-grey lighten-2"
+        label="Add (additional) party members"
+        item-text="name"
+        item-value="id"
+        hide-details="auto"
+        class="mb-4"
+    >
         <template v-slot:selection="data">
-          <v-chip
+            <v-chip
             v-bind="data.attrs"
             :input-value="data.selected"
             close
             @click="data.select"
             @click:close="remove(data.item)"
-          >
+            >
             <v-avatar
-              color="accent"
-              class="white--text text-caption"
-              v-if="data.item.name"
-              left
-              >{{ getInitials(data.item.name, 2) }}</v-avatar
+                color="accent"
+                class="white--text text-caption"
+                v-if="data.item.name"
+                left
+                >{{ getInitials(data.item.name, 2) }}</v-avatar
             >
             {{ data.item.name }}
-          </v-chip>
+            </v-chip>
         </template>
         <template v-slot:item="data">
             <template v-if="typeof data.item !== 'object'">
@@ -68,13 +67,12 @@
                     </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                <v-list-item-title>{{data.item.name}}</v-list-item-title>
-                <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
+                    <v-list-item-title>{{data.item.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{data.item.username}}</v-list-item-subtitle>
                 </v-list-item-content>
             </template>
         </template>
     </v-autocomplete>
-</v-container>
 
 </template>
 <script>
