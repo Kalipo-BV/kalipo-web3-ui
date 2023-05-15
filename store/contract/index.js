@@ -202,7 +202,12 @@ export const mutations = {
 export const getters = {
 	filtered: (state) => {
 		return normalizeContract(state.body);
+	},
+
+	getAllContracts: () => {
+		return getAllFromLocalStorage();
 	}
+	
 }
 
 function retreiveData(state) {
