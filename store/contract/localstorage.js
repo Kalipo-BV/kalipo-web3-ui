@@ -2,6 +2,8 @@ import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValid
 import { isValidContract } from "./validation.js"
 import { initContract } from "./initData.js";
 
+let isLocalStorageChecked = false;
+
 export const saveToLocalStorage = (contract, id = 0) => {
 	if (isValidContract(contract)) {
 		const data = putContractToLocalStorageData(contract, id);
@@ -132,8 +134,18 @@ function saveInLocalStorage(data) {
 }
 
 function getNormalizedLocalStorageData() {
+	setEmptyLocalStorageIfRequired();
 	const localStorageReference = localStorage.getItem("Agreements");
-	if (isNotNull(localStorageReference, "localStorageReference is not null")) {
-		return JSON.parse(localStorageReference);
-	}
+	return JSON.parse(localStorageReference);
+}
+
+function setEmptyLocalStorageIfRequired() {
+	if(!isLocalStorageChecked) {
+		const localStorageReference = localStorage.getItem("Agreements");
+		if (!isNotNull(localStorageReference)) {
+			localStorage.setItem("Agreements", JSON.stringify({}));
+		}
+
+		isLocalStorageChecked = true;
+	};
 }

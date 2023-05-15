@@ -38,7 +38,10 @@ const arrayHasValues = (arrayToCheck, neededValues) => {
 
 export const isNotNull = (payload, errorName) => {
 	const result = (payload !== undefined && payload !== null);
-	logError(result, errorName, payload);
+	
+	if (errorName === undefined) {
+		logError(result, errorName, payload);
+	}
 
 	return result;
 }

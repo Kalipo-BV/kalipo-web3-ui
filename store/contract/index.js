@@ -79,14 +79,14 @@ export const mutations = {
 	},
 
 	changePreample(state, payload) {
-		if (isString(payload, 'preample')) {
+		if (isString(payload, 'invalid preample given')) {
 			state.body.formData.preample = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
 	changePropertyRights(state, payload) {
-		if (isString(payload, 'propertyRights')) {
+		if (isString(payload, 'invalid propertyRights given')) {
 			state.body.formData.propertyRights = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
