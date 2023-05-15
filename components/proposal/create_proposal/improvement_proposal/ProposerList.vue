@@ -14,17 +14,19 @@
     >
       <template v-slot:selection="data">
         <v-chip
+          v-for="item in data.selectedValue"
           v-bind="data.attrs"
-          :input-value="data.selectedValue"
+          :key="item.id"
+          :input-value="item"
         >
           <v-avatar
             color="accent"
             class="white--text text-caption"
-            v-if="data.item.name"
+            v-if="item.name"
             left
-          >{{ getInitials(data.item.name, 2) }}</v-avatar
+          >{{ getInitials(item.name, 2) }}</v-avatar
           >
-          {{ data.item.name }}
+          {{ item }}
         </v-chip>
       </template>
       <template v-slot:item="data">
@@ -60,12 +62,17 @@ export default {
   computed: {
     selectedValue: {
       get: function () {
-        return this.proposers;
+        return this.proposers[0];
       },
       set: function (newValue) {
         if(this.proposers.indexOf(newValue) === -1){
-          if(this.proposers === ""){ this.$emit("update:proposers", this.proposers  + newValue);}
-        else{this.$emit("update:proposers", this.proposers + ", " + newValue);}
+          if(this.proposers === ""){
+            this.proposers.push(newValue)
+            this.$emit("update:proposers", this.proposers);}
+        else{
+          this.proposers.push(newValue)
+          this.$emit("update:proposers", this.proposers);
+        }
         }
         console.log(this.proposers)
       },
