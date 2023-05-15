@@ -134,12 +134,12 @@ function saveInLocalStorage(data) {
 }
 
 function getNormalizedLocalStorageData() {
-	setEmptyLocalStorageIfRequired();
+	setEmptyLocalStorageIfNotSet();
 	const localStorageReference = localStorage.getItem("Agreements");
 	return JSON.parse(localStorageReference);
 }
 
-function setEmptyLocalStorageIfRequired() {
+function setEmptyLocalStorageIfNotSet() {
 	if(!isLocalStorageChecked) {
 		const localStorageReference = localStorage.getItem("Agreements");
 		if (!isNotNull(localStorageReference)) {
