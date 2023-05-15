@@ -105,12 +105,12 @@ export default {
   },
   methods: {
     remove(item) {
-      console.log()
+
       // const index = this.selectedValue.indexOf(item.name);
       // if (index >= 0) this.selectedValue.splice(index, 1);
     },
     getInitials(parseStr, max) {
-      console.log("TETETET")
+
       if (parseStr != undefined) {
         const nameList = parseStr.split(" ");
         let result = "";
@@ -132,7 +132,6 @@ export default {
   },
 
   mounted: async function () {
-    console.log("TERING ZOOI JONGUH")
     this.isUpdating = true;
     const accountIdsWrapper = await this.$invoke("kalipoAccount:getAll");
 
@@ -141,7 +140,6 @@ export default {
     // });
 
     if (!accountIdsWrapper.error) {
-      console.log("test")
       const ids = accountIdsWrapper.result.ids.reverse();
       for (let index = 0; index < ids.length; index++) {
         const id = ids[index];
@@ -149,7 +147,6 @@ export default {
           id: id,
         });
         accountWrapper.result.id = id;
-        console.log(accountWrapper)
         this.users.push(accountWrapper.result);
       }
     }
