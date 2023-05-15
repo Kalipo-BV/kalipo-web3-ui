@@ -127,7 +127,7 @@
     </v-form>
 
     <v-dialog
-      width="60%"
+      max-width="500px"
       v-model="dialog"
       activator="parent"
     >

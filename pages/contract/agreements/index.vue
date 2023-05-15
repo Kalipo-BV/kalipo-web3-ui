@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container style="min-width: 90%;">
     <div class="mt-4">
       <v-row>
         <v-col cols="12" md="4">
@@ -18,8 +18,8 @@
         <v-col>
           <v-btn-toggle v-model="toggle_exclusive" group outlined class="mx-4">
             <v-btn value="All" @click="sortOnStatus('All')" style="margin-right: 20px;">All</v-btn>
-            <v-btn value="In progress" @click="sortOnStatus('In progress')" style="margin-right: 20px;">In progress</v-btn>
-            <v-btn value="Active" @click="sortOnStatus('Active')" style="margin-right: 20px;">Active</v-btn>
+            <v-btn value="In progress" @click="sortOnStatus('Local copy')" style="margin-right: 20px;">In progress</v-btn>
+            <v-btn value="Active" @click="sortOnStatus('Outgoing')" style="margin-right: 20px;">Active</v-btn>
             <v-btn value="Inactive" @click="sortOnStatus('Inactive')">Inactive</v-btn>
           </v-btn-toggle>
         </v-col>
@@ -50,7 +50,12 @@
         :search="search"
       >
         <template v-slot:item.agreement="{ item }">
-          <v-btn style="min-width: 65%" color="accent" small>View</v-btn>
+          <router-link v-if="item.status ==`Local copy`" :to="`/contract/grant_contract?id=${item.id}`">
+            <v-btn style="min-width: 65%" color="accent" small>Edit</v-btn>
+          </router-link>
+          <router-link v-else :to="`/contract/grant_contract?bid=${item.id}`">
+            <v-btn style="min-width: 65%" color="accent" small>View</v-btn>
+          </router-link>          
         </template>
           <template v-slot:item.title="{ item }">
             {{ item.title }}
@@ -76,18 +81,15 @@
 </template>
 
 <script>
+  import { v4 as uuidv4 } from 'uuid';
   export default {
     data: () => ({
       headers: [
         { text: "Agreements", align: 'center', value: "agreement" },
-        // { text: "Title", align: 'center', value: "title" },
-        // { text: "Agreement Type", align: 'center', value: "type" },
-        // { text: "Version", align: 'center', value: "version" },
-        // { text: "Status", align: 'center', value: "status" },
-        { text: "Title", value: "title" },
-        { text: "Agreement Type", value: "type" },
-        { text: "Version", value: "version" },
-        { text: "Status", value: "status" },
+        { text: "Title", align: 'center', value: "title" },
+        { text: "Agreement Type", align: 'center', value: "type" },
+        { text: "Version", align: 'center', value: "version" },
+        { text: "Status", align: 'center', value: "status" },
       ],
       search: "",
       data: [],
@@ -102,24 +104,43 @@
         const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: id });
       },
 
-      async getAllWithInfo() {       
+      async getAllWithInfo() {
+        this.data = [];
+        await this.getBEAllWithInfo();
+        await this.getFEAllWithInfo();
+        this.filterd_data = this.data;
+      },
+
+      async getBEAllWithInfo() {       
         const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
  
         //shh this isn't cheese       needs to be changed in BE/DB {{ item.version }}
         existingAccoundIdWrapper.result.forEach(element => {
           element.status = "Outgoing";
           element["version"] = Math.floor(Math.random() * (4 - 1 + 1) + 1);
-          element.title = 'New legal contract' 
+          element.title = 'New legal contract';
+          element.id = uuidv4();
+          this.data.push(element); 
         });
-        this.data = existingAccoundIdWrapper.result;
-        //
+      },
 
-        this.filterd_data = this.data;
+      async getFEAllWithInfo() {    
+        // const agreements = localStorage.getItem("Agreements")
+        const agreements = this.$store.getters["contract/getAllContracts"];
+
+        //shh this isn't cheese       needs to be changed in BE/DB {{ item.version }}
+        for (const contract in agreements) {
+          agreements[contract].status = "Local copy";
+          agreements[contract]["version"] = Math.floor(Math.random() * (4 - 1 + 1) + 1);
+          agreements[contract].title = 'Edit legal contract';
+          agreements[contract].id = contract;
+          this.data.push(agreements[contract]); 
+        };
       },
 
       async sortOnStatus(info) {
         this.loading = true;
-        if(info !== "All" && info !== "Active") {
+        if(info !== "All") {
           this.filterd_data = this.data.filter((item) => item.status === info);
         } else {
           this.filterd_data = this.data;
@@ -127,6 +148,11 @@
         this.loading = false;
       },
     },
+
+    // toEditView() {
+    //   this.$router.push("/wallet");
+    //   this.$router.push({ name: "EditAgreement" });
+    // },
 
     beforeMount() {
       this.getAllWithInfo();
