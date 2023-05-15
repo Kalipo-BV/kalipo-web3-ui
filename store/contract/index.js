@@ -16,7 +16,7 @@
  */
 
 import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValidPartyData, isNotNull } from "./validation.js"
-import { saveNewToLocalStorage, saveToLocalStorage, getFromLocalStorage, normalizeContract } from "./localstorage.js"
+import { getAllFromLocalStorage, saveNewToLocalStorage, saveToLocalStorage, getFromLocalStorage, normalizeContract } from "./localstorage.js"
 import { initFormData, initContract } from "./initData.js";
 
 // const loadState = () => {
