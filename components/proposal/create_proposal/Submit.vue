@@ -78,6 +78,20 @@
         ></Abstract>
       </v-card-text>
 
+      <v-card-text v-if="steps.includes('proposers-list')">
+        <StepperHeader
+          title="Authors"
+          subtitle="Choose the authors"
+        ></StepperHeader>
+
+        <ProposerList
+        :proposers.sync="proposers"
+        class="mt-4"
+        :autonId="autonId"
+
+        ></ProposerList>
+      </v-card-text>
+
       <v-card-text v-if="steps.includes('motivation')">
         <StepperHeader
           title="Motivation"
@@ -146,6 +160,8 @@
         ></TimeConstraints>
       </v-card-text>
 
+
+
       <AccountSign
         :transaction="transaction"
         :uri="uri"
@@ -204,7 +220,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
-    improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
+    improvementScreenList: ['title', 'abstract', 'proposers-list', 'motivation', 'specification',
       'references', 'budget', 'execution-roles', 'time-constraints']
   }),
   created() {
