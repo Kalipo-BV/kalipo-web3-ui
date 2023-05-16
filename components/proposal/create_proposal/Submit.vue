@@ -299,10 +299,6 @@ export default {
               this.steps = ['sign'];
           }
       }
-      console.log(this.steps)
-      console.log(['sign'])
-      console.log(this.steps[0] === 'sign')
-      console.log(this.steps == ['sign'])
 
       if (this.steps[0] === 'sign') {
         console.log(this.steps)
