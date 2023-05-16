@@ -3,7 +3,6 @@
     <v-form v-model="valid" @submit.prevent>
       <v-checkbox
       label="Expert advice"
-      :value="false"
       v-model="approvalAndAgreementValue"
       ></v-checkbox>
     </v-form>
@@ -14,14 +13,6 @@
 export default {
   props: ["approvalAndAgreement"],
   computed: {
-    approvalAndAgreementValue: {
-      get: function () {
-        return this.approvalAndAgreement;
-      },
-      set: function (newValue) {
-        this.$emit("update:approvalAndAgreement", newValue);
-      },
-    }
   },
   data: () => ({
     valid: false,

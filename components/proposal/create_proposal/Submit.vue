@@ -153,7 +153,6 @@
         ></StepperHeader>
 
         <ApprovalAndAgreement
-          :approval-and-agreement.sync="approvalAndAgreement"
         ></ApprovalAndAgreement>
       </v-card-text>
 
@@ -224,7 +223,7 @@ export default {
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
     improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
       'references', 'budget', 'execution-roles', 'time-constraints'],
-    extraOptionBoxList: ['extraOptions','agreement', 'expertAdvice']
+    extraOptionBoxList: ['extraOptions']
   }),
   created() {
     this.$nuxt.$on(
@@ -262,6 +261,8 @@ export default {
     },
     async nextStep() {
       // Set the currentPage
+      // console.log(this.currentPage)
+      // console.log(this.selectedProposalType)
       this.currentPage += 1;
       // Set the inputs of the page to contain the ones in the list from 'data'
       // If there is a new type of proposal, add a list of screen names above and add a new case.
@@ -269,7 +270,7 @@ export default {
         case 1:
           switch(this.selectedProposalType) {
           case 'membership-invitation':
-            if(this.currentPage )
+            if(this.currentPage)
               this.steps = this.membershipScreenList;
             break;
           case 'improvement-proposal':
@@ -287,11 +288,24 @@ export default {
               break;
           }
         break;
-        default:
-          this.steps = ['sign']
+        case 3:
+          switch(this.selectedProposalType) {
+            case 'membership-invitation':
+              break;
+            case 'improvement-proposal':
+              this.steps = ['sign'];
+              break;
+            default:
+              this.steps = ['sign'];
+          }
       }
+      console.log(this.steps)
+      console.log(['sign'])
+      console.log(this.steps[0] === 'sign')
+      console.log(this.steps == ['sign'])
 
-      if (this.steps === ['sign']) {
+      if (this.steps[0] === 'sign') {
+        console.log(this.steps)
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
         });
