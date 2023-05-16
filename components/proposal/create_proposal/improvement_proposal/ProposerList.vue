@@ -13,9 +13,10 @@
       :rules="[rules.required]"
     >
       <template v-slot:selection="data">
+
         <v-chip
-          v-for="item in data.selectedValue"
-          v-bind="data.attrs"
+          v-for="item in selectedValue"
+          v-bind="selectedValue.attrs"
           :key="item.id"
           :input-value="item"
         >
@@ -26,7 +27,7 @@
             left
           >{{ getInitials(item.name, 2) }}</v-avatar
           >
-          {{ item }}
+          {{ selectedValue }}
         </v-chip>
       </template>
       <template v-slot:item="data">
@@ -52,6 +53,11 @@
       </template>
     </v-autocomplete>
   </v-form>
+    <div  v-for="item in selectedValue"
+          v-bind="selectedValue.attrs"
+          :key="item.id"
+          :input-value="item">{{item}}</div>
+
   <h1>Voor nu kapot</h1>
   </div>
 </template>
@@ -62,7 +68,9 @@ export default {
   computed: {
     selectedValue: {
       get: function () {
-        return this.proposers[0];
+        console.log(this.proposers)
+        // console.log(data)
+        return this.proposers;
       },
       set: function (newValue) {
         if(this.proposers.indexOf(newValue) === -1){
