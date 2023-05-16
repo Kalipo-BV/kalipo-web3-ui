@@ -161,6 +161,16 @@
       </v-card-text>
 
 
+      <v-card-text v-if="steps.includes('extraOptions')">
+        <StepperHeader
+          title="Expert advice and agreement (Optional)"
+          subtitle="Check expert advice and agreement if needed"
+        ></StepperHeader>
+
+        <ApprovalAndAgreement
+        ></ApprovalAndAgreement>
+      </v-card-text>
+
 
       <AccountSign
         :transaction="transaction"
@@ -191,10 +201,17 @@
 </template>
 <script>
 import Abstract from "~/components/proposal/create_proposal/improvement_proposal/Abstract.vue";
+import ApprovalAndAgreement from "~/components/proposal/create_proposal/improvement_proposal/ApprovalAndAgreement.vue";
+import approvalAndAgreement from "~/components/proposal/create_proposal/improvement_proposal/ApprovalAndAgreement.vue";
 
 export default {
   name: "AutonProposalSubmit",
-  components: {Abstract},
+  computed: {
+    approvalAndAgreement() {
+      return approvalAndAgreement
+    }
+  },
+  components: {ApprovalAndAgreement, Abstract},
   props: ["autonId", "autonName", "callbackFinish"],
   data: () => ({
     steps: "select-proposal-type",
@@ -202,17 +219,17 @@ export default {
     selectedProposalType: "",
     selectedAccountId: "",
     invitationMessage: "",
-    proposalTitle: "Test",
+    proposalTitle: "",
     proposalDescription: "",
     uri: "",
     proposers: [],
-    abstract: "abstract",
-    motivation: "mot",
-    specification: "spec",
-    references: "ref",
-    budget: "bud is vies",
-    executionRoles: "ROLEEEES",
-    timeBasedConstraint: "tijd is geld nou gappie gooi wat tijd op me.",
+    abstract: "",
+    motivation: "",
+    specification: "",
+    references: "",
+    budget: "",
+    executionRoles: "",
+    timeBasedConstraint: "",
     transaction: {
       moduleId: -1,
       assetId: 1,
@@ -220,8 +237,10 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
-    improvementScreenList: ['title', 'abstract', 'proposers-list', 'motivation', 'specification',
-      'references', 'budget', 'execution-roles', 'time-constraints']
+    improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
+      'references', 'budget', 'execution-roles', 'time-constraints'],
+    extraOptionBoxList: ['extraOptions']
+
   }),
   created() {
     this.$nuxt.$on(
@@ -253,10 +272,14 @@ export default {
               break;
           }
           break;
+        case 2:
+          this.steps = this.extraOptionBoxList;
       }
     },
     async nextStep() {
       // Set the currentPage
+      // console.log(this.currentPage)
+      // console.log(this.selectedProposalType)
       this.currentPage += 1;
       // Set the inputs of the page to contain the ones in the list from 'data'
       // If there is a new type of proposal, add a list of screen names above and add a new case.
@@ -264,7 +287,7 @@ export default {
         case 1:
           switch(this.selectedProposalType) {
           case 'membership-invitation':
-            if(this.currentPage )
+            if(this.currentPage)
               this.steps = this.membershipScreenList;
             break;
           case 'improvement-proposal':
@@ -273,10 +296,29 @@ export default {
         }
         break;
         case 2:
-          this.steps = ['sign'];
+          switch(this.selectedProposalType) {
+            case 'membership-invitation':
+              this.steps = ['sign'];
+              break;
+            case 'improvement-proposal':
+              this.steps = this.extraOptionBoxList;
+              break;
+          }
+        break;
+        case 3:
+          switch(this.selectedProposalType) {
+            case 'membership-invitation':
+              break;
+            case 'improvement-proposal':
+              this.steps = ['sign'];
+              break;
+            default:
+              this.steps = ['sign'];
+          }
       }
 
-      if (this.currentPage === 2) {
+      if (this.steps[0] === 'sign') {
+        console.log(this.steps)
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
         });
