@@ -217,12 +217,41 @@ export default {
         }),
       });
 
-      // Proposer
+      // Submitter
       this.list.push({
         icon: "mdi-account",
-        leftText: "Proposer:",
+        leftText: "Submitter:",
         rightText: "@" + this.submitter.username,
         link: "/account/" + this.submitter.username,
+      });
+
+      // proposers
+      var propserNames = "";
+      const promises = this.proposal.improvementArguments.proposers.map((proposerId) => {
+        return this.$invoke("kalipoAccount:getByID", {
+          id: proposerId,
+        });
+      });
+
+      await Promise.all(promises).then((accounts) => {
+        accounts.forEach((account) => {
+          console.log(account.result.name);
+          console.log(promises.length)
+          const commaCount = propserNames.split(",").length - 1;
+          if((promises.length) -1 === commaCount){
+            propserNames += account.result.name
+          }
+          else{propserNames += account.result.name + ", "}
+          console.log(propserNames)
+        });
+      });
+
+
+
+      this.list.push({
+        icon: "mdi-account-group",
+        leftText: "Authors:",
+        rightText:  propserNames,
       });
 
       // Proposal type
@@ -232,7 +261,7 @@ export default {
         rightText: this.proposal.type.replaceAll("-", " "),
       });
 
-      console.log(this.proposal)
+
 
       // Some attributes linked to a proposal type.
       if (this.proposal.type == "membership-invitation") {

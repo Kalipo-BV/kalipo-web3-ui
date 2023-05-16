@@ -78,6 +78,20 @@
         ></Abstract>
       </v-card-text>
 
+      <v-card-text v-if="steps.includes('proposers-list')">
+        <StepperHeader
+          title="Authors"
+          subtitle="Choose the authors"
+        ></StepperHeader>
+
+        <ProposerList
+        :proposers.sync="proposers"
+        class="mt-4"
+        :autonId="autonId"
+
+        ></ProposerList>
+      </v-card-text>
+
       <v-card-text v-if="steps.includes('motivation')">
         <StepperHeader
           title="Motivation"
@@ -146,6 +160,7 @@
         ></TimeConstraints>
       </v-card-text>
 
+
       <v-card-text v-if="steps.includes('extraOptions')">
         <StepperHeader
           title="Expert advice and agreement (Optional)"
@@ -155,6 +170,7 @@
         <ApprovalAndAgreement
         ></ApprovalAndAgreement>
       </v-card-text>
+
 
       <AccountSign
         :transaction="transaction"
@@ -224,6 +240,7 @@ export default {
     improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
       'references', 'budget', 'execution-roles', 'time-constraints'],
     extraOptionBoxList: ['extraOptions']
+
   }),
   created() {
     this.$nuxt.$on(
