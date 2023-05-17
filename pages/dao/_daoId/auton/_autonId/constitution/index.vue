@@ -17,38 +17,44 @@
 
 <template>
   <div>
-    <v-toolbar class="mt-0 px-3" color="primary" dense>
-      <!-- <div class="d-flex justify-start align-center">
-        <v-avatar color="accent" size="30px"
-          ><v-icon small dark>mdi-bank</v-icon></v-avatar
-        >
-        <div class="text-h4 primary--text ml-2">Constitution</div>
-      </div> -->
-
-      <v-tabs
-        show-arrows
-        v-model="selectedItem"
-        color="white"
-        class="ml-4"
-        dark
-      >
+    <v-divider></v-divider>
+    <div>
+      <v-tabs show-arrows v-model="selectedItem" color="primary">
         <v-tab v-for="(item, idx) in tabItemsDefault" :key="idx">
           <v-icon small class="mr-2">{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-tab>
       </v-tabs>
-    </v-toolbar>
+    </div>
     <v-container>
-      <div class="mt-n5">
+      <div class="mt-n3">
         <div v-if="selectedItem === 0">
           <v-row>
+            <v-col cols="12" md="8">
+              <div class="text-h1">Terms & Conditions</div>
+
+              <NestedList
+                title="Glossary"
+                :items="preambles"
+                class="mt-0"
+              ></NestedList>
+              <NestedList
+                title="Preambles"
+                :items="preambles"
+                class="mt-4"
+              ></NestedList>
+              <NestedList
+                title="Articles"
+                :items="preambles"
+                class="mt-4"
+              ></NestedList>
+            </v-col>
             <v-col cols="12" md="4">
-              <div class="mt-4">
-                <div class="text-h3">Versions</div>
-                <v-card class="mt-2">
+              <div class="">
+                <v-card class="" flat>
                   <v-card-text class="black--text">
                     <v-row>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="9">
                         <div class="text-h6">
                           Version:
                           <span class="font-weight-regular">{{
@@ -56,14 +62,13 @@
                           }}</span>
                         </div>
                         <div class="text-h6">
-                          Effectuation date:
+                          Effectuation:
                           <span class="font-weight-regular">01-01-2023</span>
                         </div>
                       </v-col>
-                      <v-col cols="12" md="6" class="d-flex justify-end">
+                      <v-col cols="12" md="3" class="d-flex justify-end">
                         <div>
-                          <div class="text-h6">Decided by:</div>
-                          <v-btn color="accent" small>Go to proposal</v-btn>
+                          <v-btn color="accent" small>Proposal</v-btn>
                         </div>
                       </v-col>
                     </v-row>
@@ -149,25 +154,9 @@
                   class="mt-2"
                   v-model="termsAndConditionsVersionSelected"
                   :length="termsAndConditionsVersions"
+                  color="accent"
                 ></v-pagination>
               </div>
-            </v-col>
-            <v-col cols="12" md="8">
-              <NestedList
-                title="Glossary"
-                :items="preambles"
-                class="mt-4"
-              ></NestedList>
-              <NestedList
-                title="Preambles"
-                :items="preambles"
-                class="mt-4"
-              ></NestedList>
-              <NestedList
-                title="Articles"
-                :items="preambles"
-                class="mt-4"
-              ></NestedList>
             </v-col>
           </v-row>
         </div>

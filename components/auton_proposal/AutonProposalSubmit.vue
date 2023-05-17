@@ -77,7 +77,12 @@
       ></AccountSign>
 
       <v-card-text
-        v-if="step !== 'sign' && step != 'auton-creation' && !hideNavigation"
+        v-if="
+          step !== 'sign' &&
+          step != 'auton-creation' &&
+          step != 'terms-and-conditions' &&
+          !hideNavigation
+        "
       >
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="prevStep">

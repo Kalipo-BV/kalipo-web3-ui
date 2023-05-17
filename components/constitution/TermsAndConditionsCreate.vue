@@ -17,142 +17,93 @@
 
 <template>
   <div class="">
-    <v-card-text v-if="step == 0">
-      <AutonStepperHeader
-        title="Proposing new Terms & Conditions"
-        subtitle="Manage..."
-      >
-      </AutonStepperHeader>
-      <div class="text-body-1 mt-3">...</div>
+    <div v-if="step == 0">
+      <v-card-text>
+        <AutonStepperHeader
+          title="Proposing new Terms & Conditions"
+          subtitle=""
+        >
+        </AutonStepperHeader>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-text>
+        <EntryMaster title="Glossary"></EntryMaster>
+      </v-card-text>
+    </div>
 
-      <!-- <NestedList :items="nestedListItems"></NestedList> -->
-      <EntryMaster></EntryMaster>
-    </v-card-text>
+    <div v-if="step == 1">
+      <v-card-text>
+        <AutonStepperHeader
+          title="Proposing new Terms & Conditions"
+          subtitle=""
+        >
+        </AutonStepperHeader>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-text>
+        <EntryMaster title="Preambles"></EntryMaster>
+      </v-card-text>
+    </div>
+
+    <div v-if="step == 2">
+      <v-card-text>
+        <AutonStepperHeader
+          title="Proposing new Terms & Conditions"
+          subtitle=""
+        >
+        </AutonStepperHeader>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-text>
+        <EntryMaster title="Articles"></EntryMaster>
+      </v-card-text>
+    </div>
 
     <AccountSign
       :transaction="transaction"
       :uri="uri"
-      v-if="step == 1"
+      v-if="step == 3"
       callback="AutonCreate-PrevStep"
       title="Proposing Terms & Conditions"
     ></AccountSign>
+    <v-divider></v-divider>
+    <v-card-text v-if="!hideNavigation">
+      <div class="d-flex align-center justify-space-between">
+        <v-btn @click="prevStep">
+          <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
+        </v-btn>
+        <v-btn color="accent" @click="nextStep" :disabled="disabledNext">
+          next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
+        </v-btn>
+      </div>
+    </v-card-text>
   </div>
 </template>
 <script>
 export default {
   data: () => ({
     step: 0,
-    uri: "",
-    transaction: {
-      moduleId: 1000,
-      assetId: 0,
-      assets: {},
-    },
-    icon: "mdi-web",
-    name: "",
-    governingName: "",
-    mission: "",
-    vision: "",
-    hasLegalEntity: false,
-    jurisdiction: "",
-    cocId: "",
-    businessAddress: "",
-    channelList: null,
-    selectedFounderIds: null,
     disabledNext: false,
-    disabledNextStep4: false,
-    nestedListItems: [
-      {
-        header: "test",
-        content: "test 123",
-        children: [
-          {
-            header: "test",
-            content: "test 123",
-            children: [
-              {
-                header: "test",
-                content: "test 123",
-              },
-              {
-                header: "test",
-                content: "test 123",
-              },
-            ],
-          },
-          {
-            header: "test",
-            content: "test 123",
-          },
-        ],
-      },
-      {
-        header: "test",
-        content: "test 123",
-      },
-    ],
+    hideNavigation: false,
   }),
   created() {
     this.$nuxt.$on("AutonCreate-NextStep", ($event) => this.step++);
     this.$nuxt.$on("AutonCreate-PrevStep", ($event) => this.step--);
+    this.$nuxt.$on("AutonProposalSubmit-HideNavigation", ($event) => {
+      this.hideNavigation = $event;
+    });
   },
   methods: {
     makeTransaction() {},
+    prevStep() {
+      if (this.step == 0) {
+        this.$nuxt.$emit("AutonProposalSubmit-PrevStep");
+      } else {
+        this.step--;
+      }
+    },
     nextStep() {
       this.step++;
-      console.log(this.step);
-      if (this.step == 7) {
-        this.uri = `dao/${this.name.replace(
-          " ",
-          "_"
-        )}/auton/${this.governingName.replace(" ", "_")}`;
-
-        if (this.tags == null) {
-          this.tags = [];
-        }
-        if (this.mission == null) {
-          this.mission = "";
-        }
-        if (this.vision == null) {
-          this.vision = "";
-        }
-        if (this.selectedFounderIds == null) {
-          this.selectedFounderIds = [];
-        }
-
-        let linkedChannels = [];
-        if (
-          (this.channelList != null && this.channelList.length > 1) ||
-          this.channelList[0].channel != ""
-        ) {
-          let tempChannelList = [];
-          for (let index = 0; index < this.channelList.length; index++) {
-            const element = this.channelList[index];
-            if (element.channel != "" && element.link != "") {
-              tempChannelList.push(element);
-            }
-          }
-          linkedChannels = tempChannelList;
-        }
-
-        const asset = {
-          name: this.name,
-          governingAutonName: this.governingName,
-          icon: this.icon,
-          mission: this.mission,
-          vision: this.vision,
-          bulkInviteAccountIds: this.selectedFounderIds,
-          linkedChannels: linkedChannels,
-          hasLegalEntity: this.hasLegalEntity,
-          jurisdiction: this.jurisdiction,
-          cocId: this.cocId,
-          businessAddress: this.businessAddress,
-        };
-
-        console.log(asset);
-
-        this.transaction.assets = asset;
-      }
     },
   },
 };

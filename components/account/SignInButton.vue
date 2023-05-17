@@ -27,7 +27,7 @@
         <div class="d-flex align-center justify-space-between">
           <div class="d-flex align-center">
             <v-avatar color="white" size="35"
-              ><div class="text-caption">
+              ><div class="text-caption primary--text">
                 {{ getInitials(account.name) }}
               </div></v-avatar
             >

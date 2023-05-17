@@ -4,7 +4,7 @@
       <div class="text-h3">{{ title }}</div>
     </div>
     <div class="py-1 px-1 mx-n1" style="max-height: 350px; overflow: scroll">
-      <v-expansion-panels accordion v-model="panel" multiple>
+      <v-expansion-panels accordion v-model="panel" multiple flat>
         <NestedListElement
           v-for="(item, i) in items"
           :key="i"

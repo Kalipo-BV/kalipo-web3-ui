@@ -14,7 +14,7 @@
       <v-btn @click="$emit('cancel')">Cancel</v-btn>
       <div class="d-flex align-center">
         <v-btn
-          v-if="!isMarkedForDelete"
+          v-if="!isMarkedForDelete && id != 'new'"
           color="error"
           class="mr-2"
           @click="$emit('delete', id)"

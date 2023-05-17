@@ -2,9 +2,9 @@
   <div>
     <div v-if="selected == null">
       <div class="d-flex align-center justify-space-between mb-2">
-        <div class="text-h4">Preambles</div>
+        <div class="text-h4">{{ title }}</div>
         <div>
-          <v-btn
+          <!-- <v-btn
             class="mr-2"
             :color="orderMode ? 'primary' : 'accent'"
             @click="orderMode = !orderMode"
@@ -14,7 +14,7 @@
             <div class="d-flex align-center" v-if="orderMode">
               <v-icon small class="mr-1">mdi-pencil</v-icon> edit
             </div></v-btn
-          >
+          > -->
           <v-btn color="accent" @click="newOne" v-if="!orderMode"
             ><v-icon class="mr-1">mdi-plus</v-icon> new</v-btn
           >
@@ -172,6 +172,10 @@ export default {
     changeOrderMode: {
       type: Boolean,
       default: false,
+    },
+    title: {
+      type: String,
+      default: "",
     },
   },
   data() {
