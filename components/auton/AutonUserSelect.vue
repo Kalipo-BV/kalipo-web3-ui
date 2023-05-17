@@ -44,7 +44,7 @@
           :input-value="data.selectedValue"
           close
           @click="data.select"
-          @click:close="remove(data.username)"
+          @click:close="remove(data.item.id)"
         >
           <v-avatar
             color="accent"
@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     remove(item) {
-      const index = this.selectedValue.indexOf(item.name);
+      const index = this.selectedValue.indexOf(item);
       if (index >= 0) this.selectedValue.splice(index, 1);
     },
     getInitials(parseStr, max) {

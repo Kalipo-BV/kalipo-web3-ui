@@ -237,7 +237,7 @@ export default {
     },
     currentPage: 0,
     membershipScreenList: ['proposal-profile', 'membership-invitation'],
-    improvementScreenList: ['title', 'abstract', 'proposers', 'motivation', 'specification',
+    improvementScreenList: ['title', 'abstract', 'proposers-list', 'motivation', 'specification',
       'references', 'budget', 'execution-roles', 'time-constraints'],
     extraOptionBoxList: ['extraOptions']
 
