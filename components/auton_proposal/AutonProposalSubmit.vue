@@ -19,40 +19,80 @@
   <div class="">
     <v-card>
       <v-card-text v-if="step == 'select-proposal-type'">
-        <AutonStepperHeader title="Submitting a new proposal"
-          subtitle="First choose the desired type that suits your proposal"></AutonStepperHeader>
+        <AutonStepperHeader
+          title="Submitting a new proposal"
+          subtitle="First choose the desired type that suits your proposal"
+        ></AutonStepperHeader>
 
-        <AutonSelectProposalType :selectedProposalType.sync="selectedProposalType"></AutonSelectProposalType>
+        <AutonSelectProposalType
+          :selectedProposalType.sync="selectedProposalType"
+        ></AutonSelectProposalType>
       </v-card-text>
 
       <v-card-text v-if="step == 'proposal-profile'">
-        <AutonStepperHeader title="Submitting a new proposal"
-          subtitle="Describe your proposal by providing a title and description"></AutonStepperHeader>
+        <AutonStepperHeader
+          title="Submitting a new proposal"
+          subtitle="Describe your proposal by providing a title and description"
+        ></AutonStepperHeader>
 
-        <AutonProposalProfile :disabledNext.sync="disabledNext" :title.sync="proposalTitle"
-          :description.sync="proposalDescription"></AutonProposalProfile>
+        <AutonProposalProfile
+          :disabledNext.sync="disabledNext"
+          :title.sync="proposalTitle"
+          :description.sync="proposalDescription"
+        ></AutonProposalProfile>
       </v-card-text>
 
       <v-card-text v-if="step == 'membership-invitation'">
-        <AutonStepperHeader title="Submitting a new proposal"
-          subtitle="Please select the user you'd like to invite and supply an invitation message"></AutonStepperHeader>
+        <AutonStepperHeader
+          title="Submitting a new proposal"
+          subtitle="Please select the user you'd like to invite and supply an invitation message"
+        ></AutonStepperHeader>
 
-        <AutonProposalMembershipInvitation :selectedAccountId.sync="selectedAccountId"
-          :invitationMessage.sync="invitationMessage" class="mt-4" :autonId="autonId"></AutonProposalMembershipInvitation>
+        <AutonProposalMembershipInvitation
+          :selectedAccountId.sync="selectedAccountId"
+          :invitationMessage.sync="invitationMessage"
+          class="mt-4"
+          :autonId="autonId"
+        ></AutonProposalMembershipInvitation>
       </v-card-text>
 
-      <AutonCreate v-if="step == 'auton-creation'" :autonCreationArguments.sync="autonCreationArguments"
-        :parentPrev="prevStep" :parentNext="nextStep"></AutonCreate>
+      <AutonCreate
+        v-if="step == 'auton-creation'"
+        :autonCreationArguments.sync="autonCreationArguments"
+        :parentPrev="prevStep"
+        :parentNext="nextStep"
+      ></AutonCreate>
 
-      <AccountSign :transaction="transaction" :uri="uri" callback="AutonProposalSubmit-PrevStep"
-        callbackFinish="AutonProposalSubmit-Finish" v-if="step == 'sign'" title="Submitting proposal"></AccountSign>
+      <TermsAndConditionsCreate
+        v-if="step == 'terms-and-conditions'"
+      ></TermsAndConditionsCreate>
 
-      <v-card-text v-if="step !== 'sign' && step != 'auton-creation'">
+      <AccountSign
+        :transaction="transaction"
+        :uri="uri"
+        callback="AutonProposalSubmit-PrevStep"
+        callbackFinish="AutonProposalSubmit-Finish"
+        v-if="step == 'sign'"
+        title="Submitting proposal"
+      ></AccountSign>
+
+      <v-card-text
+        v-if="
+          step !== 'sign' &&
+          step != 'auton-creation' &&
+          step != 'terms-and-conditions' &&
+          !hideNavigation
+        "
+      >
         <div class="d-flex align-center justify-space-between">
           <v-btn :disabled="step == 0" @click="prevStep">
             <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous
           </v-btn>
-          <v-btn color="accent" @click="nextStep" :disabled="disabledNext || selectedProposalType == null">
+          <v-btn
+            color="accent"
+            @click="nextStep"
+            :disabled="disabledNext || selectedProposalType == null"
+          >
             next <v-icon class="ml-2" small>mdi-arrow-right</v-icon>
           </v-btn>
         </div>
@@ -72,6 +112,7 @@ export default {
     proposalTitle: "",
     proposalDescription: "",
     autonCreationArguments: null,
+    hideNavigation: false,
     uri: "",
     transaction: {
       moduleId: -1,
@@ -86,6 +127,9 @@ export default {
     );
     this.$nuxt.$on("AutonProposalSubmit-PrevStep", ($event) => this.prevStep());
     this.$nuxt.$on("AutonProposalSubmit-Finish", ($event) => this.finish());
+    this.$nuxt.$on("AutonProposalSubmit-HideNavigation", ($event) => {
+      this.hideNavigation = $event;
+    });
   },
   methods: {
     prevStep() {
@@ -95,11 +139,15 @@ export default {
         this.step = "proposal-profile";
       } else if (this.step == "auton-creation") {
         this.step = "proposal-profile";
+      } else if (this.step == "terms-and-conditions") {
+        this.step = "proposal-profile";
       } else if (this.step == "sign") {
         if (this.selectedProposalType == "membership-invitation") {
           this.step = "membership-invitation";
         } else if (this.selectedProposalType == "auton-creation") {
           this.step = "auton-creation";
+        } else if (this.selectedProposalType == "terms-and-conditions") {
+          this.step = "terms-and-conditions";
         }
       }
     },
@@ -123,6 +171,7 @@ export default {
       }
     },
     async nextStep() {
+      console.log(this.selectedProposalType);
       if (this.step == "select-proposal-type") {
         this.step = "proposal-profile";
       } else if (this.step == "proposal-profile") {
@@ -130,8 +179,14 @@ export default {
           this.step = "membership-invitation";
         } else if (this.selectedProposalType == "auton-creation") {
           this.step = "auton-creation";
+        } else if (this.selectedProposalType == "terms-and-conditions") {
+          this.step = "terms-and-conditions";
         }
-      } else if (this.step == "membership-invitation" || this.step == "auton-creation") {
+      } else if (
+        this.step == "membership-invitation" ||
+        this.step == "auton-creation" ||
+        this.step == "terms-and-conditions"
+      ) {
         this.step = "sign";
       }
 
@@ -145,8 +200,12 @@ export default {
         const autonWrapper = await this.$invoke("auton:getByID", {
           id: this.autonId,
         });
-        this.uri = `/dao/${this.daoName.replace(" ", "_")}/auton/${this.autonName.replace(" ", "_")}/proposal/${autonWrapper.result.proposals.length + 1
-          }/campaigning`;
+        this.uri = `/dao/${this.daoName.replace(
+          " ",
+          "_"
+        )}/auton/${this.autonName.replace(" ", "_")}/proposal/${
+          autonWrapper.result.proposals.length + 1
+        }/campaigning`;
 
         if (this.selectedProposalType == "membership-invitation") {
           const asset = {
@@ -166,7 +225,7 @@ export default {
             campaignComment: this.proposalDescription,
             proposalType: this.selectedProposalType,
             autonId: this.autonId,
-            autonCreationArguments: this.autonCreationArguments
+            autonCreationArguments: this.autonCreationArguments,
           };
           this.transaction.moduleId = 1004;
           this.transaction.assetId = 1;

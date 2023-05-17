@@ -35,7 +35,10 @@
       <v-divider v-if="member.started"></v-divider>
 
       <v-card-text v-if="member.started">
-        <div class="d-flex justify-center text-caption text--primary" v-if="userLang">
+        <div
+          class="d-flex justify-center text-caption text--primary"
+          v-if="userLang"
+        >
           Joined:
           {{
             new Date(parseInt(member.started) * 1000).toLocaleDateString(
@@ -53,18 +56,34 @@
       <v-divider v-if="studentCard"></v-divider>
 
       <v-container v-if="studentCard" class="d-flex justify-center">
-        <v-chip v-if="member.checkedStatus === 'CHECKEDIN' && studentCard" class="ma-2" color="blue" text-color="white">
+        <v-chip
+          v-if="member.checkedStatus === 'CHECKEDIN' && studentCard"
+          class="ma-2"
+          color="blue"
+          text-color="white"
+        >
           <v-icon left>mdi-account-school</v-icon>
           Checked in
         </v-chip>
 
-        <v-chip v-else-if="member.checkedStatus === 'CHECKEDOUT' && studentCard" class="ma-2" align="center" color="green"
-          text-color="white">
+        <v-chip
+          v-else-if="member.checkedStatus === 'CHECKEDOUT' && studentCard"
+          class="ma-2"
+          align="center"
+          color="green"
+          text-color="white"
+        >
           <v-icon left>mdi-account-check</v-icon>
           Checked out
         </v-chip>
 
-        <v-chip v-else-if="studentCard" class="ma-2" align="center" color="red" text-color="white">
+        <v-chip
+          v-else-if="studentCard"
+          class="ma-2"
+          align="center"
+          color="red"
+          text-color="white"
+        >
           <v-icon left>mdi-account-remove</v-icon>
           Not checked in
         </v-chip>
@@ -75,23 +94,37 @@
       <v-card-text>
         <div class="d-flex justify-center">
           <div v-for="(social, z) in member.account.socials" :key="z">
-            <v-btn color="accent" fab x-small class="mr-1">
-              <Icon :icon="getIcon(social.social)" width="18" height="18"></Icon>
-            </v-btn>
+            <a :href="social.link" target="_blank">
+              <v-btn color="accent" fab x-small class="mr-1">
+                <Icon
+                  :icon="getIcon(social.social)"
+                  width="18"
+                  height="18"
+                ></Icon>
+              </v-btn>
+            </a>
           </div>
           <div v-if="member.account.socials.length == 0" class="py-1">
             No socials found
           </div>
         </div>
         <div class="mt-2">
-          <v-btn v-if="attendeeCard" :disabled="authorizedIssuePoa" @click="dialog = !dialog"
-            :style="{ left: '50%', transform: 'translateX(-50%)' }">Issue poa</v-btn>
+          <v-btn
+            v-if="attendeeCard"
+            :disabled="authorizedIssuePoa"
+            @click="dialog = !dialog"
+            :style="{ left: '50%', transform: 'translateX(-50%)' }"
+            >Issue poa</v-btn
+          >
         </div>
       </v-card-text>
     </v-card>
 
     <v-dialog v-model="dialog" max-width="500">
-      <PoaIssueDialog :member="member" :autonId="member.autonId"></PoaIssueDialog>
+      <PoaIssueDialog
+        :member="member"
+        :autonId="member.autonId"
+      ></PoaIssueDialog>
     </v-dialog>
   </div>
 </template>
@@ -200,7 +233,6 @@ export default {
     if (this.member.role == "FULL_MEMBER") {
       this.role = "Full member";
     }
-
 
     this.authorized();
   },
