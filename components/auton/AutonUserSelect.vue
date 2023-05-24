@@ -1,65 +1,32 @@
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
 <template>
   <div>
-<!--  <v-form v-model="valid" @submit.prevent>-->
-<!--    <v-autocomplete-->
-<!--      v-model="selectedValue"-->
-<!--      :disabled="isUpdating"-->
-<!--      :items="users"-->
-<!--      chips-->
-<!--      color="blue-grey lighten-2"-->
-<!--      label="Choose authors"-->
-<!--      item-text="name"-->
-<!--      item-value="id"-->
-<!--      :rules="[rules.required]"-->
-<!--    >-->
-<!--      <template v-slot:selection="data">-->
+    <div class="text-body-1 mb-2">Creator and founding member</div>
+    <v-chip v-if="account">
+      <v-avatar color="accent" class="white--text text-caption" left>{{
+          getInitials(account.name, 2)
+        }}</v-avatar>
+      {{ account.name }}
+    </v-chip>
 
-<!--        <v-chip-->
-<!--          v-for="item in selectedValue"-->
-<!--          v-bind="selectedValue.attrs"-->
-<!--          :key="item.id"-->
-<!--          :input-value="item"-->
-<!--        >-->
-<!--          <v-avatar-->
-<!--            color="accent"-->
-<!--            class="white&#45;&#45;text text-caption"-->
-<!--            v-if="item.name"-->
-<!--            left-->
-<!--          >{{ getInitials(item.name, 2) }}</v-avatar-->
-<!--          >-->
-<!--          {{ selectedValue }}-->
-<!--        </v-chip>-->
-<!--      </template>-->
-<!--      <template v-slot:item="data">-->
-<!--        <template v-if="typeof data.item !== 'object'">-->
-<!--          <v-list-item-content v-text="data.item"></v-list-item-content>-->
-<!--        </template>-->
-<!--        <template v-else>-->
-<!--          <v-list-item-avatar class="d-flex align-center justify-center">-->
-<!--            <v-avatar-->
-<!--              color="accent"-->
-<!--              class="white&#45;&#45;text text-caption"-->
-<!--              v-if="data.item.name"-->
-<!--            >{{ getInitials(data.item.name, 3) }}</v-avatar-->
-<!--            >-->
-<!--          </v-list-item-avatar>-->
-<!--          <v-list-item-content>-->
-<!--            <v-list-item-title>{{ data.item.name }}</v-list-item-title>-->
-<!--            <v-list-item-subtitle>{{-->
-<!--                data.item.username-->
-<!--              }}</v-list-item-subtitle>-->
-<!--          </v-list-item-content>-->
-<!--        </template>-->
-<!--      </template>-->
-<!--    </v-autocomplete>-->
-<!--  </v-form>-->
-<!--    <div  v-for="item in selectedValue"-->
-<!--          v-bind="selectedValue.attrs"-->
-<!--          :key="item.id"-->
-<!--          :input-value="item">{{item}}</div>-->
+    <v-divider class="my-3"></v-divider>
 
-<!--  <h1>Voor nu kapot</h1>-->
-<!--  </div>-->
     <v-autocomplete
       v-model="selectedValue"
       :disabled="isUpdating"
@@ -113,19 +80,16 @@
     </v-autocomplete>
   </div>
 </template>
-
 <script>
 export default {
-  props: ["proposers"],
+  props: ["selectedFounderIds"],
   computed: {
     selectedValue: {
       get: function () {
-        console.log(this.proposers)
-        return this.proposers;
+        return this.selectedFounderIds;
       },
       set: function (newValue) {
-        console.log(newValue)
-        this.$emit("update:proposers", newValue);
+        this.$emit("update:selectedFounderIds", newValue);
       },
     },
     account() {
@@ -153,7 +117,6 @@ export default {
   },
   methods: {
     remove(item) {
-      console.log(item)
       const index = this.selectedValue.indexOf(item);
       if (index >= 0) this.selectedValue.splice(index, 1);
     },
@@ -184,6 +147,3 @@ export default {
   }),
 };
 </script>
-<style scoped>
-
-</style>
