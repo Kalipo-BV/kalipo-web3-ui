@@ -19,7 +19,7 @@
   <v-container width="90%">
     <h1 style="margin-bottom: 10px; text-align: center;">Edit Template (Grant Contract)</h1>
     <v-form ref="form">
-      <div class="text-h2 pb-2">Agreement Parties</div>
+      <div class="text-h2 pb-2">Agreement parties</div>
       <v-card style="padding:12px 12px 20px 12px">
         <PartyMemberProvision isContractor partyName="contractor"/>
         <PartyMemberProvision partyName="client"/>
@@ -31,30 +31,30 @@
       </v-card>
 
       <div class="text-h2 mt-6">Provision types</div>
-      <div class="text-h3">Purpose provision</div>
+      <div class="text-h3">Purpose</div>
       <v-card class="mb-4">
         <PurposeProvision />
       </v-card>
 
-      <div class="text-h3">Payment provision</div>
+      <div class="text-h3">Payment provisions</div>
       <PaymentProvision />
 
-      <div class="text-h3">Date provision</div>
+      <div class="text-h3">Date provisions</div>
       <v-card class="mt-4 mb-2" style="padding: 12px;">
         <DateTimeProvision />
       </v-card>
 
-      <div class="text-h3 mb-2 mt-2">Property provision</div>
+      <div class="text-h3 mb-2 mt-2">Property rights</div>
       <v-card>
         <PropertyRightsProvision />
       </v-card>
 
-      <div class="text-h3 mb-2 mt-2">Termination of Agreement</div>
+      <div class="text-h3 mb-2 mt-2">Termination of agreement</div>
       <v-card>
         <TerminationOfAgreement />
       </v-card>
 
-      <div class="text-h3 mb-2 mt-2">Governing and Law</div>
+      <div class="text-h3 mb-2 mt-2">Applicable laws & regulations</div>
       <v-card>
         <GoverningLawAndJurisdictionProvision />
       </v-card>

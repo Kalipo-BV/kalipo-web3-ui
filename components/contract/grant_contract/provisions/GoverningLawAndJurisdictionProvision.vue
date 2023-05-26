@@ -19,7 +19,7 @@
     <v-textarea
         v-model="governingLawAndJurisdiction"
         rows="2"
-        label="Governing law and jurisdiction"
+        label="Applicable laws & regulations"
         outlined
         hide-details="auto"
         style="background-color: white;"

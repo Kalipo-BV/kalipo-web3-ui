@@ -29,7 +29,7 @@
                         required
                         outlined
                         hide-details="auto"
-                        label="Payment Amount"
+                        label="Payment amount"
                         :rules="[v => v > 0 || 'This field can\'t be left open (>0)!']"
                     />
                 </v-card>
@@ -44,7 +44,7 @@
                         auto-grow
                         outlined
                         hide-details="auto"
-                        label="Payment Note"
+                        label="Payment note"
                         style="background-color: white;"
                     />
                 </v-card>
