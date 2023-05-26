@@ -31,7 +31,7 @@
 
       <v-card-text v-if="steps.includes('title')">
         <StepperHeader
-          title="Title"
+          title="Title *"
           subtitle="Write down the title for the proposal"
         ></StepperHeader>
 
@@ -69,7 +69,7 @@
 
       <v-card-text v-if="steps.includes('abstract')">
         <StepperHeader
-          title="Abstract"
+          title="Abstract *"
           subtitle="Write down the abstract for the proposal"
         ></StepperHeader>
 
@@ -80,7 +80,7 @@
 
       <v-card-text v-if="steps.includes('proposers-list')">
         <StepperHeader
-          title="Authors"
+          title="Authors *"
           subtitle="Choose the authors"
         ></StepperHeader>
 
@@ -94,7 +94,7 @@
 
       <v-card-text v-if="steps.includes('motivation')">
         <StepperHeader
-          title="Motivation"
+          title="Motivation *"
           subtitle="Please write a motivation for your improvement proposal"
         ></StepperHeader>
 
@@ -107,7 +107,7 @@
 
       <v-card-text v-if="steps.includes('specification')">
         <StepperHeader
-          title="Specification"
+          title="Specification *"
           subtitle="Please write a specification for your improvement proposal"
         ></StepperHeader>
 
@@ -278,8 +278,6 @@ export default {
     },
     async nextStep() {
       // Set the currentPage
-      // console.log(this.currentPage)
-      // console.log(this.selectedProposalType)
       this.currentPage += 1;
       // Set the inputs of the page to contain the ones in the list from 'data'
       // If there is a new type of proposal, add a list of screen names above and add a new case.
@@ -301,7 +299,12 @@ export default {
               this.steps = ['sign'];
               break;
             case 'improvement-proposal':
-              this.steps = this.extraOptionBoxList;
+              if(this.proposalTitle.length < 2 || this.abstract.length < 2 || this.proposers.length < 1 || this.motivation.length < 2 || this.specification.length < 2){
+                alert("Fill in the required attributes!");
+                this.currentPage -= 1;
+              }else {
+                this.steps = this.extraOptionBoxList;
+              }
               break;
           }
         break;
