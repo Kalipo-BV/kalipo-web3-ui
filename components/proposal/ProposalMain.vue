@@ -109,7 +109,6 @@
           </div>
         </v-card-text>
       </v-card>
-
       <div v-for="(item, i) in list" :key="i">
         <v-divider></v-divider>
 
@@ -135,6 +134,7 @@
           </v-card-text>
         </v-card>
       </div>
+      <div style="background-color: #eef1f5; height: 2rem"></div>
       <div id="extraInfo">
         <div id="extraInfoContainer" v-for="(item, i) in extraInfoList" :key="i">
           <v-divider></v-divider>
