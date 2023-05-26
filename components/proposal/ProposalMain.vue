@@ -20,7 +20,7 @@
     <v-stepper
       alt-labels
       class="mt-0"
-      style="background-color: #eef1f5"
+      style="background-color: #eef1f5;"
       flat
       v-model="step"
     >
@@ -134,11 +134,12 @@
           </v-card-text>
         </v-card>
       </div>
+    </v-card>
       <div style="background-color: #eef1f5; height: 2rem"></div>
-      <div id="extraInfo">
+    <v-card flat class="mt-0 rounded-lg">
+      <div id="extraInfo" class=".rounded-xl .rounded-be-0">
         <div id="extraInfoContainer" v-for="(item, i) in extraInfoList" :key="i">
-          <v-divider></v-divider>
-
+          <v-divider v-if="i !== 0"></v-divider>
           <v-card flat link @click="navigateTo(item.link)">
             <v-card-text class="py-2">
               <div class="d-flex align-center">
