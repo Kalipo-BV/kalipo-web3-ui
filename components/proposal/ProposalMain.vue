@@ -104,7 +104,8 @@
       <v-card flat>
         <v-card-text class="py-2">
           <div class="" v-if="proposal">
-            <div class="text-h4 primary--text">{{ proposal.title }}</div>
+            <div class="text-h2 primary--text" style="text-transform: capitalize;">{{ proposal.title }}</div>
+            <div class="text-h5" style="color: #0a75f3; text-transform: capitalize;">{{ proposal.type }}</div>
           </div>
         </v-card-text>
       </v-card>
@@ -253,14 +254,6 @@ export default {
         leftText: "Authors:",
         rightText:  propserNames,
       });
-
-      // Proposal type
-      this.list.push({
-        icon: "mdi-bank",
-        leftText: "Proposal type:",
-        rightText: this.proposal.type.replaceAll("-", " "),
-      });
-
 
 
       // Some attributes linked to a proposal type.

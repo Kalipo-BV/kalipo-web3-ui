@@ -102,7 +102,7 @@ export default {
       },
       { text: "Type", value: "type" },
 
-      { text: "Author(s)", value: "author" },
+      { text: "Submitter", value: "author" },
       { text: "Status", value: "status" },
       { text: "Result", value: "result" },
       { text: "Submission date", value: "submission" },
