@@ -23,7 +23,7 @@
         clearable
         auto-grow
         :rules="[v => !!v || 'This field can\'t be left open!']"
-        label="Preample"
+        label="Preamples"
         required
         v-model="preample"
     />

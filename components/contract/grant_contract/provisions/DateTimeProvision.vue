@@ -21,7 +21,7 @@
       <v-col
         cols="12"
         lg="6"
-        style="padding:0;"
+        class="fieldContainer"
       >
         <v-menu
           ref="menu1"
@@ -56,7 +56,7 @@
       <v-col
         cols="12"
         lg="6"
-        style="padding:0;"
+        class="secondFieldContainer fieldContainer"
       >
         <v-menu
           v-model="menu2"
@@ -109,34 +109,27 @@
           this.$store.commit("contract/changeEndDate", payload);
         },
       }
-
-      // get: function () {
-      //   return this.dates;
-      // },
-      // set: function (newValue) {
-      //   this.$emit("update:dates", newValue);
-      // },
-
-      // startDate() {
-      //   return this.$store.getters["contract/startDate"];
-      // },
-
-      // endDate() {
-      //   return this.$store.getters["contract/endDate"];
-      // },
     },
 
     data: vm => ({
       menu1: false,
       menu2: false,
     }),
-
-    // changeStart(payload) {
-    //   this.$store.commit("contract/changeStartDate", payload);
-    // },
-
-    // changeEnd(payload) {
-    //   this.$store.commit("contract/changeEndDate", payload);
-    // }
   }
 </script>
+
+<style>
+  @media screen and (min-width: 1280px) {
+    .fieldContainer:not(:first-child) {
+      padding-left: 12px;
+    }
+
+    .fieldContainer:not(:last-child) {
+      padding-right: 12px;
+    }
+  }
+
+  .fieldContainer {
+    padding: 0;
+  }
+</style>
