@@ -106,152 +106,152 @@
                   {{ item.rightText }}
                 </div>
               </div>
+              
             </div>
           </v-card-text>
         </v-card>
       </div>
     </v-card>
+    <!-- <p v-if="isStakeholder()">jij bent een stakeholder en kan advies geven!</p> -->
+    <StakeholderAdvice v-if="isStakeholder()"></StakeholderAdvice>
   </div>
 </template>
 
 <script>
+import StakeholderAdvice from './stakeholderAdvice.vue';
+
 export default {
-  props: ["proposal", "submitter"],
-  data: () => ({
-    list: [],
-    userLang: null,
-    mainPath: null,
-    step: 1,
-    proposals: [null],
-  }),
-  async mounted() {
-
-
-
-    const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
-    const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
-    this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
-
-    const proposals = await this.$invoke("kalipoAccount:getAll");
-
-    if (!proposals.error) {
-      const ids = proposals.result.ids.reverse();
-      for (let index = 0; index < ids.length; index++) {
-        const id = ids[index];
-        const proposalWrapper = await this.$invoke("kalipoProposal:getByID", {
-          id: id,
-        });
-        if (!proposalWrapper.error && alreadyMemberAccounts.indexOf(id) == -1) {
-          proposalWrapper.result.id = id;
-          this.proposals.push(proposalWrapper.result);
+    props: ["proposal", "submitter"],
+    data: () => ({
+        list: [],
+        userLang: null,
+        mainPath: null,
+        step: 1,
+        proposals: [null],
+    }),
+    async mounted() {
+        const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
+        const proposalIndexPlusOne = parseInt(this.$route.params.proposalId);
+        this.mainPath = `/auton/${autonIdParam}/proposal/${proposalIndexPlusOne}/`;
+        const proposals = await this.$invoke("kalipoAccount:getAll");
+        if (!proposals.error) {
+            const ids = proposals.result.ids.reverse();
+            for (let index = 0; index < ids.length; index++) {
+                const id = ids[index];
+                const proposalWrapper = await this.$invoke("kalipoProposal:getByID", {
+                    id: id,
+                });
+                if (!proposalWrapper.error && alreadyMemberAccounts.indexOf(id) == -1) {
+                    proposalWrapper.result.id = id;
+                    this.proposals.push(proposalWrapper.result);
+                }
+            }
         }
-      }
-    }
-
-    console.log("proposals uit database: ")
-    console.log(proposals)
-
-    if (
-      this.proposal != null &&
-      this.submitter != null &&
-      this.proposal.membershipInvitationArguments != null
-    ) {
-      if (this.proposal.status == "CAMPAIGNING") {
-        this.step = 1;
-      } else if (this.proposal.status == "VOTING") {
-        this.step = 2;
-      } else if (this.proposal.status == "ENDED") {
-        this.step = 3;
-      }
-
-      
-      this.userLang = navigator.language || navigator.userLanguage;
-      this.list.push({
-        icon: "mdi-calendar",
-
-        leftText: "Submission:",
-        rightText: new Date(
-          parseInt(this.proposal.created) * 1000
-        ).toLocaleDateString(this.userLang, {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-        }),
-      });
-
-      this.list.push({
-        icon: "mdi-account",
-        leftText: "Proposer:",
-        rightText: "@" + this.submitter.username,
-        link: "/account/" + this.submitter.username,
-      });
-
-      this.list.push({
-        icon: "mdi-bank",
-        leftText: "Proposal type:",
-        rightText: this.proposal.type.replaceAll("-", " "),
-      });
-
-      const invitedId = this.proposal.membershipInvitationArguments.accountId;
-      const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
-        id: invitedId,
-      });
-      const invited = invitedWrapper.result;
-      this.list.push({
-        icon: "mdi-account-plus",
-        leftText: "Membership candidate:",
-        rightText: "@" + invited.username,
-        link: "/account/" + invited.username,
-      });
-
-      let i = 0;
-        while (i < this.proposal.stakeholders.length) {
-          console.log("loop1")
-          if(this.proposal.stakeholders[i].stakeholderId == ""){
-            this.proposal.stakeholders.pop(i)
-          }else{i++;}
+        console.log("proposals uit database: ");
+        console.log(proposals);
+        if (this.proposal != null &&
+            this.submitter != null &&
+            this.proposal.membershipInvitationArguments != null) {
+            if (this.proposal.status == "CAMPAIGNING") {
+                this.step = 1;
+            }
+            else if (this.proposal.status == "VOTING") {
+                this.step = 2;
+            }
+            else if (this.proposal.status == "ENDED") {
+                this.step = 3;
+            }
+            this.userLang = navigator.language || navigator.userLanguage;
+            this.list.push({
+                icon: "mdi-calendar",
+                leftText: "Submission:",
+                rightText: new Date(parseInt(this.proposal.created) * 1000).toLocaleDateString(this.userLang, {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                }),
+            });
+            this.list.push({
+                icon: "mdi-account",
+                leftText: "Proposer:",
+                rightText: "@" + this.submitter.username,
+                link: "/account/" + this.submitter.username,
+            });
+            this.list.push({
+                icon: "mdi-bank",
+                leftText: "Proposal type:",
+                rightText: this.proposal.type.replaceAll("-", " "),
+            });
+            const invitedId = this.proposal.membershipInvitationArguments.accountId;
+            const invitedWrapper = await this.$invoke("kalipoAccount:getByID", {
+                id: invitedId,
+            });
+            const invited = invitedWrapper.result;
+            this.list.push({
+                icon: "mdi-account-plus",
+                leftText: "Membership candidate:",
+                rightText: "@" + invited.username,
+                link: "/account/" + invited.username,
+            });
+            let i = 0;
+            while (i < this.proposal.stakeholders.length) {
+                if (this.proposal.stakeholders[i].stakeholderId == "") {
+                    this.proposal.stakeholders.pop(i);
+                }
+                else {
+                    i++;
+                }
+            }
+            for (i = 0; i < this.proposal.stakeholders.length; i++) {
+                let stakeholder = await this.$invoke("kalipoAccount:getByID", { id: this.proposal.stakeholders[i].stakeholderId, });
+                this.list.push({
+                    icon: "mdi-account",
+                    leftText: "Stakeholder " + (i + 1) + ":",
+                    rightText: "naam: " + stakeholder.result.name + " expertise: " + this.proposal.stakeholders[i].expertise,
+                });
+            }
         }
-        
-        for(i = 0; i<this.proposal.stakeholders.length; i++){
-          let stakeholder = await this.$invoke("kalipoAccount:getByID", 
-          {id: this.proposal.stakeholders[i].stakeholderId,})
-          console.log("loop2")
-          this.list.push({
-          icon: "mdi-account",
-          leftText: "Stakeholder "+(i+1)+":",
-          rightText:  "naam: "+stakeholder.result.name+" expertise: "+this.proposal.stakeholders[i].expertise,
-        });
-        }
-
-    }
-  },
-  methods: {
-    navigateTo(to) {
-      if (to) {
-        this.$router.push(to);
-      }
     },
-    getStakeholders() {
-      return this.proposal.stakeholders;
+    methods: {
+        isStakeholder() {
+            for (let i = 0; i < this.proposal.stakeholders.length; i++) {
+                if (this.proposal.stakeholders[i].stakeholderId == this.getAccount().accountId) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        getAccount() {
+            return this.$store.state.wallet.account;
+        },
+        navigateTo(to) {
+            if (to) {
+                this.$router.push(to);
+            }
+        },
+        getStakeholders() {
+            return this.proposal.stakeholders;
+        },
+        getInitials(parseStr) {
+            if (parseStr != undefined) {
+                const nameList = parseStr.split(" ");
+                let result = "";
+                for (let index = 0; index < nameList.length; index++) {
+                    if (index < 3) {
+                        const element = nameList[index];
+                        result += element[0].toUpperCase();
+                    }
+                    else {
+                        break;
+                    }
+                }
+                return result;
+            }
+        },
     },
-    getInitials(parseStr) {
-      if (parseStr != undefined) {
-        const nameList = parseStr.split(" ");
-        let result = "";
-        for (let index = 0; index < nameList.length; index++) {
-          if (index < 3) {
-            const element = nameList[index];
-            result += element[0].toUpperCase();
-          } else {
-            break;
-          }
-        }
-        return result;
-      }
-    },
-  },
+    components: { StakeholderAdvice }
 };
 </script>
 
