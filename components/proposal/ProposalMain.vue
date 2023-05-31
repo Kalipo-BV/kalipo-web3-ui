@@ -136,7 +136,7 @@
       </div>
     </v-card>
       <div style="background-color: #eef1f5; height: 2rem"></div>
-    <v-card flat class="mt-0 rounded-lg">
+    <v-card flat class="mt-0 rounded-lg" style="margin-bottom:20px">
       <div id="extraInfo" class=".rounded-xl .rounded-be-0">
         <div id="extraInfoContainer" v-for="(item, i) in extraInfoList" :key="i">
           <v-divider v-if="i !== 0"></v-divider>
@@ -165,9 +165,6 @@
         </div>
       </div>
     </v-card>
-    <div style="justify-content: center; display: flex;">
-      <v-btn style="background-color: #0a75f3; color: white;  margin-top: 5px; " id="buttonShow" @click="hideExtraInfo">Show more</v-btn>
-    </div>
   </div>
 </template>
 
@@ -338,8 +335,6 @@ export default {
       this.showMoreshowLess(element);
     })
 
-    this.hideExtraInfo();
-
   },
   methods: {
     navigateTo(to) {
@@ -363,11 +358,6 @@ export default {
         //Veranderd de tekst van de button naar V
         this.buttonText = "V"
       }
-    },
-    hideExtraInfo() {
-      const extraInfoContainer = document.getElementById('extraInfo');
-      document.getElementById('buttonShow').innerText = extraInfoContainer.style.display !== 'none' ? 'Show more' : 'Show less';
-      extraInfoContainer.style.display = extraInfoContainer.style.display !== 'none' ? 'none' : 'block';
     },
     getInitials(parseStr) {
       if (parseStr != undefined) {
