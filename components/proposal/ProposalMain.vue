@@ -156,7 +156,7 @@
                   </div>
                   <div class="ma-0 text-caption pr-8" style="width: 80%; text-align: right;">
                     {{ item.rightText }}
-                    <button :style="{visibility:item.rightText.length<51?'hidden':'inherit'}" @click="showMoreshowLess(item)">
+                    <button :style="{visibility:item.rightText.length<86?'hidden':'inherit'}" @click="showMoreshowLess(item)">
                       <v-avatar
                         size="20"
                         v-if="item.moreAndLess"
@@ -358,7 +358,7 @@ export default {
       var indexInTheList = this.extraInfoList.indexOf(item);
 
       // Al gesliced.
-      if(this.extraInfoList[indexInTheList].rightText.length === 51 && this.extraInfoListFullRightText[indexInTheList].length > 48){
+      if(this.extraInfoList[indexInTheList].rightText.length === 86 && this.extraInfoListFullRightText[indexInTheList].length > 83){
         this.extraInfoList[indexInTheList].rightText = this.extraInfoListFullRightText[indexInTheList];
         //Veranderd de tekst van de button naar ^
         console.log("erin");
@@ -366,8 +366,8 @@ export default {
         console.log(this.extraInfoList[indexInTheList].moreAndLess);
       }
       // Nog niet gesliced.
-      else if(this.extraInfoListFullRightText[indexInTheList].length > 48) {
-        this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0, 48) + "...";
+      else if(this.extraInfoListFullRightText[indexInTheList].length > 83) {
+        this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0, 83) + "...";
         //Veranderd de tekst van de button naar V
         this.extraInfoList[indexInTheList].moreAndLess = "mdi-chevron-down";
       }
