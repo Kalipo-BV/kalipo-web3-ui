@@ -7,7 +7,7 @@
         label="Budget"
         rows="4"
         row-height="20"
-        maxlength="1024"
+        maxlength="512"
         counter
         v-model="budgetValue"
       ></v-textarea>

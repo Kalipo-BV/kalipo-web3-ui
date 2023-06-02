@@ -7,7 +7,7 @@
         label="Specification"
         rows="4"
         row-height="20"
-        maxlength="1024"
+        maxlength="2048"
         counter
         v-model="specificationValue"
       ></v-textarea>

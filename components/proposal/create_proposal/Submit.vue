@@ -81,7 +81,7 @@
       <v-card-text v-if="steps.includes('proposers-list')">
         <StepperHeader
           title="Authors *"
-          subtitle="Choose the authors"
+          subtitle="Choose the authors (max 5)"
         ></StepperHeader>
 
         <ProposerList

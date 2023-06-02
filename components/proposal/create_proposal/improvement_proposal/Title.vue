@@ -7,7 +7,7 @@
         label="Title"
         rows="4"
         row-height="20"
-        maxlength="1024"
+        maxlength="32"
         counter
         v-model="titleValue"
       ></v-textarea>
