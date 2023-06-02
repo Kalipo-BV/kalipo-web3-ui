@@ -154,14 +154,24 @@
                   <div class="text-caption font-weight-medium mr-2" style="width: 20%;">
                     {{ item.leftText }}
                   </div>
-                  <div class="ma-0 text-caption pr-8" style="width: 80%; text-align: right;">
-                    {{ item.rightText }}
-                    <button :style="{visibility:item.rightText.length<86?'hidden':'inherit'}" @click="showMoreshowLess(item)">
+                  <div class="ma-0 text-caption" style="width: 70%; text-align: right;">
+                    <p style="display:contents"  @click="showMoreshowLess(item)">{{ item.rightText }}</p>
+                    <button :style="{visibility:item.rightText.length<86?'hidden':'inherit'}"  @click="showMoreshowLess(item)">
                       <v-avatar
                         size="20"
                         v-if="item.moreAndLess"
                         >
                         <v-icon style="color: #212a42; font-size: 20px;" dark x-small>{{ item.moreAndLess }}</v-icon>
+                      </v-avatar>
+                    </button>
+                  </div>
+                  <div class="ma-0 text-caption" style="width: 9%; text-align: right; padding-left: 4%;">
+                    <button :style="{display: item.moreAndLess === 'mdi-chevron-down' ? 'none' : 'inherit'}" @click="copyText(item.rightText)">
+                      <v-avatar
+                        size="20"
+                        v-if="item.moreAndLess"
+                        >
+                        <v-icon style="color: #212a42; font-size: 15px;" dark x-small>{{ "mdi-content-copy" }}</v-icon>
                       </v-avatar>
                     </button>
                   </div>
@@ -179,6 +189,7 @@
 export default {
   props: ["proposal", "submitter"],
   data: () => ({
+    showAlert: true,
     standardAttributeList: [],
     extraInfoList: [],
     extraInfoListFullRightText: [],
@@ -353,6 +364,10 @@ export default {
         this.$router.push(to);
       }
     },
+    copyText(copyText){
+      navigator.clipboard.writeText(copyText);
+      alert("The text is copied!");
+    },
     showMoreshowLess(item) {
 
       var indexInTheList = this.extraInfoList.indexOf(item);
@@ -361,9 +376,7 @@ export default {
       if(this.extraInfoList[indexInTheList].rightText.length === 86 && this.extraInfoListFullRightText[indexInTheList].length > 83){
         this.extraInfoList[indexInTheList].rightText = this.extraInfoListFullRightText[indexInTheList];
         //Veranderd de tekst van de button naar ^
-        console.log("erin");
         this.extraInfoList[indexInTheList].moreAndLess = "mdi-chevron-up";
-        console.log(this.extraInfoList[indexInTheList].moreAndLess);
       }
       // Nog niet gesliced.
       else if(this.extraInfoListFullRightText[indexInTheList].length > 83) {
