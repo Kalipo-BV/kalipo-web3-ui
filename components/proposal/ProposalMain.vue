@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <v-card flat class="mt-9 rounded-lg">
+    <v-card flat class="mt-7 rounded-lg">
       <v-card flat>
         <v-card-text class="py-2">
           <div class="" v-if="proposal">
