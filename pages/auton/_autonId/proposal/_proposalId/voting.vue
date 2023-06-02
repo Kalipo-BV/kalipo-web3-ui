@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,10 +27,16 @@
       </v-col>
       <v-col cols="12" md="7">
         <v-row>
+          <v-col cols="2" md="12">
+            <ProposalStatus
+              v-if="proposal"
+              :proposal="proposal">
+            </ProposalStatus>
+          </v-col>
           <v-col cols="12" md="4">
-            <v-card class="mt-4 rounded-lg" flat>
+            <v-card class="rounded-lg" flat>
               <v-card-text v-if="proposal">
-                <div class="text-h4 primary--text mb-1">Status</div>
+                <div class="text-h4 primary--text">Status</div>
                 <v-chip color="accent" v-if="proposal.status == 'CAMPAIGNING'"
                   >not open yet</v-chip
                 >
@@ -62,7 +68,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="8">
-            <v-card class="mt-4 rounded-lg" flat>
+            <v-card class="rounded-lg" flat>
               <v-card-text>
                 <div
                   class="d-flex align-center justify-start"
@@ -201,7 +207,11 @@
   </v-container>
 </template>
 <script>
+import ProposalStatus from "~/components/proposal/ProposalStatus.vue";
+import ProposalMain from "~/components/proposal/ProposalMain.vue";
+
 export default {
+  components: {ProposalMain, ProposalStatus},
   layout: "auton",
   data: () => ({
     autonId: null,
@@ -246,7 +256,7 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    
+
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
@@ -327,8 +337,8 @@ export default {
 
       const client = await this.$client();
       client.subscribe("vote:newVote", async (data) => {
-        
-        
+
+
         if (
           !this.voteIds.includes(data.id) &&
           data.vote.proposalId == this.proposalId
@@ -345,13 +355,13 @@ export default {
       });
 
       client.subscribe("proposal:gotDecided", async (data) => {
-        
-        
+
+
         if (data.id == this.proposalId) {
           this.proposal = data.proposal;
         }
       });
-      
+
     }
   },
   methods: {

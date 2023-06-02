@@ -1,4 +1,4 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+<!-- Kalipo B.V. - the DAO platform for business & societal impact
  * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,12 @@
         ></ProposalMain>
       </v-col>
       <v-col cols="12" md="7">
+        <v-col cols="2" md="12">
+          <ProposalStatus
+            v-if="proposal"
+            :proposal="proposal">
+          </ProposalStatus>
+        </v-col>
         <div class="text-h4 primary--text mt-4">Dialogue</div>
 
         <div v-for="(comment, i) in comments" :key="i">
@@ -114,7 +120,7 @@ export default {
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
       name: autonIdParam,
     });
-    
+
     if (autonIdWrapper.result === null) {
       this.auton = null;
       this.error = "Auton not found: " + autonIdParam;
@@ -150,7 +156,7 @@ export default {
           id: commentId,
         });
 
-        
+
 
         const commentMembershipId = commentWrapper.result.membershipId;
         const commentMembershipWrapper = await this.$invoke(
@@ -172,8 +178,8 @@ export default {
         this.comments.push(commentWrapper.result);
       }
 
-      
-      
+
+
     }
   },
   methods: {
