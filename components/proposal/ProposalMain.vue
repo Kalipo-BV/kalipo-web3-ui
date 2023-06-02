@@ -156,7 +156,14 @@
                   </div>
                   <div class="ma-0 text-caption pr-8" style="width: 80%; text-align: right;">
                     {{ item.rightText }}
-                    <button :style="{visibility:item.rightText.length<53?'hidden':'inherit'}" @click="showMoreshowLess(item)">{{buttonText}}</button>
+                    <button :style="{visibility:item.rightText.length<51?'hidden':'inherit'}" @click="showMoreshowLess(item)">
+                      <v-avatar
+                        size="20"
+                        v-if="item.moreAndLess"
+                        >
+                        <v-icon style="color: #212a42; font-size: 20px;" dark x-small>{{ item.moreAndLess }}</v-icon>
+                      </v-avatar>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -179,7 +186,6 @@ export default {
     userLang: null,
     mainPath: null,
     step: 1,
-    buttonText: "V",
   }),
   async mounted() {
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
@@ -203,7 +209,6 @@ export default {
       // Submission date
       this.list.push({
         icon: "mdi-calendar",
-
         leftText: "Submission:",
         rightText: new Date(
           parseInt(this.proposal.created) * 1000
@@ -231,22 +236,15 @@ export default {
           id: proposerId,
         });
       });
-
       await Promise.all(promises).then((accounts) => {
-        accounts.forEach((account) => {
-          console.log(account.result.name);
-          console.log(promises.length)
-          const commaCount = propserNames.split(",").length - 1;
-          if((promises.length) -1 === commaCount){
-            propserNames += account.result.name
+        accounts.forEach((account, index) => {
+          if(index === 0){
+            propserNames = account.result.name;
+          } else{
+            propserNames += ", " + account.result.name
           }
-          else{propserNames += account.result.name + ", "}
-          console.log(propserNames)
         });
       });
-
-
-
       this.list.push({
         icon: "mdi-account-group",
         leftText: "Authors:",
@@ -269,14 +267,13 @@ export default {
           link: "/account/" + invited.username,
         });
       } else if (this.proposal.type == "improvement") {
-        console.log(this.proposal)
-
         // Abstract
         this.extraInfoListFullRightText.push(this.proposal.improvementArguments.abstract);
         this.extraInfoList.push({
           icon: "mdi-text",
           leftText: "Abstract:",
           rightText: this.proposal.improvementArguments.abstract,
+          moreAndLess: "mdi-chevron-down",
         });
 
         // Motivation
@@ -285,6 +282,7 @@ export default {
           icon: "mdi-target",
           leftText: "Motivation:",
           rightText: this.proposal.improvementArguments.motivation,
+          moreAndLess: "mdi-chevron-down",
         });
 
         // Specification
@@ -293,39 +291,52 @@ export default {
           icon: "mdi-text-search",
           leftText: "Specification:",
           rightText: this.proposal.improvementArguments.specification,
+          moreAndLess: "mdi-chevron-down",
         });
 
         // References
-        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.references);
-        this.extraInfoList.push({
-          icon: "mdi-link-box",
-          leftText: "References:",
-          rightText: this.proposal.improvementArguments.references,
-        });
+        if (this.proposal.improvementArguments.references !== ""){
+          this.extraInfoListFullRightText.push(this.proposal.improvementArguments.references);
+          this.extraInfoList.push({
+            icon: "mdi-link-box",
+            leftText: "References:",
+            rightText: this.proposal.improvementArguments.references,
+            moreAndLess: "mdi-chevron-down",
+          });
+        }
 
         // Budget
-        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.budget);
-        this.extraInfoList.push({
-          icon: "mdi-currency-eur",
-          leftText: "Budget:",
-          rightText: this.proposal.improvementArguments.budget,
-        });
+        if (this.proposal.improvementArguments.budget !== ""){
+          this.extraInfoListFullRightText.push(this.proposal.improvementArguments.budget);
+          this.extraInfoList.push({
+            icon: "mdi-currency-eur",
+            leftText: "Budget:",
+            rightText: this.proposal.improvementArguments.budget,
+            moreAndLess: "mdi-chevron-down",
+          });
+        }
 
         // Roles
-        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.executionRoles);
-        this.extraInfoList.push({
-          icon: "mdi-account-multiple",
-          leftText: "Roles:",
-          rightText: this.proposal.improvementArguments.executionRoles,
-        });
+        if (this.proposal.improvementArguments.executionRoles !== ""){
+          this.extraInfoListFullRightText.push(this.proposal.improvementArguments.executionRoles);
+          this.extraInfoList.push({
+            icon: "mdi-account-multiple",
+            leftText: "Roles:",
+            rightText: this.proposal.improvementArguments.executionRoles,
+            moreAndLess: "mdi-chevron-down",
+          });
+        }
 
         // Timebasedconstraints
-        this.extraInfoListFullRightText.push(this.proposal.improvementArguments.timeBasedConstraint);
-        this.extraInfoList.push({
-          icon: "mdi-calendar-range",
-          leftText: "Time based constraints:",
-          rightText: this.proposal.improvementArguments.timeBasedConstraint,
-        });
+        if (this.proposal.improvementArguments.timeBasedConstraint !== ""){
+          this.extraInfoListFullRightText.push(this.proposal.improvementArguments.timeBasedConstraint);
+          this.extraInfoList.push({
+            icon: "mdi-calendar-range",
+            leftText: "Time based constraints:",
+            rightText: this.proposal.improvementArguments.timeBasedConstraint,
+            moreAndLess: "mdi-chevron-down",
+          });
+        }
       }
 
     }
@@ -347,16 +358,18 @@ export default {
       var indexInTheList = this.extraInfoList.indexOf(item);
 
       // Al gesliced.
-      if(this.extraInfoList[indexInTheList].rightText.length === 53 && this.extraInfoListFullRightText[indexInTheList].length > 50){
+      if(this.extraInfoList[indexInTheList].rightText.length === 51 && this.extraInfoListFullRightText[indexInTheList].length > 48){
         this.extraInfoList[indexInTheList].rightText = this.extraInfoListFullRightText[indexInTheList];
         //Veranderd de tekst van de button naar ^
-        this.buttonText = "^";
+        console.log("erin");
+        this.extraInfoList[indexInTheList].moreAndLess = "mdi-chevron-up";
+        console.log(this.extraInfoList[indexInTheList].moreAndLess);
       }
       // Nog niet gesliced.
-      else if(this.extraInfoListFullRightText[indexInTheList].length > 50) {
-        this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0,50) + "...";
+      else if(this.extraInfoListFullRightText[indexInTheList].length > 48) {
+        this.extraInfoList[indexInTheList].rightText = this.extraInfoList[indexInTheList].rightText.slice(0, 48) + "...";
         //Veranderd de tekst van de button naar V
-        this.buttonText = "V"
+        this.extraInfoList[indexInTheList].moreAndLess = "mdi-chevron-down";
       }
     },
     getInitials(parseStr) {
