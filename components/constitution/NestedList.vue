@@ -33,13 +33,22 @@ export default {
       synced: false,
     };
   },
-  async mounted() {
-    for (let index = 0; index < this.items.length; index++) {
-      const entry = this.items[index];
-      await this.recursiveSync(entry);
-    }
-    this.synced = true;
+  watch: {
+    items: {
+      async handler(val, oldVal) {
+        // do your stuff
+        this.synced = false;
+        for (let index = 0; index < val.length; index++) {
+          const entry = val[index];
+          await this.recursiveSync(entry);
+        }
+        this.synced = true;
+        console.log("this.items");
+        console.log(val);
+      },
+    },
   },
+  async mounted() {},
   methods: {
     async recursiveSync(entry) {
       if (entry) {
@@ -47,7 +56,7 @@ export default {
         if (entry.children && entry.children.length > 0) {
           for (let index = 0; index < entry.children.length; index++) {
             const child = entry.children[index];
-            await this.syncEntry(child);
+            await this.recursiveSync(child);
           }
         }
       }
@@ -69,8 +78,6 @@ export default {
         }
       }
       entry.synced = true;
-      console.log("entry");
-      console.log(entry);
     },
   },
 };

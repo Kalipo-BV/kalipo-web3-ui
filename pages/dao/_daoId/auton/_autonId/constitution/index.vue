@@ -93,7 +93,7 @@
                               termsAndConditionsVersions
                             "
                             color="accent"
-                            >Current</v-chip
+                            >Operational</v-chip
                           >
                           <v-chip
                             v-if="
@@ -101,7 +101,7 @@
                               termsAndConditionsVersions
                             "
                             color="primary"
-                            >History</v-chip
+                            >Expired</v-chip
                           >
                         </div>
                       </v-col>
@@ -533,11 +533,13 @@ export default {
     },
   },
   watch: {
-    termsAndConditionsVersionSelected(newest, previous) {
-      if (this.versionMap[newest] == null) {
-        this.getVersion(newest, this.versionIds[newest - 1]);
-      }
-      this.selectVersion(newest);
+    termsAndConditionsVersionSelected: {
+      async handler(newest, previous) {
+        if (this.versionMap[newest] == null) {
+          await this.getVersion(newest, this.versionIds[newest - 1]);
+        }
+        this.selectVersion(newest);
+      },
     },
   },
 };
