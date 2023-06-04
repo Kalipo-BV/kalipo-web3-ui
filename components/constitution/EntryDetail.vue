@@ -4,11 +4,13 @@
       solo
       v-model="titleValue"
       :disabled="isMarkedForDelete"
+      placeholder="Title"
     ></v-text-field>
     <v-textarea
       solo
       v-model="contentValue"
       :disabled="isMarkedForDelete"
+      placeholder="Content"
     ></v-textarea>
     <div class="d-flex align-center justify-space-between">
       <v-btn @click="$emit('cancel')">Cancel</v-btn>

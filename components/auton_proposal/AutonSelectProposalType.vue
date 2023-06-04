@@ -43,7 +43,7 @@
         <v-col cols="12" md="6">
           <div @click="selectedProposalTypeInput = 'terms-and-conditions'">
             <ProposalTypeCard
-              icon="mdi-book-open"
+              icon="mdi-scale-balance"
               title="Terms and Conditions"
               :active="selectedProposalTypeInput == 'terms-and-conditions'"
             ></ProposalTypeCard>

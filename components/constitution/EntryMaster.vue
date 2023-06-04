@@ -4,18 +4,7 @@
       <div class="d-flex align-center justify-space-between mb-2">
         <div class="text-h4">{{ title }}</div>
         <div>
-          <!-- <v-btn
-            class="mr-2"
-            :color="orderMode ? 'primary' : 'accent'"
-            @click="orderMode = !orderMode"
-            ><div class="d-flex align-center" v-if="!orderMode">
-              <v-icon small class="mr-1">mdi-cursor-move</v-icon> order
-            </div>
-            <div class="d-flex align-center" v-if="orderMode">
-              <v-icon small class="mr-1">mdi-pencil</v-icon> edit
-            </div></v-btn
-          > -->
-          <v-btn color="accent" @click="newOne" v-if="!orderMode"
+          <v-btn color="accent" @click="newOne"
             ><v-icon class="mr-1">mdi-plus</v-icon> new</v-btn
           >
         </div>
@@ -26,114 +15,83 @@
           color="accent"
           flat
           height="30"
-          v-if="!orderMode"
         >
           <span
             class="mr-1"
-            @click="selectedEntryNumber = null"
+            @click="
+              {
+                showing = { children: items };
+                crumbs = [];
+              }
+            "
             style="cursor: pointer"
             >Main</span
           >
-          <div v-for="(item, i) in selectedEntryNumber?.split('.')" :key="i">
+          <div v-for="(item, i) in crumbs" :key="i">
             <span class="mr-1" v-if="item"
               ><v-icon color="white">mdi-menu-right</v-icon></span
             >
             <span
               class="mr-1"
               v-if="item"
-              @click="
-                selectedEntryNumber =
-                  selectedEntryNumber.split('.', i + 1).join('.') + '.'
-              "
+              @click="show(item.entryId)"
               style="cursor: pointer"
-              >{{ item }}</span
+              >{{ item.entryNumber }}</span
             >
           </div>
         </v-system-bar>
       </div>
       <v-list dense flat class="mt-0 pt-0">
         <v-list-item-group color="primary" v-model="selectedItem">
-          <v-list-item
-            v-for="(item, i) in filtered"
-            :key="i"
-            color="accent"
-            :class="(i + 1) % 2 ? 'grey lighten-4' : ''"
-          >
-            <div
-              v-if="i != 0"
-              style="width: 100%; position: absolute; top: 0; left: 0"
-            >
-              <v-divider></v-divider>
-            </div>
-            <div v-if="!orderMode">
-              <v-btn
-                x-small
+          <draggable v-model="filtered">
+            <transition-group>
+              <v-list-item
+                v-for="(item, i) in filtered"
+                :key="item.entryId"
                 color="accent"
-                fab
-                outlined
-                class="mr-3"
-                @click="selectedEntryNumber = item.entryNumber"
-                ><v-icon small>mdi-format-list-numbered</v-icon></v-btn
+                :class="(i + 1) % 2 ? 'grey lighten-4' : ''"
               >
-            </div>
-            <div v-if="orderMode" class="mr-2">
-              <v-icon x-small v-if="selectedItem == i"
-                >mdi-checkbox-blank-circle</v-icon
-              >
-              <v-icon x-small v-if="selectedItem != i"
-                >mdi-checkbox-blank-circle-outline</v-icon
-              >
-            </div>
-            <v-list-item-content
-              @click="select(item.id)"
-              :style="
-                item.icon == 'mdi-delete-circle'
-                  ? 'text-decoration: line-through'
-                  : ''
-              "
-            >
-              <v-list-item-title
-                >{{ item.entryNumber }} {{ item.title }}</v-list-item-title
-              >
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
-            </v-list-item-icon>
-          </v-list-item>
+                <div
+                  v-if="i != 0"
+                  style="width: 100%; position: absolute; top: 0; left: 0"
+                >
+                  <v-divider></v-divider>
+                </div>
+                <div v-if="!orderMode">
+                  <v-btn
+                    x-small
+                    color="accent"
+                    fab
+                    outlined
+                    class="mr-3"
+                    @click="show(item.entryId)"
+                    ><v-icon small>mdi-format-list-numbered</v-icon></v-btn
+                  >
+                </div>
+                <v-list-item-content
+                  @click="open(item.entryId)"
+                  :style="
+                    item.icon == 'mdi-delete-circle'
+                      ? 'text-decoration: line-through'
+                      : ''
+                  "
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  <v-list-item-title class="error--text">{{
+                    item.error
+                  }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-icon>
+                  <v-icon v-text="item.icon"></v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+            </transition-group>
+          </draggable>
           <v-list-item v-if="filtered.length == 0"
             >No entries, create a new one!</v-list-item
           >
         </v-list-item-group>
       </v-list>
-      <div class="primary px-5" v-if="orderMode">
-        <v-row>
-          <v-col>
-            <v-btn
-              block
-              x-small
-              color="accent"
-              @click="left"
-              :outlined="!isLeftPossible()"
-              ><v-icon small>mdi-arrow-left</v-icon></v-btn
-            >
-          </v-col>
-          <v-col>
-            <v-btn block x-small color="accent" @click="up"
-              ><v-icon small>mdi-arrow-up</v-icon></v-btn
-            >
-          </v-col>
-          <v-col>
-            <v-btn block x-small color="accent" @click="down"
-              ><v-icon small>mdi-arrow-down</v-icon></v-btn
-            >
-          </v-col>
-          <v-col>
-            <v-btn block x-small color="accent"
-              ><v-icon small>mdi-arrow-right</v-icon></v-btn
-            >
-          </v-col>
-        </v-row>
-      </div>
     </div>
     <div v-if="selected != null">
       <EntryDetail
@@ -153,68 +111,31 @@
 <script>
 export default {
   props: {
-    item: {
-      type: Object,
-      required: true,
-    },
-    spacing: {
-      type: Number,
-      default: 0,
-    },
-    isOpen: {
-      type: Boolean,
-      default: false,
-    },
-    prefix: {
-      type: String,
-      default: "",
-    },
-    changeOrderMode: {
-      type: Boolean,
-      default: false,
-    },
     title: {
       type: String,
       default: "",
+    },
+    currentTree: {
+      type: Array,
+      default() {
+        return [];
+      },
     },
   },
   data() {
     return {
       selectedId: null,
       selected: null,
-      created: [],
-      updated: [],
-      deleted: [],
+      showing: null,
+      showingObj: null,
+      crumbs: [],
+      tempUUIDs: [],
+      parentIdMap: {},
+      mutations: [],
       selectedEntryNumber: null,
       orderMode: false,
       selectedItem: null,
-      items: [
-        {
-          id: "d",
-          entryNumber: "2.",
-          title: "Conversions",
-          content: "",
-          icon: "",
-        },
-        {
-          id: "a",
-          entryNumber: "1.",
-          title: "First",
-          content: "abc ",
-        },
-        {
-          id: "b",
-          entryNumber: "1.1.",
-          title: "Ipsum",
-          content: "",
-        },
-        {
-          id: "c",
-          entryNumber: "1.2.",
-          title: "Lorem",
-          content: "",
-        },
-      ],
+      items: [],
     };
   },
   computed: {
@@ -232,41 +153,36 @@ export default {
         a.entryNumber > b.entryNumber ? 1 : -1
       );
     },
-    filtered() {
-      const that = this;
-      return this.ordered.filter((item) => {
-        if (that.orderMode) {
-          return true;
-        } else {
-          if (that.selectedEntryNumber != null) {
-            return (
-              item.entryNumber.startsWith(that.selectedEntryNumber) &&
-              item.entryNumber != that.selectedEntryNumber &&
-              item.entryNumber
-                .substr(that.selectedEntryNumber.length)
-                .split(".").length == 2
-            );
+    filtered: {
+      get: function () {
+        if (this.showing) {
+          if (this.showing.children) {
+            return this.showing.children;
           } else {
-            return item.entryNumber.split(".").length - 1 == 1;
+            return [];
           }
+        } else {
+          return this.items;
         }
-      });
+      },
+      set: function (newValue) {
+        // console.log(newValue);
+        // const result = [];
+        // for (let index = 0; index < newValue.length; index++) {
+        //   const element = newValue[index];
+        //   if (this.selectedEntryNumber) {
+        //     element.entryNumber =
+        //       element.entryNumber.substr(0, this.selectedEntryNumber.length) +
+        //       (index + 1) +
+        //       ".";
+        //   } else {
+        //     element.entryNumber = index + 1 + ".";
+        //   }
+        // }
+      },
     },
   },
   watch: {
-    changeOrderMode(newest, previous) {
-      if (newest) {
-        const panels = [];
-        if (this.item.children !== undefined) {
-          for (let index = 0; index < this.item.children.length; index++) {
-            panels.push(index);
-          }
-        }
-        this.panel = panels;
-      } else {
-        this.panel = [];
-      }
-    },
     selected(newest, previous) {
       if (newest != null) {
         this.$nuxt.$emit("AutonProposalSubmit-HideNavigation", true);
@@ -275,37 +191,158 @@ export default {
       }
     },
   },
+  async mounted() {
+    console.log("CURRENT TREE master:");
+    console.log(this.currentTree);
+    const recursiveItems = this.recursieFill(this.currentTree, null);
+    // recursiveItems.push({
+    //   entryId:
+    //     "222c279c972b3568483b2c8edb8eca711edcbc45c0f3583c9767bf14cd1f1ea9",
+    //   title: "",
+    //   content: "",
+    //   icon: "",
+    //   children: [],
+    //   synced: false,
+    //   entryNumber: 3,
+    //   parentId: null,
+    // });
+    for (let index = 0; index < recursiveItems.length; index++) {
+      const entry = recursiveItems[index];
+      this.syncEntry(entry);
+    }
+
+    this.items = recursiveItems;
+    this.showing = { children: recursiveItems };
+    this.showingObj = null;
+  },
   methods: {
-    get(id) {
-      let item = null;
-      for (let index = 0; index < this.items.length; index++) {
-        const element = this.items[index];
-        if (element.id == id) {
-          item = element;
+    async syncEntry(entry) {
+      const entryWrapper = await this.$invoke(
+        "document:getGovernmentalEntryByID",
+        {
+          id: entry.entryId,
+        }
+      );
+
+      if (entryWrapper.result && !entryWrapper.error) {
+        entry.title = entryWrapper.result.title;
+        entry.content = entryWrapper.result.content;
+      } else {
+        if (entryWrapper.result == null) {
+          entry.error = "Entry was not found";
         }
       }
-      console.log(item);
-      return item;
+      entry.synced = true;
     },
-    select(id) {
-      console.log("si");
-      console.log(this.items);
-      if (!this.orderMode) {
-        this.selectedId = id;
-        this.selected = this.get(id);
+    recursieFill(treeList, parentId) {
+      const result = [];
+      for (let index = 0; index < treeList.length; index++) {
+        const tree = treeList[index];
+        const children = this.recursieFill(tree.children, tree.parentId);
+        result.push({
+          entryId: tree.entryId,
+          title: "",
+          content: "",
+          icon: "",
+          children: children,
+          entryNumber: index + 1,
+          synced: false,
+          parentId: parentId ? parentId : null,
+        });
+        if (parentId) {
+          this.parentIdMap[tree.entryId] = parentId;
+        }
+      }
+      return result;
+    },
+    recursiveCrumbs(entry, crumbs) {
+      console.log("Recursive crumbs");
+      crumbs.push(entry);
+      console.log(crumbs);
+
+      if (entry.parentId != null) {
+        const parent = this.get(entry.parentId);
+        console.log(parent);
+        if (parent) {
+          this.recursiveCrumbs(parent, crumbs);
+        }
+      }
+      return crumbs;
+    },
+    recursiveGet(id, items) {
+      let item = null;
+      if (items) {
+        for (let index = 0; index < items.length; index++) {
+          const element = items[index];
+          if (element.entryId == id) {
+            item = element;
+          } else {
+            if (element.children && element.children.length > 0) {
+              const result = this.recursiveGet(id, element.children);
+              if (result != null) {
+                return result;
+              }
+            }
+          }
+        }
+      }
+
+      if (item != null) {
+        return item;
+      }
+      return null;
+    },
+    get(id) {
+      return this.recursiveGet(id, this.items);
+    },
+    show(id) {
+      const search = this.get(id);
+      this.showing = search;
+      this.showingObj = search;
+      if (this.showingObj) {
+        console.log("showingObj");
+        console.log(this.showingObj);
+        const crumbs = this.recursiveCrumbs(this.showingObj, []);
+        if (crumbs) {
+          this.crumbs = crumbs.reverse();
+        }
       }
     },
-    update(id, title, content) {
+    open(id) {
+      this.selectedId = id;
+      this.selected = this.get(id).item;
+    },
+    update() {
+      let foundMutation = null;
+      for (let index = 0; index < this.mutations.length; index++) {
+        const mutation = this.mutations[index];
+        if (mutation.entryId == this.selected.entryId) {
+          foundMutation = mutation;
+        }
+      }
+      if (foundMutation) {
+        foundMutation.title = this.selected.title;
+        foundMutation.content = this.selected.content;
+      } else {
+        this.mutations.push({
+          type: "UPDATE",
+          entryId: this.selected.entryId,
+          title: this.selected.title,
+          content: this.selected.content,
+        });
+      }
+      this.$emit("mutationUpdate", this.mutations);
+
       if (this.selected.icon != "mdi-plus-circle") {
         this.selected.icon = "mdi-pencil-circle";
       }
       this.selected = null;
     },
-    markForDelete(id) {
+    markForDelete() {
       this.selected.icon = "mdi-delete-circle";
       this.selected = null;
     },
-    unDelete(id) {
+    unDelete() {
       this.selected.icon = undefined;
       this.selected = null;
     },
@@ -315,152 +352,84 @@ export default {
       }
       return false;
     },
+    generateUUID() {
+      // Public Domain/MIT
+      var d = new Date().getTime(); //Timestamp
+      var d2 =
+        (typeof performance !== "undefined" &&
+          performance.now &&
+          performance.now() * 1000) ||
+        0; //Time in microseconds since page-load or 0 if unsupported
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+          var r = Math.random() * 16; //random number between 0 and 16
+          if (d > 0) {
+            //Use timestamp until depleted
+            r = (d + r) % 16 | 0;
+            d = Math.floor(d / 16);
+          } else {
+            //Use microseconds since page-load if supported
+            r = (d2 + r) % 16 | 0;
+            d2 = Math.floor(d2 / 16);
+          }
+          return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+        }
+      );
+    },
+    convertProposedTreeRecursive(trees) {
+      const result = [];
+      for (let index = 0; index < trees.length; index++) {
+        const tree = trees[index];
+        if (tree.children) {
+          const tempResult = this.convertProposedTreeRecursive(tree.children);
+          if (tempResult) {
+            result.push({ entryId: tree.entryId, children: tempResult });
+          } else {
+            result.push({ entryId: tree.entryId, children: [] });
+          }
+        } else {
+          result.push({ entryId: tree.entryId, children: [] });
+        }
+      }
+      return result;
+    },
+    updateProposedTree() {
+      console.log("updateProposedTree");
+      const proposedTree = this.convertProposedTreeRecursive(this.items);
+      this.$emit("update:proposedTree", proposedTree);
+
+      console.log("proposedTree:");
+      console.log(proposedTree);
+    },
     newOne() {
       this.selectedId = "new";
       this.selected = {
-        id: "",
+        entryId: this.generateUUID(),
         title: "",
         content: "",
         icon: "mdi-plus-circle",
-        entryNumber:
-          this.selectedEntryNumber + (this.filtered.length + 1) + ".",
+        entryNumber: this.filtered ? this.filtered.length + 1 : 1,
+        parentId: this.showingObj ? this.showingObj.entryId : null,
+        children: [],
       };
     },
     create() {
-      this.items.push(this.selected);
+      if (this.showing.children) {
+        this.showing.children.push(this.selected);
+      } else {
+        this.showing.children = [this.selected];
+      }
+      this.updateProposedTree();
+      this.mutations.push({
+        type: "CREATE",
+        entryId: this.selected.entryId,
+        title: this.selected.title,
+        content: this.selected.content,
+      });
+      this.tempUUIDs.push(this.selected.entryId);
+      this.$emit("mutationUpdate", this.mutations);
       this.selected = null;
-    },
-    incrementEntryNumber(entryNumber) {
-      const numbers = entryNumber.split(".");
-      let result = "";
-      for (let index = 0; index < numbers.length; index++) {
-        let element = numbers[index];
-        if (index >= numbers.length - 2) {
-          if (index >= numbers.length - 1) {
-            break;
-          }
-          result += Number(element) + 1;
-        } else {
-          result += element;
-        }
-        result += ".";
-      }
-      return result;
-    },
-    decrementEntryNumber(entryNumber) {
-      const numbers = entryNumber.split(".");
-      let result = "";
-      for (let index = 0; index < numbers.length; index++) {
-        let element = numbers[index];
-        if (index >= numbers.length - 2) {
-          if (index >= numbers.length - 1) {
-            break;
-          }
-          result += Number(element) - 1;
-        } else {
-          result += element;
-        }
-        result += ".";
-      }
-      return result;
-    },
-    tillParentIncremented(entryNumber) {
-      const numbers = entryNumber.split(".");
-      let result = "";
-
-      let heighestNumber = -1;
-      for (let index = 0; index < this.items.length; index++) {
-        const element = this.items[index];
-        const elementNumbers = element.entryNumber.split(".");
-        if (elementNumbers.length == numbers.length - 1) {
-          if (
-            Number(elementNumbers[elementNumbers.length - 2]) >
-            Number(heighestNumber)
-          );
-          {
-            heighestNumber = Number(elementNumbers[elementNumbers.length - 2]);
-          }
-        }
-      }
-
-      for (let index = 0; index < numbers.length - 3; index++) {
-        const element = numbers[index];
-        result += element + ".";
-      }
-
-      result += Number(heighestNumber) + 1 + ".";
-
-      return result;
-    },
-    down() {
-      const item = this.filtered[this.selectedItem];
-      //   for (let index = 0; index < this.filtered.length; index++) {
-      //     const element = this.filtered[index];
-      //     if (index == this.selectedItem) {
-      //     }
-      //   }
-      console.log(this.incrementEntryNumber(item.entryNumber));
-    },
-    up() {
-      const item = this.filtered[this.selectedItem];
-      //   for (let index = 0; index < this.filtered.length; index++) {
-      //     const element = this.filtered[index];
-      //     if (index == this.selectedItem) {
-      //     }
-      //   }
-      console.log(this.decrementEntryNumber(item.entryNumber));
-    },
-    isLeftPossible() {
-      if (this.selectedItem) {
-        const item = this.filtered[this.selectedItem];
-        if (item.entryNumber.split(".").length > 2) {
-          return true;
-        }
-      }
-      return false;
-    },
-    left() {
-      if (this.isLeftPossible) {
-        const item = this.filtered[this.selectedItem];
-        if (item && item.entryNumber.split(".").length > 2) {
-          const itemNumbers = item.entryNumber.split(".");
-          item.oldEntryNumber = item.entryNumber;
-          item.entryNumber = this.tillParentIncremented(item.entryNumber);
-
-          for (let index = 0; index < this.items.length; index++) {
-            const element = this.items[index];
-            const elementNumbers = element.entryNumber.split(".");
-            if (itemNumbers.length == elementNumbers.length) {
-              console.log("WUT");
-              console.log(elementNumbers);
-              console.log(elementNumbers[elementNumbers.length - 2]);
-              console.log(itemNumbers);
-              console.log(itemNumbers[itemNumbers.length - 2]);
-              if (
-                Number(elementNumbers[elementNumbers.length - 2]) >
-                Number(itemNumbers[itemNumbers.length - 2])
-              ) {
-                if (!element.oldEntryNumber) {
-                  element.oldEntryNumber = element.entryNumber;
-                }
-                let newEntryNumber = "";
-                for (
-                  let index = 0;
-                  index < elementNumbers.length - 2;
-                  index++
-                ) {
-                  const elementNum = elementNumbers[index];
-                  newEntryNumber += elementNum + ".";
-                }
-                newEntryNumber +=
-                  Number(elementNumbers[elementNumbers.length - 2]) - 1;
-                newEntryNumber += ".";
-                element.entryNumber = newEntryNumber;
-              }
-            }
-          }
-        }
-      }
     },
   },
 };

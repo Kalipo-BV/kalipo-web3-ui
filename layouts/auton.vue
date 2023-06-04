@@ -103,7 +103,7 @@
             </v-row>
           </v-container>
         </div>
-        <div style="height: 100%; background: #eef1f6">
+        <div class="white">
           <!-- <div class="primary">
             <v-container>
               <div class="d-flex align-start">
@@ -198,7 +198,7 @@
             </v-row>
           </v-container>
         </v-app-bar> -->
-          <div>
+          <v-container class="py-0 px-0 px-lg-3">
             <v-tabs show-arrows v-model="selectedItem" background-color="">
               <v-tabs-slider color="primary"></v-tabs-slider>
 
@@ -232,11 +232,28 @@
                 {{ item.title }}
               </v-tab>
             </v-tabs>
-          </div>
-
+          </v-container>
+        </div>
+        <div style="height: 100%; background: #eef1f6">
           <Nuxt class="" :auton="auton" />
         </div>
       </div>
+      <v-footer padless fixed color="primary" v-if="false">
+        <v-col class="white--text" cols="6">
+          <div class="ml-16 pl-16">
+            <div class="ml-16 pl-16">
+              {{ new Date().getFullYear() }} — <strong>Kalipo</strong>
+            </div>
+          </div>
+        </v-col>
+        <v-col class="white--text" cols="6">
+          <div class="d-flex justify-end">
+            <div class="">
+              <v-btn small>...</v-btn>
+            </div>
+          </div>
+        </v-col>
+      </v-footer>
     </v-main>
     <MainMenu></MainMenu>
 
