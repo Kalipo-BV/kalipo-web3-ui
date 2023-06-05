@@ -72,7 +72,7 @@ export default {
 
     data: () => ({
       saving: false,
-	  saved: 0,
+	  	saved: 0,
     }),
 
 	methods: {

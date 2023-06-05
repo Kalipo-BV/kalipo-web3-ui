@@ -238,6 +238,9 @@
       },
 
       
+        previous: function () {
+          this.$emit('previous', null);
+        },
 
       sign() {
         if(this.$refs.form.validate()) {
