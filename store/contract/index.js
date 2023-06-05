@@ -111,23 +111,9 @@ export const mutations = {
 		}
 	},
 
-	changePreample(state, payload) {
-		if (isString(payload, 'invalid preample given')) {
-			state.body.formData.preample = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changePropertyRights(state, payload) {
-		if (isString(payload, 'invalid propertyRights given')) {
-			state.body.formData.propertyRights = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeGoverningLawAndJurisdiction(state, payload) {
-		if (isString(payload, 'invalid governingLawAndJurisdiction given')) {
-			state.body.formData.governingLawAndJurisdiction = payload;
+	changePaymentNote(state, payload) {
+		if (isString(payload, 'invalid paymentNote given')) {
+			state.body.formData.payment.note = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
@@ -139,44 +125,9 @@ export const mutations = {
 		}
 	},
 
-	changePurpose(state, payload) {
-		if (isString(payload, 'invalid purpose given')) {
-			state.body.formData.purpose = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeFinalProvisions(state, payload) {
-		if (isString(payload, 'invalid finalProvision given')) {
-			state.body.formData.finalProvisions = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
 	changePaymentAmount(state, payload) {
 		if (isNumber(payload, 'invalid paymentAmount given')) {
 			state.body.formData.payment.amount = Number.parseFloat(payload);
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changePaymentNote(state, payload) {
-		if (isString(payload, 'invalid paymentNote given')) {
-			state.body.formData.payment.note = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeStartDate(state, payload) {
-		if (isDate(payload, 'invalid startDate given')) {
-			state.body.formData.dates.startDate = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeEndDate(state, payload) {
-		if (isDate(payload, 'invalid endDate given')) {
-			state.body.formData.dates.endDate = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
@@ -218,12 +169,6 @@ export const mutations = {
 	customChangeData(state, payload) {
 		state.body.formData.custom[payload.index].data = payload.data;
 		saveToLocalStorage(state.body, state.id);
-	},
-
-	changeTerminationOfAgreement(state, payload) {
-		if (isString(payload, 'invalid terminationOfAgreement given')) {
-			state.body.formData.terminationOfAgreement = payload;
-		}
 	},
 
 	reset(state) {

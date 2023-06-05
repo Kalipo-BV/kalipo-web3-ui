@@ -33,10 +33,10 @@
         computed: {
             preample: {
                 get: function () {
-                    return this.$store.state.contract.body.formData.preample;
+                    return this.$store.state.contract.body.formData['preample'];
                 },
-                set: function (payload) {
-                    this.$store.commit("contract/changePreample", payload);
+                set: function (content) {
+                    this.$store.commit("contract/changeString", {key: 'preample', content: content });
                 },
             }
         },
