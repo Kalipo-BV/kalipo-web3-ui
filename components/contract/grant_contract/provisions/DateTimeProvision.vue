@@ -94,7 +94,14 @@
     computed: {
       startDate: {
         get: function () {
-          return this.$store.state.contract.body.formData.dates.startDate;
+          const data = this.$store.state.contract.body.formData.dates.startDate;
+          
+          if (typeof data === 'string') {
+            return data;
+          } else {
+            console.error('data is invalid', data)
+            return '';
+          }
         },
         set: function (payload) {
           this.$store.commit("contract/changeStartDate", payload);
@@ -103,7 +110,14 @@
 
       endDate: {
         get: function () {
-          return this.$store.state.contract.body.formData.dates.endDate;
+          const data = this.$store.state.contract.body.formData.dates.endDate;
+
+          if (typeof data === 'string') {
+          return data;
+        } else {
+          console.error('data is invalid', data)
+          return '';
+        }
         },
         set: function (payload) {
           this.$store.commit("contract/changeEndDate", payload);
