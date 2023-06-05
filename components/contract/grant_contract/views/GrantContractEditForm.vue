@@ -31,7 +31,7 @@
       </v-card>
 
       <div class="text-h2 mt-6">Provision types</div>
-      <div class="text-h3">Contract Title</div>
+      <div class="text-h3">Contract title</div>
       <v-card class="mb-4">
         <TitleProvision />
       </v-card>
