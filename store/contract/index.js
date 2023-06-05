@@ -96,8 +96,6 @@ export const mutations = {
 	},
 
 	changeDate(state, payload) {
-		const bool = genericErrorChecking(payload, state, 'date');
-		console.log(bool);
 		if (genericErrorChecking(payload, state, 'date')) {
 			if (isDate(payload.content, `invalid ${payload.key} given`)) {
 				state.body.formData.dates[payload.key] = payload.content;
