@@ -186,6 +186,7 @@
   </v-container>
 </template>
 <script>
+  import { v4 as uuidv4 } from 'uuid';
   export default {
     computed: {
       formData: {
@@ -200,14 +201,13 @@
         this.$emit("update:data", newValue);
       },
     },
-      
     data: () => ({
       saved: false,
       signed: false,
       dialog: false,
       devDialog: false,
       transaction: {
-        moduleId: 1010,
+        moduleId: 1011,
         assetId: 1,
         assets: null,
       },
@@ -228,7 +228,7 @@
       async getBySetIdTest() {       
         const existingAccoundIdWrapper = await this.$invoke(
           "grantContract:getByID",
-          { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" },
+          { id: "978c66d0edca62d5ce4bb98af3d087e93345a1f7621bd867fc974349a3e64b6d" },
         );
         console.log(existingAccoundIdWrapper);
       },
@@ -241,10 +241,16 @@
 
       sign() {
         if(this.$refs.form.validate()) {
-          // this.transaction.assets = this.$store.state.contract;
-          this.transaction.assets = this.$store.getters["contract/filtered"];
           this.uri = "";
+          let contract = this.$store.getters["contract/filtered"];
+          this.transaction.assets = {contractor: contract.formData.parties.contractor, client: contract.formData.parties.client, status: "", TID: this.TID, clientAuton: "", creator: "", contractorAuton: "", agreementVersion: []};
+          this.transaction.assets.contract = contract;
+      
+          this.transaction.assets.contract.formData.title = "remove me GCEF r/247";
+          this.transaction.assets.contract.uuid = uuidv4();
+
           this.dialog = true;
+          console.log(this.transaction.assets);
         }
       },
       

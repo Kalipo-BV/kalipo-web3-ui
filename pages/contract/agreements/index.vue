@@ -106,21 +106,25 @@
 
       async getAllWithInfo() {
         this.data = [];
-        await this.getBEAllWithInfo();
+        try {
+          await this.getBEAllWithInfo();
+        } catch (Inactive) {}
         await this.getFEAllWithInfo();
         this.filterd_data = this.data;
       },
 
       async getBEAllWithInfo() {       
-        const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
- 
-        //shh this isn't cheese       needs to be changed in BE/DB {{ item.version }}
+        const existingAccoundIdWrapper = await this.$invoke("agreement:getAllByAccount", {id: this.$store.state.wallet.account.accountId});
+
         existingAccoundIdWrapper.result.forEach(element => {
-          element.status = "Outgoing";
-          element["version"] = Math.floor(Math.random() * (4 - 1 + 1) + 1);
-          element.title = 'New legal contract';
-          element.id = uuidv4();
-          this.data.push(element); 
+          element.agreementVersion.forEach(async element => {
+            const result = await this.$invoke("grantContract:getByID", { id: element.contract });
+            result.result.status = "Outgoing";
+            result.result["version"] = element.version;
+            result.result.title = element.title;
+            result.result.id = element.contract;
+            this.data.push(result.result); 
+          });
         });
       },
 
@@ -131,7 +135,7 @@
         //shh this isn't cheese       needs to be changed in BE/DB {{ item.version }}
         for (const contract in agreements) {
           agreements[contract].status = "Local copy";
-          agreements[contract]["version"] = Math.floor(Math.random() * (4 - 1 + 1) + 1);
+          // agreements[contract]["version"] = Math.floor(Math.random() * (4 - 1 + 1) + 1);
           agreements[contract].title = 'Edit legal contract';
           agreements[contract].id = contract;
           this.data.push(agreements[contract]); 
