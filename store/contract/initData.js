@@ -24,6 +24,7 @@ export const initFormData = () => {
 		dates: {
 			startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
 			endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
+			signingDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
 		},
 		propertyRights: "",
 		terminationOfAgreement: "",
@@ -34,5 +35,7 @@ export const initFormData = () => {
 		signingWindow: "",
 		requiredToSign: false,
 		signed: false,
+		title: '',
+		productDescription: '',
 	}
 }
