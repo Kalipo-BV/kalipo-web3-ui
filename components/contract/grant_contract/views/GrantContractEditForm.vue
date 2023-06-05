@@ -24,16 +24,26 @@
         <PartyMemberProvision isContractor partyName="contractor"/>
         <PartyMemberProvision partyName="client"/>
       </v-card>
-
+      
       <div class="text-h2 pt-2 pb-2 mt-5">Preamples</div>
       <v-card>
         <PreampleProvision />
       </v-card>
 
       <div class="text-h2 mt-6">Provision types</div>
+      <div class="text-h3">Contract Title</div>
+      <v-card class="mb-4">
+        <TitleProvision />
+      </v-card>
+
       <div class="text-h3">Purpose</div>
       <v-card class="mb-4">
         <PurposeProvision />
+      </v-card>
+
+      <div class="text-h3">Desc. of product/service</div>
+      <v-card class="mb-4">
+        <ProductDescriptionProvision />
       </v-card>
 
       <div class="text-h3">Payment provisions</div>
@@ -62,6 +72,11 @@
       <div class="text-h3 mb-2 mt-2">Final provisions</div>
       <v-card>
         <FinalProvisions />
+      </v-card>
+
+      <div class="text-h3 mb-2 mt-2">Ultimate signing date</div>
+      <v-card class="mb-4">
+        <SigningDateProvision />
       </v-card>
 
         <!-- <RequiredToSignProvision/> -->
@@ -102,7 +117,7 @@
 
       <v-row style="margin-bottom: 10px;">
         <v-col>
-          <v-btn>Back</v-btn>
+          <v-btn @click="previous">Back</v-btn>
         </v-col>
         <v-col align="right">
           <v-btn
@@ -186,75 +201,70 @@
   </v-container>
 </template>
 <script>
+import SigningDateProvision from '../provisions/SigningDateProvision.vue';
+import TitleProvision from '../provisions/TitleProvision.vue';
+
   export default {
     computed: {
-      formData: {
-          get: function () {
-              return this.data;
-          },
-          set: function (newValue) {
-              this.$emit("update:data", newValue);
-          },
-      },
-      set: function (newValue) {
-        this.$emit("update:data", newValue);
-      },
+        formData: {
+            get: function () {
+                return this.data;
+            },
+            set: function (newValue) {
+                this.$emit("update:data", newValue);
+            },
+        },
+        set: function (newValue) {
+            this.$emit("update:data", newValue);
+        },
     },
-      
     data: () => ({
-      saved: false,
-      signed: false,
-      dialog: false,
-      devDialog: false,
-      transaction: {
-        moduleId: 1010,
-        assetId: 1,
-        assets: null,
-      },
-      uri: "",
+        saved: false,
+        signed: false,
+        dialog: false,
+        devDialog: false,
+        transaction: {
+            moduleId: 1010,
+            assetId: 1,
+            assets: null,
+        },
+        uri: "",
     }),
-
     created() {
-      this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
-        this.handleCreation();
-      });
+        this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
+            this.handleCreation();
+        });
     },
-    
     methods: {
-      async getAllIds() {
-        const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
-        console.log(existingAccoundIdWrapper);
-      },
-      async getBySetIdTest() {       
-        const existingAccoundIdWrapper = await this.$invoke(
-          "grantContract:getByID",
-          { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" },
-        );
-        console.log(existingAccoundIdWrapper);
-      },
-      async getAllWithInfo() {       
-        const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
-        console.log(existingAccoundIdWrapper); 
-      },
-
-      
         previous: function () {
           this.$emit('previous', null);
         },
 
-      sign() {
-        if(this.$refs.form.validate()) {
-          // this.transaction.assets = this.$store.state.contract;
-          this.transaction.assets = this.$store.getters["contract/filtered"];
-          this.uri = "";
-          this.dialog = true;
-        }
-      },
-      
-      reset() {
-        this.$store.commit("contract/reset");
-        console.log(this.$store.state.contract);
-      },
+        async getAllIds() {
+            const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
+            console.log(existingAccoundIdWrapper);
+        },
+        async getBySetIdTest() {
+            const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" });
+            console.log(existingAccoundIdWrapper);
+        },
+        async getAllWithInfo() {
+            const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
+            console.log(existingAccoundIdWrapper);
+        },
+        sign() {
+            if (this.$refs.form.validate()) {
+                // this.transaction.assets = this.$store.state.contract;
+                this.transaction.assets = this.$store.getters["contract/filtered"];
+                this.uri = "";
+                this.dialog = true;
+            }
+        },
+        reset() {
+            this.$store.commit("contract/reset");
+            console.log(this.$store.state.contract);
+        },
     },
-  };
+    components: { SigningDateProvision, TitleProvision }
+};
 </script>
