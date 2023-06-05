@@ -34,10 +34,10 @@
         computed: {
             terminationOfAgreement: {
                 get: function () {
-                    return this.$store.state.contract.body.formData.terminationOfAgreement;
+                    return this.$store.state.contract.body.formData['terminationOfAgreement'];
                 },
-                set: function (payload) {
-                    this.$store.commit("contract/changeTerminationOfAgreement", payload);
+                set: function (content) {
+                    this.$store.commit("contract/changeString", {key: 'terminationOfAgreement', content: content});
                 },
             },
         },

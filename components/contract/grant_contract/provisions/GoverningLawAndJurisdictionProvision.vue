@@ -34,10 +34,10 @@
         computed: {
             governingLawAndJurisdiction: {
                 get: function () {
-                    return this.$store.state.contract.body.formData.governingLawAndJurisdiction;
+                    return this.$store.state.contract.body.formData['governingLawAndJurisdiction']
                 },
-                set: function (payload) {
-                    this.$store.commit("contract/changeGoverningLawAndJurisdiction", payload);
+                set: function (content) {
+                    this.$store.commit("contract/changeString", {key: 'governingLawAndJurisdiction', content: content});
                 },
             },
         },

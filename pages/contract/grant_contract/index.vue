@@ -30,7 +30,7 @@
       <PurposeProvision/>
     </StageBuilder>
 
-    <GrantContractEditForm v-if="editFase === 0" />
+    <GrantContractEditForm v-if="editFase === 0" @previous="previous"/>
   </v-row>
 </template>
 <script>
@@ -51,7 +51,7 @@
 
     mounted: function() {
       const idIn = this.$route.query.id;
-      const id = (idIn && idIn*1 > -1 ? this.$route.query.id: -1);
+      const id = (idIn && idIn*1 > -1 ? idIn: -1);
       
       if (id === -1) {
         this.$store.commit("contract/createNew", {});

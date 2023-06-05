@@ -16,29 +16,21 @@
 -->
 
 <template>
-    <v-textarea
-        rows="2"
-        outlined
-        hide-details="auto"
-        clearable
-        auto-grow
-        :rules="[v => !!v || 'This field can\'t be left open!']"
-        label="Preamples"
-        required
-        v-model="preample"
-    />
+	<v-textarea v-model="productDescription" rows="2" outlined style="background-color: white; margin-bottom: 5px;"
+		hide-details="auto" label="description of product or service" clearable auto-grow model-value="fill me in"
+		:rules="[v => !!v || 'This field can\'t be left open!']" />
 </template>
 <script>
-    export default {
-        computed: {
-            preample: {
-                get: function () {
-                    return this.$store.state.contract.body.formData['preample'];
-                },
-                set: function (content) {
-                    this.$store.commit("contract/changeString", {key: 'preample', content: content });
-                },
-            }
-        },
-    }
+export default {
+	computed: {
+		productDescription: {
+			get: function () {
+				return this.$store.state.contract.body.formData['productDescription'];
+			},
+			set: function (content) {
+				this.$store.commit("contract/changeString", { key: 'productDescription', content: content });
+			},
+		},
+	},
+}
 </script>

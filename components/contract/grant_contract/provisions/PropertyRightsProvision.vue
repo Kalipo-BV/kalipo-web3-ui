@@ -34,10 +34,10 @@
         computed: {
             propertyRights: {
                 get: function () {
-                    return this.$store.state.contract.body.formData.propertyRights;
+                    return this.$store.state.contract.body.formData['propertyRights'];
                 },
-                set: function (payload) {
-                    this.$store.commit("contract/changePropertyRights", payload);
+                set: function (content) {
+                    this.$store.commit("contract/changeString", {key: 'propertyRights', content:content});
                 },
             },
         },

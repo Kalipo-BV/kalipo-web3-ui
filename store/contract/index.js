@@ -19,20 +19,35 @@ import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValid
 import { getAllFromLocalStorage, saveNewToLocalStorage, saveToLocalStorage, getFromLocalStorage, normalizeContract } from "./localstorage.js"
 import { initFormData, initContract } from "./initData.js";
 
-// const loadState = () => {
-// 	const contract = getFromLocalStorage();
-// 	if (contract === null) {
-// 		return initState();
-// 	}
-
-// 	return contract;
-// }
-
 function initState () {
 	return {
 		body: initContract(),
 		id: -1
 	}
+}
+
+function genericErrorChecking(payload, state, type='string') {
+	if (payload.key === undefined) {
+		console.error('payload.key is not defined');
+		return false;
+	} 
+	
+	if (type==='string' && state.body.formData[payload.key] === undefined) {
+		console.error('state.body.formData[payload.key] is undefined');
+		return false;
+
+	} else if (type === 'date' && state.body.formData.dates[payload.key] === undefined) {
+		console.error('state.body.formData.dates[payload.key] is undefined');
+		return false;
+	}
+	
+	
+	if (payload.content === undefined) {
+		console.error('payload.content is not defined');
+		return false;
+	} 
+	
+	return true;
 }
 
 export const state = () => (
@@ -71,58 +86,27 @@ export const mutations = {
 		}
 	},
 
+	changeString(state, payload) {
+		if (genericErrorChecking(payload, state) ) {
+			if (isString(payload.content, `invalid ${payload.key} given`)) {
+				state.body.formData[payload.key] = payload.content;
+				saveToLocalStorage(state.body, state.id);
+			}
+		}
+	},
+
+	changeDate(state, payload) {
+		if (genericErrorChecking(payload, state, 'date')) {
+			if (isDate(payload.content, `invalid ${payload.key} given`)) {
+				state.body.formData.dates[payload.key] = payload.content;
+				saveToLocalStorage(state.body, state.id);
+			}
+		}
+	},
+
 	changeParties(state, payload) {
 		if (isValidPartyData(payload) && isArray(payload.data, `parties[${payload.target}]_data`)) {
 			state.body.formData.parties[payload.target] = payload.data;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changePreample(state, payload) {
-		if (isString(payload, 'invalid preample given')) {
-			state.body.formData.preample = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changePropertyRights(state, payload) {
-		if (isString(payload, 'invalid propertyRights given')) {
-			state.body.formData.propertyRights = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeGoverningLawAndJurisdiction(state, payload) {
-		if (isString(payload, 'invalid governingLawAndJurisdiction given')) {
-			state.body.formData.governingLawAndJurisdiction = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeRequiredSign(state, payload) {
-		if (isBoolean(payload, 'invalid required to sign given')) {
-			state.body.formData.purpose = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changePurpose(state, payload) {
-		if (isString(payload, 'invalid purpose given')) {
-			state.body.formData.purpose = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeFinalProvisions(state, payload) {
-		if (isString(payload, 'invalid finalProvision given')) {
-			state.body.formData.finalProvisions = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changePaymentAmount(state, payload) {
-		if (isNumber(payload, 'invalid paymentAmount given')) {
-			state.body.formData.payment.amount = Number.parseFloat(payload);
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
@@ -134,16 +118,16 @@ export const mutations = {
 		}
 	},
 
-	changeStartDate(state, payload) {
-		if (isDate(payload, 'invalid startDate given')) {
-			state.body.formData.dates.startDate = payload;
+	changeRequiredSign(state, payload) {
+		if (isBoolean(payload, 'invalid required to sign given')) {
+			state.body.formData.purpose = payload;
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
 
-	changeEndDate(state, payload) {
-		if (isDate(payload, 'invalid endDate given')) {
-			state.body.formData.dates.endDate = payload;
+	changePaymentAmount(state, payload) {
+		if (isNumber(payload, 'invalid paymentAmount given')) {
+			state.body.formData.payment.amount = Number.parseFloat(payload);
 			saveToLocalStorage(state.body, state.id);
 		}
 	},
@@ -185,12 +169,6 @@ export const mutations = {
 	customChangeData(state, payload) {
 		state.body.formData.custom[payload.index].data = payload.data;
 		saveToLocalStorage(state.body, state.id);
-	},
-
-	changeTerminationOfAgreement(state, payload) {
-		if (isString(payload, 'invalid terminationOfAgreement given')) {
-			state.body.formData.terminationOfAgreement = payload;
-		}
 	},
 
 	reset(state) {

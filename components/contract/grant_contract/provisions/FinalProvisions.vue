@@ -34,10 +34,10 @@
         computed: {
             finalProvisions: {
                 get: function () {
-                    return this.$store.state.contract.body.formData.finalProvisions;
+                    return this.$store.state.contract.body.formData['finalProvisions'];
                 },
-                set: function (payload) {
-                    this.$store.commit("contract/changeFinalProvisions", payload);
+                set: function (content) {
+                    this.$store.commit("contract/changeString", {key: 'finalProvisions', content: content});
                 },
             },
         },
