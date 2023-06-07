@@ -54,10 +54,18 @@
       const bidIn = this.$route.query.bid;
 
       const id = (idIn && idIn*1 > -1 ? idIn: -1);
-      const bid = (idIn && idIn * 1 > -1 ? idIn : -1);
+      const bid = (bidIn != undefined ? bidIn: -1);
 
+      console.log({
+        bidIn: bidIn ,
+        bool: bidIn == undefined,
+        bid: bid
+      });
+      
       if (bid !== -1) {
-        // this.$store.commit("contract/loadContract", { id: id });
+        this.$invoke("grantContract:getByID", { id: bid }).then((account) => {
+          console.log(account); /*TODO load this into view */
+        });
       } else if (id === -1) {
         this.$store.commit("contract/createNew", {});
         const newId = this.$store.state.contract.id;
