@@ -51,9 +51,14 @@
 
     mounted: function() {
       const idIn = this.$route.query.id;
+      const bidIn = this.$route.query.bid;
+
       const id = (idIn && idIn*1 > -1 ? idIn: -1);
-      
-      if (id === -1) {
+      const bid = (idIn && idIn * 1 > -1 ? idIn : -1);
+
+      if (bid !== -1) {
+        // this.$store.commit("contract/loadContract", { id: id });
+      } else if (id === -1) {
         this.$store.commit("contract/createNew", {});
         const newId = this.$store.state.contract.id;
         
