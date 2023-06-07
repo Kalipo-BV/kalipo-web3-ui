@@ -113,11 +113,11 @@
           const data = this.$store.state.contract.body.formData.dates['endDate'];
 
           if (typeof data === 'string') {
-          return data;
-        } else {
-          console.error('data is invalid', data)
-          return '';
-        }
+            return data;
+          } else {
+            console.error('data is invalid', data)
+            return '';
+          }
         },
         set: function (content) {
           this.$store.commit("contract/changeDate", {key: 'endDate', content: content});
