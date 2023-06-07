@@ -58,7 +58,7 @@
           </router-link>          
         </template>
           <template v-slot:item.title="{ item }">
-            {{ item.title }}
+            {{ item.formData.title }}
           </template>
           <template v-slot:item.type="{ item }">
               {{ item.type }}
@@ -117,11 +117,14 @@
         const existingAccoundIdWrapper = await this.$invoke("agreement:getAllByAccount", {id: this.$store.state.wallet.account.accountId});
 
         existingAccoundIdWrapper.result.forEach(element => {
+          // console.log(element)
+
           element.agreementVersion.forEach(async element => {
             const result = await this.$invoke("grantContract:getByID", { id: element.contract });
+            // console.log(result)
             result.result.status = "Outgoing";
             result.result["version"] = element.version;
-            result.result.title = element.title;
+            // result.result.title = element.formData.title;
             result.result.id = element.contract;
             this.data.push(result.result); 
           });

@@ -32,7 +32,6 @@ export const initFormData = () => {
 		finalProvisions: "",
 		milestones: [],
 		custom: [],
-		signingWindow: "",
 		requiredToSign: false,
 		signed: false,
 		title: '',

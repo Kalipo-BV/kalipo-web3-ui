@@ -260,7 +260,7 @@
           this.transaction.assets = {contractor: contract.formData.parties.contractor, client: contract.formData.parties.client, status: "", TID: this.TID, clientAuton: "", creator: "", contractorAuton: "", agreementVersion: []};
           this.transaction.assets.contract = contract;
       
-          this.transaction.assets.contract.formData.title = "remove me GCEF r/247";
+          // this.transaction.assets.contract.formData.title = "remove me GCEF r/247";
           this.transaction.assets.contract.uuid = uuidv4();
 
           this.dialog = true;
