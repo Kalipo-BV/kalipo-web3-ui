@@ -2,22 +2,22 @@
   <v-container>
     <div class="mt-4">
       <v-row>
-        <v-col cols="12" md="4">
-          <v-text-field
-            append-icon="mdi-magnify"
-            label="Search a proposal"
-            solo
-            hide-details
-            v-model="search"
-            style="max-width: 250px"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-
-      <v-row>
+        <v-col cols="1" md="3">
+        <v-text-field
+          append-icon="mdi-magnify"
+          label="Search a proposal"
+          solo
+          hide-details
+          v-model="search"
+          style="max-width: 250px"
+        ></v-text-field>
+      </v-col>
         <v-col>
-          <v-switch v-model="showTable" label="Table"></v-switch>
-        </v-col>
+        <v-switch v-model="showTable" label="Table"></v-switch>
+      </v-col>
+
+
+
       </v-row>
     </div>
 
