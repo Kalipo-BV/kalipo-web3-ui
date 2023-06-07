@@ -1,20 +1,3 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
- * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
-
 <template>
   <v-container>
     <div class="mt-4">
@@ -31,10 +14,15 @@
         </v-col>
       </v-row>
 
-      <v-row> </v-row>
+      <v-row>
+        <v-col>
+          <v-switch v-model="showTable" label="Table"></v-switch>
+        </v-col>
+      </v-row>
     </div>
 
     <v-data-table
+      v-show="showTable"
       :headers="headers"
       :items="proposals"
       :items-per-page="5"
@@ -45,48 +33,45 @@
       :sort-desc="[true]"
     >
       <template v-slot:item.link="{ item }">
-        <v-btn color="accent" @click="$router.push(item.link)" small
-          >Open</v-btn
-        >
+        <v-btn color="accent" @click="$router.push(item.link)" small>Open</v-btn>
       </template>
       <template v-slot:item.status="{ item }">
-        <v-chip :color="getStatusColor(item.status)" dark outlined small>
-          {{ item.status }}
-        </v-chip>
+        <v-chip :color="getStatusColor(item.status)" dark outlined small>{{ item.status }}</v-chip>
       </template>
       <template v-slot:item.author="{ item }">
-        <v-btn outlined small @click="$router.push('/account/' + item.author)"
-          >@{{ item.author }}</v-btn
-        >
+        <v-btn outlined small @click="$router.push('/account/' + item.author)">@{{ item.author }}</v-btn>
       </template>
       <template v-slot:item.result="{ item }">
-        <v-chip :color="getResultColor(item.result)" dark outlined small>
-          {{ item.result }}
-        </v-chip>
+        <v-chip :color="getResultColor(item.result)" dark outlined small>{{ item.result }}</v-chip>
       </template>
-
       <template v-slot:item.submission="{ item }">
         {{
-          new Date(parseInt(item.submission) * 1000).toLocaleDateString(
-            userLang,
-            {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-            }
-          )
+          new Date(parseInt(item.submission) * 1000).toLocaleDateString(userLang, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+          })
         }}
       </template>
     </v-data-table>
+
+    <div v-if="!showTable">
+      <improvement-proposal-list :proposals="proposals"></improvement-proposal-list>
+    </div>
   </v-container>
 </template>
+
 <script>
+import ImprovementProposalList from "~/components/improvement_proposal/improvementProposalList.vue";
+
 export default {
+  components: {ImprovementProposalList},
   layout: "auton",
   data: () => ({
     dialog: true,
+    showTable: true, // Toggle state
     userLang: null,
     filterStatus: [],
     filterResult: [],
@@ -94,14 +79,8 @@ export default {
     search: "",
     headers: [
       { text: "Proposal", value: "link" },
-      {
-        text: "Title",
-        align: "start",
-        sortable: false,
-        value: "title",
-      },
+      { text: "Title", align: "start", sortable: false, value: "title" },
       { text: "Type", value: "type" },
-
       { text: "Submitter", value: "author" },
       { text: "Status", value: "status" },
       { text: "Result", value: "result" },
@@ -112,7 +91,6 @@ export default {
   async mounted() {
     this.$nuxt.$emit("Auton-setPage", "proposals");
     this.userLang = navigator.language || navigator.userLanguage;
-
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
 
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
@@ -166,12 +144,16 @@ export default {
         author: submitterAccountWrapper.result.username,
         result: proposalWrapper.result.binaryVoteResult.result,
       });
-      
+
     }
   },
   methods: {
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
     getStatusColor(status) {
       if (status == "") {
+        // Custom logic for status color
       }
       return "primary";
     },
@@ -190,15 +172,7 @@ export default {
     filter(value, search, item) {
       let result = false;
       if (value != null && search != null) {
-        result =
-          value
-            .toString()
-            .toLocaleUpperCase()
-            .indexOf(search.toLocaleUpperCase()) !== -1;
-
-        // if (this.filterResult.length > 0) {
-        //   result = this.filterResult.contains(item.result);
-        // }
+        result = value.toString().toLocaleUpperCase().indexOf(search.toLocaleUpperCase()) !== -1;
       }
       return result;
     },
