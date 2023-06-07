@@ -30,8 +30,6 @@ export const initFormData = () => {
 		terminationOfAgreement: "",
 		governingLawAndJurisdiction: "",
 		finalProvisions: "",
-		milestones: [],
-		custom: [],
 		requiredToSign: false,
 		signed: false,
 		title: '',

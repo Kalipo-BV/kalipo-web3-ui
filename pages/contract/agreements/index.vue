@@ -119,7 +119,7 @@
         existingAccoundIdWrapper.result.forEach(element1 => {
           element1.agreementVersion.forEach(async element2 => {
             const result = await this.$invoke("grantContract:getByID", { id: element2.contract });
-            result.result.TID = element1.TID;
+            result.result.tid = element1.tid;
             result.result.status = "Outgoing";
             result.result["version"] = element2.version;
             result.result.id = element2.contract;

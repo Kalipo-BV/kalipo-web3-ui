@@ -257,7 +257,7 @@
         if(this.$refs.form.validate()) {
           this.uri = "";
           let contract = this.$store.getters["contract/filtered"];
-          this.transaction.assets = {contractor: contract.formData.parties.contractor, client: contract.formData.parties.client, status: "", TID: this.TID, clientAuton: "", creator: "", contractorAuton: "", agreementVersion: []};
+          this.transaction.assets = {contractor: contract.formData.parties.contractor, client: contract.formData.parties.client, status: (this.status? a: ""), tid: (this.tid? a: ""), clientAuton: (this.clientAuton? a: ""), creator: "", contractorAuton: "", agreementVersion: []};
           this.transaction.assets.contract = contract;
           this.dialog = true;
         }
