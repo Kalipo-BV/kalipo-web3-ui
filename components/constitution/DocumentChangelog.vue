@@ -2,72 +2,142 @@
   <div>
     <v-row dense>
       <v-col cols="12" md="12">
-        <div class="text-h6">5 glossary changes</div>
+        <div class="text-h6">
+          {{ glossaryChanges.length }} glossary change<span
+            v-show="glossaryChanges.length != 1"
+            >s</span
+          >
+        </div>
         <v-list>
-          <v-list-item two-line dense class="grey lighten-4">
+          <v-list-item
+            two-line
+            dense
+            class="grey lighten-4"
+            v-for="(item, i) in glossaryChanges"
+            :key="i"
+          >
             <v-list-item-avatar size="20">
-              <v-icon class="grey" dark x-small> mdi-pencil </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'CREATE'">
+                mdi-plus
+              </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'UPDATE'">
+                mdi-pencil
+              </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'DELETE'">
+                mdi-delete
+              </v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title class="text-caption"
-                >1.1. Ecosystem customer
+                >{{ item.entryNumber }} {{ item.entry.title }}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <v-chip x-small class="mr-1">Content changed</v-chip>
-                <v-chip x-small class="mr-1">Title changed</v-chip>
+                <v-chip
+                  x-small
+                  class="mr-1"
+                  v-for="(change, y) in item.changes"
+                  :key="y"
+                  >{{ change }}</v-chip
+                >
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-col>
       <v-col cols="12" md="12">
-        <div class="text-h6">3 preamble changes</div>
+        <div class="text-h6">
+          {{ preambleChanges.length }} preamble change<span
+            v-show="preambleChanges.length != 1"
+            >s</span
+          >
+        </div>
         <v-list>
-          <v-list-item two-line dense class="grey lighten-4">
+          <v-list-item
+            two-line
+            dense
+            class="grey lighten-4"
+            v-for="(item, i) in preambleChanges"
+            :key="i"
+          >
             <v-list-item-avatar size="20">
-              <v-icon class="grey" dark x-small> mdi-delete </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'CREATE'">
+                mdi-plus
+              </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'UPDATE'">
+                mdi-pencil
+              </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'DELETE'">
+                mdi-delete
+              </v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title class="text-caption"
-                >12. Strategic positioning
+                >{{ item.entryNumber }} {{ item.entry.title }}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <v-chip x-small class="mr-1">Removed</v-chip>
+                <v-chip
+                  x-small
+                  class="mr-1"
+                  v-for="(change, y) in item.changes"
+                  :key="y"
+                  >{{ change }}</v-chip
+                >
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-col>
       <v-col cols="12" md="12">
-        <div class="text-h6">3 article changes</div>
+        <div class="text-h6">
+          {{ articleChanges.length }} article change<span
+            v-show="articleChanges.length != 1"
+            >s</span
+          >
+        </div>
         <v-list>
-          <v-list-item two-line dense class="grey lighten-4">
+          <v-list-item
+            two-line
+            dense
+            class="grey lighten-4"
+            v-for="(item, i) in articleChanges"
+            :key="i"
+          >
             <v-list-item-avatar size="20">
-              <v-icon class="grey" dark x-small> mdi-plus </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'CREATE'">
+                mdi-plus
+              </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'UPDATE'">
+                mdi-pencil
+              </v-icon>
+              <v-icon class="grey" dark x-small v-if="item.type == 'DELETE'">
+                mdi-delete
+              </v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title class="text-caption"
-                >6. Online obligations
+                >{{ item.entryNumber }} {{ item.entry.title }}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <v-chip x-small class="mr-1">Created</v-chip>
+                <v-chip
+                  x-small
+                  class="mr-1"
+                  v-for="(change, y) in item.changes"
+                  :key="y"
+                  >{{ change }}</v-chip
+                >
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-col>
     </v-row>
-    <div class="d-flex justify-center mt-2">
-      <v-btn small
-        ><v-icon small class="mr-2">mdi-arrow-down</v-icon> Show all 11
-        changes</v-btn
-      >
-    </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["glossaryChanges", "preambleChanges", "articleChanges"],
+};
 </script>
 
 <style>

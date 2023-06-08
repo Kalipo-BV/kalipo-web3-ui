@@ -203,11 +203,11 @@
                     <div>
                       <div class="d-flex align-center justify-space-between">
                         <v-chip small class="mr-1" outlined
-                          >15 in glossary</v-chip
+                          >{{ glossaryChanges.length }} in glossary</v-chip
                         ><v-chip small class="mr-1" outlined
-                          >70 in preambles</v-chip
+                          >{{ preambleChanges.length }} in preambles</v-chip
                         ><v-chip small class="mr-1" outlined
-                          >8 in articles</v-chip
+                          >{{ articleChanges.length }} in articles</v-chip
                         >
                       </div>
 
@@ -217,7 +217,13 @@
                         small
                         class="mt-4"
                         @click="showChangeLog = true"
-                        >view all 123 changes</v-btn
+                        >view all
+                        {{
+                          glossaryChanges.length +
+                          preambleChanges.length +
+                          articleChanges.length
+                        }}
+                        changes</v-btn
                       >
                     </div>
                   </v-card-text>
@@ -381,7 +387,12 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text class="black--text" style="height: 350px">
-          <DocumentChangelog class="mt-4"></DocumentChangelog>
+          <DocumentChangelog
+            :glossaryChanges="glossaryChanges"
+            :preambleChanges="preambleChanges"
+            :articleChanges="articleChanges"
+            class="mt-4"
+          ></DocumentChangelog>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -423,6 +434,9 @@ export default {
     showChangeLog: false,
     versionMap: {},
     versionIds: [],
+    glossaryChanges: [],
+    preambleChanges: [],
+    articleChanges: [],
   }),
   async mounted() {
     this.$nuxt.$emit("Auton-setPage", "constitution");
@@ -516,6 +530,67 @@ export default {
         this.versionMap[position] = versionWrapper.result;
       }
     },
+    recursiveSearchTree(tree, entryId, entryNumber) {
+      let found = null;
+      if (entryNumber == null) {
+        entryNumber = "";
+      }
+
+      for (let index = 0; index < tree.length; index++) {
+        const entry = tree[index];
+        if (entry.entryId == entryId) {
+          entryNumber += index + 1 + ".";
+          found = { entryNumber: entryNumber, entry: entry };
+          break;
+        }
+        if (entry.children) {
+          const tempNumber = entryNumber + (index + 1) + ".";
+          const subResult = this.recursiveSearchTree(
+            entry.children,
+            entryId,
+            tempNumber
+          );
+          if (subResult) {
+            found = subResult;
+          }
+        }
+      }
+      return found;
+    },
+    searchSectionByEntryId(entryId) {
+      console.log("this.currentGlossaryTree");
+      console.log(this.currentGlossaryTree);
+      const isGlossarySection = this.recursiveSearchTree(
+        this.currentGlossaryTree,
+        entryId,
+        null
+      );
+      if (isGlossarySection) {
+        isGlossarySection.section = "GLOSSARY";
+        return isGlossarySection;
+      }
+
+      const isPreambleSection = this.recursiveSearchTree(
+        this.currentPreambleTree,
+        entryId,
+        null
+      );
+      if (isPreambleSection) {
+        isPreambleSection.section = "PREAMBLES";
+        return isPreambleSection;
+      }
+
+      const isArticleSection = this.recursiveSearchTree(
+        this.currentArticleTree,
+        entryId,
+        null
+      );
+      if (isArticleSection) {
+        isArticleSection.section = "ARTICLES";
+        return isArticleSection;
+      }
+      return false;
+    },
     selectVersion(position) {
       const version = this.versionMap[position];
       if (version) {
@@ -527,6 +602,32 @@ export default {
             this.currentPreambleTree = treeWrapper.tree;
           } else if (treeWrapper.section == "ARTICLES") {
             this.currentArticleTree = treeWrapper.tree;
+          }
+        }
+
+        this.glossaryChanges = [];
+        this.preambleChanges = [];
+        this.articleChanges = [];
+
+        for (let index = 0; index < version.mutations.length; index++) {
+          const mutation = version.mutations[index];
+          console.log("mutation");
+          console.log(mutation);
+          const mutationEnriched = this.searchSectionByEntryId(
+            mutation.newEntryId
+          );
+          if (mutationEnriched) {
+            mutationEnriched.changes = mutation.changes;
+            mutationEnriched.type = mutation.type;
+            if (mutationEnriched.section == "GLOSSARY") {
+              this.glossaryChanges.push(mutationEnriched);
+            } else if (mutationEnriched.section == "PREAMBLES") {
+              this.preambleChanges.push(mutationEnriched);
+            } else if (mutationEnriched.section == "ARTICLES") {
+              this.articleChanges.push(mutationEnriched);
+            }
+            console.log("mutationEnriched");
+            console.log(mutationEnriched);
           }
         }
       }

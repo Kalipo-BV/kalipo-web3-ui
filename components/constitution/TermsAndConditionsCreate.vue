@@ -228,6 +228,8 @@ export default {
     },
     nextStep() {
       this.step++;
+      console.log("this.proposedGlossaryTree");
+      console.log(this.proposedGlossaryTree);
 
       if (this.step == 3) {
         this.transaction = {

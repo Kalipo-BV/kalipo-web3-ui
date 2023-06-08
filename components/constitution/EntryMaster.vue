@@ -214,6 +214,8 @@ export default {
     this.items = recursiveItems;
     this.showing = { children: recursiveItems };
     this.showingObj = null;
+
+    this.updateProposedTree();
   },
   methods: {
     async syncEntry(entry) {
@@ -238,7 +240,8 @@ export default {
       const result = [];
       for (let index = 0; index < treeList.length; index++) {
         const tree = treeList[index];
-        const children = this.recursieFill(tree.children, tree.parentId);
+
+        const children = this.recursieFill(tree.children, tree.entryId);
         result.push({
           entryId: tree.entryId,
           title: "",
@@ -299,6 +302,14 @@ export default {
       const search = this.get(id);
       this.showing = search;
       this.showingObj = search;
+
+      if (this.showing.children) {
+        for (let index = 0; index < this.showing.children.length; index++) {
+          const entry = this.showing.children[index];
+          this.syncEntry(entry);
+        }
+      }
+
       if (this.showingObj) {
         console.log("showingObj");
         console.log(this.showingObj);
@@ -310,7 +321,7 @@ export default {
     },
     open(id) {
       this.selectedId = id;
-      this.selected = this.get(id).item;
+      this.selected = this.get(id);
     },
     update() {
       let foundMutation = null;

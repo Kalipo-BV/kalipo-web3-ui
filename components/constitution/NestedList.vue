@@ -43,8 +43,6 @@ export default {
           await this.recursiveSync(entry);
         }
         this.synced = true;
-        console.log("this.items");
-        console.log(val);
       },
     },
   },
