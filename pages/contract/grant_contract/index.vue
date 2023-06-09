@@ -16,27 +16,33 @@
 -->
 
 <template>
-  <v-row align="center" justify="center" style="height: 100%">
-    <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Agreement parties">
-      <PartyMemberProvision is-contractor party-name="contractor"/>
-      <PartyMemberProvision party-name="client"/>
-    </StageBuilder>
+  <div>
+    <div v-if="bid !== -1">
+      <ContractView />
+    </div>
+    <v-row v-else align="center" justify="center" style="height: 100%">
+      <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Agreement parties">
+        <PartyMemberProvision is-contractor party-name="contractor"/>
+        <PartyMemberProvision party-name="client"/>
+      </StageBuilder>
 
-    <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preamples">
-      <PreampleProvision/>
-    </StageBuilder>
+      <StageBuilder v-if="editFase === 2" @previous="previous" @next="next"  title="Preamples">
+        <PreampleProvision/>
+      </StageBuilder>
 
-    <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose">
-      <PurposeProvision/>
-    </StageBuilder>
+      <StageBuilder v-if="editFase === 1" @previous="previous" @next="next"  title="Purpose">
+        <PurposeProvision/>
+      </StageBuilder>
 
-    <GrantContractEditForm v-if="editFase === 0" @previous="previous"/>
-  </v-row>
+      <GrantContractEditForm v-if="editFase === 0" @previous="previous"/>
+    </v-row>
+  </div>
 </template>
 <script>
   export default {
     data: () => ({
       editFase: 3,
+      bid: -1,
     }),
 
     methods: {
