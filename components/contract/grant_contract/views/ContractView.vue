@@ -188,6 +188,8 @@
     methods: {
       localCopy() {
         this.$store.commit("contract/createNewLocalCopy", this.contractData);
+        const id = 79;
+        this.$router.push(`grant_contract?id=${id}`)
       }
     }
   }
