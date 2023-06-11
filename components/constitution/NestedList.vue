@@ -6,7 +6,7 @@
       </div>
     </v-card-text>
 
-    <div class="py-0" style="max-height: 350px; overflow: scroll">
+    <div class="py-0">
       <v-expansion-panels accordion v-model="panel" multiple flat>
         <NestedListElement
           v-for="(item, i) in items"

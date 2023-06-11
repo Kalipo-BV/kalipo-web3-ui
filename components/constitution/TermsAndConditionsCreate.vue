@@ -85,7 +85,7 @@
       title="Proposing Terms & Conditions"
     ></AccountSign>
     <v-divider></v-divider>
-    <v-card-text v-if="!hideNavigation">
+    <v-card-text v-if="!hideNavigation && step != 3">
       <div class="d-flex align-center justify-space-between">
         <v-btn @click="prevStep">
           <v-icon class="mr-2" small>mdi-arrow-left</v-icon> previous

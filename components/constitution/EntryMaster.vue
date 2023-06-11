@@ -77,9 +77,11 @@
                   "
                 >
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
-                  <v-list-item-title class="error--text">{{
-                    item.error
-                  }}</v-list-item-title>
+                  <v-list-item-title
+                    class="error--text"
+                    v-show="item.icon != 'mdi-plus-circle'"
+                    >{{ item.error }}</v-list-item-title
+                  >
                 </v-list-item-content>
                 <v-list-item-icon>
                   <v-icon v-text="item.icon"></v-icon>
