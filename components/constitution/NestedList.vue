@@ -1,18 +1,22 @@
 <template>
-  <div>
-    <div class="d-flex align-center justify-space-between mb-1">
-      <div class="text-h3">{{ title }}</div>
-    </div>
-    <div class="py-1 px-1 mx-n1" style="max-height: 350px; overflow: scroll">
+  <div class="" v-if="items && items.length > 0 && synced">
+    <v-card-text class="py-3">
+      <div class="d-flex align-center align-center">
+        <div class="text-h3 primary--text">{{ title }}</div>
+      </div>
+    </v-card-text>
+
+    <div class="py-0">
       <v-expansion-panels accordion v-model="panel" multiple flat>
         <NestedListElement
           v-for="(item, i) in items"
           :key="i"
           :item="item"
-          class="nested-list-childs"
+          class="nested-list-childs grey lighten-4"
           :prefix="i + 1 + '.'"
           :isOpen="panel.includes(i)"
-          :changeOrderMode="changeOrderMode"
+          :isFirstItem="i == 1"
+          :isLastItem="i == items.length - 1"
         >
         </NestedListElement>
       </v-expansion-panels>
@@ -25,24 +29,55 @@ export default {
   props: ["title", "items"],
   data() {
     return {
-      changeOrderMode: false,
       panel: [],
+      synced: false,
     };
   },
   watch: {
-    changeOrderMode(newest, previous) {
-      if (newest) {
-        const panels = [];
-        for (let index = 0; index < this.items.length; index++) {
-          panels.push(index);
+    items: {
+      async handler(val, oldVal) {
+        // do your stuff
+        this.synced = false;
+        for (let index = 0; index < val.length; index++) {
+          const entry = val[index];
+          await this.recursiveSync(entry);
         }
-        this.panel = panels;
-      } else {
-        this.panel = [];
-      }
+        this.synced = true;
+      },
     },
   },
-  computed: {},
+  async mounted() {},
+  methods: {
+    async recursiveSync(entry) {
+      if (entry) {
+        await this.syncEntry(entry);
+        if (entry.children && entry.children.length > 0) {
+          for (let index = 0; index < entry.children.length; index++) {
+            const child = entry.children[index];
+            await this.recursiveSync(child);
+          }
+        }
+      }
+    },
+    async syncEntry(entry) {
+      const entryWrapper = await this.$invoke(
+        "document:getGovernmentalEntryByID",
+        {
+          id: entry.entryId,
+        }
+      );
+
+      if (entryWrapper.result && !entryWrapper.error) {
+        entry.title = entryWrapper.result.title;
+        entry.content = entryWrapper.result.content;
+      } else {
+        if (entryWrapper.result == null) {
+          entry.error = "Entry was not found";
+        }
+      }
+      entry.synced = true;
+    },
+  },
 };
 </script>
 

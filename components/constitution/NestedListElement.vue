@@ -34,7 +34,8 @@
           {{ item.content }}
         </div>
       </div>
-      <v-divider></v-divider>
+
+      <v-divider v-if="!isFirstItem" class="mx-6"></v-divider>
 
       <div v-if="hasChildren">
         <v-expansion-panels accordion v-model="panel" multiple flat>
@@ -42,15 +43,17 @@
             v-for="(childItem, i) in item.children"
             :key="i"
             :item="childItem"
-            :spacing="spacing + 6"
+            class="nested-list-childs grey lighten-4"
             :prefix="prefix + (i + 1) + '.'"
             :isOpen="panel.includes(i)"
             :changeOrderMode="changeOrderMode"
+            :isFirstItem="i == 0"
+            :isLastItem="i == item.children.length - 1"
           ></NestedListElement>
         </v-expansion-panels>
       </div>
     </v-expansion-panel-content>
-    <v-divider v-if="!changeOrderMode"></v-divider>
+    <v-divider v-if="!isLastItem"></v-divider>
   </v-expansion-panel>
 </template>
 
@@ -74,6 +77,14 @@ export default {
       default: "",
     },
     changeOrderMode: {
+      type: Boolean,
+      default: false,
+    },
+    isFirstItem: {
+      type: Boolean,
+      default: false,
+    },
+    isLastItem: {
       type: Boolean,
       default: false,
     },
