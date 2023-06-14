@@ -30,6 +30,7 @@
           color="accent"
           :complete="proposal.status != 'CAMPAIGNING'"
           @click="$router.push(mainPath + 'campaigning')"
+          class="hover-effect"
         >
           <div class="d-flex justify-center">Dialogue</div>
           <div class="d-flex justify-center mt-2">
@@ -57,6 +58,7 @@
           :complete="
             proposal.status != 'CAMPAIGNING' && proposal.status != 'VOTING'
           "
+          class="hover-effect"
         >
           <div class="d-flex justify-center">Voting</div>
           <div class="d-flex justify-center mt-2">
@@ -82,6 +84,7 @@
           @click="$router.push(mainPath + 'results')"
           color="accent"
           :complete="proposal.status == 'ENDED'"
+          class="hover-effect"
         >
           <div class="d-flex justify-center">Closed</div>
           <div class="d-flex justify-center mt-2">
@@ -148,4 +151,19 @@ export default {
 </script>
 
 <style>
+  .hover-effect:hover {
+    cursor: pointer;
+  }
+
+  .hover-effect:hover > div > div {
+    color: #0a75f3 !important;
+  }
+
+  .hover-effect:hover > div > div > small {
+    color: #0a75f3 !important;
+  }
+
+  .hover-effect:hover > span {
+    background-color: #212a42 !important;
+  }
 </style>
