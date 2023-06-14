@@ -69,10 +69,52 @@ export const mutations = {
 		}
 		
 		const contract = getFromLocalStorage(id);	
+		console.log(contract)
 		if (isNotNull(contract, "contract is null")) {
 			state.body = contract;
 			state.id = id;
 		}		
+	},
+
+	createNewLocalCopy(state, payload) {
+		const id = saveNewToLocalStorage(initContract());
+		console.log(id);
+
+		if (!isId(id, "id")) {
+			return;
+		}
+
+		const contract = getFromLocalStorage(id);
+		if(isNotNull(contract, "contract is null")) {
+			console.log(payload)
+			contract.formData.dates.endDate = payload.dates.endDate
+			contract.formData.dates.signingDate = payload.dates.signingDate
+			contract.formData.dates.startDate = payload.dates.startDate
+			contract.formData.finalProvisions = payload.finalProvisions
+			contract.formData.governingLawAndJurisdiction = payload.governingLawAndJurisdiction
+			contract.formData.payment.amount = payload.payment.amount
+			contract.formData.payment.note = payload.payment.note
+			contract.formData.preample = payload.preample
+			contract.formData.productDescription = payload.productDescription
+			contract.formData.propertyRights = payload.propertyRights
+			contract.formData.purpose = payload.purpose;
+			contract.formData.requiredToSign = payload.requiredToSign
+			contract.formData.signed = payload.signed
+			contract.formData.terminationOfAgreement = payload.terminationOfAgreement
+			contract.formData.title = payload.title
+
+			payload.parties.contractor.forEach(c => {
+				contract.formData.parties.contractor.push(c);
+			})
+
+			payload.parties.client.forEach(c => {
+				contract.formData.parties.client.push(c);
+			})
+
+			console.log(contract);
+		}
+
+		saveToLocalStorage(contract, id);
 	},
 
 	removeFromParties(state, payload) {
