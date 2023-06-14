@@ -85,7 +85,7 @@
   export default {
     head() {
       return {
-        title: "Kalipo - Agreement overview",
+        title: "Kalipo - Agreements",
       }
     },
 

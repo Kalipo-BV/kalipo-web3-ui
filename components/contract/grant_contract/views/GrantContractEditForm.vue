@@ -191,7 +191,7 @@
   export default {
     head() {
       return {
-        title: "Kalipo - Agreement edit-mode",
+        title: "Kalipo - edit-agreement - grant-contract",
       }
     },
     computed: {
