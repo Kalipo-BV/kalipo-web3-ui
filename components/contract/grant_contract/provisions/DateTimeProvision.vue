@@ -133,7 +133,7 @@
 </script>
 
 <style>
-  @media screen and (min-width: 1280px) {
+  @media screen and (min-width: 1370px) {
     .fieldContainer:not(:first-child) {
       padding-left: 12px;
     }
