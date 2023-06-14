@@ -87,27 +87,27 @@ export const mutations = {
 		const contract = getFromLocalStorage(id);
 		if(isNotNull(contract, "contract is null")) {
 			console.log(payload)
-			contract.formData.dates.endDate = payload[0].dates.endDate
-			contract.formData.dates.signingDate = payload[0].dates.signingDate
-			contract.formData.dates.startDate = payload[0].dates.startDate
-			contract.formData.finalProvisions = payload[0].finalProvisions
-			contract.formData.governingLawAndJurisdiction = payload[0].governingLawAndJurisdiction
-			contract.formData.payment.amount = payload[0].payment.amount
-			contract.formData.payment.note = payload[0].payment.note
-			contract.formData.preample = payload[0].preample
-			contract.formData.productDescription = payload[0].productDescription
-			contract.formData.propertyRights = payload[0].propertyRights
-			contract.formData.purpose = payload[0].purpose;
-			contract.formData.requiredToSign = payload[0].requiredToSign
-			contract.formData.signed = payload[0].signed
-			contract.formData.terminationOfAgreement = payload[0].terminationOfAgreement
-			contract.formData.title = payload[0].title
+			contract.formData.dates.endDate = payload.dates.endDate
+			contract.formData.dates.signingDate = payload.dates.signingDate
+			contract.formData.dates.startDate = payload.dates.startDate
+			contract.formData.finalProvisions = payload.finalProvisions
+			contract.formData.governingLawAndJurisdiction = payload.governingLawAndJurisdiction
+			contract.formData.payment.amount = payload.payment.amount
+			contract.formData.payment.note = payload.payment.note
+			contract.formData.preample = payload.preample
+			contract.formData.productDescription = payload.productDescription
+			contract.formData.propertyRights = payload.propertyRights
+			contract.formData.purpose = payload.purpose;
+			contract.formData.requiredToSign = payload.requiredToSign
+			contract.formData.signed = payload.signed
+			contract.formData.terminationOfAgreement = payload.terminationOfAgreement
+			contract.formData.title = payload.title
 
-			payload[0].parties.contractor.forEach(c => {
+			payload.parties.contractor.forEach(c => {
 				contract.formData.parties.contractor.push(c);
 			})
 
-			payload[0].parties.client.forEach(c => {
+			payload.parties.client.forEach(c => {
 				contract.formData.parties.client.push(c);
 			})
 
