@@ -78,15 +78,6 @@
       <v-card class="mb-4">
         <SigningDateProvision />
       </v-card>
-
-        <!-- <RequiredToSignProvision/> -->
-      
-        <!-- <v-checkbox
-          v-model="formData.signed"
-          :rules="[v => !!v || 'You must sign the contract to continue!']"
-          label="I hereby agree to the aforementioned contract?"
-          required
-        /> -->
       <v-row>
         <v-alert
           v-if="saved"
@@ -154,10 +145,6 @@
       ></AccountSign>
     </v-dialog>
 
-
-
-
-
     <!-- dev dialog (delete this) -->
     <v-dialog
       width="60%"
@@ -195,9 +182,6 @@
       </div>
     </v-dialog>
 
-
-
-
   </v-container>
 </template>
 <script>
@@ -206,17 +190,17 @@
   import TitleProvision from '../provisions/TitleProvision.vue';
   export default {
     computed: {
-        formData: {
-            get: function () {
-                return this.data;
-            },
-            set: function (newValue) {
-                this.$emit("update:data", newValue);
-            },
-        },
-        set: function (newValue) {
-            this.$emit("update:data", newValue);
-        },
+      formData: {
+          get: function () {
+              return this.data;
+          },
+          set: function (newValue) {
+              this.$emit("update:data", newValue);
+          },
+      },
+      set: function (newValue) {
+          this.$emit("update:data", newValue);
+      },
     },
     data: () => ({
       saved: false,
@@ -231,9 +215,9 @@
       uri: "",
     }),
     created() {
-        this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
-            this.handleCreation();
-        });
+      this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
+          this.handleCreation();
+      });
     },
     methods: {
         previous: function () {
