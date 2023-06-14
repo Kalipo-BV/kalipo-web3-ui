@@ -18,14 +18,14 @@
           <v-text-field
             readonly
             outlined
-            :value="this.contractData[0].contractor"
+            :value="this.contractData.contractor"
             class="ml-5 mr-5"
           ></v-text-field>
           <div class="text-h3 ml-5">Client</div>
           <v-text-field
               readonly
               outlined
-              :value="this.contractData[0].client"
+              :value="this.contractData.client"
               class="ml-5 mr-5"
           ></v-text-field>
       </v-card>
@@ -35,7 +35,7 @@
           <v-text-field
               readonly
               outlined
-              :value="this.contractData[0].preample"
+              :value="this.contractData.preample"
               class="ml-5 mr-5"
           />
         </v-card>
@@ -47,7 +47,7 @@
         <v-text-field
             readonly
             outlined
-            :value="this.contractData[0].title"
+            :value="this.contractData.title"
             class="ml-5 mr-5"
         />
 
@@ -55,7 +55,7 @@
         <v-text-field
             readonly
             outlined
-            :value="this.contractData[0].purpose"
+            :value="this.contractData.purpose"
             class="ml-5 mr-5"
         />
 
@@ -63,7 +63,7 @@
         <v-text-field
             readonly
             outlined
-            :value="this.contractData[0].productDescription"
+            :value="this.contractData.productDescription"
             class="ml-5 mr-5"
         />
 
@@ -74,7 +74,7 @@
               readonly
               outlined
               label="Amount"
-              :value="this.contractData[0].payment.amount"
+              :value="this.contractData.payment.amount"
               class="ml-5 mr-5"
             ></v-text-field>
           </v-col>
@@ -83,7 +83,7 @@
               readonly
               outlined
               label="Note"
-              :value="this.contractData[0].payment.note"
+              :value="this.contractData.payment.note"
               class="ml-5 mr-5"
             ></v-text-field>
           </v-col>
@@ -96,7 +96,7 @@
               readonly
               outlined
               label="Start date"
-              :value="this.contractData[0].dates.startDate"
+              :value="this.contractData.dates.startDate"
               class="ml-5 mr-5"
             ></v-text-field>
           </v-col>
@@ -105,7 +105,7 @@
               readonly
               outlined
               label="End date"
-              :value="this.contractData[0].dates.endDate"
+              :value="this.contractData.dates.endDate"
               class="ml-5 mr-5"
             ></v-text-field>
           </v-col>
@@ -116,7 +116,7 @@
           <v-text-field
               readonly
               outlined
-              :value="this.contractData[0].propertyRights"
+              :value="this.contractData.propertyRights"
               class="ml-5 mr-5"
             ></v-text-field>
 
@@ -124,7 +124,7 @@
           <v-text-field
               readonly
               outlined
-              :value="this.contractData[0].terminationOfAgreement"
+              :value="this.contractData.terminationOfAgreement"
               class="ml-5 mr-5"
             ></v-text-field>
 
@@ -132,13 +132,13 @@
         <v-text-field
             readonly
             outlined
-            :value="this.contractData[0].governingLawAndJurisdiction"
+            :value="this.contractData.governingLawAndJurisdiction"
             class="ml-5 mr-5"
           ></v-text-field>
 
         <div class="text-h3 mb-2 mt-2 ml-5">Final provisions</div>
         <v-text-field
-            :value="this.contractData[0].preample"
+            :value="this.contractData.preample"
             class="ml-5 mr-5"
             readonly
             outlined
@@ -148,7 +148,7 @@
         <v-text-field
               readonly
               outlined
-              :value="this.contractData[0].dates.signingDate"
+              :value="this.contractData.dates.signingDate"
               class="ml-5 mr-5"
             ></v-text-field>
       </v-card>
@@ -158,33 +158,12 @@
 
 <script>
   export default {
-    data: () => ({
-      contractData: [{
-        parties: {
-          contractor: ["6ce6c9a40d42f02d4753d1f7b3f4158972536f58b8e94b66fda0234bf62bacec"],
-          client: ["d6bd5d587d5935d125b6a8075513460f6dfbf08042062b8cffb39cc19193d03f"]
-        },
-        preample: "preample",
-        purpose: "purpose",
-        payment: {
-          amount: 0,
-          note: ""
-        },
-        dates: {
-          startDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-          endDate: new Date(new Date().setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() + 1)).toISOString().substr(0, 10),
-          signingDate: new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-        },
-        propertyRights: "property",
-        terminationOfAgreement: "termination",
-        governingLawAndJurisdiction: "goverining",
-        finalProvisions: "final provision",
-        requiredToSign: false,
-        signed: false,
-        title: 'Title',
-        productDescription: 'product description',
-      }],
-    }),
+    props: {
+      contractData: { type: Object }
+    },
+    mounted: function () {
+      console.log(this.contractData);
+    },
     methods: {
       localCopy() {
         this.$store.commit("contract/createNewLocalCopy", this.contractData);

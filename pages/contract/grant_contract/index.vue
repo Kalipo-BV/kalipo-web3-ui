@@ -18,7 +18,7 @@
 <template>
   <div>
     <div v-if="bid !== -1">
-      <ContractView />
+      <ContractView :contractData="this.contractData"/>
     </div>
     <v-row v-else align="center" justify="center" style="height: 100%">
       <StageBuilder v-if="editFase === 3" isFirst @previous="previous" @next="next" title="Agreement parties">
@@ -42,7 +42,32 @@
   export default {
     data: () => ({
       editFase: 3,
-      bid: -1,
+      contractData: {
+        parties: {
+          contractor: [],
+          client: []
+        },
+        preample: '',
+        purpose: '',
+        payment: {
+          amount: 0,
+          note: ''
+        },
+        dates: {
+          startDate: '',
+          endDate: '',
+          signingDate: '',
+        },
+        propertyRights: '',
+        terminationOfAgreement: '',
+        governingLawAndJurisdiction: '',
+        finalProvisions: '',
+        requiredToSign: false,
+        signed: false,
+        title: '',
+        productDescription: 'hallo',
+      },
+      bid: -1
     }),
 
     methods: {
@@ -67,10 +92,15 @@
         bool: bidIn == undefined,
         bid: bid
       });
+
+      this.bid = bid;
       
       if (bid !== -1) {
         this.$invoke("grantContract:getByID", { id: bid }).then((account) => {
-          console.log(account); /*TODO load this into view */
+          // console.log(account); /*TODO load this into view */
+          this.contractData = account.result.formData;
+          console.log(account);
+          console.log(this.contractData.preample);
         });
       } else if (id === -1) {
         this.$store.commit("contract/createNew", {});
