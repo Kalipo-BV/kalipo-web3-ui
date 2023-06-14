@@ -25,12 +25,13 @@ export const getFromLocalStorage = (id = 0) => {
 	const contracten = getNormalizedLocalStorageData();
 	const contract = contracten[id];
 
-	if (!isNotNull(contract, "contract is null")) {
+	if (!isNotNull(contract)) {
+		console.error(`[contract Store] getFromLocalstorage cant load the contract with id:${id} = null \n Maybe it doesnt exist in the local storage`)
 		return null;
 	}
 
 	if (!isValidContract(contract)) {
-		console.warn("getFromLocalstorage uses a fallback to fill the holes in its required dataStructure");
+		console.warn("[contract store] getFromLocalstorage uses a fallback to fill the holes in its required dataStructure");
 		return normalizeContract(contract);;
 	}
 
@@ -64,7 +65,7 @@ function extractDataByObject(requiredObject, givenObject) {
 
 		if (currentGivenProp === undefined || currentGivenProp === null) {
 			result[key] = currentRequiredProp;
-			console.warn(`uses a fallback for the following key -> ${key}\n key is not defined or null`);
+			console.warn(`[contract store] uses a fallback for the following key -> ${key}\n key is not defined or null`);
 			continue;
 		}
 
@@ -78,7 +79,7 @@ function extractDataByObject(requiredObject, givenObject) {
 
 			} else {
 				result[key] = currentRequiredProp
-				console.warn(`uses a fallback for the following key -> ${key}\n key is not an object`);
+				console.warn(`[contract store] uses a fallback for the following key -> ${key}\n key is not an object`);
 			}
 			continue;
 		}
@@ -90,7 +91,7 @@ function extractDataByObject(requiredObject, givenObject) {
 				result[key] = currentGivenProp;
 			} else {
 				result[key] = currentRequiredProp
-				console.warn(`uses a fallback for the following key -> ${key}\n key is not an array`);
+				console.warn(`[contract store] uses a fallback for the following key -> ${key}\n key is not an array`);
 			}
 			continue;
 		}
@@ -120,14 +121,15 @@ function addContractToLocalStorageData(contract) {
 }
 
 function putContractToLocalStorageData(contract, id) {
-	if (isNotNull(contract, "contract is null")) {
+	if (isNotNull(contract)) {
 		const data = getNormalizedLocalStorageData();
 		data[id] = contract;
 
 		return data;
+	} else {
+		console.error(`[contract store] in putContractToLocalStorageData the contract is null`)
+		return false;
 	}
-
-	return false;
 }
 
 function saveInLocalStorage(data) {
