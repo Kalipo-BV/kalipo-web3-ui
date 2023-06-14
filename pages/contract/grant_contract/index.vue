@@ -16,9 +16,6 @@
 -->
 
 <template>
-  <v-row align="center" justify="center" style="height: 100%">
-    <GrantContractEditForm v-if="editFase === 0" @previous="previous"/>
-  </v-row>
   <div>
     <div v-if="bid !== -1">
       <ContractView :contractData="this.contractData"/>
