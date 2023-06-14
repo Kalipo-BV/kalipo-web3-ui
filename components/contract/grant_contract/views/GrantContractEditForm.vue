@@ -189,6 +189,11 @@
   import SigningDateProvision from '../provisions/SigningDateProvision.vue';
   import TitleProvision from '../provisions/TitleProvision.vue';
   export default {
+    head() {
+      return {
+        title: "Kalipo - Agreement edit-mode",
+      }
+    },
     computed: {
       formData: {
           get: function () {

@@ -83,6 +83,12 @@
 <script>
   import { v4 as uuidv4 } from 'uuid';
   export default {
+    head() {
+      return {
+        title: "Kalipo - Agreement overview",
+      }
+    },
+
     data: () => ({
       headers: [
         { text: "Agreements", align: 'center', value: "agreement" },
