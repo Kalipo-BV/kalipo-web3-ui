@@ -18,7 +18,7 @@
 <template>
   <v-row align="center" justify="center" style="height: 100%">
     <GrantContractEditForm v-if="id  !=- 1" @previous="previous"/>
-    <GrantContractEditForm v-if="bid != -1" @previous="previous"/>
+    <GrantContractEditForm v-if="account != null != -1" @previous="previous"/>
   </v-row>
 </template>
 <script>
@@ -26,6 +26,7 @@
     data: () => ({
       bid: -1,
       id: -1,
+      account: null,
     }),
 
     methods: {
@@ -48,20 +49,28 @@
       console.log({
         bidIn: bidIn ,
         bool: bidIn == undefined,
-        bid: this.bid
+        bid: this.bid,
+        id: this.id
       });
       
       if (this.bid !== -1) {
         this.$invoke("grantContract:getByID", { id: this.bid }).then((account) => {
+          this.account = account;
           console.log(account); /*TODO load this into view */
+          
+        }).catch( (err) => {
+          console.error(err);
+          this.$router.push("/contract/agreements");
         });
       } else if (this.id === -1) {
-        this.$store.commit("contract/createNew", {});
-        const newId = this.$store.state.contract.id;
-        
-        this.$router.push({ path: this.$route.path, query: { id: newId } });
+        this.$router.push("/contract/agreements");
+
       } else {
         this.$store.commit("contract/loadContract", {id: this.id});
+
+        if (this.$store.state.contract.loadError) {
+          this.$router.push("/contract/agreements");
+        }
       }
     }
   };
