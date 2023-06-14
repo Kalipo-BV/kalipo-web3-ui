@@ -1,24 +1,31 @@
 <template>
 <!--  <v-hover id="hover">-->
-  <div @click="toProposal(proposal.link)">
+  <div>
 
     <!--  min-width: 30%; min-height: 20vh; border-radius: 7px; padding: 10px 3% 10px 20px;-->
 
-    <div :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', borderRadius: '7px', minHeight: '160px', backgroundColor: 'white'}" >
+    <div :style="{display: 'flex', margin: '0 10px 0 10px', minWidth: '30%', maxWidth: '30%', borderRadius: '7px', minHeight: '140px', backgroundColor: 'white'}" >
       <div tabindex="0" class="v-card v-card--flat v-card--link v-sheet theme--light white pl-3"
-           :style="{ minWidth: '300px', padding: '15px', paddingTop: '0px', display: 'flex' }">
-        <div style="width: 90%!important;">
-          <p style="font-size: 22px!important;" class="text-h1 mb-1 accent--text">{{ proposal.title }}</p>
-
-          <div>
-
-            <p class="mb-0">
+           :style="{ minWidth: '300px', paddingRight: '15px',paddingLeft: '15px', paddingTop: '4px', display: 'flex' }">
+        <div :style="{width: '100%'}">
+          <div :style="{display: 'flex'}">
+            <div :style="{width: '10%', marginRight: '5px'}">
+              <v-avatar
+                size="20"
+                >
+                <v-icon style="color: #212a42; font-size: 20px;" dark x-small> {{getStateIcon(this.proposal.result)}}</v-icon>
+              </v-avatar>
+            </div>
+          <div class="mb-1" :style="{width: '88%'}">
+            <p class="text-h3 mb-0" :style="{width: 'auto'}">{{ proposal.title }}</p>
+            <p class="mb-0 text-h6 accent--text">
               {{ proposal.type }}
             </p>
-<!--            Haal dit er uit als peter t oké vindt-->
-
-
-            <p>{{
+          </div>
+        </div>
+        <div>
+          <div>
+            <p class="mb-0">{{
                 new Date(parseInt(proposal.submission) * 1000).toLocaleDateString(
                   userLang,
                   {
@@ -30,19 +37,14 @@
                   }
                 )
               }}</p>
-            <v-chip dark outlined small :style="{marginBottom: '10px'}"  :color=getResultColor(proposal.result)>
-            {{ proposal.result }}
-          </v-chip>
-<!--            <p>TEST</p>-->
-            <v-btn outlined small :style="{width: '113%'}" @click="$router.push('/account/' + proposal.author)"
+            <div outlined small :style="{width: '113%'}" @click="$router.push('/account/' + proposal.author)"
             >@{{ proposal.author }}
-            </v-btn>
+            </div>
           </div>
-        </div>
-        <div class="d-flex align-center" :style="{width: '10%', marginLeft: '2%'}">
-          <p class="font-weight-regular" :style="{color: '#0F6AF1', marginBottom:'0px', fontSize: '45px'}">
-            >
-          </p>
+            <div :style="{display: 'flex', justifyContent: 'end', marginTop: '-20px'}">
+              <v-btn @click="toProposal(proposal.link)" class="mr-1 mb-2 v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default accent">open</v-btn>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -77,6 +79,16 @@ export default {
     toProposal(uri) {
       console.log(uri);
       this.$router.push(uri);
+    },
+    getStateIcon(state){
+      switch (state){
+        case "UNDECIDED":
+          return 'mdi-clock-time-two-outline';
+        case 'ACCEPTED':
+          return 'mdi-check-bold';
+        default:
+          return 'mdi-sword-cross';
+      }
     }
   },
 }
