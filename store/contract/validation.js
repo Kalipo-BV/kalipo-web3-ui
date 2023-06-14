@@ -38,10 +38,7 @@ const arrayHasValues = (arrayToCheck, neededValues) => {
 
 export const isNotNull = (payload, errorName) => {
 	const result = (payload !== undefined && payload !== null);
-	
-	if (errorName === undefined) {
-		logError(result, errorName, payload);
-	}
+	logError(result, errorName, payload);
 
 	return result;
 }
@@ -111,8 +108,11 @@ export const isDate = (payload, errorName) => {
 	return result;
 }
 
+/**
+ * logs errors if an errorName is provided
+ */
 export const logError = (bool, errorName, payload) => {
-	if (!bool) {
+	if (errorName !== undefined && !bool) {
 		console.error(`${errorName}\n\n`, `payload = ${payload}\n\n`, `typeof payload = ${typeof payload}`);
 	}
 }

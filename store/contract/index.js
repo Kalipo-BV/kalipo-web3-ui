@@ -22,7 +22,8 @@ import { initFormData, initContract } from "./initData.js";
 function initState () {
 	return {
 		body: initContract(),
-		id: -1
+		id: -1,
+		loadError: false,
 	}
 }
 
@@ -64,15 +65,23 @@ export const mutations = {
 	loadContract(state, payload) {
 		const id = payload.id;
 
-		if (!isId(id, "id")) {
+		if (!isId(id)) {
+			state.loadError = true;
+			console.error(`[contract Store] invalid id given while loading the contract the id=${id}`);
 			return;
 		}
 		
 		const contract = getFromLocalStorage(id);	
-		if (isNotNull(contract, "contract is null")) {
+		if (isNotNull(contract)) {
 			state.body = contract;
 			state.id = id;
-		}		
+			state.loadError = false;
+			return;
+		
+		} else {
+			state.loadError = true;
+			console.error(`[contract Store] contract cant be loaded contract with id:${id} = null \n Maybe it doesnt exist in the local storage`);
+		}
 	},
 
 	removeFromParties(state, payload) {
@@ -184,8 +193,7 @@ export const getters = {
 
 	getAllContracts: () => {
 		return getAllFromLocalStorage();
-	}
-	
+	},
 }
 
 function retreiveData(state) {
