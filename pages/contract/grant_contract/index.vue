@@ -86,8 +86,6 @@
         this.$invoke("grantContract:getByID", { id: bid }).then((account) => {
           // console.log(account); /*TODO load this into view */
           this.contractData = account.result.formData;
-          console.log(account);
-          console.log(this.contractData.preample);
         });
       } else if (id === -1) {
         this.$store.commit("contract/createNew", {});

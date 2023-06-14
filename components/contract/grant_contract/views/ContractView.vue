@@ -161,9 +161,6 @@
     props: {
       contractData: { type: Object }
     },
-    mounted: function () {
-      console.log(this.contractData);
-    },
     methods: {
       localCopy() {
         this.$store.commit("contract/createNewLocalCopy", this.contractData);
