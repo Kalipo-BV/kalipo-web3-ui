@@ -18,7 +18,11 @@
 <template>
   <div>
     <div v-if="bid !== -1">
-      <ContractView :contractData="this.contractData"/>
+      <ContractView 
+        :contractData="contractData" 
+        :tid="tid" 
+        :version=version
+      />
     </div>
     <v-row v-else align="center" justify="center" style="height: 100%">
       <GrantContractEditForm v-if="editFase === 0" @previous="previous"/>
@@ -29,7 +33,8 @@
   export default {
     data: () => ({
       editFase: 0,
-      contractData: {
+      contractData: 
+      {
         parties: {
           contractor: [],
           client: []
@@ -54,7 +59,9 @@
         title: '',
         productDescription: 'hallo',
       },
-      bid: -1
+      bid: null,
+      tid: null,
+      version: null,
     }),
 
     methods: {
@@ -74,13 +81,9 @@
       const id = (idIn && idIn*1 > -1 ? idIn: -1);
       const bid = (bidIn != undefined ? bidIn: -1);
 
-      console.log({
-        bidIn: bidIn ,
-        bool: bidIn == undefined,
-        bid: bid
-      });
-
       this.bid = bid;
+      this.tid = this.$route.query.tid;
+      this.version = Number.parseInt(this.$route.query.version);
       
       if (bid !== -1) {
         this.$invoke("grantContract:getByID", { id: bid }).then((account) => {

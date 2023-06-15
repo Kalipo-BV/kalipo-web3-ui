@@ -14,20 +14,10 @@
     </v-row>
       <v-card>
         <div class="text-h2 pb-2 ml-5">Agreement Parties</div>
-          <div class="text-h3 ml-5">Contractor</div>
-          <v-text-field
-            readonly
-            outlined
-            :value="this.contractData.contractor"
-            class="ml-5 mr-5"
-          ></v-text-field>
-          <div class="text-h3 ml-5">Client</div>
-          <v-text-field
-              readonly
-              outlined
-              :value="this.contractData.client"
-              class="ml-5 mr-5"
-          ></v-text-field>
+          <AgreementPartiesSignInfo
+            :tid = "this.tid"
+            :version = this.version
+          />
       </v-card>
         
         <v-card>
@@ -159,7 +149,9 @@
 <script>
   export default {
     props: {
-      contractData: { type: Object }
+      contractData: { type: Object },
+      tid: { type: String },
+      version: { type: Number },
     },
     methods: {
       localCopy() {

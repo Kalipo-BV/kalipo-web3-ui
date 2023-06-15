@@ -29,17 +29,6 @@
       </v-row>
     </div>
     <v-card>
-      <!-- <v-card-title>
-        Agreements
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
-      </v-card-title> -->
       <v-data-table
         item-key="name"
         class="elevation-1"
@@ -53,7 +42,7 @@
           <router-link v-if="item.status ==`Local copy`" :to="`/contract/grant_contract?id=${item.id}`">
             <v-btn style="min-width: 65%" color="accent" small>Edit</v-btn>
           </router-link>
-          <router-link v-else :to="`/contract/grant_contract?bid=${item.id}`">
+          <router-link v-else :to="{ path: '/contract/grant_contract', query: { bid: item.id, tid: item.tid, version: item.version }}">
             <v-btn style="min-width: 65%" color="accent" small>View</v-btn>
           </router-link>          
         </template>
@@ -81,7 +70,6 @@
 </template>
 
 <script>
-  import { v4 as uuidv4 } from 'uuid';
   export default {
     data: () => ({
       headers: [
@@ -100,10 +88,6 @@
     }),
 
     methods: {
-      async getBySetIdTest(id) {       
-        const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: id });
-      },
-
       async getAllWithInfo() {
         this.data = [];
         try {
@@ -119,23 +103,23 @@
         existingAccoundIdWrapper.result.forEach(element1 => {
           element1.agreementVersion.forEach(async element2 => {
             const result = await this.$invoke("grantContract:getByID", { id: element2.contract });
-            result.result.tid = element1.tid;
-            result.result.status = "Outgoing";
-            result.result["version"] = element2.version;
-            result.result.id = element2.contract;
-            this.data.push(result.result); 
+            if(result.result != null) {
+              result.result.tid = element1.tid;
+              result.result.status = "Outgoing";
+              result.result["version"] = element2.version;
+              result.result.id = element2.contract;
+              this.data.push(result.result); 
+            }
           });
         });
       },
 
       async getFEAllWithInfo() {    
-        // const agreements = localStorage.getItem("Agreements")
         const agreements = this.$store.getters["contract/getAllContracts"];
 
         //shh this isn't cheese       needs to be changed in BE/DB {{ item.version }}
         for (const contract in agreements) {
           agreements[contract].status = "Local copy";
-          // agreements[contract]["version"] = Math.floor(Math.random() * (4 - 1 + 1) + 1);
           agreements[contract].title = 'Edit legal contract';
           agreements[contract].id = contract;
           this.data.push(agreements[contract]); 
@@ -152,11 +136,6 @@
         this.loading = false;
       },
     },
-
-    // toEditView() {
-    //   this.$router.push("/wallet");
-    //   this.$router.push({ name: "EditAgreement" });
-    // },
 
     beforeMount() {
       this.getAllWithInfo();
