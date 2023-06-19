@@ -34,6 +34,32 @@
           >
           </ProposalStatus>
         </v-col>
+        <div class="text-h4 primary--text mt-4">Dialogue</div>
+        <v-row dense class="mt-2" v-if="proposal">
+          <v-col cols="12" md="4">
+            <v-card flat>
+              <v-card-text class="d-flex align-center justify-start">
+                <v-avatar color="accent" dark size="40"
+                  ><div
+                    class="text-body-caption white--text font-weight-medium"
+                  >
+                    {{ commentCount }}
+                  </div></v-avatar
+                >
+                <div class="pl-2">
+                  <div class="text-caption font-weight-medium">
+                    Messages
+                  </div>
+                  <div class="text-caption">
+                    {{ commentUniqueMembershipCount }} member{{
+                      commentUniqueMembershipCount != 1 ? "s" : ""
+                    }}
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
         <div class="text-h4 primary--text mt-4">Results</div>
         <v-row dense class="mt-2" v-if="proposal">
           <v-col cols="12" md="4">
@@ -55,6 +81,17 @@
                 >
                 <div class="pl-2">
                   <div class="text-caption font-weight-medium">Rejected</div>
+                  <div class="text-caption"></div>
+                </div>
+              </v-card-text>
+            </v-card>
+            <v-card flat v-if="proposal.binaryVoteResult.result == 'UNDECIDED'">
+              <v-card-text class="d-flex align-center justify-start">
+                <v-avatar color="#0a75f3" dark size="40"
+                  ><v-icon small dark>mdi-clock-alert-outline</v-icon></v-avatar
+                >
+                <div class="pl-2">
+                  <div class="text-caption font-weight-medium">Undecided</div>
                   <div class="text-caption"></div>
                 </div>
               </v-card-text>
@@ -122,29 +159,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" md="4">
-            <v-card flat>
-              <v-card-text class="d-flex align-center justify-start">
-                <v-avatar color="accent" dark size="40"
-                  ><div
-                    class="text-body-caption white--text font-weight-medium"
-                  >
-                    {{ commentCount }}
-                  </div></v-avatar
-                >
-                <div class="pl-2">
-                  <div class="text-caption font-weight-medium">
-                    Campaign messages
-                  </div>
-                  <div class="text-caption">
-                    {{ commentUniqueMembershipCount }} member{{
-                      commentUniqueMembershipCount != 1 ? "s" : ""
-                    }}
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -190,6 +204,7 @@ export default {
       });
 
       this.proposal = proposalWrapper.result;
+      console.log(this.proposal);
 
       const membershipId = this.proposal.membershipId;
       const membershipWrapper = await this.$invoke("membership:getByID", {
