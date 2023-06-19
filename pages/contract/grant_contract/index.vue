@@ -16,45 +16,16 @@
 -->
 
 <template>
-  <div>
-    <div v-if="bid !== -1">
-      <ContractView :contractData="this.contractData"/>
-    </div>
-    <v-row v-else align="center" justify="center" style="height: 100%">
-      <GrantContractEditForm v-if="editFase === 0" @previous="previous"/>
-    </v-row>
-  </div>
+  <v-row align="center" justify="center" style="height: 100%">
+    <GrantContractEditForm v-if="id  !=- 1" @previous="previous"/>
+    <GrantContractEditForm v-if="account != null && != -1" @previous="previous"/>
+  </v-row>
 </template>
 <script>
   export default {
     data: () => ({
-      editFase: 0,
-      contractData: {
-        parties: {
-          contractor: [],
-          client: []
-        },
-        preample: '',
-        purpose: '',
-        payment: {
-          amount: 0,
-          note: ''
-        },
-        dates: {
-          startDate: '',
-          endDate: '',
-          signingDate: '',
-        },
-        propertyRights: '',
-        terminationOfAgreement: '',
-        governingLawAndJurisdiction: '',
-        finalProvisions: '',
-        requiredToSign: false,
-        signed: false,
-        title: '',
-        productDescription: 'hallo',
-      },
-      bid: -1
+      id: -1,
+      account: null,
     }),
 
     methods: {
@@ -71,29 +42,36 @@
       const idIn = this.$route.query.id;
       const bidIn = this.$route.query.bid;
 
-      const id = (idIn && idIn*1 > -1 ? idIn: -1);
-      const bid = (bidIn != undefined ? bidIn: -1);
+      this.id = (idIn && idIn*1 > -1 ? idIn: -1);
+      this.bid = (bidIn != undefined ? bidIn: -1);
 
       console.log({
         bidIn: bidIn ,
         bool: bidIn == undefined,
-        bid: bid
+        bid: this.bid,
+        id: this.id
       });
 
       this.bid = bid;
       
-      if (bid !== -1) {
-        this.$invoke("grantContract:getByID", { id: bid }).then((account) => {
-          // console.log(account); /*TODO load this into view */
-          this.contractData = account.result.formData;
+      if (this.bid !== -1) {
+        this.$invoke("grantContract:getByID", { id: this.bid }).then((account) => {
+          this.account = account;
+          console.log(account); /*TODO load this into view */
+          
+        }).catch( (err) => {
+          console.error(err);
+          this.$router.push("/contract/agreements");
         });
-      } else if (id === -1) {
-        this.$store.commit("contract/createNew", {});
-        const newId = this.$store.state.contract.id;
-        
-        this.$router.push({ path: this.$route.path, query: { id: newId } });
+      } else if (this.id === -1) {
+        this.$router.push("/contract/agreements");
+
       } else {
-        this.$store.commit("contract/loadContract", {id: id});
+        this.$store.commit("contract/loadContract", {id: this.id});
+
+        if (this.$store.state.contract.loadError) {
+          this.$router.push("/contract/agreements");
+        }
       }
     }
   };

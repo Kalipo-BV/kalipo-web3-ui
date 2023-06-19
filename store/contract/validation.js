@@ -12,12 +12,12 @@ export const isValidContract = (contract) => {
 	const isFormDataStructureCorrect = arrayHasValues(formDataKeys, initFormDataKeys);
 
 	if (!isContractStructureCorrect) {
-		console.error("State structure of the loaded agreement is malformed")
+		console.error("[contract store] State structure of the loaded agreement is malformed")
 		return false;
 	}
 
 	if (!isFormDataStructureCorrect) {
-		console.error("State structure of the loaded agreement is malformed")
+		console.error("[contract store] State structure of the loaded agreement is malformed")
 		return false;
 	}
 
@@ -29,7 +29,7 @@ const arrayHasValues = (arrayToCheck, neededValues) => {
 	for (i; i < neededValues.length; i++) {
 		const hasValue = arrayToCheck.includes(neededValues[i]);
 		if(!hasValue) {
-			console.error(`Field doesnt exist ${neededValues[i]}`)
+			console.error(`[contract store] Field doesnt exist ${neededValues[i]}`)
 			return false;
 		}
 	}
@@ -38,10 +38,7 @@ const arrayHasValues = (arrayToCheck, neededValues) => {
 
 export const isNotNull = (payload, errorName) => {
 	const result = (payload !== undefined && payload !== null);
-	
-	if (errorName === undefined) {
-		logError(result, errorName, payload);
-	}
+	logError(result, errorName, payload);
 
 	return result;
 }
@@ -111,8 +108,11 @@ export const isDate = (payload, errorName) => {
 	return result;
 }
 
+/**
+ * logs errors if an errorName is provided
+ */
 export const logError = (bool, errorName, payload) => {
-	if (!bool) {
-		console.error(`${errorName}\n\n`, `payload = ${payload}\n\n`, `typeof payload = ${typeof payload}`);
+	if (errorName !== undefined && !bool) {
+		console.error(`[contract store] ${errorName}\n\n`, `payload = ${payload}\n\n`, `typeof payload = ${typeof payload}`);
 	}
 }

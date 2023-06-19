@@ -189,18 +189,10 @@
   import SigningDateProvision from '../provisions/SigningDateProvision.vue';
   import TitleProvision from '../provisions/TitleProvision.vue';
   export default {
-    computed: {
-      formData: {
-          get: function () {
-              return this.data;
-          },
-          set: function (newValue) {
-              this.$emit("update:data", newValue);
-          },
-      },
-      set: function (newValue) {
-          this.$emit("update:data", newValue);
-      },
+    head() {
+      return {
+        title: "Kalipo - edit-agreement - grant-contract",
+      }
     },
     data: () => ({
       saved: false,
@@ -214,11 +206,13 @@
       },
       uri: "",
     }),
+
     created() {
       this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
           this.handleCreation();
       });
     },
+
     methods: {
         previous: function () {
           this.$emit('previous', null);

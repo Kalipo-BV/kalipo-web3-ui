@@ -76,7 +76,11 @@ export default {
 
   methods: {
     selectTemplate() {
-      this.$router.push("/contract" + this.s_templates[this.selected].url);
+      // this.$router.push(`/contract${this.s_templates[this.selected].url}`);
+
+      this.$store.commit("contract/createNew", {});
+      const newId = this.$store.state.contract.id;
+      this.$router.push(`/contract/grant_contract?id=${newId}`);
     },
 
     back() {
