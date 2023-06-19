@@ -226,6 +226,7 @@ export default {
           title: "Dashboard",
           to: "/",
         },
+        
         {
           icon: "mdi-trophy",
           title: "Poas",
