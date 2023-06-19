@@ -15,11 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<template>
+<template> 
   <v-row align="center" justify="center" style="height: 100%">
-    <GrantContractEditForm v-if="viewData != null" />
-    <GrantContractEditForm v-else-if="id  !=- 1"   />
-    
+    <GrantContractEditForm 
+        v-if="bid !== -1"
+        :contractData="contractData" 
+        :tid="tid" 
+        :version=version
+    />
+    <GrantContractEditForm v-else-if="id  !=- 1" />
   </v-row>
 </template>
 <script>
@@ -28,6 +32,35 @@
       id: -1,
       bid: -1,
       viewData: null
+      editFase: 0,
+      contractData: 
+      {
+        parties: {
+          contractor: [],
+          client: []
+        },
+        preample: '',
+        purpose: '',
+        payment: {
+          amount: 0,
+          note: ''
+        },
+        dates: {
+          startDate: '',
+          endDate: '',
+          signingDate: '',
+        },
+        propertyRights: '',
+        terminationOfAgreement: '',
+        governingLawAndJurisdiction: '',
+        finalProvisions: '',
+        requiredToSign: false,
+        signed: false,
+        title: '',
+        productDescription: 'hallo',
+      },
+      tid: null,
+      version: null,
     }),
 
     mounted: function() {
@@ -37,12 +70,9 @@
       this.id = (idIn && idIn*1 > -1 ? idIn: -1);
       this.bid = (bidIn != undefined ? bidIn: -1);
 
-      console.log({
-        bidIn: bidIn ,
-        bool: bidIn != undefined,
-        bid: this.bid,
-        id: this.id
-      });
+      this.bid = bid;
+      this.tid = this.$route.query.tid;
+      this.version = Number.parseInt(this.$route.query.version);
       
       if (this.bid !== -1) {
         this.$invoke("grantContract:getByID", { id: this.bid }).then((viewData) => {
