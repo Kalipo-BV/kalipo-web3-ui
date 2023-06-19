@@ -34,7 +34,7 @@
           >
           </ProposalStatus>
         </v-col>
-        <div class="text-h4 primary--text mt-4">Dialogue</div>
+        <div class="text-h4 primary--text">Dialogue</div>
         <v-row dense class="mt-2" v-if="proposal">
           <v-col cols="12" md="4">
             <v-card flat>
