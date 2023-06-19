@@ -17,26 +17,18 @@
 
 <template>
   <v-row align="center" justify="center" style="height: 100%">
-    <GrantContractEditForm v-if="id  !=- 1" @previous="previous"/>
-    <GrantContractEditForm v-if="account != null && != -1" @previous="previous"/>
+    <GrantContractEditForm v-if="viewData != null" />
+    <GrantContractEditForm v-else-if="id  !=- 1"   />
+    
   </v-row>
 </template>
 <script>
   export default {
     data: () => ({
       id: -1,
-      account: null,
+      bid: -1,
+      viewData: null
     }),
-
-    methods: {
-      previous: function() {
-        this.editFase++;
-      },
-
-      next: function() {
-        this.editFase--;
-      },
-    },
 
     mounted: function() {
       const idIn = this.$route.query.id;
@@ -55,9 +47,9 @@
       this.bid = bid;
       
       if (this.bid !== -1) {
-        this.$invoke("grantContract:getByID", { id: this.bid }).then((account) => {
-          this.account = account;
-          console.log(account); /*TODO load this into view */
+        this.$invoke("grantContract:getByID", { id: this.bid }).then((viewData) => {
+          this.viewData = viewData;
+          console.log(viewData); /*TODO load this into view */
           
         }).catch( (err) => {
           console.error(err);
