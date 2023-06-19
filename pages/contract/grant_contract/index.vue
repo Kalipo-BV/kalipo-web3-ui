@@ -17,13 +17,13 @@
 
 <template> 
   <v-row align="center" justify="center" style="height: 100%">
-    <GrantContractEditForm 
-        v-if="bid !== -1"
-        :contractData="contractData" 
-        :tid="tid" 
-        :version=version
+    <ContractView
+        v-if="this.viewData !== null"
+        :contractData="this.viewData" 
+        :tid="this.tid" 
+        :version=this.version
     />
-    <GrantContractEditForm v-else-if="id  !=- 1" />
+    <GrantContractEditForm v-else-if="id !=- 1" />
   </v-row>
 </template>
 <script>
@@ -31,34 +31,8 @@
     data: () => ({
       id: -1,
       bid: -1,
-      viewData: null
       editFase: 0,
-      contractData: 
-      {
-        parties: {
-          contractor: [],
-          client: []
-        },
-        preample: '',
-        purpose: '',
-        payment: {
-          amount: 0,
-          note: ''
-        },
-        dates: {
-          startDate: '',
-          endDate: '',
-          signingDate: '',
-        },
-        propertyRights: '',
-        terminationOfAgreement: '',
-        governingLawAndJurisdiction: '',
-        finalProvisions: '',
-        requiredToSign: false,
-        signed: false,
-        title: '',
-        productDescription: 'hallo',
-      },
+      viewData: null,
       tid: null,
       version: null,
     }),
@@ -70,15 +44,22 @@
       this.id = (idIn && idIn*1 > -1 ? idIn: -1);
       this.bid = (bidIn != undefined ? bidIn: -1);
 
-      this.bid = bid;
+      // this.bid = bid;
       this.tid = this.$route.query.tid;
       this.version = Number.parseInt(this.$route.query.version);
+
+      // console.log({
+      //   bidIn: bidIn ,
+      //   bool: bidIn != undefined,
+      //   bid: this.bid,
+      //   id: this.id,
+      //   tid: this.tid,
+      //   version: this.version,
+      // });
       
       if (this.bid !== -1) {
         this.$invoke("grantContract:getByID", { id: this.bid }).then((viewData) => {
-          this.viewData = viewData;
-          console.log(viewData); /*TODO load this into view */
-          
+          this.viewData = viewData.result.formData;  
         }).catch( (err) => {
           console.error(err);
           this.$router.push("/contract/agreements");

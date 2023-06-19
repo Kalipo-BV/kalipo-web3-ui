@@ -81,12 +81,8 @@
             },
             uri: "",
         }),
-        watch: {
-            tid: {
-                async handler() {
-                    await this.getSignInfo();
-                }
-            }
+        mounted: function() {
+            this.getSignInfo();
         },
         methods: {
             async getSignInfo() {     
