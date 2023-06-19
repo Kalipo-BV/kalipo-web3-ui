@@ -219,11 +219,6 @@ export default {
           title: "Constitution",
           to: "constitution",
         },
-        {
-          icon: "mdi-folder-wrench",
-          title: "Improvement Proposal",
-          to: "improvementproposal",
-        },
       ],
       tabItemsEvent: [
         {
