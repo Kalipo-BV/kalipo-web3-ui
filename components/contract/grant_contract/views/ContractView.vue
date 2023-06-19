@@ -13,10 +13,11 @@
       </v-col>
     </v-row>
       <v-card>
-        <div class="text-h2 pb-2 ml-5">Agreement Parties</div>
+        <div class="text-h2 pt-2 pb-2 mt-5 ml-5">Agreement Parties</div>
           <AgreementPartiesSignInfo
             :tid = "this.tid"
             :version = this.version
+            class="ml-5 mr-5"
           />
       </v-card>
         

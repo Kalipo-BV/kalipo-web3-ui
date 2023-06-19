@@ -122,12 +122,12 @@
             class="accent">
             Sign
           </v-btn>
-          <v-btn
+          <!-- <v-btn
             color="primary"
             @click="devDialog = true"
           >
             Dev preview
-          </v-btn>
+          </v-btn> -->
         </v-col>
       </v-row>
     </v-form>
@@ -146,7 +146,7 @@
     </v-dialog>
 
     <!-- dev dialog (delete this) -->
-    <v-dialog
+    <!-- <v-dialog
       width="60%"
       v-model="devDialog"
       activator="parent"
@@ -180,12 +180,11 @@
           getAllWithInfo
         </v-btn>
       </div>
-    </v-dialog>
+    </v-dialog> -->
 
   </v-container>
 </template>
 <script>
-  import { v4 as uuidv4 } from 'uuid';
   import SigningDateProvision from '../provisions/SigningDateProvision.vue';
   import TitleProvision from '../provisions/TitleProvision.vue';
   export default {
@@ -206,7 +205,7 @@
       saved: false,
       signed: false,
       dialog: false,
-      devDialog: false,
+      // devDialog: false,
       transaction: {
         moduleId: 1011,
         assetId: 1,
@@ -224,18 +223,18 @@
           this.$emit('previous', null);
         },
 
-        async getAllIds() {
-            const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
-            console.log(existingAccoundIdWrapper);
-        },
-        async getBySetIdTest() {
-            const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" });
-            console.log(existingAccoundIdWrapper);
-        },
-        async getAllWithInfo() {
-            const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
-            console.log(existingAccoundIdWrapper);
-        },
+        // async getAllIds() {
+        //     const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
+        //     console.log(existingAccoundIdWrapper);
+        // },
+        // async getBySetIdTest() {
+        //     const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" });
+        //     console.log(existingAccoundIdWrapper);
+        // },
+        // async getAllWithInfo() {
+        //     const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
+        //     console.log(existingAccoundIdWrapper);
+        // },
 
       sign() {
         if(this.$refs.form.validate()) {
@@ -245,14 +244,12 @@
           this.transaction.assets.contract = contract;
           this.dialog = true;
         }
-          console.log(this.transaction.assets);
       },
       
       reset() {
         this.$store.commit("contract/reset");
-        console.log(this.$store.state.contract);
       },
     },
-    components: { SigningDateProvision, TitleProvision }
+    // components: { SigningDateProvision, TitleProvision }
 };
 </script>
