@@ -108,7 +108,7 @@
 
       <v-row style="margin-bottom: 10px;">
         <v-col>
-          <v-btn @click="previous">Back</v-btn>
+          
         </v-col>
         <v-col align="right">
           <v-btn
@@ -214,22 +214,18 @@
     },
 
     methods: {
-        previous: function () {
-          this.$emit('previous', null);
-        },
-
-        async getAllIds() {
-            const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
-            console.log(existingAccoundIdWrapper);
-        },
-        async getBySetIdTest() {
-            const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" });
-            console.log(existingAccoundIdWrapper);
-        },
-        async getAllWithInfo() {
-            const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
-            console.log(existingAccoundIdWrapper);
-        },
+      async getAllIds() {
+          const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
+          console.log(existingAccoundIdWrapper);
+      },
+      async getBySetIdTest() {
+          const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" });
+          console.log(existingAccoundIdWrapper);
+      },
+      async getAllWithInfo() {
+          const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
+          console.log(existingAccoundIdWrapper);
+      },
 
       sign() {
         if(this.$refs.form.validate()) {

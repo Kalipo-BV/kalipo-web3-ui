@@ -39,12 +39,10 @@
 
       console.log({
         bidIn: bidIn ,
-        bool: bidIn == undefined,
+        bool: bidIn != undefined,
         bid: this.bid,
         id: this.id
       });
-
-      this.bid = bid;
       
       if (this.bid !== -1) {
         this.$invoke("grantContract:getByID", { id: this.bid }).then((viewData) => {
