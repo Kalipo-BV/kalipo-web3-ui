@@ -24,6 +24,7 @@ function initState () {
 		body: initContract(),
 		id: -1,
 		loadError: false,
+		localStorageUpdateCounter: 0,
 	}
 }
 
@@ -67,6 +68,7 @@ export const mutations = {
 
 		if (!isId(id)) {
 			state.loadError = true;
+			state.id = -1;
 			console.error(`[contract Store] invalid id given while loading the contract the id=${id}`);
 			return;
 		}
@@ -80,6 +82,7 @@ export const mutations = {
 		
 		} else {
 			state.loadError = true;
+			state.id = -1;
 			console.error(`[contract Store] contract cant be loaded contract with id:${id} = null \n Maybe it doesnt exist in the local storage`);
 		}
 	},

@@ -194,19 +194,6 @@
         title: "Kalipo - edit-agreement - grant-contract",
       }
     },
-    computed: {
-      formData: {
-          get: function () {
-              return this.data;
-          },
-          set: function (newValue) {
-              this.$emit("update:data", newValue);
-          },
-      },
-      set: function (newValue) {
-          this.$emit("update:data", newValue);
-      },
-    },
     data: () => ({
       saved: false,
       signed: false,
@@ -219,11 +206,13 @@
       },
       uri: "",
     }),
+
     created() {
       this.$nuxt.$on("IAH-triggerSignComplete", function (_$event) {
           this.handleCreation();
       });
     },
+
     methods: {
         previous: function () {
           this.$emit('previous', null);

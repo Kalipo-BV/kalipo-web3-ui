@@ -85,7 +85,7 @@
   export default {
     head() {
       return {
-        title: "Kalipo - Agreements",
+        title: "Kalipo - Agreements overview",
       }
     },
 
@@ -104,6 +104,18 @@
       dialog: false,
       loading: true,
     }),
+
+    // computed: () => {
+    //   return {
+    //     data
+    //   }
+    // },
+
+    // watch: {
+    //   '$store.state.contract.localStorageUpdateCounter': function () {
+    //     console.log(this.$store.state.contract.localStorageUpdateCounter)
+    //   }
+    // },
 
     methods: {
       async getBySetIdTest(id) {       
@@ -164,7 +176,7 @@
     //   this.$router.push({ name: "EditAgreement" });
     // },
 
-    beforeMount() {
+    mounted: function() {
       this.getAllWithInfo();
       this.filterd_data = this.data;
       this.loading = false;
