@@ -115,22 +115,22 @@ export default {
         },
         {
           icon: "mdi-web",
-          title: "Personal autons",
+          title: "My autons",
           to: "autons",
         },
         {
           icon: "mdi-tray-full",
-          title: "Personal proposals",
+          title: "My proposals",
           to: "proposals",
         },
         {
           icon: "mdi-vote",
-          title: "Personal votes",
+          title: "My votes",
           to: "votes",
         },
         {
           icon: "mdi-trophy",
-          title: "Personal poas",
+          title: "My poas",
           to: "poas",
         },
       ],
