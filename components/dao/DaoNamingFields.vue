@@ -81,7 +81,7 @@ export default {
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v?.length >= 2 || "Min 2 characters",
-      maxgoverningName: (v) => v?.length <= 20 || "Max 64 characters",
+      maxgoverningName: (v) => v?.length <= 20 || "Max 20 characters",
       maxName: (v) => v?.length <= 16 || "Max 16 characters",
     },
   }),
