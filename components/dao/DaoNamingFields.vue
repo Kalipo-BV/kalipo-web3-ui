@@ -37,7 +37,7 @@
         class="mt-2"
         counter
         style="max-width: 450px"
-        maxlength="64"
+        maxlength="20"
         :rules="[rules.required, rules.min, rules.maxgoverningName]"
         v-model="governingNameValue"
       ></v-text-field>
@@ -81,7 +81,7 @@ export default {
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v?.length >= 2 || "Min 2 characters",
-      maxgoverningName: (v) => v?.length <= 64 || "Max 64 characters",
+      maxgoverningName: (v) => v?.length <= 20 || "Max 64 characters",
       maxName: (v) => v?.length <= 16 || "Max 16 characters",
     },
   }),
