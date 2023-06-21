@@ -37,43 +37,56 @@
       version: null,
     }),
 
-    mounted: function() {
-      const idIn = this.$route.query.id;
-      const bidIn = this.$route.query.bid;
+    methods: {
+      getQueryVars: function () {
+        const viewData = null;
+        const idIn = this.$route.query.id;
+        const bidIn = this.$route.query.bid;
 
-      this.id = (idIn && idIn*1 > -1 ? idIn: -1);
-      this.bid = (bidIn != undefined ? bidIn: -1);
+        this.id = (idIn && idIn * 1 > -1 ? idIn : -1);
+        this.bid = (bidIn != undefined ? bidIn : -1);
 
-      // this.bid = bid;
-      this.tid = this.$route.query.tid;
-      this.version = Number.parseInt(this.$route.query.version);
-
-      // console.log({
-      //   bidIn: bidIn ,
-      //   bool: bidIn != undefined,
-      //   bid: this.bid,
-      //   id: this.id,
-      //   tid: this.tid,
-      //   version: this.version,
-      // });
-      
-      if (this.bid !== -1) {
-        this.$invoke("grantContract:getByID", { id: this.bid }).then((viewData) => {
-          this.viewData = viewData.result.formData;  
-        }).catch( (err) => {
+        this.tid = this.$route.query.tid;
+        this.version = Number.parseInt(this.$route.query.version);
+        if (this.bid !== -1) {
+          this.$invoke("grantContract:getByID", { id: this.bid }).then((viewData) => {
+          this.viewData = viewData.result.formData;
+        }).catch((err) => {
           console.error(err);
           this.$router.push("/contract/agreements");
         });
-      } else if (this.id === -1) {
-        this.$router.push("/contract/agreements");
-
-      } else {
-        this.$store.commit("contract/loadContract", {id: this.id});
-
-        if (this.$store.state.contract.loadError) {
+        } else if (this.id === -1) {
           this.$router.push("/contract/agreements");
+
+        } else {
+          this.$store.commit("contract/loadContract", { id: this.id });
+
+          if (this.$store.state.contract.loadError) {
+            this.$router.push("/contract/agreements");
+          }
         }
+        // console.log({
+        //   bidIn: bidIn ,
+        //   bool: bidIn != undefined,
+        //   bid: this.bid,
+        //   id: this.id,
+        //   tid: this.tid,
+        //   version: this.version,
+        // });
       }
+    },
+
+    watch: {
+      '$store.state.contract.id': function () {
+        this.viewData = null
+        this.bid = -1;
+        this.id = this.$store.state.contract.id;
+        console.info("manually changed the id to reroute the user");
+      }
+    },
+
+    mounted: function() {
+      this.getQueryVars();
     }
   };
 

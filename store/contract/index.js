@@ -43,11 +43,10 @@ function genericErrorChecking(payload, state, type='string') {
 		return false;
 	}
 	
-	
 	if (payload.content === undefined) {
 		console.error('payload.content is not defined');
 		return false;
-	} 
+	}
 	
 	return true;
 }
