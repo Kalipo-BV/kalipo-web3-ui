@@ -22,14 +22,14 @@
             style="width: 100%;"
             cols="12"
         >
-            <v-row v-if="(user == key)" style="width: 100%;">
-                <v-col cols="8" md="8">  
+            <v-row v-if="(user == key)" style="width: 100%;" class="removeMargin" >
+                <v-col cols="8" md="8" class="removePaddingLeft">  
                     <v-chip style="width: 100%; text-align: center; background-color: lightblue;">You</v-chip>
                 </v-col>
-                <v-col v-if="(value.signed)" cols="4" md="2">  
+                <v-col v-if="(value.signed)" cols="4" md="4" class="removePaddingRight">  
                     <v-chip outlined style="width: 100%; text-align: center;">{{ isSigned(value.signed) }}</v-chip>
                 </v-col>
-                <v-col v-else cols="4" md="2">  
+                <v-col v-else cols="4" md="4" class="removePaddingRight">  
                     <v-btn @click="SignAgreementVersion">clickme</v-btn>
                 </v-col>
             </v-row>
@@ -40,11 +40,11 @@
             cols="12" 
             style="width: 100%;"
         >
-            <v-row style="width: 100%;">
-                <v-col cols="8" md="8">  
-                    <v-chip style="width: 100%; text-align: center;">{{ value.name }}</v-chip>
+            <v-row style="width: 100%;" class="removeMargin">
+                <v-col cols="8" md="8" class="removePaddingLeft">  
+                    <v-chip style="width: 100%; text-align: center;" >{{ value.name }}</v-chip>
                 </v-col>
-                <v-col cols="4" md="2">  
+                <v-col cols="4" md="4" class="removePaddingRight">  
                     <v-chip outlined style="width: 100%; text-align: center;">{{ isSigned(value.signed) }}</v-chip>
                 </v-col>
             </v-row>
@@ -111,3 +111,17 @@
         },
     };
 </script>
+
+<style>
+    .removePaddingLeft {
+        padding: 12px 12px 12px 0px
+    }
+
+    .removePaddingRight {
+        padding: 12px 0 12px 12px
+    }
+
+    .removeMargin {
+        margin: 0;
+    }
+</style>
