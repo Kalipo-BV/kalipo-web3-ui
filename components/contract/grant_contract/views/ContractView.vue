@@ -12,50 +12,52 @@
         </v-btn>
       </v-col>
     </v-row>
+
+    <div style="margin-bottom: 25px;">
       <v-card>
         <div class="text-h2 pt-2 pb-2 mt-5 ml-5">Agreement Parties</div>
-          <AgreementPartiesSignInfo
-            :tid = "this.tid"
-            :version = this.version
-            class="ml-5 mr-5"
-          />
+        <AgreementPartiesSignInfo
+          :tid = "this.tid"
+          :version = this.version
+          class="ml-5 mr-5"
+        />
       </v-card>
         
-        <v-card>
-          <div class="text-h2 pt-2 pb-2 mt-5 ml-5">Preamples</div>
-          <v-text-field
-              readonly
-              outlined
-              :value="this.contractData.preample"
-              class="ml-5 mr-5"
-          />
-        </v-card>
+      <v-card>
+        <div class="text-h2 pt-2 pb-2 mt-5 ml-5">Preamples</div>
+        <v-text-field
+            readonly
+            outlined
+            :value="this.contractData.preample"
+            class="ml-5 mr-5"
+        />
+      </v-card>
       
       <v-card>
         <div class="text-h2 mt-6 ml-5">Provision types</div>
 
         <div class="text-h3 ml-5">Contract title</div>
         <v-text-field
-            readonly
-            outlined
-            :value="this.contractData.title"
-            class="ml-5 mr-5"
+          readonly
+          outlined
+          :value="this.contractData.title"
+          class="ml-5 mr-5"
         />
 
         <div class="text-h3 ml-5">Purpose</div>
         <v-text-field
-            readonly
-            outlined
-            :value="this.contractData.purpose"
-            class="ml-5 mr-5"
+          readonly
+          outlined
+          :value="this.contractData.purpose"
+          class="ml-5 mr-5"
         />
 
         <div class="text-h3 ml-5">Desc. of product/service</div>
         <v-text-field
-            readonly
-            outlined
-            :value="this.contractData.productDescription"
-            class="ml-5 mr-5"
+          readonly
+          outlined
+          :value="this.contractData.productDescription"
+          class="ml-5 mr-5"
         />
 
         <div class="text-h3 ml-5">Payment provisions</div>
@@ -105,19 +107,19 @@
 
         <div class="text-h3 mb-2 mt-2 ml-5" ml-5>Property rights</div>
           <v-text-field
-              readonly
-              outlined
-              :value="this.contractData.propertyRights"
-              class="ml-5 mr-5"
-            ></v-text-field>
+            readonly
+            outlined
+            :value="this.contractData.propertyRights"
+            class="ml-5 mr-5"
+          ></v-text-field>
 
         <div class="text-h3 mb-2 mt-2 ml-5">Termination of agreement</div>
           <v-text-field
-              readonly
-              outlined
-              :value="this.contractData.terminationOfAgreement"
-              class="ml-5 mr-5"
-            ></v-text-field>
+            readonly
+            outlined
+            :value="this.contractData.terminationOfAgreement"
+            class="ml-5 mr-5"
+          ></v-text-field>
 
         <div class="text-h3 mb-2 mt-2 ml-5">Applicable laws & regulations</div>
         <v-text-field
@@ -137,13 +139,13 @@
 
         <div class="text-h3 mb-2 mt-2 ml-5">Ultimate signing date</div>
         <v-text-field
-              readonly
-              outlined
-              :value="this.contractData.dates.signingDate"
-              class="ml-5 mr-5"
-            ></v-text-field>
+          readonly
+          outlined
+          :value="this.contractData.dates.signingDate"
+          class="ml-5 mr-5"
+        ></v-text-field>
       </v-card>
-
+    </div>
   </v-container>
 </template>
 
@@ -156,7 +158,7 @@
     },
     methods: {
       localCopy() {
-        this.$store.commit("contract/createNewLocalCopy", this.contractData);
+        this.$store.commit("contract/createNewLocalCopy", {contractData: this.contractData, tid: this.tid, version: this.version});
         const id = this.$store.state.contract.id;
         this.$route.query.id = id;
         this.$router.push(`grant_contract?id=${id}`);

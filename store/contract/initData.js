@@ -5,7 +5,9 @@ export const initContract = () => {
 		type: "Grant Contract",
 		fullySigned: false,
 		date: new Date().toISOString(),
-		formData: initFormData()
+		formData: initFormData(),
+		tid: "",
+		verstion: null,
 	}
 }
 

@@ -90,19 +90,19 @@ export const mutations = {
 		}
 	},
 
-	createNewLocalCopy(state, payload) {
+	createNewLocalCopy(state, data) {
 		const id = saveNewToLocalStorage(initContract());
-		
 		const contract = getFromLocalStorage(id);
+		const {contractData, tid, version} = data;
+
 		if(isNotNull(contract, "contract is null")) {
-			
 			//if length is different
-			if (Object.keys(payload).length !== Object.keys(contract.formData).length) {
+			if (Object.keys(contractData).length !== Object.keys(contract.formData).length) {
 				console.warn("contract.formdata its length is different then the proposed change in payload");
 			}
 
 			for (let dataKey in contract.formData) {
-				const newData = payload[dataKey];
+				const newData = contractData[dataKey];
 
 				if (newData != undefined) {
 					contract.formData[dataKey] = newData;
@@ -114,6 +114,9 @@ export const mutations = {
 			state.body.formData = contract.formData 
 			state.id = id;
 		}
+
+		state.body.tid = tid;
+		state.body.version = version;
 
 		saveToLocalStorage(contract, id);
 	},
@@ -211,6 +214,16 @@ export const mutations = {
 
 	customChangeData(state, payload) {
 		state.body.formData.custom[payload.index].data = payload.data;
+		saveToLocalStorage(state.body, state.id);
+	},
+
+	setTid(state, payload) {
+		state.body.formData.tid = payload.data;
+		saveToLocalStorage(state.body, state.id);
+	},
+
+	setVerstion(state, payload) {
+		state.body.formData.version = payload.data;
 		saveToLocalStorage(state.body, state.id);
 	},
 

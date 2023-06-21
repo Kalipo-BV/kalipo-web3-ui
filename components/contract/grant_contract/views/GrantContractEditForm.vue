@@ -185,8 +185,6 @@
   </v-container>
 </template>
 <script>
-  import SigningDateProvision from '../provisions/SigningDateProvision.vue';
-  import TitleProvision from '../provisions/TitleProvision.vue';
   export default {
     head() {
       return {
@@ -213,19 +211,6 @@
     },
 
     methods: {
-      async getAllIds() {
-          const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
-          console.log(existingAccoundIdWrapper);
-      },
-      async getBySetIdTest() {
-          const existingAccoundIdWrapper = await this.$invoke("grantContract:getByID", { id: "4c8dc0218fe5189de638e6d83d15e5ce0a6f89368c0522926cc468bdda0e0f58" });
-          console.log(existingAccoundIdWrapper);
-      },
-      async getAllWithInfo() {
-          const existingAccoundIdWrapper = await this.$invoke("grantContract:getAllInfo");
-          console.log(existingAccoundIdWrapper);
-      },
-
         // async getAllIds() {
         //     const existingAccoundIdWrapper = await this.$invoke("grantContract:getAll");
         //     console.log(existingAccoundIdWrapper);
@@ -245,6 +230,8 @@
           let contract = this.$store.getters["contract/filtered"];
           this.transaction.assets = {contractor: contract.formData.parties.contractor, client: contract.formData.parties.client, status: (this.status? a: ""), tid: (this.tid? a: ""), clientAuton: (this.clientAuton? a: ""), creator: "", contractorAuton: "", agreementVersion: []};
           this.transaction.assets.contract = contract;
+          this.transaction.assets.tid = this.$store.state.contract.body.tid;
+          // this.transaction.assets.version = this.$store.contract.body.version;
           this.dialog = true;
         }
       },
@@ -253,6 +240,5 @@
         this.$store.commit("contract/reset");
       },
     },
-    // components: { SigningDateProvision, TitleProvision }
 };
 </script>

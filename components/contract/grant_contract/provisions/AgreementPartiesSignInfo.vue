@@ -30,7 +30,7 @@
                     <v-chip outlined style="width: 100%; text-align: center;">{{ isSigned(value.signed) }}</v-chip>
                 </v-col>
                 <v-col v-else cols="4" md="4" class="removePaddingRight">  
-                    <v-btn @click="SignAgreementVersion">clickme</v-btn>
+                    <v-btn @click="SignAgreementVersion">Sign</v-btn>
                 </v-col>
             </v-row>
         </div>

@@ -112,15 +112,14 @@
       async getBEAllWithInfo() {
         this.backendData = [];
         const existingAccoundIdWrapper = await this.$invoke("agreement:getAllByAccount", {id: this.$store.state.wallet.account.accountId});
-
-        existingAccoundIdWrapper.result.forEach(element1 => {
-          element1.agreementVersion.forEach(async element2 => {
-            const result = await this.$invoke("grantContract:getByID", { id: element2.contract });
+        existingAccoundIdWrapper.result.forEach(agreement => {
+          agreement.agreementVersion.forEach(async agreementVersion => {
+            const result = await this.$invoke("grantContract:getByID", { id: agreementVersion.contract });
             if(result.result != null) {
-              result.result.tid = element1.tid;
+              result.result.tid = agreement.tid;
               result.result.status = "Outgoing";
-              result.result["version"] = element2.version;
-              result.result.id = element2.contract;
+              result.result["version"] = agreementVersion.version;
+              result.result.id = agreementVersion.contract;
               this.backendData.push(result.result); 
             }
           });
