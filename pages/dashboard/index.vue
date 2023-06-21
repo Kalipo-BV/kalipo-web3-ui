@@ -360,7 +360,8 @@ export default {
       console.log("leeg")
       
     }else{
-
+      console.log("--------------------------------------------")
+      console.log(account.stakeholderNotification)
       for(let i = 0; i<account.stakeholderNotification.length; i++){
           const id = account.stakeholderNotification[i];
 

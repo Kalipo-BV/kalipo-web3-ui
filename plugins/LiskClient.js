@@ -93,7 +93,7 @@ const createTransaction = async (
 
 export default ({ app }, inject) => {
     //const server = 'ws://localhost:8080/ws'
-    const server = 'wss://23.kalipo.dev/ws'
+    const server = 'wss://27.kalipo.dev/ws'
     // onderste server om lokaal te runnen
         
     let client;

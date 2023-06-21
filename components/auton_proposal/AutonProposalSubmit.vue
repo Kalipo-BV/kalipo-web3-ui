@@ -131,7 +131,7 @@ export default {
     disabledNext: false,
     selectedProposalType: null,
     selectedAccountId: null,
-    selectedStakeholders: [{stakeholderId: "", expertise: "finance"}, {stakeholderId: "", expertise: "sport"}, {stakeholderId: "", expertise: "medical"}],
+    selectedStakeholders: [{stakeholderId: "", expertise: "finance", advice: "", opinion: ""}, {stakeholderId: "", expertise: "sport", advice: "", opinion: ""}, {stakeholderId: "", expertise: "medical", advice: "", opinion: ""}],
     invitationMessage: "",
     proposalTitle: "",
     proposalDescription: "",

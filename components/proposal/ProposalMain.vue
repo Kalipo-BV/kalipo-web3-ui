@@ -120,7 +120,6 @@
 </template>
 
 <script>
-import StakeholderAdvice from './stakeholderAdvice.vue';
 
 export default {
     props: ["proposal", "submitter"],
@@ -216,17 +215,7 @@ export default {
         }
     },
     methods: {
-      log(){
-        console.log(this.proposals);
-      },
-        isStakeholder() {
-            for (let i = 0; i < this.proposal.stakeholders.length; i++) {
-                if (this.proposal.stakeholders[i].stakeholderId == this.getAccount().accountId) {
-                    return true;
-                }
-            }
-            return false;
-        },
+
         getAccount() {
             return this.$store.state.wallet.account;
         },
@@ -255,7 +244,6 @@ export default {
             }
         },
     },
-    components: { StakeholderAdvice }
 };
 </script>
 
