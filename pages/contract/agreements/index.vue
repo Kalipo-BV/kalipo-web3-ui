@@ -86,28 +86,22 @@
         { text: "Status", align: 'center', value: "status" },
       ],
       search: "",
-      data: [],
+      frontendData: [],
+      backendData: [],
       filterd_data: [],
       toggle_exclusive: "All",
       dialog: false,
       loading: true,
     }),
 
-    // computed: () => {
-    //   return {
-    //     data
-    //   }
-    // },
-
-    // watch: {
-    //   '$store.state.contract.localStorageUpdateCounter': function () {
-    //     console.log(this.$store.state.contract.localStorageUpdateCounter)
-    //   }
-    // },
+    computed: {
+      data: function() {        
+        return this.frontendData.concat(this.backendData);
+      },
+    },
 
     methods: {
       async getAllWithInfo() {
-        this.data = [];
         try {
           await this.getBEAllWithInfo();
         } catch (Inactive) {}
@@ -115,7 +109,8 @@
         this.filterd_data = this.data;
       },
 
-      async getBEAllWithInfo() {       
+      async getBEAllWithInfo() {
+        this.backendData = [];
         const existingAccoundIdWrapper = await this.$invoke("agreement:getAllByAccount", {id: this.$store.state.wallet.account.accountId});
 
         existingAccoundIdWrapper.result.forEach(element1 => {
@@ -126,22 +121,25 @@
               result.result.status = "Outgoing";
               result.result["version"] = element2.version;
               result.result.id = element2.contract;
-              this.data.push(result.result); 
+              this.backendData.push(result.result); 
             }
           });
         });
       },
 
-      async getFEAllWithInfo() {    
-        const agreements = this.$store.getters["contract/getAllContracts"];
-
-        //shh this isn't cheese       needs to be changed in BE/DB {{ item.version }}
-        for (const contract in agreements) {
-          agreements[contract].status = "Local copy";
-          agreements[contract].title = 'Edit legal contract';
-          agreements[contract].id = contract;
-          this.data.push(agreements[contract]); 
-        };
+      async getFEAllWithInfo() {
+        return new Promise((resolve, reject) => {
+          this.frontendData = [];
+          const agreements = this.$store.state.contract.allContracts();
+          //shh this isn't cheese       needs to be changed in BE/DB {{ item.version }}
+          for (const contract in agreements) {
+            agreements[contract].status = "Local copy";
+            agreements[contract].title = 'Edit legal contract';
+            agreements[contract].id = contract;
+            this.frontendData.push(agreements[contract]);
+          };
+          resolve(this.frontendData);
+        });
       },
 
       async sortOnStatus(info) {

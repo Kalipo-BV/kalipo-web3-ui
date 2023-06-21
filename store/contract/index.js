@@ -24,7 +24,7 @@ function initState () {
 		body: initContract(),
 		id: -1,
 		loadError: false,
-		localStorageUpdateCounter: 0,
+		allContracts: getAllFromLocalStorage,// is used as prop because getters are cached based on props
 	}
 }
 
@@ -58,7 +58,7 @@ export const state = () => (
 
 export const mutations = {
 	
-	createNew() {
+	createNew(state) {
 		const id = saveNewToLocalStorage(initContract());
 		this.commit("contract/loadContract", { id: id });
 	},
@@ -89,33 +89,13 @@ export const mutations = {
 
 	createNewLocalCopy(state, payload) {
 		const id = saveNewToLocalStorage(initContract());
-		console.log(id);
-
-		if (!isId(id, "id")) {
-			return;
-		}
-
+		
 		const contract = getFromLocalStorage(id);
 		if(isNotNull(contract, "contract is null")) {
 			console.log(payload)
 
 			state.body = contract;
 			state.id = id;
-			// contract.body.formData.dates.endDate = payload.dates.endDate
-			// contract.formData.dates.signingDate = payload.dates.signingDate
-			// contract.formData.dates.startDate = payload.dates.startDate
-			// contract.formData.finalProvisions = payload.finalProvisions
-			// contract.formData.governingLawAndJurisdiction = payload.governingLawAndJurisdiction
-			// contract.formData.payment.amount = payload.payment.amount
-			// contract.formData.payment.note = payload.payment.note
-			// contract.formData.preample = payload.preample
-			// contract.formData.productDescription = payload.productDescription
-			// contract.formData.propertyRights = payload.propertyRights
-			// contract.formData.purpose = payload.purpose;
-			// contract.formData.requiredToSign = payload.requiredToSign
-			// contract.formData.signed = payload.signed
-			// contract.formData.terminationOfAgreement = payload.terminationOfAgreement
-			// contract.formData.title = payload.title
 
 			payload.parties.contractor.forEach(c => {
 				contract.formData.parties.contractor.push(c);
@@ -236,10 +216,6 @@ export const mutations = {
 export const getters = {
 	filtered: (state) => {
 		return normalizeContract(state.body);
-	},
-
-	getAllContracts: () => {
-		return getAllFromLocalStorage();
 	},
 }
 
