@@ -149,13 +149,6 @@ export default {
   },
   methods: {
     prevStep() {
-      let i = 0;
-      while(i < this.selectedStakeholders.length){
-              console.log("stakeholder id: "+this.selectedStakeholders[i].accountId);
-              console.log("stakeholder expertise: "+this.selectedStakeholders[i].expertise);
-              i++;
-      }
-      console.log("invitation IDs: "+this.selectedAccountId)
       if (this.step == "proposal-profile") {
         this.step = "select-proposal-type";
       }

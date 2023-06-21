@@ -113,7 +113,7 @@
       </div>
     </v-card>
     <!-- <p v-if="isStakeholder()">jij bent een stakeholder en kan advies geven!</p> -->
-    <StakeholderAdvice v-if="isStakeholder()"></StakeholderAdvice>
+    
   </div>
 </template>
 
@@ -147,8 +147,7 @@ export default {
                 }
             }
         }
-        console.log("proposals uit database: ");
-        console.log(proposals);
+
         if (this.proposal != null &&
             this.submitter != null &&
             this.proposal.membershipInvitationArguments != null) {
@@ -203,7 +202,7 @@ export default {
                 else {
                     i++;
                 }
-            }
+            } 
             for (i = 0; i < this.proposal.stakeholders.length; i++) {
                 let stakeholder = await this.$invoke("kalipoAccount:getByID", { id: this.proposal.stakeholders[i].stakeholderId, });
                 this.list.push({
@@ -215,6 +214,9 @@ export default {
         }
     },
     methods: {
+      log(){
+        console.log(this.proposals);
+      },
         isStakeholder() {
             for (let i = 0; i < this.proposal.stakeholders.length; i++) {
                 if (this.proposal.stakeholders[i].stakeholderId == this.getAccount().accountId) {

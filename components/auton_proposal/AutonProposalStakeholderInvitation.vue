@@ -93,8 +93,6 @@ export default {
         return this.selectedStakeholders;
       },
       set: function (newValue) {
-        console.log("stakeholders x: "+ this.selectedStakeholders)
-        console.log("stakeholders: "+ newValue)
         this.$emit("update:selectedStakeholders", newValue);
       },
     },

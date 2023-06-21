@@ -17,6 +17,7 @@
 
 <template>
   <v-container>
+    
     <v-row class="mt-0">
       <v-col cols="12" md="8">
         <div class="text-h2 primary--text">My autons</div>
@@ -69,6 +70,30 @@
       <v-col cols="12" md="4">
         <div class="text-h2 primary--text">Personal backlog</div>
 
+        
+        <v-card
+          class="mt-4"
+          flat
+        v-for="item in links">
+          <v-card
+            flat
+            link
+            @click="$router.push(item.link)"
+          >
+            <v-card-text class="py-2">
+              <div class="text-caption d-flex align-center">
+                <v-icon small class="mr-1 mdi-24px" style="color: #0a75f3;" >mdi-alert-circle</v-icon>
+                <span class="text-caption">jouw stakeholder advies is vereist!</span>
+                
+              </div>
+              <sub> {{ item.info1 }}</sub><br>
+              <sub> {{ item.info2 }}</sub><br>
+              <sub> {{ item.info3 }}</sub>
+            </v-card-text>
+          </v-card>
+        </v-card>
+        
+
         <v-card
           class="mt-4"
           flat
@@ -108,6 +133,8 @@
           </v-card>
 
           <v-divider></v-divider>
+
+          
 
           <v-row align="center" dense>
             <v-col cols="6">
@@ -178,7 +205,10 @@
         callbackFinish="Dashboard-ModalClose"
       ></GenericTransaction>
     </v-dialog>
+
   </v-container>
+  
+
 </template>
 <script>
 export default {
@@ -204,6 +234,7 @@ export default {
         membershipId: null,
       },
     },
+    links: [],
   }),
   methods: {
     acceptMembership(membership) {
@@ -264,6 +295,7 @@ export default {
             id: autonMembershipId,
           }
         );
+            
         if (
           BigInt(autonMembershipWrapper.result.started) != BigInt(0) &&
           nowInSec > BigInt(autonMembershipWrapper.result.started)
@@ -323,6 +355,55 @@ export default {
         this.membershipInvitations.push(membership);
       }
     }
+    // hier moeten de meldingen geladen worden
+    if(account.stakeholderNotification == null || account.stakeholderNotification == [] || account.stakeholderNotification == undefined){
+      console.log("leeg")
+      
+    }else{
+
+      for(let i = 0; i<account.stakeholderNotification.length; i++){
+          const id = account.stakeholderNotification[i];
+
+          const proposalWrapper = await this.$invoke("proposal:getByID", {
+            id: id,
+          });
+              
+          
+          const autonWrapper = await this.$invoke("auton:getByID", {
+          id: proposalWrapper.result.autonId,
+          });
+          // probleem misschien? is ID wel wat er wordt gevraagd in het url
+          //this.links.push("/auton/"+autonWrapper.result.autonProfile.name+"/proposal/"+(autonWrapper.result.proposals.indexOf(id) + 1)+"/campaigning")
+
+          console.log(proposalWrapper.result.status) 
+          // ik kan de link ook bouwen op basis van status, ff met peter overleggen
+          
+
+          // hieronder wordt het expertise ook uit de proposal gehaald en opgeslagen
+          let stakeholder;
+          for(let x = 0; x<proposalWrapper.result.stakeholders.length; x++){
+            if(this.account.accountId == proposalWrapper.result.stakeholders[x].stakeholderId){
+              stakeholder = proposalWrapper.result.stakeholders[x];
+            }
+          } 
+          console.log("status: "+ proposalWrapper.result.status)
+
+          if(proposalWrapper.result.status == "CAMPAIGNING" || proposalWrapper.result.status == "VOTING"){
+            this.links.push({link : "/auton/"+autonWrapper.result.autonProfile.name+"/proposal/"+(autonWrapper.result.proposals.indexOf(id) + 1)+"/campaigning", 
+                           info1 : "auton: "+autonWrapper.result.autonProfile.name,
+                           info2 : "proposal: "+ proposalWrapper.result.title,
+                           info3 : "jouw gevraagde expertise: "+stakeholder.expertise,})
+          }
+
+      }
+
+    }
+
+
+    
+
+    
+
   },
 };
 </script>
