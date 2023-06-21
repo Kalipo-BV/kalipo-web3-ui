@@ -26,6 +26,38 @@
         ></ProposalMain>
       </v-col>
       <v-col cols="12" md="7">
+        <!-- advies komt hier onder -->
+        <v-card flat class="mt-0 rounded-lg mx-auto">
+      <div class="mt-4">
+        <v-card-text>Expert consult</v-card-text>
+        <v-form v-model="formStake">
+          <v-textarea 
+          v-model="advice" 
+           :rules="rules"
+           label="Advice"
+           outlined
+           auto-grow
+           rows="4"
+           row-height="15"
+           max-length="1024"
+           counter
+           ></v-textarea>
+
+          <v-radio-group inline outlined v-model="opinion">
+            <v-radio label="I agree" value="agree"></v-radio>
+            <v-radio label="Neutral" value="neutral"></v-radio>
+            <v-radio label="I disagree" value="disagree"></v-radio>
+        </v-radio-group>
+        <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default accent" @click="sendStakeholderExpertise()">
+          Submit
+        </button>
+        <v-text></v-text>
+        <AccountSign :transaction="transaction" :uri="uri"></AccountSign>
+        </v-form>
+
+
+      </div>
+    </v-card>
         <div class="text-h4 primary--text mt-4">Dialogue</div>
 
         <div v-for="(comment, i) in comments" :key="i">
@@ -93,6 +125,8 @@
   </v-container>
 </template>
 <script>
+import { NIL } from 'uuid';
+
 export default {
   layout: "auton",
   data: () => ({
@@ -103,7 +137,29 @@ export default {
     submitter: null,
     comments: [],
     userLang: null,
-  }),
+    uri: null,
+    advice: null,
+    opinion: null,
+    formStake : null,
+    stakeholders: null,
+    errors:{},
+    rules: [
+        value => {
+          if (!value) {
+            console.log(value);
+            return true;
+          }
+          return 'You must enter advice.';
+        }
+      ],
+    transaction:{
+      moduleId : -1,
+      assetId: 0,
+      assets: {},
+    },
+  
+  }),  
+
   async mounted() {
     this.$nuxt.$emit("Auton-setPage", "proposals");
     this.userLang = navigator.language || navigator.userLanguage;
@@ -128,6 +184,7 @@ export default {
 
       const proposalWrapper = await this.$invoke("proposal:getByID", {
         id: this.proposalId,
+        stakeholders: this.stakeholders,
       });
 
       this.proposal = proposalWrapper.result;
@@ -192,6 +249,79 @@ export default {
         return result;
       }
     },
+    sendStakeholderExpertise(){
+      //hier moet de form opgestuurd worden naar de backend of info uit de form gehaald worden
+      //test
+      this.$emit('submit', this.advice);
+      this.uri = `auton/autonnew/proposal/2/campaigning`;
+
+
+      
+
+
+      if(this.advice == null || this.opinion == null){
+        alert("You must enter your advice and opinion");
+      }else if(this.opinion == "neutral" || this.opinion == "disagree" || this.opinion == "agree"){
+        console.log("Advice: "+ this.advice);
+        console.log("Vote: " + this.opinion);
+
+
+      //haal proposal op
+      const proposal = this.$invoke("proposal:getByID", {
+        id: this.proposalId,
+        stakeholders : this.stakeholders,
+      });
+      console.log("proposal:" + this.proposal);
+
+      
+      for(let i = 0; i< this.proposal.stakeholders.length; i++){
+        console.log(this.proposal.stakeholders[i]);
+        if(this.accountId == this.proposal.stakeholders[i]){
+          console.log("Je bent een stakeholder");
+          //hier moet alles komen als je stakeholder bent
+        }else{
+          console.log("Geen stakeholder");
+          //hieronder om te testen want ik ben geen stakeholder
+          // this.proposal.stakeholders[0].advice = this.advice;
+          // this.proposal.stakeholders[0].opinion = this.opinion;
+        }
+      }
+
+      
+
+
+      //hier komt de transactie
+      const asset = {
+        proposalId : this.proposalId,
+        stakeholderId: this.proposal.stakeholders[0].stakeholderId,
+        advice : this.advice,
+        opinion : this.opinion,
+      }
+
+      // this.transaction.moduleId = 1006;
+      // this.transaction.assetId = 1;
+      // this.transaction.assets = asset;
+
+      console.log(this.proposal.stakeholders);
+      console.log(this.transaction);
+
+
+      }
+
+
+    },
+    sendData(){
+      $nuxt.$emit
+
+    },
+    warn(message, event) {
+    // now we have access to the native event
+    if (event) {
+      event.preventDefault()
+    }
+    alert(message + this.Advice  + this.Opinion)
+  },
+
   },
 };
 </script>

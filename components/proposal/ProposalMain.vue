@@ -80,6 +80,7 @@
         </v-stepper-step>
       </v-stepper-header>
     </v-stepper>
+
     <v-card flat class="mt-0 rounded-lg">
       <v-card flat>
         <v-card-text class="py-2">
@@ -112,6 +113,7 @@
         </v-card>
       </div>
     </v-card>
+
     <!-- <p v-if="isStakeholder()">jij bent een stakeholder en kan advies geven!</p> -->
     
   </div>
