@@ -114,11 +114,11 @@
 
 <style>
     .removePaddingLeft {
-        padding: 12px 12px 12px 0px
+        padding: 12px 6px 12px 0px
     }
 
     .removePaddingRight {
-        padding: 12px 0 12px 12px
+        padding: 12px 0 12px 6px
     }
 
     .removeMargin {
