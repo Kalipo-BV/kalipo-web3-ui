@@ -63,6 +63,10 @@ export const mutations = {
 		this.commit("contract/loadContract", { id: id });
 	},
 
+	incrementUpdateCounter(state) {
+		state.localStorageUpdateCounter++;
+	},
+
 	loadContract(state, payload) {
 		const id = payload.id;
 
@@ -92,20 +96,24 @@ export const mutations = {
 		
 		const contract = getFromLocalStorage(id);
 		if(isNotNull(contract, "contract is null")) {
-			console.log(payload)
+			
+			//if length is different
+			if (Object.keys(payload).length !== Object.keys(contract.formData).length) {
+				console.warn("contract.formdata its length is different then the proposed change in payload");
+			}
 
-			state.body = contract;
+			for (let dataKey in contract.formData) {
+				const newData = payload[dataKey];
+
+				if (newData != undefined) {
+					contract.formData[dataKey] = newData;
+				} else {
+					console.warn(`the property key:${dataKey} does not exist in the payload and therefore can not be set`);
+				}			
+			}		
+
+			state.body.formData = contract.formData 
 			state.id = id;
-
-			payload.parties.contractor.forEach(c => {
-				contract.formData.parties.contractor.push(c);
-			})
-
-			payload.parties.client.forEach(c => {
-				contract.formData.parties.client.push(c);
-			})
-
-			console.log(contract);
 		}
 
 		saveToLocalStorage(contract, id);

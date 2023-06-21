@@ -41,8 +41,6 @@ export const getFromLocalStorage = (id = 0) => {
 export const getAllFromLocalStorage = () => {
 	setEmptyLocalStorageIfNotSet();
 	const localStorageReference = localStorage.getItem("Agreements");
-	console.log("Json parse",JSON.parse(localStorageReference));
-
 	return JSON.parse(localStorageReference);
 }
 
