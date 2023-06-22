@@ -38,7 +38,7 @@
               outlined
               :value=startDate
               label="Start date"
-              hint="YYYY/MM/DD format"
+              hint="YYYY-MM-DD format"
               persistent-hint
               v-bind="attrs"
               v-on="on"
@@ -72,7 +72,7 @@
               outlined
               :value=endDate
               label="End date"
-              hint="YYYY/MM/DD format"
+              hint="YYYY-MM-DD format"
               persistent-hint
               v-bind="attrs"
               v-on="on"

@@ -16,26 +16,6 @@
 -->
 
 <template>
-	<!-- <v-container style="min-width: 100%;">
-		<v-row>
-			<v-col cols="12" lg="6" class="fieldContainer">4
-
-				<v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y
-					max-width="290px" min-width="auto">
-					<template v-slot:activator="{ on, attrs }">
-						<v-text-field readonly outlined :value=signingDate label="Ultimate signing data" hint="YYYY/MM/DD format" persistent-hint
-							v-bind="attrs" v-on="on"
-							:rules="[v => !!v || 'A signingDate must be selected!', signingDate >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || 'The signingDate must be in the future or today'].flat()">
-						</v-text-field>
-					</template>
-					<v-date-picker @input="(e) => { signingDate = e }" :value=signingDate no-title></v-date-picker>
-				</v-menu>
-			</v-col>
-
-			
-		</v-row>
-	</v-container> -->
-
 	<v-menu
 		v-model="menu1"
 		:close-on-content-click="false"
@@ -50,7 +30,7 @@
 				outlined
 				:value=signingDate
 				label="ultimate signing date"
-				hint="YYYY/MM/DD format"
+				hint="YYYY-MM-DD format"
 				persistent-hint
 				v-bind="attrs"
 				v-on="on"
@@ -83,8 +63,6 @@ export default {
 			},
 		},
 	},
-
-	// signingDate
 
 	data: vm => ({
 		menu1: false,
