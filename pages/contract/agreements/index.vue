@@ -1,5 +1,6 @@
 <template>
   <v-container style="min-width: 90%;">
+    <AgreementsModel v-if="modelVisibility" @close="dropdownOverlay"/>
     <div class="mt-4">
       <v-row>
         <v-col cols="12" md="4">
@@ -44,7 +45,7 @@
           </router-link>
           <router-link v-else :to="{ path: '/contract/grant_contract', query: { bid: item.id, tid: item.tid, version: item.version }}">
             <v-btn style="min-width: 65%" color="accent" small>View</v-btn>
-          </router-link>          
+          </router-link>
         </template>
           <template v-slot:item.title="{ item }">
             {{ item.formData.title }}
@@ -59,7 +60,7 @@
             <v-chip outlined small>
               {{ item.status }}
             </v-chip>
-          </template> 
+          </template>
       </v-data-table>
     </v-card>
 
@@ -92,15 +93,20 @@
       toggle_exclusive: "All",
       dialog: false,
       loading: true,
+      modelVisibility: true,
     }),
 
     computed: {
-      data: function() {        
+      data: function() {
         return this.frontendData.concat(this.backendData);
       },
     },
 
     methods: {
+      dropdownOverlay() {
+        this.modelVisibility = false;
+      },
+
       async getAllWithInfo() {
         try {
           await this.getBEAllWithInfo();
@@ -120,7 +126,7 @@
               result.result.status = "Outgoing";
               result.result["version"] = agreementVersion.version;
               result.result.id = agreementVersion.contract;
-              this.backendData.push(result.result); 
+              this.backendData.push(result.result);
             }
           });
         });
