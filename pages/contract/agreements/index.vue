@@ -113,7 +113,6 @@
 
       openModel() {
         this.modelData=this.data;
-        console.log(this.data)
         this.modelVisibility=true;
       },
 

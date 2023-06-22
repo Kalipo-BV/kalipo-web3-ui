@@ -91,10 +91,6 @@ export default {
     }
   },
 
-  mounted: function() {
-    console.log(this.filterd_data);
-  },
-
   beforeMount() {
     this.loading = false;
   },
