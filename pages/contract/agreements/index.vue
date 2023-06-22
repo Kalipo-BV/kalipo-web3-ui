@@ -1,6 +1,6 @@
 <template>
   <v-container style="min-width: 90%;">
-    <AgreementsModel v-if="modelVisibility" @close="dropdownOverlay"/>
+    <AgreementsModel v-if="modelVisibility" @close="closeModel" :modelData=this.modelData />
     <div class="mt-4">
       <v-row>
         <v-col cols="12" md="4">
@@ -29,6 +29,8 @@
         </v-col>
       </v-row>
     </div>
+
+    <v-btn @click="openModel" style="margin-right: 20px; background-color: red;">Test btn</v-btn>
     <v-card>
       <v-data-table
         item-key="name"
@@ -93,7 +95,8 @@
       toggle_exclusive: "All",
       dialog: false,
       loading: true,
-      modelVisibility: true,
+      modelVisibility: false,
+      modelData: []
     }),
 
     computed: {
@@ -103,8 +106,15 @@
     },
 
     methods: {
-      dropdownOverlay() {
+      closeModel() {
         this.modelVisibility = false;
+        this.modelData=[];
+      },
+
+      openModel() {
+        this.modelData=this.data;
+        console.log(this.data)
+        this.modelVisibility=true;
       },
 
       async getAllWithInfo() {
