@@ -371,30 +371,17 @@
                   title="Bill"
                 ></ProposalTypeCard>
               </v-col>
+              <v-col cols="12" md="3" @click="() => {dialog2 = true}">
+                <ProposalTypeCard icon="" title="Contract"/>
+              </v-col>
+              <v-col cols="12" md="3" @click="openAgreement">
+                <ProposalTypeCard icon="" title="Agreements"/>
+              </v-col>
             </v-row>
           </div>
         </div>
       </div>
-    </v-container>
-
-    <div>
-      <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
-        Constitution
-      </div>
-      <v-row justify="start">
-        <v-col cols="12" md="3">
-          <ProposalTypeCard icon="mdi-bank" title="Bill"></ProposalTypeCard>
-        </v-col>
-        <v-col cols="12" md="3" @click="() => {dialog = true}">
-          <ProposalTypeCard icon="" title="Contract"/>
-        </v-col>
-        <v-col cols="12" md="3" @click="openAgreement">
-          <ProposalTypeCard icon="" title="Agreements"/>
-        </v-col>
-      </v-row>
-    </div>
-
-    <v-dialog scrollable v-model="dialog" max-width="500">
+    <v-dialog scrollable v-model="dialog2" max-width="500">
       <SelectAgreementTemplate />
     </v-dialog>
   </v-container>
@@ -424,6 +411,7 @@ export default {
   layout: "auton",
   data: () => ({
     dialog: true,
+    dialog2: false,
     selectedItem: "",
     termsAndConditionsVersionSelected: 0,
     termsAndConditionsVersions: 0,
