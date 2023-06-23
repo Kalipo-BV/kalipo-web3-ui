@@ -19,6 +19,32 @@
   <v-app id="auton-layout">
     <v-main class="primary">
       <div style="height: 100%; background: #eef1f6">
+        <div class="primary">
+          <v-container>
+            <v-breadcrumbs class="px-0 py-0">
+              <v-breadcrumbs-item
+                v-for="(breadcrumb, i) in breadcrumbs"
+                :key="i"
+                @click="$router.push(breadcrumb.to)"
+                class="white--text text-h6 px-0"
+              >
+                <v-avatar
+                  v-if="breadcrumb.icon"
+                  :tile="breadcrumb.tileIcon"
+                  color="accent"
+                  size="20px"
+                  class="mr-2"
+                >
+                  <v-icon color="white">
+                    {{ breadcrumb.icon }}
+                  </v-icon>
+                </v-avatar>
+                {{ breadcrumb.text }}
+                <li v-if="i !== breadcrumbs.length - 1" class="pl-3">/</li>
+              </v-breadcrumbs-item>
+            </v-breadcrumbs>
+          </v-container>
+        </div>
         <v-app-bar height="148px" color="white" flat>
           <v-row>
             <v-container>
@@ -65,7 +91,7 @@
                 </v-col>
                 <v-col class="d-flex justify-end">
                   <v-btn
-                    v-if="auton.type == 'DEFAULT'"
+                    v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'"
                     class="mr-12"
                     color="accent"
                     @click="dialog = !dialog"
@@ -100,7 +126,7 @@
                 <v-tabs-slider color="primary"></v-tabs-slider>
 
                 <v-tab
-                  v-if="auton.type == 'DEFAULT'"
+                  v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'"
                   v-for="(item, idx) in tabItemsDefault"
                   :key="idx"
                   @click="navigate(item.to)"
@@ -139,8 +165,9 @@
 
     <v-dialog v-model="dialog" max-width="500">
       <AutonProposalSubmit
-        v-if="auton.type == 'DEFAULT'"
+        v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'"
         :autonId="autondId"
+        :daoName="daoName"
         :autonName="autonName"
         callbackFinish="Auton-ProposalModalClose"
       ></AutonProposalSubmit>
@@ -156,7 +183,8 @@
         v-if="auton.type == 'LESSON'"
         :autonId="autondId"
         callbackFinish="Auton-ProposalModalClose"
-      ></LessonCheckIn>
+      >
+      </LessonCheckIn>
     </v-dialog>
   </v-app>
 </template>
@@ -189,6 +217,7 @@ export default {
       autondId: null,
       id: "",
       autonName: null,
+      daoName: null,
       auton: {
         autonProfile: {},
         tags: [],
@@ -197,6 +226,7 @@ export default {
       miniVariant: false,
       selectedItem: 0,
       userLang: null,
+      breadcrumbs: [],
       tabItemsDefault: [
         {
           icon: "mdi-monitor-dashboard",
@@ -298,36 +328,115 @@ export default {
     },
     navigate(to) {
       if (to == "/") {
-        this.$router.push(`/auton/${this.$route.params.autonId}`);
+        this.$router.push(
+          `/dao/${this.$route.params.daoId}/auton/${this.$route.params.autonId}`
+        );
       } else {
-        this.$router.push(`/auton/${this.$route.params.autonId}/${to}/`);
+        this.$router.push(
+          `/dao/${this.$route.params.daoId}/auton/${this.$route.params.autonId}/${to}/`
+        );
       }
+    },
+    async init() {
+      this.userLang = navigator.language || navigator.userLanguage;
+      const urlParam = this.$route.params.autonId.replaceAll("_", " ");
+
+      const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
+        name: urlParam,
+      });
+      if (autonIdWrapper.result === null) {
+        this.auton = null;
+        this.error = "Auton not found: " + urlParam;
+      } else {
+        this.autondId = autonIdWrapper.result.id;
+
+        this.id = autonIdWrapper.result.id;
+        const autonWrapper = await this.$invoke("auton:getByID", {
+          id: autonIdWrapper.result.id,
+        });
+        this.auton = autonWrapper.result;
+        this.autonName = autonWrapper.result.autonProfile.name;
+
+        const daoId = autonWrapper.result.daoId;
+        const daoWrapper = await this.$invoke("dao:getByID", {
+          id: daoId,
+        });
+        console.log(daoId);
+        console.log(daoWrapper);
+        const dao = daoWrapper.result;
+        this.daoName = dao.daoProfile.name;
+
+        this.breadcrumbs = [];
+
+        this.breadcrumbs.push({
+          text: dao.daoProfile.name,
+          icon: dao.daoProfile.icon,
+          tileIcon: true,
+          to: `/dao/${dao.daoProfile.name.replaceAll(" ", "_")}`,
+        });
+
+        let parentAutons = [];
+        if (this.auton.parentAutonId != "") {
+          let hasParent = true;
+          let currentParentId = this.auton.parentAutonId;
+          while (hasParent) {
+            const parentWrapper = await this.$invoke("auton:getByID", {
+              id: currentParentId,
+            });
+            const parent = parentWrapper.result;
+            parentAutons.push(parent);
+            if (parent.parentAutonId != "") {
+              currentParentId = parent.parentAutonId;
+            } else {
+              hasParent = false;
+              break;
+            }
+          }
+        }
+        parentAutons.reverse();
+
+        for (let index = 0; index < parentAutons.length; index++) {
+          const element = parentAutons[index];
+          this.breadcrumbs.push({
+            text: element.autonProfile.name,
+            icon: element.autonProfile.icon,
+            to: `/dao/${dao.daoProfile.name.replaceAll(
+              " ",
+              "_"
+            )}/auton/${element.autonProfile.name.replaceAll(" ", "_")}`,
+          });
+        }
+
+        this.breadcrumbs.push({
+          text: this.auton.autonProfile.name,
+          icon: this.auton.autonProfile.icon,
+          to: `/dao/${dao.daoProfile.name.replaceAll(
+            " ",
+            "_"
+          )}/auton/${this.auton.autonProfile.name.replaceAll(" ", "_")}`,
+        });
+      }
+
+      this.authorized();
+    },
+  },
+  watch: {
+    "$route.params.autonId": {
+      handler: function (autonId) {
+        console.log(autonId);
+        this.init();
+      },
+      deep: true,
+      immediate: true,
     },
   },
   async mounted() {
     this.$nuxt.$emit("MainMenu-setPage", "autons");
-    this.userLang = navigator.language || navigator.userLanguage;
-    const urlParam = this.$route.params.autonId.replaceAll("_", " ");
-
-    const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
-      name: urlParam,
-    });
-    if (autonIdWrapper.result === null) {
-      this.auton = null;
-      this.error = "Auton not found: " + urlParam;
-    } else {
-      this.autondId = autonIdWrapper.result.id;
-
-      this.id = autonIdWrapper.result.id;
-      const autonWrapper = await this.$invoke("auton:getByID", {
-        id: autonIdWrapper.result.id,
-      });
-      this.auton = autonWrapper.result;
-      this.autonName = autonWrapper.result.autonProfile.name;
-    }
-
-    this.authorized();
   },
 };
 </script>
-<style></style>
+<style>
+#auton-layout .v-breadcrumbs li {
+  cursor: pointer;
+}
+</style>

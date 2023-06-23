@@ -19,51 +19,29 @@
   <v-container>
     <v-row class="mt-0">
       <v-col cols="12" md="8">
-        <div class="text-h2 primary--text">My autons</div>
+        <div class="text-h2 primary--text">My DAOs and autons</div>
 
         <v-row>
-          <v-col
-            xs="12"
-            sm="6"
-            md="4"
-            lg="3"
-            v-for="(auton, i) in autons"
-            :key="i"
-          >
-            <div
-              @click="
-                $router.push(
+          <!-- <v-col xs="12" sm="6" md="4" lg="3" v-for="(auton, i) in autons" :key="i">
+            <div @click="
+              $router.push(
                   '/auton/' + auton.autonProfile.name.replaceAll(' ', '_')
                 )
-              "
-            >
-              <AutonCard class="mt-4" :auton="auton"></AutonCard>
-            </div>
-          </v-col>
-          <v-col xs="12" sm="6" md="4" lg="3">
-            <v-card
-              class="mt-4"
-              height="230.567"
-              color="#eef1f6"
-              outlined
-              style="border-color: #d6d6d6"
-            >
-              <div
-                class="d-flex align-center justify-center"
-                style="height: 100%"
-              >
-                <div>
+              ">
+                <AutonCard class="mt-4" :auton="auton"></AutonCard>
+              </div>
+            </v-col>
+            <v-col xs="12" sm="6" md="4" lg="3">
+              <v-card class="mt-4" height="230.567" color="#eef1f6" outlined style="border-color: #d6d6d6">
+                <div class="d-flex align-center justify-center" style="height: 100%">
                   <div>
-                    <v-btn color="accent" fab small
-                      ><v-icon dark @click="dialog = !dialog"
-                        >mdi-plus</v-icon
-                      ></v-btn
-                    >
+                    <div>
+                      <v-btn color="accent" fab small><v-icon dark @click="dialog = !dialog">mdi-plus</v-icon></v-btn>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </v-card>
-          </v-col>
+              </v-card>
+            </v-col> -->
         </v-row>
       </v-col>
       <v-col cols="12" md="4">
@@ -163,9 +141,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" max-width="500">
-      <AutonCreate></AutonCreate>
-    </v-dialog>
     <v-dialog v-model="genericDialog" max-width="500">
       <GenericTransaction
         title="Membership invitation"
@@ -207,7 +182,10 @@ export default {
   methods: {
     acceptMembership(membership) {
       this.uri =
-        "/auton/" + membership.auton.autonProfile.name.replaceAll(" ", "_");
+        "/dao/" +
+        membership.dao.daoProfile.name.replaceAll(" ", "_") +
+        "/auton/" +
+        membership.auton.autonProfile.name.replaceAll(" ", "_");
       this.transaction.assetId = 0;
       this.transaction.assets.membershipId = membership.id;
       this.actionText = "Joining: " + membership.auton.autonProfile.name;
@@ -250,6 +228,10 @@ export default {
       });
       const auton = autonWrapper.result;
 
+      const daoWrapper = await this.$invoke("dao:getByID", {
+        id: auton.daoId,
+      });
+      const dao = daoWrapper.result;
 
       const now = new Date();
       const nowInSec = BigInt(Math.floor(now / 1000));
@@ -318,6 +300,7 @@ export default {
           membership.invitation.proposalId
         );
         membership.auton = auton;
+        membership.dao = dao;
         membership.id = membershipId;
         this.membershipInvitations.push(membership);
       }

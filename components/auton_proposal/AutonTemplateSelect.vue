@@ -17,44 +17,26 @@
 
 <template>
   <div>
-    <v-item-group v-model="selected" mandatory class="mt-4">
-      <v-row>
-        <v-col cols="6">
+  <v-item-group v-model="selected" mandatory class="mt-4">
+    <v-row>
+      <v-col cols="6">
           <v-item v-slot="{ active, toggle }">
-            <OptionCard
-              :active="active"
-              :toggle="toggle"
-              title="Starter template"
-              subTitle="Kalipo's default"
-              icon="mdi-shield-check"
-              template="default"
-            ></OptionCard>
+            <OptionCard :active="active" :toggle="toggle" title="Starter template" subTitle="Kalipo's default"
+              icon="mdi-shield-check" template="default"></OptionCard>
           </v-item>
         </v-col>
-        <v-col cols="6">
-          <v-item v-slot="{ active, toggle }">
-            <OptionCard
-              :active="active"
-              :toggle="toggle"
-              title="Event template"
-              subTitle="Create an event"
-              icon="mdi-calendar"
-              template="event"
-            ></OptionCard>
-          </v-item>
-        </v-col>
-        <v-col cols="6">
-          <v-item v-slot="{ active, toggle }">
-            <OptionCard
-              :active="active"
-              :toggle="toggle"
-              title="Lesson template"
-              subTitle="Create a lesson"
-              icon="mdi-account-school"
-              template="lesson"
-            ></OptionCard>
-          </v-item>
-        </v-col>
+        <!-- <v-col cols="6">
+            <v-item v-slot="{ active, toggle }">
+              <OptionCard :active="active" :toggle="toggle" title="Event template" subTitle="Create an event"
+                icon="mdi-calendar" template="event"></OptionCard>
+            </v-item>
+          </v-col>
+          <v-col cols="6">
+            <v-item v-slot="{ active, toggle }">
+              <OptionCard :active="active" :toggle="toggle" title="Lesson template" subTitle="Create a lesson"
+                icon="mdi-account-school" template="lesson"></OptionCard>
+            </v-item>
+          </v-col> -->
       </v-row>
     </v-item-group>
   </div>

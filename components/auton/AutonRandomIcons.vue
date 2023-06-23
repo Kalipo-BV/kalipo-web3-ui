@@ -18,16 +18,10 @@
 <template>
   <div>
     <div class="d-flex align-center">
-      <v-text-field
-        solo
-        label="Search"
-        append-icon="mdi-magnify"
-        class="mt-4"
-        v-model="searchValue"
-        @keyup="search"
-      ></v-text-field>
-      <v-btn color="accent" @click="generateNewIcons" large class="ml-4 mt-n4"
-        >Randomize <v-icon class="ml-2" small>mdi-dice-multiple</v-icon>
+      <v-text-field solo label="Search" append-icon="mdi-magnify" class="mt-4" v-model="searchValue"
+        @keyup="search"></v-text-field>
+      <v-btn color="accent" @click="generateNewIcons" large class="ml-4 mt-n4">Randomize <v-icon class="ml-2"
+          small>mdi-dice-multiple</v-icon>
       </v-btn>
     </div>
     <div class="d-flex justify-center"></div>
@@ -37,11 +31,8 @@
         <v-col cols="3" v-for="icon in generatedIcons" :key="icon">
           <v-item v-slot="{ active, toggle }">
             <v-card :elevation="active ? '5' : '0'" @click="toggle">
-              <v-card-text class="d-flex justify-center"
-                ><v-avatar :color="active ? 'accent' : 'primary'" size="50px"
-                  ><v-icon dark>{{ icon }}</v-icon></v-avatar
-                ></v-card-text
-              >
+              <v-card-text class="d-flex justify-center"><v-avatar :color="active ? 'accent' : 'primary'"
+                  size="50px"><v-icon dark>{{ icon }}</v-icon></v-avatar></v-card-text>
             </v-card>
           </v-item>
         </v-col>
@@ -1126,7 +1117,6 @@ export default {
       "mdi-book-sync",
       "mdi-book-sync-outline",
       "mdi-book-variant",
-      "mdi-book-variant-multiple",
       "mdi-bookmark",
       "mdi-bookmark-box-multiple",
       "mdi-bookmark-box-multiple-outline",
@@ -2334,8 +2324,6 @@ export default {
       "mdi-desk-lamp",
       "mdi-deskphone",
       "mdi-desktop-classic",
-      "mdi-desktop-mac",
-      "mdi-desktop-mac-dashboard",
       "mdi-desktop-tower",
       "mdi-desktop-tower-monitor",
       "mdi-details",
@@ -2553,16 +2541,12 @@ export default {
       "mdi-email-outline",
       "mdi-email-plus",
       "mdi-email-plus-outline",
-      "mdi-email-receive",
-      "mdi-email-receive-outline",
       "mdi-email-remove",
       "mdi-email-remove-outline",
       "mdi-email-seal",
       "mdi-email-seal-outline",
       "mdi-email-search",
       "mdi-email-search-outline",
-      "mdi-email-send",
-      "mdi-email-send-outline",
       "mdi-email-sync",
       "mdi-email-sync-outline",
       "mdi-email-variant",
@@ -6147,7 +6131,6 @@ export default {
       "mdi-text-search",
       "mdi-text-shadow",
       "mdi-text-short",
-      "mdi-text-to-speech",
       "mdi-text-to-speech-off",
       "mdi-texture",
       "mdi-texture-box",
@@ -6815,7 +6798,6 @@ export default {
       "mdi-zodiac-scorpio",
       "mdi-zodiac-taurus",
       "mdi-zodiac-virgo",
-      "mdi-blank",
     ],
   }),
 };
