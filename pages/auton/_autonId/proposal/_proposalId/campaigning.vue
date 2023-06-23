@@ -30,29 +30,43 @@
         <v-card flat class="mt-0 rounded-lg mx-auto">
       <div class="mt-4" v-if="isStakeholder()">
         <v-card-text>Expert consult</v-card-text>
-        <v-form v-model="formStake">
+        <v-form v-model="formStake" align-center >
           <v-textarea 
           v-model="advice" 
            :rules="rules"
            label="Advice"
            outlined
            auto-grow
-           rows="4"
+           rows="1"
            row-height="15"
            max-length="1024"
            counter
            ></v-textarea>
 
-          <v-radio-group inline outlined v-model="opinion">
+
+
+          <v-radio-group  outlined v-model="opinion" row>
             <v-radio label="I agree" value="agree"></v-radio>
             <v-radio label="Neutral" value="neutral"></v-radio>
             <v-radio label="I disagree" value="disagree"></v-radio>
         </v-radio-group>
-        <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default accent" @click="sendStakeholderExpertise()">
+        <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default accent" @click="sendStakeholderExpertise(), overlay=!overlay">
+          
           Submit
         </button>
-        <v-text></v-text>
-        <AccountSign :transaction="this.transaction" :uri="this.uri"></AccountSign>
+        <v-text></v-text>        
+        
+        <v-overlay
+          v-model="overlay"
+          contained
+          class="align-center justify-center"
+        >
+        <AccountSign :transaction="this.transaction" :uri="this.uri" ></AccountSign>
+
+
+        </v-overlay>
+
+
         </v-form>
 
 
@@ -211,6 +225,7 @@ export default {
       assetId: 0,
       assets: {},
     },
+    overlay : false,
   
   }),  
 
@@ -344,10 +359,14 @@ export default {
       }
     },
     sendStakeholderExpertise(){
+      console.log(this.auton)
       //hier moet de form opgestuurd worden naar de backend of info uit de form gehaald worden
       //test
-      this.$emit('submit', this.advice);
-      this.uri = `auton/autonnew/proposal/2/campaigning`;
+      //this.$emit('submit', this.advice);
+      this.uri = `/dashboard`;
+      //this.$router.push(this.uri)
+      //this.uri = `/auton/${this.auton.autonProfile.name.replace(" ", "_")}/proposal/${this.auton.proposals.length}/campaigning`;
+
 
 
 
