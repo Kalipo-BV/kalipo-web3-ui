@@ -2,7 +2,7 @@
   <v-container width="90%">
     <v-row>
       <v-col cols=10>
-        <h1 style="margin-bottom: 10px; text-align: center;" class="pl-5">View Contract</h1>
+        <h1 style="margin-bottom: 10px; text-align: center;" class="pl-5">Agreement(view modus)</h1>
       </v-col>
       <v-col cols=2>
         <v-btn
