@@ -15,10 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValidPartyData, isNotNull } from "./validation.js"
+import { isArray, isObject, isBoolean, isDate, isNumber, isId, isString, isValidPartyData, isNotNull, objectIsSameLength, genericErrorChecking } from "./validation.js"
 import { getAllFromLocalStorage, saveNewToLocalStorage, saveToLocalStorage, getFromLocalStorage, normalizeContract } from "./localstorage.js"
 import { initFormData, initContract } from "./initData.js";
 
+/**
+ * initializes the state of the contract with its main variables and can be reused by other parts
+ */
 function initState () {
 	return {
 		body: initContract(),
@@ -28,44 +31,25 @@ function initState () {
 	}
 }
 
-function genericErrorChecking(payload, state, type='string') {
-	if (payload.key === undefined) {
-		console.error('payload.key is not defined');
-		return false;
-	} 
-	
-	if (type==='string' && state.body.formData[payload.key] === undefined) {
-		console.error('state.body.formData[payload.key] is undefined');
-		return false;
-
-	} else if (type === 'date' && state.body.formData.dates[payload.key] === undefined) {
-		console.error('state.body.formData.dates[payload.key] is undefined');
-		return false;
-	}
-	
-	if (payload.content === undefined) {
-		console.error('payload.content is not defined');
-		return false;
-	}
-	
-	return true;
-}
-
+/**
+ * uses the method to initialize the state
+ */
 export const state = () => (
 	initState()
 )
 
 export const mutations = {
-	
-	createNew(state) {
+	/**
+	 * reacte a new local contract without any variable and loads it
+	 */
+	createNew() {
 		const id = saveNewToLocalStorage(initContract());
 		this.commit("contract/loadContract", { id: id });
 	},
 
-	incrementUpdateCounter(state) {
-		state.localStorageUpdateCounter++;
-	},
-
+	/**
+	 * loads contract from localstorage into the store
+	 */
 	loadContract(state, payload) {
 		const id = payload.id;
 
@@ -90,16 +74,16 @@ export const mutations = {
 		}
 	},
 
+	/**
+	 * This function is used to make a new localcopy base on given data
+	 */
 	createNewLocalCopy(state, data) {
 		const id = saveNewToLocalStorage(initContract());
 		const contract = getFromLocalStorage(id);
 		const {contractData, tid, version} = data;
 
 		if(isNotNull(contract, "contract is null")) {
-			//if length is different
-			if (Object.keys(contractData).length !== Object.keys(contract.formData).length) {
-				console.warn("contract.formdata its length is different then the proposed change in payload");
-			}
+			objectIsSameLength(contractData, contract.formData, true);
 
 			for (let dataKey in contract.formData) {
 				const newData = contractData[dataKey];
@@ -121,6 +105,9 @@ export const mutations = {
 		saveToLocalStorage(contract, id);
 	},
 
+	/**
+	 * remove an user from parties in the loaded contract and save it
+	 */
 	removeFromParties(state, payload) {
 		if (isValidPartyData(payload) ) {
 			const currentParty = state.body.formData.parties[payload.target];
@@ -132,6 +119,9 @@ export const mutations = {
 		}
 	},
 
+	/**
+	 * change a string with a key given by the component in the loaded contract and save it
+	 */
 	changeString(state, payload) {
 		if (genericErrorChecking(payload, state) ) {
 			if (isString(payload.content, `invalid ${payload.key} given`)) {
@@ -141,6 +131,9 @@ export const mutations = {
 		}
 	},
 
+	/**
+	 * change a date with a key given by the component in the loaded contract and save it
+	 */
 	changeDate(state, payload) {
 		if (genericErrorChecking(payload, state, 'date')) {
 			if (isDate(payload.content, `invalid ${payload.key} given`)) {
@@ -150,6 +143,9 @@ export const mutations = {
 		}
 	},
 
+	/**
+	 * Add a party to the loaded contract
+	 */
 	changeParties(state, payload) {
 		if (isValidPartyData(payload) && isArray(payload.data, `parties[${payload.target}]_data`)) {
 			state.body.formData.parties[payload.target] = payload.data;
@@ -157,6 +153,9 @@ export const mutations = {
 		}
 	},
 
+	/**
+	 * Change the paymentNote in the loaded contract
+	 */
 	changePaymentNote(state, payload) {
 		if (isString(payload, 'invalid paymentNote given')) {
 			state.body.formData.payment.note = payload;
@@ -164,6 +163,9 @@ export const mutations = {
 		}
 	},
 
+	/**
+	 * Change the requiredSign in the loaded contract
+	 */
 	changeRequiredSign(state, payload) {
 		if (isBoolean(payload, 'invalid required to sign given')) {
 			state.body.formData.purpose = payload;
@@ -171,6 +173,9 @@ export const mutations = {
 		}
 	},
 
+	/**
+	 * Change the paymentAmount in the loaded contract
+	 */
 	changePaymentAmount(state, payload) {
 		if (isNumber(payload, 'invalid paymentAmount given')) {
 			state.body.formData.payment.amount = Number.parseFloat(payload);
@@ -178,16 +183,9 @@ export const mutations = {
 		}
 	},
 
-	setTid(state, payload) {
-		state.body.formData.tid = payload.data;
-		saveToLocalStorage(state.body, state.id);
-	},
-
-	setVerstion(state, payload) {
-		state.body.formData.version = payload.data;
-		saveToLocalStorage(state.body, state.id);
-	},
-
+	/**
+	 * resets all variables in the local contract to the default value
+	 */
 	reset(state) {
 		state.formData = initFormData();
 		saveToLocalStorage(state.body, state.id);
@@ -195,33 +193,10 @@ export const mutations = {
 }
 
 export const getters = {
+	/**
+	 * Get filteredData to check the data before sending it to the backend
+	 */
 	filtered: (state) => {
 		return normalizeContract(state.body);
 	},
-}
-
-function retreiveData(state) {
-	const result = {};
-
-	for (const key in state) {
-		const currentProp = state[key];
-		const isObject = (typeof currentProp === 'object' && !Array.isArray(currentProp));
-		if (isObject) {
-			const data = retreiveData(currentProp);
-			if (Object.keys(data).length > 0) {
-				result[key] = data;
-			}
-		
-		} else if (Array.isArray(currentProp) ) {
-			
-			if (currentProp.length > 0) {
-				result[key] = currentProp;
-			}
-
-		} else if (currentProp !== "" && currentProp !== null && currentProp !== undefined) {
-			result[key] = currentProp;
-		}
-	}
-
-	return result;
 }

@@ -7,7 +7,7 @@ export const initContract = () => {
 		date: new Date().toISOString(),
 		formData: initFormData(),
 		tid: "",
-		verstion: null,
+		version: "",
 	}
 }
 

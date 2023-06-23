@@ -116,3 +116,38 @@ export const logError = (bool, errorName, payload) => {
 		console.error(`[contract store] ${errorName}\n\n`, `payload = ${payload}\n\n`, `typeof payload = ${typeof payload}`);
 	}
 }
+
+export const objectIsSameLength = (object1, object2, showWarning=false) => {
+	if (Object.keys(object1).length !== Object.keys(object2).length) {
+		if (showWarning) {
+			console.warn("contract.formdata its length is different then the proposed change in payload");
+		}
+		
+		return false;
+	}
+
+	return true;
+}
+
+export function genericErrorChecking(payload, state, type = 'string') {
+	if (payload.key === undefined) {
+		console.error('payload.key is not defined');
+		return false;
+	}
+
+	if (type === 'string' && state.body.formData[payload.key] === undefined) {
+		console.error('state.body.formData[payload.key] is undefined');
+		return false;
+
+	} else if (type === 'date' && state.body.formData.dates[payload.key] === undefined) {
+		console.error('state.body.formData.dates[payload.key] is undefined');
+		return false;
+	}
+
+	if (payload.content === undefined) {
+		console.error('payload.content is not defined');
+		return false;
+	}
+
+	return true;
+}
