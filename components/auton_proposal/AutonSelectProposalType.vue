@@ -24,14 +24,29 @@
       <v-row justify="start">
         <v-col cols="12" md="6">
           <div @click="selectedProposalTypeInput = 'membership-invitation'">
-            <ProposalTypeCard icon="mdi-account-plus" title="Membership invitation"
-              :active="selectedProposalTypeInput == 'membership-invitation'"></ProposalTypeCard>
+            <ProposalTypeCard
+              icon="mdi-account-plus"
+              title="Membership invitation"
+              :active="selectedProposalTypeInput == 'membership-invitation'"
+            ></ProposalTypeCard>
           </div>
         </v-col>
         <v-col cols="12" md="6">
           <div @click="selectedProposalTypeInput = 'auton-creation'">
-            <ProposalTypeCard icon="mdi-web-plus" title="Auton creation"
-              :active="selectedProposalTypeInput == 'auton-creation'"></ProposalTypeCard>
+            <ProposalTypeCard
+              icon="mdi-web-plus"
+              title="Auton creation"
+              :active="selectedProposalTypeInput == 'auton-creation'"
+            ></ProposalTypeCard>
+          </div>
+        </v-col>
+        <v-col cols="12" md="6">
+          <div @click="selectedProposalTypeInput = 'terms-and-conditions'">
+            <ProposalTypeCard
+              icon="mdi-scale-balance"
+              title="Terms and Conditions"
+              :active="selectedProposalTypeInput == 'terms-and-conditions'"
+            ></ProposalTypeCard>
           </div>
         </v-col>
       </v-row>

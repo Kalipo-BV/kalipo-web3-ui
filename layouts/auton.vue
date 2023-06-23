@@ -44,26 +44,25 @@
               </v-breadcrumbs-item>
             </v-breadcrumbs>
           </v-container>
-        </div>
-        <v-app-bar height="148px" color="white" flat>
-          <v-row>
-            <v-container>
-              <v-row no-gutters class="d-flex align-center">
-                <v-col class="">
-                  <div class="d-flex align-start">
-                    <v-avatar
-                      color="primary"
-                      size="40"
-                      class="white--text mr-2 mt-1"
-                      ><v-icon color="white">{{
-                        auton.autonProfile.icon
-                      }}</v-icon></v-avatar
-                    >
-                    <div class="ml-2">
-                      <div class="text-h3 primary--text">
+          <v-divider dark></v-divider>
+          <v-container>
+            <v-row>
+              <v-col cols="12" md="9">
+                <div class="d-flex align-center mt-0 mb-1">
+                  <v-avatar
+                    color="accent"
+                    size="31"
+                    class="white--text mr-2 mt-1"
+                    ><v-icon color="white">{{
+                      auton.autonProfile.icon
+                    }}</v-icon></v-avatar
+                  >
+                  <div class="ml-2 d-flex align-center">
+                    <div class="mr-5">
+                      <div class="text-h4 white--text">
                         {{ auton.autonProfile.name }}
                       </div>
-                      <div class="text-caption">
+                      <div class="text-caption white--text">
                         Founded since
                         {{
                           new Date(
@@ -75,91 +74,186 @@
                           })
                         }}
                       </div>
-                      <div class="text-caption mt-2" style="min-height: 16px">
-                        <v-chip
-                          x-small
-                          link
-                          color=""
-                          class="px-2 mr-1"
-                          v-for="(tag, i) in auton.tags"
-                          :key="i"
-                          >#{{ tag }}</v-chip
-                        >
-                      </div>
+                    </div>
+
+                    <div class="text-caption mt-2" style="min-height: 16px">
+                      <v-chip
+                        x-small
+                        link
+                        color=""
+                        class="px-2 mr-1"
+                        v-for="(tag, i) in auton.tags"
+                        :key="i"
+                        >#{{ tag }}</v-chip
+                      >
                     </div>
                   </div>
-                </v-col>
-                <v-col class="d-flex justify-end">
-                  <v-btn
-                    v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'"
-                    class="mr-12"
-                    color="accent"
-                    @click="dialog = !dialog"
-                  >
-                    New proposal
-                  </v-btn>
-                  <v-btn
-                    v-if="auton.type == 'EVENT'"
-                    class="mr-12"
-                    color="accent"
-                    @click="dialog = !dialog"
-                    :disabled="authorizedAddAttendee"
-                  >
-                    Add attendee
-                  </v-btn>
-                  <v-btn
-                    v-if="auton.type == 'LESSON'"
-                    class="mr-12"
-                    color="accent"
-                    :disabled="authorizedAddAttendee"
-                    @click="dialog = !dialog"
-                  >
-                    Check in/out
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-row>
-          <template v-slot:extension class="mt-2">
-            <v-container
-              ><v-tabs show-arrows v-model="selectedItem">
-                <v-tabs-slider color="primary"></v-tabs-slider>
-
-                <v-tab
+                </div>
+              </v-col>
+              <v-col cols="12" md="3" class="d-flex align-center justify-end">
+                <v-btn
                   v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'"
-                  v-for="(item, idx) in tabItemsDefault"
-                  :key="idx"
-                  @click="navigate(item.to)"
+                  class="mr-0"
+                  color="accent"
+                  @click="dialog = !dialog"
                 >
-                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                  {{ item.title }}
-                </v-tab>
-
-                <v-tab
-                  v-if="auton.type == 'EVENT'"
-                  v-for="(item, idx) in tabItemsEvent"
-                  :key="idx"
-                  @click="navigate(item.to)"
-                >
-                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                  {{ item.title }}
-                </v-tab>
-
-                <v-tab
-                  v-if="auton.type == 'LESSON'"
-                  v-for="(item, idx) in tabItemsLesson"
-                  :key="idx"
-                  @click="navigate(item.to)"
-                >
-                  <v-icon small class="mr-2">{{ item.icon }}</v-icon>
-                  {{ item.title }}
-                </v-tab>
-              </v-tabs>
+                  New proposal
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </div>
+        <div class="white">
+          <!-- <div class="primary">
+            <v-container>
+              <div class="d-flex align-start">
+                <v-avatar color="accent" size="28" class="white--text mr-2 mt-1"
+                  ><v-img src="/Kalipo_Logo_512x512.png"></v-img
+                ></v-avatar>
+                <div class="ml-2">
+                  <div class="d-flex align-center">
+                    <div class="text-h6 white--text">0.148 KLP</div>
+                  </div>
+                  <v-chip x-small link color="success" class="mt-n2 mr-1">
+                    <v-icon small>mdi-menu-up</v-icon> 0.3%
+                  </v-chip>
+                </div>
+              </div>
             </v-container>
-          </template>
-        </v-app-bar>
-        <Nuxt class="mt-n2 px-8 px-lg-3" :auton="auton" />
+          </div> -->
+          <!-- <v-app-bar height="50px" color="primary" flat>
+          <v-container class="mt-0 pt-2">
+            <v-row class="d-flex align-center">
+              <v-col class="">
+                <div class="d-flex align-start">
+                  <v-avatar
+                    color="accent"
+                    size="30"
+                    class="white--text mr-2 mt-1"
+                    ><v-icon color="white">{{
+                      auton.autonProfile.icon
+                    }}</v-icon></v-avatar
+                  >
+                  <div class="ml-2 d-flex align-center">
+                    <div class="mr-5">
+                      <div class="text-h4 white--text">
+                        {{ auton.autonProfile.name }}
+                      </div>
+                      <div class="text-caption white--text">
+                        Founded since
+                        {{
+                          new Date(
+                            parseInt(auton.autonProfile.foundingDate) * 1000
+                          ).toLocaleDateString(userLang, {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })
+                        }}
+                      </div>
+                    </div>
+
+                    <div class="text-caption mt-2" style="min-height: 16px">
+                      <v-chip
+                        x-small
+                        link
+                        color=""
+                        class="px-2 mr-1"
+                        v-for="(tag, i) in auton.tags"
+                        :key="i"
+                        >#{{ tag }}</v-chip
+                      >
+                    </div>
+                  </div>
+                </div>
+              </v-col>
+              <v-col class="d-flex justify-end">
+                <v-btn
+                  v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'"
+                  class="mr-12"
+                  color="accent"
+                  @click="dialog = !dialog"
+                >
+                  New proposal
+                </v-btn>
+                <v-btn
+                  v-if="auton.type == 'EVENT'"
+                  class="mr-12"
+                  color="accent"
+                  @click="dialog = !dialog"
+                  :disabled="authorizedAddAttendee"
+                >
+                  Add attendee
+                </v-btn>
+                <v-btn
+                  v-if="auton.type == 'LESSON'"
+                  class="mr-12"
+                  color="accent"
+                  :disabled="authorizedAddAttendee"
+                  @click="dialog = !dialog"
+                >
+                  Check in/out
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-app-bar> -->
+          <v-container class="py-0 px-0 px-lg-3">
+            <v-tabs show-arrows v-model="selectedItem" background-color="">
+              <v-tabs-slider color="primary"></v-tabs-slider>
+
+              <v-tab
+                v-if="auton.type == 'DEFAULT' || auton.type == 'GOVERNING'"
+                v-for="(item, idx) in tabItemsDefault"
+                :key="idx"
+                @click="navigate(item.to)"
+              >
+                <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                {{ item.title }}
+              </v-tab>
+
+              <v-tab
+                v-if="auton.type == 'EVENT'"
+                v-for="(item, idx) in tabItemsEvent"
+                :key="idx"
+                @click="navigate(item.to)"
+              >
+                <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                {{ item.title }}
+              </v-tab>
+
+              <v-tab
+                v-if="auton.type == 'LESSON'"
+                v-for="(item, idx) in tabItemsLesson"
+                :key="idx"
+                @click="navigate(item.to)"
+              >
+                <v-icon small class="mr-2">{{ item.icon }}</v-icon>
+                {{ item.title }}
+              </v-tab>
+            </v-tabs>
+          </v-container>
+        </div>
+        <div style="height: 100%; background: #eef1f6">
+          <Nuxt class="" :auton="auton" />
+        </div>
       </div>
+      <v-footer padless fixed color="primary" v-if="false">
+        <v-col class="white--text" cols="6">
+          <div class="ml-16 pl-16">
+            <div class="ml-16 pl-16">
+              {{ new Date().getFullYear() }} — <strong>Kalipo</strong>
+            </div>
+          </div>
+        </v-col>
+        <v-col class="white--text" cols="6">
+          <div class="d-flex justify-end">
+            <div class="">
+              <v-btn small>...</v-btn>
+            </div>
+          </div>
+        </v-col>
+      </v-footer>
     </v-main>
     <MainMenu></MainMenu>
 
@@ -438,5 +532,8 @@ export default {
 <style>
 #auton-layout .v-breadcrumbs li {
   cursor: pointer;
+}
+#auton-layout .v-toolbar__content {
+  padding: 0;
 }
 </style>

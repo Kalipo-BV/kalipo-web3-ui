@@ -58,15 +58,17 @@ $headings: (
 );
 
 $grid-breakpoints: (
-    'xs': 0,
-    'sm': 500px,
-    'md': 900px,
-    'lg': 1370px,
-    'xl': 1500px
+    xs: 0,
+    sm: 600px,
+    md: 1024px,
+    lg: 1600px,
+    xl: 2048px
+);
+$container-max-widths: (
+    xs: 0,
+    sm: 1200px,
+    md: 1200px,
+    lg: 1200px,
+    xl: 1200px
 );
 @import "~vuetify/src/styles/styles.sass";
-$container-max-widths: (
-    'md': 1383.75px,
-    'lg': 1383.75px,
-    'xl': 1383.75px
-);

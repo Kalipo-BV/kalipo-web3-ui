@@ -22,26 +22,51 @@
         <div class="text-h2 primary--text">My DAOs and autons</div>
 
         <v-row>
-          <!-- <v-col xs="12" sm="6" md="4" lg="3" v-for="(auton, i) in autons" :key="i">
-            <div @click="
-              $router.push(
-                  '/auton/' + auton.autonProfile.name.replaceAll(' ', '_')
+          <v-col
+            xs="12"
+            sm="6"
+            md="4"
+            lg="4"
+            v-for="(auton, i) in autons"
+            :key="i"
+          >
+            <div
+              @click="
+                $router.push(
+                  '/dao/' +
+                    auton.dao.daoProfile.name.replaceAll(' ', '_') +
+                    '/auton/' +
+                    auton.autonProfile.name.replaceAll(' ', '_')
                 )
-              ">
-                <AutonCard class="mt-4" :auton="auton"></AutonCard>
-              </div>
-            </v-col>
-            <v-col xs="12" sm="6" md="4" lg="3">
-              <v-card class="mt-4" height="230.567" color="#eef1f6" outlined style="border-color: #d6d6d6">
-                <div class="d-flex align-center justify-center" style="height: 100%">
+              "
+            >
+              <AutonCard class="mt-4" :auton="auton"></AutonCard>
+            </div>
+          </v-col>
+          <v-col xs="12" sm="6" md="4" lg="4">
+            <v-card
+              class="mt-4"
+              height="230.567"
+              color="#eef1f6"
+              outlined
+              style="border-color: #d6d6d6"
+            >
+              <div
+                class="d-flex align-center justify-center"
+                style="height: 100%"
+              >
+                <div>
                   <div>
-                    <div>
-                      <v-btn color="accent" fab small><v-icon dark @click="dialog = !dialog">mdi-plus</v-icon></v-btn>
-                    </div>
+                    <v-btn color="accent" fab small
+                      ><v-icon dark @click="dialog = !dialog"
+                        >mdi-plus</v-icon
+                      ></v-btn
+                    >
                   </div>
                 </div>
-              </v-card>
-            </v-col> -->
+              </div>
+            </v-card>
+          </v-col>
         </v-row>
       </v-col>
       <v-col cols="12" md="4">
@@ -59,7 +84,9 @@
             link
             @click="
               $router.push(
-                '/auton/' +
+                '/dao/' +
+                  membership.dao.daoProfile.name.replaceAll(' ', '_') +
+                  '/auton/' +
                   membership.auton.autonProfile.name.replaceAll(' ', '_') +
                   '/proposal/' +
                   (membership.proposalIndex + 1) +
@@ -285,6 +312,11 @@ export default {
           }
         }
 
+        const daoWrapper = await this.$invoke("dao:getByID", {
+          id: auton.daoId,
+        });
+        auton.dao = daoWrapper.result;
+
         this.autons.push(auton);
       } else if (
         nowInSec >= BigInt(membership.invitation.validStart) &&
@@ -300,11 +332,16 @@ export default {
           membership.invitation.proposalId
         );
         membership.auton = auton;
+
+        const daoWrapper = await this.$invoke("dao:getByID", {
+          id: auton.daoId,
+        });
         membership.dao = dao;
-        membership.id = membershipId;
+        membership.id = daoWrapper.result;
         this.membershipInvitations.push(membership);
       }
     }
+    console.log(this.autons);
   },
 };
 </script>
