@@ -215,6 +215,7 @@ export default {
         accountWrapper.result.memberships
       );
     },
+    
     getInitials(parseStr) {
       if (parseStr != undefined) {
         const nameList = parseStr.split(" ");

@@ -371,12 +371,20 @@
                   title="Bill"
                 ></ProposalTypeCard>
               </v-col>
+              <v-col cols="12" md="3" @click="() => {dialog2 = true}">
+                <ProposalTypeCard icon="" title="Contract"/>
+              </v-col>
+              <v-col cols="12" md="3" @click="openAgreement">
+                <ProposalTypeCard icon="" title="Agreements"/>
+              </v-col>
             </v-row>
           </div>
         </div>
       </div>
-    </v-container>
-
+    <v-dialog scrollable v-model="dialog2" max-width="500">
+      <SelectAgreementTemplate />
+    </v-dialog>
+  </v-container>
     <v-dialog v-model="showChangeLog" width="500" scrollable>
       <v-card>
         <v-card-text class="pt-4 d-flex justify-space-between align-center">
@@ -403,6 +411,7 @@ export default {
   layout: "auton",
   data: () => ({
     dialog: true,
+    dialog2: false,
     selectedItem: "",
     termsAndConditionsVersionSelected: 0,
     termsAndConditionsVersions: 0,
@@ -631,6 +640,9 @@ export default {
           }
         }
       }
+    },
+    openAgreement() {
+      this.$router.push("/contract/agreements")
     },
   },
   watch: {
