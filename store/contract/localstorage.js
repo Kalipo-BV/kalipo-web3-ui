@@ -4,6 +4,9 @@ import { initContract } from "./initData.js";
 
 let isLocalStorageChecked = false;
 
+/**
+ * this method saves a contract with the specified id to the localstorage
+ */
 export const saveToLocalStorage = (contract, id = 0) => {
 	if (isValidContract(contract)) {
 		const data = putContractToLocalStorageData(contract, id);
@@ -11,6 +14,9 @@ export const saveToLocalStorage = (contract, id = 0) => {
 	}
 }
 
+/**
+ * this method saves a newcontract with the specified id to the localstorage
+ */
 export const saveNewToLocalStorage = (contract) => {
 	if (isValidContract(contract)) {
 		const { data, id } = addContractToLocalStorageData(contract);
@@ -21,6 +27,9 @@ export const saveNewToLocalStorage = (contract) => {
 	return -1;
 }
 
+/**
+ * this method retrieves a contract with the specified id from the localstorage
+ */
 export const getFromLocalStorage = (id = 0) => {
 	const contracten = getNormalizedLocalStorageData();
 	const contract = contracten[id];
@@ -38,12 +47,19 @@ export const getFromLocalStorage = (id = 0) => {
 	return contract;
 }
 
+/**
+ * this method retrieves all contracts from the localstorage
+ */
 export const getAllFromLocalStorage = () => {
 	setEmptyLocalStorageIfNotSet();
 	const localStorageReference = localStorage.getItem("Agreements");
 	return JSON.parse(localStorageReference);
 }
 
+/**
+ * filters the data of extra fields makes sure the required fields are set
+ * and makes sure that in the contract array and object types are set correctly
+ */
 export const normalizeContract = (contract) => {
 	return extractDataByObject(initContract(), contract);
 }
@@ -100,6 +116,9 @@ function extractDataByObject(requiredObject, givenObject) {
 }
 
 
+/**
+ * returns the highest found key in localstorage
+ */
 function getHighestKeyInLocalStorage() {
 	const data = getNormalizedLocalStorageData();	
 	const keys = Object.keys(data);
@@ -111,6 +130,14 @@ function getHighestKeyInLocalStorage() {
 	return Math.max(...keys) * 1;
 };
 
+/**
+ * generates a new key
+ * makes a copy from data of the localstore
+ * makes an new item on the newly generated key in the localstore data
+ * returns the the content of localstorage with the made change.
+ * 
+ * does not save the data
+ */
 function addContractToLocalStorageData(contract) {
 	const newKey = getHighestKeyInLocalStorage() +1;
 	const data = putContractToLocalStorageData(contract, newKey)
@@ -118,6 +145,13 @@ function addContractToLocalStorageData(contract) {
 	return {data, id: newKey}
 }
 
+/**
+ * makes a copy from data of the localstore
+ * makes an edit on the specified key in the localstore data
+ * returns the the content of localstorage with the made change.
+ * 
+ * does not save the data
+ */
 function putContractToLocalStorageData(contract, id) {
 	if (isNotNull(contract)) {
 		const data = getNormalizedLocalStorageData();
@@ -130,6 +164,9 @@ function putContractToLocalStorageData(contract, id) {
 	}
 }
 
+/**
+ * saves the specified data in the localstorage.
+ */
 function saveInLocalStorage(data) {
 	const dataJson = JSON.stringify(data);
 
@@ -138,12 +175,18 @@ function saveInLocalStorage(data) {
 	}
 }
 
+/**
+ * get localstorage data if exist otherwise create it and return the empty data
+ */
 function getNormalizedLocalStorageData() {
 	setEmptyLocalStorageIfNotSet();
 	const localStorageReference = localStorage.getItem("Agreements");
 	return JSON.parse(localStorageReference);
 }
 
+/**
+ * Checks if the localstorage is set otherwise creates it
+ */
 function setEmptyLocalStorageIfNotSet() {
 	if(!isLocalStorageChecked) {
 		const localStorageReference = localStorage.getItem("Agreements");
