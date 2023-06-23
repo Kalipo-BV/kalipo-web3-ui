@@ -1,3 +1,6 @@
+/**
+ * this method returns the contract.body for the main contract
+ */
 export const initContract = () => {
 	return {
 		editFase: 3,
@@ -7,10 +10,13 @@ export const initContract = () => {
 		date: new Date().toISOString(),
 		formData: initFormData(),
 		tid: "",
-		verstion: null,
+		version: "",
 	}
 }
 
+/**
+ * this method returns the main fromData for contract.body.formData for the main contract
+ */
 export const initFormData = () => {
 	return {
 		parties: {
