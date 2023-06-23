@@ -178,45 +178,6 @@ export const mutations = {
 		}
 	},
 
-	changeCustom(state, payload) {
-		if (isArray(payload, 'invalid customProvision given')) {
-			state.body.formData.custom = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	changeCustom(state, payload) {
-		if (isArray(payload, 'invalid custom given')) {
-			state.body.formData.custom = payload;
-			saveToLocalStorage(state.body, state.id);
-		}
-	},
-
-	customAddProvision(state, item) {
-		state.body.formData.custom.push(item);
-		saveToLocalStorage(state.body, state.id);
-	},
-
-	customRemoveProvision(state, index) {
-		state.body.formData.custom.splice(index, 1);
-		saveToLocalStorage(state.body, state.id);
-	},
-
-	customChangeType(state, payload) {
-		state.body.formData.custom[payload.index].type = payload.data;
-		saveToLocalStorage(state.body, state.id);
-	},
-
-	customChangeInfo(state, payload) {
-		state.body.formData.custom[payload.index].info = payload.data;
-		saveToLocalStorage(state.body, state.id);
-	},
-
-	customChangeData(state, payload) {
-		state.body.formData.custom[payload.index].data = payload.data;
-		saveToLocalStorage(state.body, state.id);
-	},
-
 	setTid(state, payload) {
 		state.body.formData.tid = payload.data;
 		saveToLocalStorage(state.body, state.id);
