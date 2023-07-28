@@ -24,6 +24,7 @@
         >
         <v-btn
           v-if="isMarkedForDelete"
+          :disabled="disableUndelete"
           color="error"
           @click="$emit('unDelete', id)"
           outlined
@@ -62,6 +63,11 @@ export default {
       required: false,
     },
     isMarkedForDelete: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    disableUndelete: {
       type: Boolean,
       required: false,
       default: false,

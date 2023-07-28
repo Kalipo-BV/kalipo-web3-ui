@@ -17,20 +17,37 @@
 
 <template>
   <div>
-    <v-card class="rounded-lg" link :color="active ? 'accent' : ''">
+    <v-card
+      class="rounded-lg"
+      :link="!disabled"
+      :flat="disabled === 'true'"
+      :color="active && !disabled ? 'accent' : disabled ? 'grey lighten-2' : ''"
+    >
       <v-card-text>
         <div class="d-flex justify-center">
-          <v-avatar :color="active ? 'white' : 'primary'" size="35px">
+          <v-avatar
+            :color="
+              active && !disabled ? 'white' : disabled ? 'grey' : 'primary'
+            "
+            size="35px"
+          >
             <v-icon :color="active ? 'accent' : 'white'" small>{{
               icon
             }}</v-icon>
           </v-avatar>
         </div>
 
-        <div class="text-h5 mt-2 d-flex justify-center">
-          <span :class="active ? 'white--text' : 'primary--text'">{{
-            title
-          }}</span>
+        <div class="text-body-1 mt-2 d-flex justify-center">
+          <span
+            :class="
+              active && !disabled
+                ? 'white--text'
+                : disabled
+                ? 'grey--text'
+                : 'primary--text'
+            "
+            >{{ title }}</span
+          >
         </div>
       </v-card-text>
     </v-card>
@@ -38,6 +55,6 @@
 </template>
 <script>
 export default {
-  props: ["icon", "title", "active"],
+  props: ["icon", "title", "active", "disabled"],
 };
 </script>

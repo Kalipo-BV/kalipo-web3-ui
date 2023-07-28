@@ -17,113 +17,23 @@
 
 <template>
   <div>
-    <v-row class="mt-4 mb-2">
-      <v-col cols="12" md="6">
-        <v-card flat>
-          <v-card-text>
-            <div class="d-flex align-center">
-              <v-btn fab x-small class="ml-xl-n16" absolute
-                ><v-icon>mdi-arrow-left</v-icon></v-btn
-              >
-              <div class="text-h4 primary--text ml-12 ml-xl-0">
-                Paramter settings
-              </div>
+    <v-container>
+      <v-row class="">
+        <v-col cols="12" md="7">
+          <div class="d-flex align-center">
+            <v-btn fab x-small class="ml-xl-n16" absolute
+              ><v-icon>mdi-arrow-left</v-icon></v-btn
+            >
+            <div class="ml-12 ml-xl-0">
+              <div class="text-h6 primary--text">Proposal type</div>
+              <div class="text-h4 primary--text">Membership invitation</div>
             </div>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text>
-            <div class="text-body-1">Mandatory attendance of auton members</div>
-            <div class="d-flex align-center">
-              <v-slider v-model="slider" class="" hide-details></v-slider>
-              <div>{{ slider }}%</div>
-            </div>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text>
-            <div class="text-body-1">
-              Percentage of votes for acceptance of proposal
-            </div>
-            <div class="d-flex align-center percentage-votes">
-              <v-slider
-                v-model="slider"
-                class=""
-                hide-details
-                :thumb-size="24"
-                thumb-label="always"
-              >
-                <template v-slot:thumb-label="{ value }">
-                  <div class="d-flex align-center black--text mb-5">
-                    Accepted
-                  </div>
-                </template>
-              </v-slider>
-              <div>{{ slider }}% accpeted</div>
-            </div>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text>
-            <div class="text-body-1">(Maximum) Voting duration</div>
-            <div class="d-flex align-center justify-space-between mt-2">
-              <v-btn fab small><v-icon>mdi-minus</v-icon></v-btn>
-              <div class="text-body-1">3 days</div>
-              <v-btn fab small><v-icon>mdi-plus</v-icon></v-btn>
-            </div>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text>
-            <div class="text-body-1">
-              Starting moment when a proposal is submitted
-            </div>
-            <div class="d-flex align-center justify-space-between mt-2">
-              <v-btn fab small><v-icon>mdi-minus</v-icon></v-btn>
-              <div class="text-body-1">3 days</div>
-              <v-btn fab small><v-icon>mdi-plus</v-icon></v-btn>
-            </div>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-text>
-            <div class="text-body-1">Moment of excecution</div>
-            <v-item-group v-model="selected" mandatory>
-              <v-row>
-                <v-col cols="6">
-                  <v-item v-slot="{ active, toggle }">
-                    <OptionCard
-                      :active="active"
-                      :toggle="toggle"
-                      icon="mdi-timer"
-                      title="When MMA & RAP is reached the vote ends"
-                      subTitle="Faster but less safe"
-                    ></OptionCard>
-                  </v-item>
-                </v-col>
-                <v-col cols="6">
-                  <v-item v-slot="{ active, toggle }">
-                    <OptionCard
-                      :active="active"
-                      :toggle="toggle"
-                      icon="mdi-security"
-                      title="When full voting daration has been passed the vote
-                          ends"
-                      subTitle="Slower but more secure"
-                    ></OptionCard>
-                  </v-item>
-                </v-col>
-              </v-row>
-            </v-item-group>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+          </div>
+          <v-divider class="my-4"></v-divider>
+          <ProposalParameterSettings></ProposalParameterSettings>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 <script>
@@ -132,6 +42,7 @@ export default {
   data: () => ({
     selected: 0,
     slider: 45,
+    executeWhenFinal: false,
   }),
   mounted() {
     this.$nuxt.$emit("Auton-setPage", "constitution");

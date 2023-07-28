@@ -67,6 +67,12 @@
         v-if="step == 'terms-and-conditions'"
       ></TermsAndConditionsCreate>
 
+      <ProposalParameterSettingsEdit
+        v-if="step == 'proposal-type-bill'"
+        @prevStep="prevStep"
+        @nextStep="nextStep"
+      ></ProposalParameterSettingsEdit>
+
       <AccountSign
         :transaction="transaction"
         :uri="uri"
@@ -141,6 +147,9 @@ export default {
         this.step = "proposal-profile";
       } else if (this.step == "terms-and-conditions") {
         this.step = "proposal-profile";
+      } else if (this.step == "proposal-type-bill") {
+        this.step = "proposal-profile";
+        this.hideNavigation = false;
       } else if (this.step == "sign") {
         if (this.selectedProposalType == "membership-invitation") {
           this.step = "membership-invitation";
@@ -181,6 +190,9 @@ export default {
           this.step = "auton-creation";
         } else if (this.selectedProposalType == "terms-and-conditions") {
           this.step = "terms-and-conditions";
+        } else if (this.selectedProposalType == "proposal-type-bill") {
+          this.step = "proposal-type-bill";
+          this.hideNavigation = true;
         }
       } else if (
         this.step == "membership-invitation" ||
