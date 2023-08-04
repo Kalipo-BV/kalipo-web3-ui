@@ -21,16 +21,27 @@
       <v-row class="">
         <v-col cols="12" md="7">
           <div class="d-flex align-center">
-            <v-btn fab x-small class="ml-xl-n16" absolute
+            <v-btn
+              fab
+              x-small
+              class="ml-xl-n16"
+              absolute
+              @click="$router.go(-1)"
               ><v-icon>mdi-arrow-left</v-icon></v-btn
             >
             <div class="ml-12 ml-xl-0">
               <div class="text-h6 primary--text">Proposal type</div>
-              <div class="text-h4 primary--text">Membership invitation</div>
+              <div class="text-h4 primary--text">{{ proposalType }}</div>
             </div>
           </div>
           <v-divider class="my-4"></v-divider>
-          <ProposalParameterSettings></ProposalParameterSettings>
+          <ProposalParameterSettings
+            :mandatoryAttendence.sync="mandatoryAttendence"
+            :acceptence.sync="acceptence"
+            :dialogWindow.sync="dialogWindow"
+            :votingWindow.sync="votingWindow"
+            :executeWhenFinal.sync="executeWhenFinal"
+          ></ProposalParameterSettings>
         </v-col>
       </v-row>
     </v-container>
@@ -43,9 +54,63 @@ export default {
     selected: 0,
     slider: 45,
     executeWhenFinal: false,
+    autondId: null,
+    auton: null,
+    proposalType: null,
+    acceptence: 0,
+    mandatoryAttendence: 0,
+    dialogWindow: 1,
+    votingWindow: 1,
+    execAfterEnd: false,
   }),
-  mounted() {
+  async mounted() {
     this.$nuxt.$emit("Auton-setPage", "constitution");
+
+    const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
+    this.proposalType = this.$route.params.proposalType;
+
+    const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {
+      name: autonIdParam,
+    });
+
+    this.autondId = autonIdWrapper.result.id;
+    const autonWrapper = await this.$invoke("auton:getByID", {
+      id: autonIdWrapper.result.id,
+    });
+    this.auton = autonWrapper.result;
+    console.log(this.auton);
+
+    let provisionId = null;
+    for (let index = 0; index < this.auton.constitution.length; index++) {
+      const proposalTypeWrapper = this.auton.constitution[index];
+      if (
+        this.proposalType == proposalTypeWrapper.type &&
+        proposalTypeWrapper.provisions.length > 0
+      ) {
+        provisionId =
+          proposalTypeWrapper.provisions[
+            proposalTypeWrapper.provisions.length - 1
+          ];
+      }
+    }
+    if (provisionId != null) {
+      const provisionWrapper = await this.$invoke("auton:getProvisionByID", {
+        id: provisionId,
+      });
+      this.acceptence = provisionWrapper.result.acceptance;
+      this.mandatoryAttendence = provisionWrapper.result.attendance;
+      if (provisionWrapper.result.campaigning == 0) {
+        this.dialogWindow = 0;
+      } else {
+        this.dialogWindow = Number(
+          Math.ceil(provisionWrapper.result.campaigning / 60 / 24)
+        );
+      }
+      this.votingWindow = Number(
+        Math.ceil(provisionWrapper.result.votingWindow / 60 / 24)
+      );
+      this.executeWhenFinal = !provisionWrapper.result.execAfterEnd;
+    }
   },
 };
 </script>

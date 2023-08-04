@@ -240,17 +240,7 @@
         </div>
 
         <div v-if="selectedItem === 1">
-          <div class="mt-2 text-body-1">
-            Formed on
-            <v-chip color="" class="" small>12 dec. 2021</v-chip>, based on
-            <v-chip color="" class="" small>starter template</v-chip>
-          </div>
-
-          <div class="mt-2 text-body-1">
-            <v-chip color="" class="" small>26</v-chip>
-            changes have been made so far
-          </div>
-          <v-row justify="start" class="mt-4">
+          <v-row justify="start" class="mt-0">
             <v-col cols="12" md="4">
               <v-text-field
                 solo
@@ -266,7 +256,11 @@
               Memberships & roles
             </div>
             <v-row justify="start">
-              <v-col cols="12" md="3">
+              <v-col
+                cols="12"
+                md="3"
+                @click="$router.push('membership-invitation')"
+              >
                 <ProposalTypeCard
                   icon="mdi-account-plus"
                   title="Membership invitation"
@@ -431,6 +425,9 @@ export default {
     currentGlossaryTree: null,
     currentPreambleTree: null,
     currentArticleTree: null,
+    prevGlossaryTree: null,
+    prevPreambleTree: null,
+    prevArticleTree: null,
     showChangeLog: false,
     versionMap: {},
     versionIds: [],
@@ -535,33 +532,42 @@ export default {
       if (entryNumber == null) {
         entryNumber = "";
       }
-
-      for (let index = 0; index < tree.length; index++) {
-        const entry = tree[index];
-        if (entry.entryId == entryId) {
-          entryNumber += index + 1 + ".";
-          found = { entryNumber: entryNumber, entry: entry };
-          break;
-        }
-        if (entry.children) {
-          const tempNumber = entryNumber + (index + 1) + ".";
-          const subResult = this.recursiveSearchTree(
-            entry.children,
-            entryId,
-            tempNumber
-          );
-          if (subResult) {
-            found = subResult;
+      if (tree) {
+        for (let index = 0; index < tree.length; index++) {
+          const entry = tree[index];
+          if (entry.entryId == entryId) {
+            entryNumber += index + 1 + ".";
+            found = { entryNumber: entryNumber, entry: entry };
+            break;
+          }
+          if (entry.children) {
+            const tempNumber = entryNumber + (index + 1) + ".";
+            const subResult = this.recursiveSearchTree(
+              entry.children,
+              entryId,
+              tempNumber
+            );
+            if (subResult) {
+              found = subResult;
+            }
           }
         }
       }
+
       return found;
     },
-    searchSectionByEntryId(entryId) {
+    searchSectionByEntryId(entryId, prev) {
       console.log("this.currentGlossaryTree");
       console.log(this.currentGlossaryTree);
+      let glossaryTree = null;
+      if (prev) {
+        glossaryTree = this.prevGlossaryTree;
+      } else {
+        glossaryTree = this.currentGlossaryTree;
+      }
+      console.log(entryId);
       const isGlossarySection = this.recursiveSearchTree(
-        this.currentGlossaryTree,
+        glossaryTree,
         entryId,
         null
       );
@@ -570,8 +576,14 @@ export default {
         return isGlossarySection;
       }
 
+      let preambleTree = null;
+      if (prev) {
+        preambleTree = this.prevPreambleTree;
+      } else {
+        preambleTree = this.currentPreambleTree;
+      }
       const isPreambleSection = this.recursiveSearchTree(
-        this.currentPreambleTree,
+        preambleTree,
         entryId,
         null
       );
@@ -580,8 +592,14 @@ export default {
         return isPreambleSection;
       }
 
+      let articleTree = null;
+      if (prev) {
+        articleTree = this.prevArticleTree;
+      } else {
+        articleTree = this.currentArticleTree;
+      }
       const isArticleSection = this.recursiveSearchTree(
-        this.currentArticleTree,
+        articleTree,
         entryId,
         null
       );
@@ -605,6 +623,20 @@ export default {
           }
         }
 
+        let prevVersion = this.versionMap[position - 1];
+        if (prevVersion) {
+          for (let index = 0; index < prevVersion.trees.length; index++) {
+            const treeWrapper = prevVersion.trees[index];
+            if (treeWrapper.section == "GLOSSARY") {
+              this.prevGlossaryTree = treeWrapper.tree;
+            } else if (treeWrapper.section == "PREAMBLES") {
+              this.prevPreambleTree = treeWrapper.tree;
+            } else if (treeWrapper.section == "ARTICLES") {
+              this.prevArticleTree = treeWrapper.tree;
+            }
+          }
+        }
+
         this.glossaryChanges = [];
         this.preambleChanges = [];
         this.articleChanges = [];
@@ -613,9 +645,22 @@ export default {
           const mutation = version.mutations[index];
           console.log("mutation");
           console.log(mutation);
-          const mutationEnriched = this.searchSectionByEntryId(
-            mutation.newEntryId
-          );
+          let mutationEnriched = null;
+          if (mutation.type != "DELETE") {
+            mutationEnriched = this.searchSectionByEntryId(mutation.newEntryId);
+          } else {
+            if (this.versionIds.length > 1) {
+              console.log("BLA");
+
+              mutationEnriched = this.searchSectionByEntryId(
+                mutation.newEntryId,
+                true
+              );
+            }
+          }
+
+          console.log("mutationEnriched");
+          console.log(mutationEnriched);
           if (mutationEnriched) {
             mutationEnriched.changes = mutation.changes;
             mutationEnriched.type = mutation.type;
@@ -638,6 +683,9 @@ export default {
       async handler(newest, previous) {
         if (this.versionMap[newest] == null) {
           await this.getVersion(newest, this.versionIds[newest - 1]);
+        }
+        if (this.versionMap[newest - 1] == null && this.versionIds.length > 1) {
+          await this.getVersion(newest - 1, this.versionIds[newest - 2]);
         }
         this.selectVersion(newest);
       },

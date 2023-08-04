@@ -1,3 +1,20 @@
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
 <template>
   <div>
     <v-row no-gutters class="">
@@ -24,13 +41,13 @@
         <v-col cols="8">
           <div class="d-flex align-center px-4">
             <v-slider
-              v-model="mandatoryAttendence"
+              v-model="mandatoryAttendenceValue"
               class=""
               hide-details
               :disabled="!editMode"
               min="1"
             ></v-slider>
-            <div>{{ mandatoryAttendence }}%</div>
+            <div>{{ mandatoryAttendenceValue }}%</div>
           </div>
         </v-col>
       </v-row>
@@ -47,13 +64,13 @@
         <v-col cols="8">
           <div class="d-flex align-center px-4">
             <v-slider
-              v-model="acceptence"
+              v-model="acceptenceValue"
               class=""
               hide-details
               :disabled="!editMode"
               min="1"
             ></v-slider>
-            <div>{{ acceptence }}%</div>
+            <div>{{ acceptenceValue }}%</div>
           </div>
         </v-col>
       </v-row>
@@ -74,19 +91,23 @@
               x-small
               v-if="editMode"
               @click="decreaseDialog"
-              :disabled="dialogWindow == 0"
+              :disabled="dialogWindowValue == 0"
               ><v-icon>mdi-minus</v-icon></v-btn
             >
             <div class="text-body-1" v-if="dialogWindow > 0">
-              {{ dialogWindow }} day<span v-show="dialogWindow != 1">s</span>
+              {{ dialogWindowValue }} day<span v-show="dialogWindowValue != 1"
+                >s</span
+              >
             </div>
-            <div class="text-body-1" v-if="dialogWindow == 0">Disabled</div>
+            <div class="text-body-1" v-if="dialogWindowValue == 0">
+              Disabled
+            </div>
             <v-btn
               fab
               x-small
               v-if="editMode"
               @click="increaseDialog"
-              :disabled="dialogWindow == 30"
+              :disabled="dialogWindowValue == 30"
               ><v-icon>mdi-plus</v-icon></v-btn
             >
           </div>
@@ -109,18 +130,20 @@
               x-small
               v-if="editMode"
               @click="decreaseVoting"
-              :disabled="votingWindow == 1"
+              :disabled="votingWindowValue == 1"
               ><v-icon>mdi-minus</v-icon></v-btn
             >
             <div class="text-body-1">
-              {{ votingWindow }} day<span v-show="votingWindow != 1">s</span>
+              {{ votingWindowValue }} day<span v-show="votingWindowValue != 1"
+                >s</span
+              >
             </div>
             <v-btn
               fab
               x-small
               v-if="editMode"
               @click="increaseVoting"
-              :disabled="votingWindow == 30"
+              :disabled="votingWindowValue == 30"
               ><v-icon>mdi-plus</v-icon></v-btn
             >
           </div>
@@ -140,7 +163,7 @@
           <div class="d-flex align-center justify-space-between px-4">
             <div>No</div>
             <v-switch
-              v-model="executeWhenFinal"
+              v-model="executeWhenFinalValue"
               hide-details
               inset
               class="mt-0"
@@ -157,33 +180,93 @@
 
 <script>
 export default {
-  props: ["editMode"],
-  data: () => ({
-    mandatoryAttendence: 0,
-    acceptence: 0,
-    dialogWindow: 1,
-    votingWindow: 1,
-    executeWhenFinal: false,
-  }),
+  props: {
+    editMode: {
+      type: String,
+    },
+    mandatoryAttendence: {
+      type: Number,
+      default: 0,
+    },
+    acceptence: {
+      type: Number,
+      default: 0,
+    },
+    dialogWindow: {
+      type: Number,
+      default: 1,
+    },
+    votingWindow: {
+      type: Number,
+      default: 1,
+    },
+    executeWhenFinal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data: () => ({}),
+  computed: {
+    mandatoryAttendenceValue: {
+      get: function () {
+        return this.mandatoryAttendence;
+      },
+      set: function (newValue) {
+        this.$emit("update:mandatoryAttendence", newValue);
+      },
+    },
+    acceptenceValue: {
+      get: function () {
+        return this.acceptence;
+      },
+      set: function (newValue) {
+        this.$emit("update:acceptence", newValue);
+      },
+    },
+    dialogWindowValue: {
+      get: function () {
+        return this.dialogWindow;
+      },
+      set: function (newValue) {
+        this.$emit("update:dialogWindow", newValue);
+      },
+    },
+    votingWindowValue: {
+      get: function () {
+        return this.votingWindow;
+      },
+      set: function (newValue) {
+        this.$emit("update:votingWindow", newValue);
+      },
+    },
+    executeWhenFinalValue: {
+      get: function () {
+        return this.executeWhenFinal;
+      },
+      set: function (newValue) {
+        this.$emit("update:executeWhenFinal", newValue);
+      },
+    },
+  },
   methods: {
     increaseDialog() {
-      if (this.dialogWindow < 30) {
-        this.dialogWindow++;
+      if (this.dialogWindowValue < 30) {
+        this.dialogWindowValue++;
       }
     },
     decreaseDialog() {
-      if (this.dialogWindow > 0) {
-        this.dialogWindow--;
+      if (this.dialogWindowValue > 0) {
+        this.dialogWindowValue--;
       }
     },
     increaseVoting() {
-      if (this.votingWindow < 30) {
-        this.votingWindow++;
+      if (this.votingWindowValue < 30) {
+        this.votingWindowValue++;
       }
     },
     decreaseVoting() {
-      if (this.votingWindow > 1) {
-        this.votingWindow--;
+      if (this.votingWindowValue > 1) {
+        this.votingWindowValue--;
       }
     },
   },
