@@ -1,116 +1,101 @@
-<!-- Kalipo B.V. - the DAO platform for business & societal impact 
- * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
-
 <template>
   <div>
     <v-container class="py-0 px-0 px-lg-3 white">
       <v-divider></v-divider>
 
       <v-tabs show-arrows v-model="selectedItem" color="primary">
-        <v-tab v-for="(item, idx) in tabItemsDefault" :key="idx">
+        <v-tab
+          v-for="(item, idx) in tabItemsDefault"
+          :key="idx"
+          @click="navigate(item.to)"
+        >
           <v-icon small class="mr-2">{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-tab>
       </v-tabs>
     </v-container>
     <v-container>
-      <div class="mt-0">
-        <div v-if="selectedItem === 0">
-          <v-row>
-            <v-col cols="12" md="8" class="pr-0">
-              <v-card flat>
-                <v-card-text class="">
-                  <div class="d-flex align-cener">
-                    <v-icon large class="mr-2" color="primary"
-                      >mdi-scale-balance</v-icon
-                    >
-                    <div class="text-h2 primary--text">Terms & Conditions</div>
-                  </div>
-                </v-card-text>
-                <v-divider></v-divider>
-                <NestedList
-                  title="Glossary"
-                  :items="currentGlossaryTree"
-                  v-if="currentGlossaryTree"
-                  class="mt-0"
-                ></NestedList>
+      <v-row>
+        <v-col cols="12" md="8" class="pr-0">
+          <v-card flat>
+            <v-card-text class="">
+              <div class="d-flex align-cener">
+                <v-icon large class="mr-2" color="primary"
+                  >mdi-scale-balance</v-icon
+                >
+                <div class="text-h2 primary--text">Terms & Conditions</div>
+              </div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <NestedList
+              title="Glossary"
+              :items="currentGlossaryTree"
+              v-if="currentGlossaryTree"
+              class="mt-0"
+            ></NestedList>
 
-                <NestedList
-                  title="Preambles"
-                  :items="currentPreambleTree"
-                  v-if="currentPreambleTree"
-                  class="mt-0"
-                ></NestedList>
+            <NestedList
+              title="Preambles"
+              :items="currentPreambleTree"
+              v-if="currentPreambleTree"
+              class="mt-0"
+            ></NestedList>
 
-                <NestedList
-                  title="Articles"
-                  :items="currentArticleTree"
-                  v-if="currentArticleTree"
-                  class="mt-0"
-                ></NestedList>
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="4">
-              <div class="">
-                <v-card class="" flat>
-                  <v-card-text class="black--text">
-                    <v-row>
-                      <v-col cols="12" md="9">
-                        <div class="text-h6">
-                          Version:
-                          <span class="font-weight-regular">{{
-                            termsAndConditionsVersionSelected
-                          }}</span>
-                        </div>
-                        <div class="text-h6">
-                          Effectuation:
-                          <span class="font-weight-regular">01-01-2023</span>
-                        </div>
-                      </v-col>
-                      <v-col
-                        cols="12"
-                        md="3"
-                        class="d-flex justify-end align-center"
+            <NestedList
+              title="Articles"
+              :items="currentArticleTree"
+              v-if="currentArticleTree"
+              class="mt-0"
+            ></NestedList>
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="4">
+          <div class="">
+            <v-card class="" flat>
+              <v-card-text class="black--text">
+                <v-row>
+                  <v-col cols="12" md="9">
+                    <div class="text-h6">
+                      Version:
+                      <span class="font-weight-regular">{{
+                        termsAndConditionsVersionSelected
+                      }}</span>
+                    </div>
+                    <div class="text-h6">
+                      Effectuation:
+                      <span class="font-weight-regular">01-01-2023</span>
+                    </div>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="3"
+                    class="d-flex justify-end align-center"
+                  >
+                    <div>
+                      <v-chip
+                        v-if="
+                          termsAndConditionsVersionSelected ==
+                          termsAndConditionsVersions
+                        "
+                        color="accent"
+                        >Operational</v-chip
                       >
-                        <div>
-                          <v-chip
-                            v-if="
-                              termsAndConditionsVersionSelected ==
-                              termsAndConditionsVersions
-                            "
-                            color="accent"
-                            >Operational</v-chip
-                          >
-                          <v-chip
-                            v-if="
-                              termsAndConditionsVersionSelected !=
-                              termsAndConditionsVersions
-                            "
-                            color="primary"
-                            >Expired</v-chip
-                          >
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
+                      <v-chip
+                        v-if="
+                          termsAndConditionsVersionSelected !=
+                          termsAndConditionsVersions
+                        "
+                        color="primary"
+                        >Expired</v-chip
+                      >
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
 
-                  <v-divider></v-divider>
+              <v-divider></v-divider>
 
-                  <!-- <v-card-text>
+              <!-- <v-card-text>
                     <v-row>
                       <v-col cols="6">
                         <div class="d-flex align-center justify-end">
@@ -159,216 +144,80 @@
                     </v-row>
                   </v-card-text>
                   <v-divider></v-divider> --> </v-card
-                ><v-card flat ripple link>
-                  <v-card-text>
-                    <div class="d-flex align-center justify-space-between">
-                      <div>Submitted by</div>
-                      <div class="d-flex align-center">
-                        <div>
-                          <v-avatar color="accent" size="25px"
-                            ><span class="white--text text-caption"
-                              >TT</span
-                            ></v-avatar
-                          >
-                        </div>
-                        <div class="ml-1 text-caption font-weight">
-                          Test_test
-                        </div>
-                      </div>
-                    </div>
-                  </v-card-text>
-                </v-card>
-                <v-divider></v-divider>
-                <v-card flat ripple link>
-                  <v-card-text>
-                    <div class="d-flex align-center justify-space-between">
-                      <div>Approved by</div>
-                      <div class="d-flex align-center">
-                        <div>
-                          <v-chip color="accent" small outlined
-                            >13 members</v-chip
-                          >
-                        </div>
-                        <div class="ml-1">
-                          <v-chip color="" small outlined>5 against</v-chip>
-                        </div>
-                      </div>
-                    </div>
-                  </v-card-text>
-                </v-card>
-
-                <v-card flat>
-                  <v-divider></v-divider>
-                  <v-card-text>
+            ><v-card flat ripple link>
+              <v-card-text>
+                <div class="d-flex align-center justify-space-between">
+                  <div>Submitted by</div>
+                  <div class="d-flex align-center">
                     <div>
-                      <div class="d-flex align-center justify-space-between">
-                        <v-chip small class="mr-1" outlined
-                          >{{ glossaryChanges.length }} in glossary</v-chip
-                        ><v-chip small class="mr-1" outlined
-                          >{{ preambleChanges.length }} in preambles</v-chip
-                        ><v-chip small class="mr-1" outlined
-                          >{{ articleChanges.length }} in articles</v-chip
-                        >
-                      </div>
-
-                      <v-btn
-                        color=""
-                        block
-                        small
-                        class="mt-4"
-                        @click="showChangeLog = true"
-                        >view all
-                        {{
-                          glossaryChanges.length +
-                          preambleChanges.length +
-                          articleChanges.length
-                        }}
-                        changes</v-btn
+                      <v-avatar color="accent" size="25px"
+                        ><span class="white--text text-caption"
+                          >TT</span
+                        ></v-avatar
                       >
                     </div>
-                  </v-card-text>
-                </v-card>
-                <v-pagination
-                  class="mt-2"
-                  v-model="termsAndConditionsVersionSelected"
-                  :length="termsAndConditionsVersions"
-                  color="accent"
-                ></v-pagination>
-              </div>
-            </v-col>
-          </v-row>
-        </div>
+                    <div class="ml-1 text-caption font-weight">Test_test</div>
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
+            <v-divider></v-divider>
+            <v-card flat ripple link>
+              <v-card-text>
+                <div class="d-flex align-center justify-space-between">
+                  <div>Approved by</div>
+                  <div class="d-flex align-center">
+                    <div>
+                      <v-chip color="accent" small outlined>13 members</v-chip>
+                    </div>
+                    <div class="ml-1">
+                      <v-chip color="" small outlined>5 against</v-chip>
+                    </div>
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
 
-        <div v-if="selectedItem === 1">
-          <v-row justify="start" class="mt-0">
-            <v-col cols="12" md="4">
-              <v-text-field
-                solo
-                label="Search"
-                append-icon="mdi-magnify"
-                class="mt-4"
-              ></v-text-field>
-            </v-col>
-          </v-row>
+            <v-card flat>
+              <v-divider></v-divider>
+              <v-card-text>
+                <div>
+                  <div class="d-flex align-center justify-space-between">
+                    <v-chip small class="mr-1" outlined
+                      >{{ glossaryChanges.length }} in glossary</v-chip
+                    ><v-chip small class="mr-1" outlined
+                      >{{ preambleChanges.length }} in preambles</v-chip
+                    ><v-chip small class="mr-1" outlined
+                      >{{ articleChanges.length }} in articles</v-chip
+                    >
+                  </div>
 
-          <div>
-            <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
-              Memberships & roles
-            </div>
-            <v-row justify="start">
-              <v-col
-                cols="12"
-                md="3"
-                @click="$router.push('membership-invitation')"
-              >
-                <ProposalTypeCard
-                  icon="mdi-account-plus"
-                  title="Membership invitation"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-account-minus"
-                  title="Membership termination"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-account-settings"
-                  title="Role assignment"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-format-list-bulleted"
-                  title="Role management"
-                ></ProposalTypeCard>
-              </v-col>
-            </v-row>
-            <v-divider class="mt-8"></v-divider>
+                  <v-btn
+                    color=""
+                    block
+                    small
+                    class="mt-4"
+                    @click="showChangeLog = true"
+                    >view all
+                    {{
+                      glossaryChanges.length +
+                      preambleChanges.length +
+                      articleChanges.length
+                    }}
+                    changes</v-btn
+                  >
+                </div>
+              </v-card-text>
+            </v-card>
+            <v-pagination
+              class="mt-2"
+              v-model="termsAndConditionsVersionSelected"
+              :length="termsAndConditionsVersions"
+              color="accent"
+            ></v-pagination>
           </div>
-
-          <div>
-            <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
-              Polls
-            </div>
-            <v-row justify="start">
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-ballot"
-                  title="Yes / No"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-view-list-outline"
-                  title="Multi option"
-                ></ProposalTypeCard>
-              </v-col>
-            </v-row>
-            <v-divider class="mt-8"></v-divider>
-          </div>
-
-          <div>
-            <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
-              Profile
-            </div>
-            <v-row justify="start">
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-form-textbox"
-                  title="Name change"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-tag"
-                  title="Tag change"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-bullseye-arrow"
-                  title="Mission change"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-eye"
-                  title="Vision change"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-image"
-                  title="Icon change"
-                ></ProposalTypeCard>
-              </v-col>
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-image-size-select-actual"
-                  title="Logo change"
-                ></ProposalTypeCard>
-              </v-col>
-            </v-row>
-            <v-divider class="mt-8"></v-divider>
-          </div>
-
-          <div>
-            <div class="d-flex justify-start text-h4 primary--text mt-8 mb-8">
-              Constitution
-            </div>
-            <v-row justify="start">
-              <v-col cols="12" md="3">
-                <ProposalTypeCard
-                  icon="mdi-bank"
-                  title="Bill"
-                ></ProposalTypeCard>
-              </v-col>
-            </v-row>
-          </div>
-        </div>
-      </div>
+        </v-col>
+      </v-row>
     </v-container>
 
     <v-dialog v-model="showChangeLog" width="500" scrollable>
@@ -392,36 +241,32 @@
     </v-dialog>
   </div>
 </template>
+
 <script>
 export default {
   layout: "auton",
   data: () => ({
-    dialog: true,
-    selectedItem: "",
-    termsAndConditionsVersionSelected: 0,
-    termsAndConditionsVersions: 0,
-    autonId: null,
+    selectedItem: 0,
     tabItemsDefault: [
       {
         icon: "mdi-scale-balance",
         title: "Terms & Conditions",
+        to: "terms_and_conditions",
       },
       {
         icon: "mdi-email-newsletter",
         title: "Proposal types",
+        to: "proposal_types",
       },
       {
         icon: "mdi-cog",
         title: "Policies",
+        to: "policies",
       },
     ],
-    preambles: [
-      {
-        id: "a",
-        title: "123",
-        content: "abc",
-      },
-    ],
+    termsAndConditionsVersionSelected: 0,
+    termsAndConditionsVersions: 0,
+    autonId: null,
     currentGlossaryTree: null,
     currentPreambleTree: null,
     currentArticleTree: null,
@@ -516,6 +361,11 @@ export default {
     console.log(this.currentArticleTree);
   },
   methods: {
+    navigate(to) {
+      this.$router.push(
+        `/dao/${this.$route.params.daoId}/auton/${this.$route.params.autonId}/constitution/${to}/`
+      );
+    },
     async getVersion(position, id) {
       const versionWrapper = await this.$invoke(
         "document:getGovernmentalVersionByID",
@@ -693,3 +543,6 @@ export default {
   },
 };
 </script>
+
+<style>
+</style>
