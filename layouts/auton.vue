@@ -340,7 +340,7 @@ export default {
         {
           icon: "mdi-bank",
           title: "Constitution",
-          to: "constitution",
+          to: "constitution/terms_and_conditions",
         },
       ],
       tabItemsEvent: [

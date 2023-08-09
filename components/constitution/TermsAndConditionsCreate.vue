@@ -83,6 +83,7 @@
       v-if="step == 3"
       callback="AutonCreate-PrevStep"
       title="Proposing Terms & Conditions"
+      @callbackFinish="$router.app.refresh()"
     ></AccountSign>
     <v-divider></v-divider>
     <v-card-text v-if="!hideNavigation && step != 3">
@@ -123,6 +124,7 @@ export default {
     });
   },
   async mounted() {
+    this.uri = this.$route.path.substr(0, this.$route.path.length - 1);
     const autonIdParam = this.$route.params.autonId.replaceAll("_", " ");
 
     const autonIdWrapper = await this.$invoke("auton:getAutonIdByName", {

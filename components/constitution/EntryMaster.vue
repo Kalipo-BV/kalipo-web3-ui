@@ -1,10 +1,30 @@
+<!-- Kalipo B.V. - the DAO platform for business & societal impact 
+ * Copyright (C) 2022 Peter Nobels and Matthias van Dijk
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
 <template>
   <div>
-    <div v-if="selected == null">
+    <div v-if="selected == null && confirmMultiDelete == null">
       <div class="d-flex align-center justify-space-between mb-2">
         <div class="text-h4">{{ title }}</div>
         <div>
-          <v-btn color="accent" @click="newOne"
+          <v-btn
+            color="accent"
+            @click="newOne"
+            :disabled="showingObj?.icon == 'mdi-delete-circle'"
             ><v-icon class="mr-1">mdi-plus</v-icon> new</v-btn
           >
         </div>
@@ -21,6 +41,7 @@
             @click="
               {
                 showing = { children: items };
+                showingObj = null;
                 crumbs = [];
               }
             "
@@ -95,7 +116,7 @@
         </v-list-item-group>
       </v-list>
     </div>
-    <div v-if="selected != null">
+    <div v-if="selected != null && confirmMultiDelete == null">
       <EntryDetail
         @cancel="selected = null"
         @update="update"
@@ -106,7 +127,17 @@
         :title.sync="selected.title"
         :content.sync="selected.content"
         :isMarkedForDelete="isMarkedForDelete(selected)"
+        :disableUndelete="disableUndelete()"
       ></EntryDetail>
+    </div>
+    <div v-if="confirmMultiDelete">
+      <div class="d-flex align-center justify-space-between mb-6">
+        <div class="text-h4 error--text">{{ confirmMultiDelete }}</div>
+      </div>
+      <div class="d-flex align-center justify-space-between mb-2">
+        <v-btn @click="cancelMultiDelete">Cancel</v-btn>
+        <v-btn color="error" @click="applyMultiDelete">Delete all</v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -134,10 +165,12 @@ export default {
       tempUUIDs: [],
       parentIdMap: {},
       mutations: [],
+      tempMutations: [],
       selectedEntryNumber: null,
       orderMode: false,
       selectedItem: null,
       items: [],
+      confirmMultiDelete: null,
     };
   },
   computed: {
@@ -297,6 +330,17 @@ export default {
       }
       return null;
     },
+    recursiveCount(item) {
+      let childCount = 0;
+      if (item.children && item.children.length > 0) {
+        for (let index = 0; index < item.children.length; index++) {
+          childCount++;
+          const child = item.children[index];
+          childCount += this.recursiveCount(child);
+        }
+      }
+      return childCount;
+    },
     get(id) {
       return this.recursiveGet(id, this.items);
     },
@@ -352,15 +396,121 @@ export default {
       this.selected = null;
     },
     markForDelete() {
-      this.selected.icon = "mdi-delete-circle";
+      const childrenCount = this.recursiveCount(this.selected);
+      if (childrenCount > 0) {
+        this.confirmMultiDelete = "Are you sure to delete this item and";
+        if (childrenCount == 1) {
+          this.confirmMultiDelete += " one child?";
+        } else {
+          this.confirmMultiDelete += ` all associated ${childrenCount} children?`;
+        }
+        this.$nuxt.$emit("AutonProposalSubmit-HideNavigation", true);
+      } else {
+        for (let index = 0; index < this.mutations.length; index++) {
+          const mutation = this.mutations[index];
+          if (mutation.entryId == this.selected.entryId) {
+            if (mutation.type != "DELETE") {
+              this.tempMutations.push(mutation);
+            }
+            this.mutations.splice(index, 1);
+            break;
+          }
+        }
+        console.log("this.tempMutations");
+        console.log(this.tempMutations);
+        console.log(this.mutations);
+        if (this.selected.icon != "mdi-plus-circle") {
+          this.mutations.push({
+            type: "DELETE",
+            entryId: this.selected.entryId,
+            title: "",
+            content: "",
+          });
+        }
+        this.selected.icon = "mdi-delete-circle";
+        this.selected = null;
+        this.updateProposedTree();
+        this.$emit("mutationUpdate", this.mutations);
+      }
+    },
+    cancelMultiDelete() {
+      this.$nuxt.$emit("AutonProposalSubmit-HideNavigation", false);
+      this.confirmMultiDelete = null;
+      this.selected = null;
+    },
+    markForDeleteRecursive(item) {
+      for (let index = 0; index < this.mutations.length; index++) {
+        const mutation = this.mutations[index];
+        if (mutation.entryId == item.entryId) {
+          if (mutation.type != "DELETE") {
+            this.tempMutations.push(mutation);
+          }
+          this.mutations.splice(index, 1);
+          break;
+        }
+      }
+      console.log(this.mutations);
+      if (item.icon != "mdi-plus-circle") {
+        this.mutations.push({
+          type: "DELETE",
+          entryId: item.entryId,
+          title: "",
+          content: "",
+        });
+      }
+      item.icon = "mdi-delete-circle";
+
+      if (item.children) {
+        for (let index = 0; index < item.children.length; index++) {
+          const child = item.children[index];
+          this.markForDeleteRecursive(child);
+        }
+      }
+    },
+    applyMultiDelete() {
+      this.markForDeleteRecursive(this.selected);
+      this.updateProposedTree();
+      this.$emit("mutationUpdate", this.mutations);
+      this.confirmMultiDelete = null;
       this.selected = null;
     },
     unDelete() {
       this.selected.icon = undefined;
+      for (let index = 0; index < this.mutations.length; index++) {
+        const mutation = this.mutations[index];
+        if (mutation.entryId == this.selected.entryId) {
+          this.mutations.splice(index, 1);
+          break;
+        }
+      }
+      for (let index2 = 0; index2 < this.tempMutations.length; index2++) {
+        const tempMutation = this.tempMutations[index2];
+        if (tempMutation.entryId == this.selected.entryId) {
+          if (tempMutation.type == "UPDATE") {
+            this.selected.icon = "mdi-pencil-circle";
+            tempMutation.title = this.selected.title;
+            tempMutation.content = this.selected.content;
+          } else if (tempMutation.type == "CREATE") {
+            this.selected.icon = "mdi-plus-circle";
+            tempMutation.title = this.selected.title;
+            tempMutation.content = this.selected.content;
+          }
+          this.mutations.push(tempMutation);
+          this.tempMutations.splice(index2, 1);
+          break;
+        }
+      }
+      console.log(this.mutations);
       this.selected = null;
     },
     isMarkedForDelete(item) {
       if (item.icon == "mdi-delete-circle") {
+        return true;
+      }
+      return false;
+    },
+    disableUndelete() {
+      if (this.showingObj && this.showingObj.icon == "mdi-delete-circle") {
         return true;
       }
       return false;
@@ -394,21 +544,23 @@ export default {
       const result = [];
       for (let index = 0; index < trees.length; index++) {
         const tree = trees[index];
-        if (tree.children) {
-          const tempResult = this.convertProposedTreeRecursive(tree.children);
-          if (tempResult) {
-            result.push({ entryId: tree.entryId, children: tempResult });
+        if (tree.icon != "mdi-delete-circle") {
+          if (tree.children) {
+            const tempResult = this.convertProposedTreeRecursive(tree.children);
+            if (tempResult) {
+              result.push({ entryId: tree.entryId, children: tempResult });
+            } else {
+              result.push({ entryId: tree.entryId, children: [] });
+            }
           } else {
             result.push({ entryId: tree.entryId, children: [] });
           }
-        } else {
-          result.push({ entryId: tree.entryId, children: [] });
         }
       }
       return result;
     },
     updateProposedTree() {
-      console.log("updateProposedTree");
+      console.log("updateProposedTree " + this.title);
       const proposedTree = this.convertProposedTreeRecursive(this.items);
       this.$emit("update:proposedTree", proposedTree);
 
